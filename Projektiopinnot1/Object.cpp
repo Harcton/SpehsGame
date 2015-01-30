@@ -93,10 +93,10 @@ void Object::checkCollisions()
 			double collisionRange = textureRadius + mGame->objects[i]->textureRadius;
 			if (distance < collisionRange)
 			{
-				float anglerad = atan2(y - mGame->objects[i]->y, x - mGame->objects[i]->x) * (180 / PI);
+				float anglerad = atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x) * (180 / PI);
 				std::cout << "\n" << anglerad;
 
-
+				//testi
 			}
 		}
 }
