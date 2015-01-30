@@ -35,7 +35,7 @@ void Object::update()
 	//update opacity
 	if (opacity < 255)
 	{
-		opacity += 3;
+		opacity += 17;
 		spr.setColor(sf::Color(255, 255, 255, opacity));
 	}
 
@@ -43,6 +43,9 @@ void Object::update()
 	angle += turnSpeed;
 	x += xSpeed;
 	y += ySpeed;
+
+	if (hasCollisions)
+		checkCollisions();
 
 	//Keep angle positi
 	if (angle > 2*PI)
@@ -97,6 +100,27 @@ void Object::checkCollisions()
 				float anglerad = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
 				if (anglerad < 0)
 					anglerad = ((2 * PI) + anglerad);
+
+
+				//std::cout << "\n" << anglerad;
+				//std::cout << "\ncos: " << cos(anglerad);
+
+
+				double ys;
+				if (ySpeed > 0)
+					ys = 1 + ySpeed;
+				else
+					ys = 1 - ySpeed;
+				ySpeed += 0.1*sin(anglerad)*mGame->objects[i]->mass*ys;
+				y += 3 * sin(anglerad);
+
+				double xs;
+				if (xSpeed > 0)
+					xs = 1 + xSpeed;
+				else
+					xs = 1 - xSpeed;
+				xSpeed += 0.1*cos(anglerad)*mGame->objects[i]->mass*xs;
+				x += -3*cos(anglerad);
 
 
 			}

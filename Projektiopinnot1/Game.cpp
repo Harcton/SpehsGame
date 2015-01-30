@@ -31,6 +31,7 @@ void Game::run()
 	mWindow.setFramerateLimit(60);
 	sf::Event mEvent;
 	std::vector<Background*>::iterator bgit;
+	std::vector<Debris*>::iterator deit;
 	
 
 	objects.push_back(new Player(mWindow, this, true, 0, 0));
@@ -38,8 +39,8 @@ void Game::run()
 	for (int i = 0; i < 10; i++)
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 
-	for (unsigned int i = 0; i < 1; i++)
-		objects.push_back(new Debris(mWindow, this));
+	for (unsigned int i = 0; i < 20; i++)
+		debris.push_back(new Debris(mWindow, this, debris));
 	
 
 
@@ -60,6 +61,8 @@ void Game::run()
 		/////////
 		mWindow.clear(sf::Color(0, 0, 0, 100));
 		//DRAWING
+
+		//Background update
 		for (bgit = backgrounds.begin(); bgit != backgrounds.end();)
 			if ((*bgit)->updateBackground() == false)
 				{
@@ -74,6 +77,25 @@ void Game::run()
 		for (unsigned int i = 0; i < backgrounds.size(); i++)
 			backgrounds[i]->draw();
 		
+
+		//Debris update
+		for (deit = debris.begin(); deit != debris.end();)
+			if ((*deit)->updateDebris() == false)
+			{
+			delete * deit;
+			deit = debris.erase(deit);
+			}
+			else
+				++deit;
+		if (debris.size() < 30)
+			debris.push_back(new Debris(mWindow, this, debris));
+
+		for (unsigned int i = 0; i < debris.size(); i++)
+			debris[i]->draw();
+
+
+
+
 
 		for (unsigned int i = 0; i < objects.size(); i++)
 		{
