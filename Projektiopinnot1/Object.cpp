@@ -21,6 +21,7 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 	else
 		y = centerObj->y + irandom(-SPAWN_RANGE, SPAWN_RANGE);
 
+	spr.setPosition(x, y);
 }
 Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref)
 {
@@ -28,6 +29,7 @@ Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindo
 	centerObj = mGame->playerObj;
 	x = cx;
 	y = cy;
+	spr.setPosition(x, y);
 }
 
 void Object::update()

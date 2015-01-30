@@ -3,6 +3,7 @@
 
 class Object;
 class Background;
+class Enemy;
 
 
 class Game
@@ -17,6 +18,7 @@ public:
 
 protected:
 	std::vector<Background*> backgrounds;
+	std::vector<Enemy*> enemies;
 };
 
 #endif
