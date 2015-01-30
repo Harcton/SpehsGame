@@ -16,6 +16,8 @@ Player::Player(sf::RenderWindow& windowref, Game* game, bool this_is_the_player,
 	spr.setOrigin(50, 50);
 	textureRadius = 50;
 
+	mass = 1;
+
 }
 
 void Player::update()
@@ -42,12 +44,13 @@ void Player::update()
 	{
 		xSpeed = 0;
 		ySpeed = 0;
+		turnSpeed = 0;
 	}
 
-	Object::checkCollisions();
 
 	Object::update();
 
+	/*std::cout << "\n" << angle;*/
 	//std::cout << "\n" << angle << "  xSpeed: " << xSpeed << " ySpeed: " << ySpeed;
 	//std::cout << "\nX: " << x << "\n  Y: " << y;
 
@@ -56,24 +59,24 @@ void Player::update()
 
 void Player::turnRight()
 {
-	turnSpeed += PI / 1800;
+	turnSpeed -= PI / 1800;
 }
 
 void Player::turnLeft()
 {
-	turnSpeed -= PI / 1800;
+	turnSpeed += PI / 1800;
 }
 
 void Player::accelerate()
 {
-	xSpeed += cos(angle)*0.04;
-	ySpeed += sin(angle)*0.04;
+	xSpeed += cos(2*PI - angle)*0.04;
+	ySpeed += sin(2 * PI - angle)*0.04;
 
 
 }
 
 void Player::reverse()
 {
-	xSpeed -= cos(angle)*0.02;
-	ySpeed -= sin(angle)*0.02;
+	xSpeed -= cos(2 * PI - angle)*0.02;
+	ySpeed -= sin(2 * PI - angle)*0.02;
 }

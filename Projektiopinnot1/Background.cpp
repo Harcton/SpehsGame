@@ -20,6 +20,7 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 	angle = (irandom(0, 360)/double(360)) * (2*PI);
 	scale = double(irandom(0, 500) + 100) / 100;
 
+	hasCollisions = false;
 
 }
 
@@ -31,8 +32,7 @@ bool Background::updateBackground()
 {
 	
 
-	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
-		return false;
+
 
 	Object::update();
 

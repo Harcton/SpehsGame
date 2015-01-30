@@ -5,6 +5,8 @@ class Object;
 class Background;
 class Enemy;
 
+class Debris;
+
 
 class Game
 {
@@ -18,7 +20,11 @@ public:
 
 protected:
 	std::vector<Background*> backgrounds;
+<<<<<<< HEAD
 	std::vector<Enemy*> enemies;
+=======
+	std::vector<Debris*> debris;
+>>>>>>> origin/master
 };
 
 #endif

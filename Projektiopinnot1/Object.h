@@ -19,6 +19,7 @@ public:
 	sf::Sprite spr;
 	double textureRadius;
 	double scale = 1;
+	double mass = 0;
 
 	double x;
 	double y;
@@ -40,6 +41,7 @@ protected:
 	sf::RenderWindow& mWindow;
 	Object* centerObj;
 	int opacity = 0;
+	bool hasCollisions = true;
 
 };
 
