@@ -70,7 +70,7 @@ void Object::update()
 	//Apply variables
 	spr.setPosition(screenX, screenY);
 	spr.setScale(scale, scale);
-	spr.setRotation((angle/PI)*180);
+	spr.setRotation(360 - (angle/PI)*180);
 
 	//if (centerObj != this)
 	//	std::cout << "\nObject distance to player: " << getDistance(x, y, centerObj->x, centerObj->y);
@@ -89,12 +89,14 @@ void Object::checkCollisions()
 	for (unsigned int i = 0; i < mGame->objects.size(); i++)
 		if (mGame->objects[i] != this)
 		{
-			float anglerad = atan2(y - mGame->objects[i]->y, x - mGame->objects[i]->x) * (180 / PI);
-			std::cout << "\n" << anglerad;
+
 			double distance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
 			double collisionRange = textureRadius + mGame->objects[i]->textureRadius;
 			if (distance < collisionRange)
 			{
+				float anglerad = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
+				if (anglerad < 0)
+					anglerad = ((2 * PI) + anglerad);
 
 
 			}
