@@ -2,6 +2,15 @@
 Thumbs.db
 ehthumbs.db
 
+#Meidän ignoret
+*.log
+*.dll
+*.sdf
+Debug/
+SFML/
+Projektiopinnot1/Debug/
+
+
 # Folder config file
 Desktop.ini
 

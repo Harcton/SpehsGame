@@ -1,0 +1,60 @@
+#include "Main.h"
+#include "Game.h"
+#include "Object.h"
+#include "Player.h"
+
+
+int WINDOW_WIDTH = 1280;
+int WINDOW_HEIGHT = 720;
+
+
+
+void main()
+{
+	//Randomize randomization...
+	time_t t;
+	srand((unsigned)time(&t));
+
+
+	Game game;
+	game.run();
+}
+
+
+
+
+//Returns a random integer between min and max
+int irandom(int min, int max)
+{
+	return (min + (rand() % (int)(max - min + 1)));
+}
+//Return true with a chance of 50%
+bool flipCoin()
+{
+	switch (irandom(0, 1))
+	{
+	default:
+		return true;
+	case 1:
+		return  false;
+	}
+}
+//Returns true with a chance of 1/sides
+bool rollDie(unsigned int sides)
+{
+	switch (irandom(0, sides - 1))
+	{
+	case 0:
+		return true;
+	default:
+		return false;
+	}
+
+}
+double getDistance(double x1, double y1, double x2, double y2)
+{
+	int xDiff = abs(x1 - x2);
+	int yDiff = abs(y1 - y2);
+
+	return sqrt(pow(xDiff, 2) + pow(yDiff, 2));
+}
