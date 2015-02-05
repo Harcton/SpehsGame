@@ -6,27 +6,26 @@
 Debris::~Debris()
 {
 }
-Debris::Debris(sf::RenderWindow& windowref, Game* game, std::vector<Debris*>& hw) : homeVector(hw), Object(windowref, game)
+Debris::Debris(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& hw) : homeVector(hw), Object(windowref, game)
 {
 	randomizeLook();
 }
-Debris::Debris(sf::RenderWindow& windowref, Game* game, std::vector<Debris*>& hw, int cx, int cy) : homeVector(hw), Object(windowref, game, cx, cy)
+Debris::Debris(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& hw, int cx, int cy) : homeVector(hw), Object(windowref, game, cx, cy)
 {
 	randomizeLook();
 }
 
 bool Debris::updateDebris()
 {
-	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
-		return false;
+	
 
-	Object::update();
+	return Object::update();
 }
 
 
 void Debris::randomizeLook()
 {
-	mass = 10;
+	mass = 100;
 
 	tex.loadFromFile("Texture/debris1.png");
 	spr.setTexture(tex);

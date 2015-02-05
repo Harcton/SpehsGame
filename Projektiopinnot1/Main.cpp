@@ -4,8 +4,8 @@
 #include "Player.h"
 
 
-int WINDOW_WIDTH = 1920;
-int WINDOW_HEIGHT = 1080;
+int WINDOW_WIDTH = 1280;
+int WINDOW_HEIGHT = 720;
 
 
 
@@ -16,7 +16,11 @@ void main()
 	srand((unsigned)time(&t));
 
 
-	Game game;
+	sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Wrench Space" };
+	mWindow.setFramerateLimit(60);
+
+
+	Game game(mWindow);
 	game.run();
 }
 

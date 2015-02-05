@@ -7,7 +7,7 @@
 Player::~Player()
 {
 }
-Player::Player(sf::RenderWindow& windowref, Game* game, bool this_is_the_player, int cx, int cy) : Object(windowref, game, cx, cy)
+Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object(windowref, game, cx, cy)
 {
 	centerObj = this;
 
@@ -16,11 +16,11 @@ Player::Player(sf::RenderWindow& windowref, Game* game, bool this_is_the_player,
 	spr.setOrigin(50, 50);
 	textureRadius = 50;
 
-	mass = 1;
+	mass = 100;
 
 }
 
-void Player::update()
+bool Player::update()
 {
 
 		
@@ -54,7 +54,7 @@ void Player::update()
 	//std::cout << "\n" << angle << "  xSpeed: " << xSpeed << " ySpeed: " << ySpeed;
 	//std::cout << "\nX: " << x << "\n  Y: " << y;
 
-
+	return true;
 }
 
 void Player::turnRight()

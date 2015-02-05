@@ -11,8 +11,8 @@ public:
 	Object(sf::RenderWindow&, Game*, int, int);
 	Object(sf::RenderWindow&, Game*);
 
-	virtual void update();
-	void checkCollisions();
+	virtual bool update();
+	void checkCollisions(unsigned int);
 	void draw();
 
 	sf::Texture tex;
@@ -34,6 +34,7 @@ public:
 	double turnSpeed; // +CCW, -CW
 
 
+	bool hasCollisionChecks = true;
 
 
 protected:
@@ -41,7 +42,6 @@ protected:
 	sf::RenderWindow& mWindow;
 	Object* centerObj;
 	int opacity = 0;
-	bool hasCollisions = true;
 
 };
 

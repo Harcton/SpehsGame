@@ -7,9 +7,9 @@ class Player : public Object
 {
 public:
 	~Player();
-	Player(sf::RenderWindow&, Game*, bool, int, int);
+	Player(sf::RenderWindow&, Game*, int, int);
 
-	void update();
+	bool update();
 
 	//Movement
 	void turnRight();

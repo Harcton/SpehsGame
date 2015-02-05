@@ -1,16 +1,18 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+class Object;
+
 class Enemy : public Object
 {
 public:
-	Enemy(sf::RenderWindow&, Game*, std::vector<Enemy*>&);
+	Enemy(sf::RenderWindow&, Game*, std::vector<Object*>&);
 	~Enemy();
 
-	bool spawnUpdate();
+	bool update();
 
 private:
-	std::vector<Enemy*>& refVector;
+	std::vector<Object*>& refVector;
 };
 
 #endif

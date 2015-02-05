@@ -4,7 +4,7 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Enemy*>& rVector) : refVector(rVector), Object(windowref, game)
+Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector) : refVector(rVector), Object(windowref, game)
 {
 	tex.loadFromFile("Texture/enemy_base.png");
 	spr.setTexture(tex);
@@ -21,12 +21,7 @@ Enemy::~Enemy()
 
 
 
-bool Enemy::spawnUpdate()
-{
-	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
-		return false;
-
-	Object::update();
-
-	return true;
+bool Enemy::update()
+{	
+	return Object::update();
 }

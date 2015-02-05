@@ -1,20 +1,20 @@
 #ifndef DEBRIS_H
 #define DEBRIS_H
 
-
+class Object;
 
 class Debris : public Object
 {
 public:
 	~Debris();
-	Debris(sf::RenderWindow& windowref, Game* game, std::vector<Debris*>& hw);
-	Debris(sf::RenderWindow& windowref, Game* game, std::vector<Debris*>& hw, int cx, int cy);
+	Debris(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& hw);
+	Debris(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& hw, int cx, int cy);
 	bool updateDebris();
 
 	void randomizeLook();
 
 protected:
-	std::vector<Debris*>& homeVector;
+	std::vector<Object*>& homeVector;
 };
 
 #endif

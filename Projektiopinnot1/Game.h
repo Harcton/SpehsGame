@@ -11,20 +11,22 @@ class Debris;
 class Game
 {
 public:
-	Game();
+	Game(sf::RenderWindow&);
 	~Game();
 
 	void run();
 	Object* playerObj;
 	std::vector<Object*> objects;
+	void updateBackgrounds();
+	void updateObjects();
 
 protected:
+	sf::RenderWindow& mWindow;
 	std::vector<Background*> backgrounds;
-<<<<<<< HEAD
-	std::vector<Enemy*> enemies;
-=======
-	std::vector<Debris*> debris;
->>>>>>> origin/master
+
+	//Iterators
+	std::vector<Object*>::iterator obIt;
+	std::vector<Background*>::iterator bgIt;
 };
 
 #endif

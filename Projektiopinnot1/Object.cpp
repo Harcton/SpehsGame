@@ -32,8 +32,11 @@ Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindo
 	spr.setPosition(x, y);
 }
 
-void Object::update()
+bool Object::update()
 {
+	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
+		return false;
+
 	//update opacity
 	if (opacity < 255)
 	{
@@ -46,17 +49,11 @@ void Object::update()
 	x += xSpeed;
 	y += ySpeed;
 
-	if (hasCollisions)
-		checkCollisions();
-
 	//Keep angle positi
 	if (angle > 2*PI)
 		angle -= 2*PI;
 	else if (angle < 0)
 		angle += 2*PI;
-
-
-
 
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
@@ -70,61 +67,32 @@ void Object::update()
 		screenY = WINDOW_HEIGHT / 2;
 	}
 
-
-
 	//Apply variables
 	spr.setPosition(screenX, screenY);
 	spr.setScale(scale, scale);
 	spr.setRotation(360 - (angle/PI)*180);
-
-	//if (centerObj != this)
-	//	std::cout << "\nObject distance to player: " << getDistance(x, y, centerObj->x, centerObj->y);
-
+	return true;
 }
 
 void Object::draw()
 {
-
-
 	mWindow.draw(spr);
 }
 
-void Object::checkCollisions()
+void Object::checkCollisions(unsigned int selfIndex)
 {
 	for (unsigned int i = 0; i < mGame->objects.size(); i++)
-		if (mGame->objects[i] != this)
+		if (i != selfIndex)
 		{
 
-			double distance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
-			double collisionRange = textureRadius + mGame->objects[i]->textureRadius;
-			if (distance < collisionRange)
-			{
-				float anglerad = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
-				if (anglerad < 0)
-					anglerad = ((2 * PI) + anglerad);
+		double distance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
+		double collisionRange = textureRadius + mGame->objects[i]->textureRadius;
+		if (distance < collisionRange)
+		{
+			float anglerad = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
+			if (anglerad < 0)
+				anglerad = ((2 * PI) + anglerad);
 
-
-				//std::cout << "\n" << anglerad;
-				//std::cout << "\ncos: " << cos(anglerad);
-
-
-				double ys;
-				if (ySpeed > 0)
-					ys = 1 + ySpeed;
-				else
-					ys = 1 - ySpeed;
-				ySpeed += 0.1*sin(anglerad)*mGame->objects[i]->mass*ys;
-				y += 3 * sin(anglerad);
-
-				double xs;
-				if (xSpeed > 0)
-					xs = 1 + xSpeed;
-				else
-					xs = 1 - xSpeed;
-				xSpeed += 0.1*cos(anglerad)*mGame->objects[i]->mass*xs;
-				x += -3*cos(anglerad);
-
-
-			}
+		}
 		}
 }

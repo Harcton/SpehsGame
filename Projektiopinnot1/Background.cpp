@@ -20,7 +20,7 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 	angle = (irandom(0, 360)/double(360)) * (2*PI);
 	scale = double(irandom(0, 500) + 100) / 100;
 
-	hasCollisions = false;
+	hasCollisionChecks = false;
 
 }
 
@@ -30,11 +30,6 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 
 bool Background::updateBackground()
 {
-	
 
-
-
-	Object::update();
-
-	return true;
+	return Object::update();
 }
