@@ -117,7 +117,7 @@ void Game::updateObjects()
 		}
 		else
 			++obIt;
-	if (objects.size() < 1)
+	if (objects.size() < 100)
 		if (flipCoin())
 			objects.push_back(new Debris(mWindow, this, objects));
 		else
