@@ -29,12 +29,11 @@ Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindo
 	centerObj = mGame->playerObj;
 	x = cx;
 	y = cy;
-	spr.setPosition(x, y);
 }
 
 bool Object::update()
 {
-	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
+	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE || hp <= 0)
 		return false;
 
 	//update opacity

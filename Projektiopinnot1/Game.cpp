@@ -1,8 +1,12 @@
 #include "Main.h"
 #include "Game.h"
 #include "Object.h"
-#include "Debris.h"
+#include "Component.h"
+#include "Turret.h"
+#include "Bullet.h"
 #include "Player.h"
+
+#include "Debris.h"
 #include "Enemy.h"
 #include "Background.h"
 
