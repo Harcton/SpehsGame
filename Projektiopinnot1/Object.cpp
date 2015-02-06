@@ -63,8 +63,8 @@ bool Object::update()
 	}
 	else
 	{//Player update, make the player object appear in the center of the screen
-		screenX = WINDOW_WIDTH / 2;
-		screenY = WINDOW_HEIGHT / 2;
+		screenX = WINDOW_WIDTH / 2 - (7 * xSpeed);
+		screenY = WINDOW_HEIGHT / 2 - (7 * ySpeed);
 	}
 
 	//Apply variables
@@ -82,17 +82,33 @@ void Object::draw()
 void Object::checkCollisions(unsigned int selfIndex)
 {
 	for (unsigned int i = 0; i < mGame->objects.size(); i++)
-		if (i != selfIndex)
+		if (mGame->objects[i] != this)
 		{
+		collisionCheckAngle = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
+		if (collisionCheckAngle < 0)
+			collisionCheckAngle = ((2 * PI) + collisionCheckAngle);
 
-		double distance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
-		double collisionRange = textureRadius + mGame->objects[i]->textureRadius;
-		if (distance < collisionRange)
+
+		checkCollisionDistance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
+		checkCollisionRange = textureRadius + mGame->objects[i]->textureRadius;
+
+		if (checkCollisionDistance < checkCollisionRange)
 		{
-			float anglerad = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
-			if (anglerad < 0)
-				anglerad = ((2 * PI) + anglerad);
+			double ys;
+			if (ySpeed > 0)
+				ys = 1 + ySpeed;
+			else
+				ys = 1 - ySpeed;
+			ySpeed += 0.001*sin(collisionCheckAngle)*ys;
+			y += 3 * sin(collisionCheckAngle);
 
+			double xs;
+			if (xSpeed > 0)
+				xs = 1 - xSpeed;
+			else
+				xs = 1 + xSpeed;
+			xSpeed += 0.001*cos(collisionCheckAngle)*xs;
+			x += -3 * cos(collisionCheckAngle);
 		}
 		}
 }

@@ -13,6 +13,9 @@ public:
 
 private:
 	std::vector<Object*>& refVector;
+	double playerDirection;
+	bool follow;
+	double distance;
 };
 
 #endif

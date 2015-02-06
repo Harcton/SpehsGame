@@ -113,9 +113,11 @@ void Game::updateObjects()
 		}
 		else
 			++obIt;
-	if (objects.size() < 30)
-		objects.push_back(new Debris(mWindow, this, objects));
-
+	if (objects.size() < 15)
+		if (flipCoin())
+			objects.push_back(new Debris(mWindow, this, objects));
+		else
+			objects.push_back(new Enemy(mWindow, this, objects));
 	for (unsigned int i = 0; i < objects.size(); i++)
 		objects[i]->draw();
 }

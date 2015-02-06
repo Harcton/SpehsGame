@@ -11,13 +11,10 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 {
 	centerObj = this;
 
-	tex.loadFromFile("Texture/ship_base.png");
+	tex.loadFromFile("Texture/ship_base_cc.png");
 	spr.setTexture(tex);
 	spr.setOrigin(50, 50);
-	textureRadius = 50;
-
-	mass = 100;
-
+	textureRadius = 50;	
 }
 
 bool Player::update()

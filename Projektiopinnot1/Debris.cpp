@@ -25,9 +25,7 @@ bool Debris::updateDebris()
 
 void Debris::randomizeLook()
 {
-	mass = 100;
-
-	tex.loadFromFile("Texture/debris1.png");
+	tex.loadFromFile("Texture/debris1_cc.png");
 	spr.setTexture(tex);
 	spr.setOrigin(50, 50);
 	turnSpeed = irandom(-6, 6) / double(360)*(2 * PI);
