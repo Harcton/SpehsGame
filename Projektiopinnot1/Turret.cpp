@@ -29,7 +29,7 @@ bool Turret::update()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		angle -= 0.03;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-		bullets.push_back(new Bullet(this, master->mWindow, master->mGame, x, y, angle, 15));
+		bullets.push_back(new Bullet(this, master->mWindow, master->mGame, x, y, angle, 25));
 
 	updateBullets();
 

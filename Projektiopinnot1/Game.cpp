@@ -117,7 +117,11 @@ void Game::updateObjects()
 		}
 		else
 			++obIt;
+<<<<<<< HEAD
 	if (objects.size() < 10)
+=======
+	if (objects.size() < 100)
+>>>>>>> origin/master
 		if (flipCoin())
 			objects.push_back(new Debris(mWindow, this, objects));
 		else

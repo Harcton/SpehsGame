@@ -42,12 +42,12 @@ bool Bullet::update()
 			{
 				mGame->objects[i]->getHpRef() -= damage;
 				canDamage = false;
-				mGame->objects[i]->x += 2 * cos(angle);
-				mGame->objects[i]->y += -2*sin(angle);
+				mGame->objects[i]->x += 6 * cos(angle);
+				mGame->objects[i]->y += -6*sin(angle);
 			}
 				
 			speed = speed*0.75;
-			if (speed < 3)
+			if (speed < 10)
 				return false;
 
 			angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
