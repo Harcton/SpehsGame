@@ -98,7 +98,7 @@ void Game::updateBackgrounds()
 		}
 		else
 			++bgIt;
-	if (backgrounds.size() < 5)
+	if (backgrounds.size() < 10)
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 
 	for (unsigned int i = 0; i < backgrounds.size(); i++)
@@ -117,7 +117,7 @@ void Game::updateObjects()
 		}
 		else
 			++obIt;
-	if (objects.size() < 1)
+	if (objects.size() < 10)
 		if (flipCoin())
 			objects.push_back(new Debris(mWindow, this, objects));
 		else
