@@ -82,33 +82,33 @@ void Object::draw()
 void Object::checkCollisions(unsigned int selfIndex)
 {
 	for (unsigned int i = 0; i < mGame->objects.size(); i++)
-		if (mGame->objects[i] != this)
+		if (i != selfIndex)
 		{
-		collisionCheckAngle = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
-		if (collisionCheckAngle < 0)
-			collisionCheckAngle = ((2 * PI) + collisionCheckAngle);
+			collisionCheckAngle = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
+			if (collisionCheckAngle < 0)
+				collisionCheckAngle = ((2 * PI) + collisionCheckAngle);
 
 
-		checkCollisionDistance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
-		checkCollisionRange = textureRadius + mGame->objects[i]->textureRadius;
+			checkCollisionDistance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
+			checkCollisionRange = textureRadius + mGame->objects[i]->textureRadius;
 
-		if (checkCollisionDistance < checkCollisionRange)
-		{
-			double ys;
-			if (ySpeed > 0)
-				ys = 1 + ySpeed;
-			else
-				ys = 1 - ySpeed;
-			ySpeed += 0.001*sin(collisionCheckAngle)*ys;
-			y += 3 * sin(collisionCheckAngle);
+			if (checkCollisionDistance < checkCollisionRange)
+			{
+				double ys;
+				if (ySpeed > 0)
+					ys = 1 + ySpeed;
+				else
+					ys = 1 - ySpeed;
+				ySpeed += 0.001*sin(collisionCheckAngle)*ys;
+				y += 3 * sin(collisionCheckAngle);
 
-			double xs;
-			if (xSpeed > 0)
-				xs = 1 - xSpeed;
-			else
-				xs = 1 + xSpeed;
-			xSpeed += 0.001*cos(collisionCheckAngle)*xs;
-			x += -3 * cos(collisionCheckAngle);
-		}
+				double xs;
+				if (xSpeed > 0)
+					xs = 1 - xSpeed;
+				else
+					xs = 1 + xSpeed;
+				xSpeed += 0.001*cos(collisionCheckAngle)*xs;
+				x += -3 * cos(collisionCheckAngle);
+			}
 		}
 }
