@@ -1,0 +1,40 @@
+#include "Main.h"
+#include "Game.h"
+#include "Object.h"
+#include "Component.h"
+
+Component::~Component()
+{
+}
+Component::Component(Object* mstr, Object* cntr, double xo, double yo)
+{
+	master = mstr;
+	centerObj = cntr;
+	angle = master->angle;
+
+	xOffset = xo;
+	yOffset = yo;
+
+}
+
+bool Component::update()
+{
+	angle += master->turnSpeed;
+
+	x = master->x + xOffset*cos(master->angle) + yOffset*sin(master->angle);
+	y = master->y - xOffset*sin(master->angle) + yOffset*cos(master->angle);
+
+	screenX = centerObj->screenX + (x - centerObj->x);
+	screenY = centerObj->screenY + (y - centerObj->y);
+
+	spr.setPosition(screenX, screenY);
+	spr.setRotation(360 - (angle / PI) * 180);
+
+	return true;
+}
+
+
+void Component::draw()
+{
+	master->mWindow.draw(spr);
+}

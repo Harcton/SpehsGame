@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 
-
+class Game;
 
 class Object
 {
@@ -32,18 +32,22 @@ public:
 	double ySpeed = 0;
 	double turnSpeed; // +CCW, -CW
 
+	//Get methods
+	int& getHpRef(){ return hp; }
+
 
 	bool hasCollisionChecks = true;
 
+	sf::RenderWindow& mWindow;
+	Game* mGame;
 
 protected:
-	Game* mGame;
-	sf::RenderWindow& mWindow;
 	Object* centerObj;
 	int opacity = 0;
 	double collisionCheckAngle;
 	double checkCollisionDistance;
 	double checkCollisionRange;
+	int hp = 100;
 };
 
 #endif

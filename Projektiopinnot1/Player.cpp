@@ -2,10 +2,20 @@
 #include "Game.h"
 #include "Object.h"
 #include "Player.h"
+#include "Component.h"
+#include "Bullet.h"
+#include "Turret.h"
+
 
 
 Player::~Player()
 {
+
+	while (!components.empty())
+	{
+		delete components.back();
+		components.pop_back();
+	}
 }
 Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object(windowref, game, cx, cy)
 {
@@ -15,16 +25,22 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	spr.setTexture(tex);
 	spr.setOrigin(50, 50);
 	textureRadius = 50;	
+
+	components.push_back(new Turret(this, this, -30, -50));
+	components.push_back(new Turret(this, this, -30, 50));
+	components.push_back(new Turret(this, this, -20, -90));
+	components.push_back(new Turret(this, this, -20, 90));
+	components.push_back(new Turret(this, this, 30, 0));
 }
 
 bool Player::update()
 {
 
-		
+
 
 	mWindow.pollEvent(mEvent);
-	
-	
+
+
 	//Speed control
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		accelerate();
@@ -45,12 +61,10 @@ bool Player::update()
 	}
 
 
+
+	updateComponents();
+
 	Object::update();
-
-	/*std::cout << "\n" << angle;*/
-	//std::cout << "\n" << angle << "  xSpeed: " << xSpeed << " ySpeed: " << ySpeed;
-	//std::cout << "\nX: " << x << "\n  Y: " << y;
-
 	return true;
 }
 
@@ -76,4 +90,23 @@ void Player::reverse()
 {
 	xSpeed -= cos(2 * PI - angle)*0.02;
 	ySpeed -= sin(2 * PI - angle)*0.02;
+}
+
+
+
+void Player::updateComponents()
+{
+	//Bullet update
+	for (componentIt = components.begin(); componentIt != components.end();)
+		if ((*componentIt)->update() == false)
+		{
+		delete (*componentIt);
+		componentIt = components.erase(componentIt);
+		}
+		else
+		{
+			++componentIt;
+		}
+	for (unsigned int i = 0; i < components.size(); i++)
+		components[i]->draw();
 }

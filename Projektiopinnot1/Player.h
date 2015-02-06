@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 
+class Component;
 
 class Player : public Object
 {
@@ -10,6 +11,7 @@ public:
 	Player(sf::RenderWindow&, Game*, int, int);
 
 	bool update();
+	void updateComponents();
 
 	//Movement
 	void turnRight();
@@ -20,8 +22,8 @@ public:
 
 protected:
 	sf::Event mEvent;
-
-
+	std::vector<Component*> components;
+	std::vector<Component*>::iterator componentIt;
 };
 
 #endif
