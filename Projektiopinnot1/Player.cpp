@@ -30,11 +30,9 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 
 bool Player::update()
 {
-
-
-
+	//Update mousePosition
+	mousePosition = sf::Mouse::getPosition(mWindow);
 	mWindow.pollEvent(mEvent);
-
 
 	//Speed control
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -55,8 +53,7 @@ bool Player::update()
 		turnSpeed = 0;
 	}
 
-	updateComponents();
-
+	//Components//
 	for (unsigned int i = 0; i < components.size(); i++)
 	{
 		for (unsigned int k = 0; k < components[i]->types.size(); k++)
@@ -66,10 +63,20 @@ bool Player::update()
 			//	components[i]->angle += 0.03;
 			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 			//	components[i]->angle -= 0.03;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+			mouseDirection = -1 * atan2(mousePosition.y - screenY, mousePosition.x - screenX);
+			if (mouseDirection < 0)
+				mouseDirection = ((2 * PI) + mouseDirection);
+
+			components[i]->angle = mouseDirection;
+			components[i]->fixAngle();
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				components[i]->fire();
 		}
 	}
+	updateComponents();
+	//////////////
+
 
 
 	Object::update();

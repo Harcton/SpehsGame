@@ -20,8 +20,12 @@ public:
 	Component(Object*, Object*, double, double);
 
 	virtual bool update();
-	virtual void fire(){}
 	void draw();
+
+	//Virtual functions
+	virtual void fire(){}
+	virtual void fixAngle(){}
+
 
 	Object* master;
 	Object* centerObj;
