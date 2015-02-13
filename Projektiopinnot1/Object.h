@@ -31,8 +31,12 @@ public:
 	double xSpeed = 0;
 	double ySpeed = 0;
 	double turnSpeed; // +CCW, -CW
+
+	double accTimer;
 	double xAcc;
 	double yAcc;
+	double xSpeed0;
+	double ySpeed0;
 
 	double scrSpeedX;
 	double scrSpeedY;

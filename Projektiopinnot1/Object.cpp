@@ -54,7 +54,24 @@ bool Object::update()
 	else if (angle < 0)
 		angle += 2*PI;
 
-	//acceleration??
+	//acceleration timer
+	if (accTimer <= 1)
+	{
+		accTimer++;
+	}
+	else
+		accTimer = 0;
+	
+	//acceleration
+	if (accTimer == 1)
+	{
+		xSpeed0 = xSpeed;
+		ySpeed0 = ySpeed;
+	}
+	xAcc = (xSpeed / xSpeed0);
+	yAcc = (ySpeed / ySpeed0);
+
+	//std::cout << centerObj->xAcc << " " << centerObj->yAcc << std::endl;
 
 	//scrSpeeds
 	scrSpeedX = 7 * xSpeed * abs(xSpeed);

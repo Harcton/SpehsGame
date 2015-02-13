@@ -72,7 +72,6 @@ bool Turret::update()
 	//}
 
 
-	std::cout << "\n" << maxAngle;
 
 	if (master->angle >= maxAngle && master->angle <= 2*PI - maxAngle)
 	{
