@@ -36,22 +36,42 @@ bool Player::update()
 
 	//Speed control
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		accelerate();
+		accelerate(100);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		reverse();
+		reverse(100);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		turnLeft();
+		turnLeft(100);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		turnRight();
+		turnRight(100);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		xSpeed = 0;
 		ySpeed = 0;
 		turnSpeed = 0;
 	}
+
+
+	///CONTROLLER SUPPORT
+
+	if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 10 )
+		turnRight(abs(sf::Joystick::getAxisPosition(0, sf::Joystick::X)));
+	if (sf::Joystick::getAxisPosition(0, sf::Joystick::X) < -10 )
+		turnLeft(abs(sf::Joystick::getAxisPosition(0, sf::Joystick::X)));
+	//right stick axes: R,U
+	if (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) < -20)
+		accelerate(abs(sf::Joystick::getAxisPosition(0, sf::Joystick::Z)));
+
+	if (sf::Joystick::getAxisPosition(0, sf::Joystick::Z) > 20)
+		reverse(sf::Joystick::getAxisPosition(0, sf::Joystick::Z));
+
+	if (sf::Joystick::isButtonPressed(0, 0))
+	for (unsigned int i = 0; i < components.size(); i++)
+	for (unsigned int k = 0; k < components[i]->types.size(); k++)
+	if (components[i]->types[k] == turret)
+		components[i]->fire();
 
 	//Components//
 	for (unsigned int i = 0; i < components.size(); i++)
@@ -67,7 +87,7 @@ bool Player::update()
 			if (mouseDirection < 0)
 				mouseDirection = ((2 * PI) + mouseDirection);
 
-			components[i]->angle = mouseDirection;
+			//components[i]->angle = mouseDirection;
 			components[i]->fixAngle();
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -83,26 +103,26 @@ bool Player::update()
 	return true;
 }
 
-void Player::turnRight()
+void Player::turnRight(double factor)
 {
-	turnSpeed -= PI / 1800;
+	turnSpeed -= factor*(PI / 180000);
 }
 
-void Player::turnLeft()
+void Player::turnLeft(double factor)
 {
-	turnSpeed += PI / 1800;
+	turnSpeed += factor*(PI / 180000);
 }
 
-void Player::accelerate()
+void Player::accelerate(double factor)
 {
-	xSpeed += cos(2*PI - angle)*0.04;
-	ySpeed += sin(2 * PI - angle)*0.04;
+	xSpeed += factor*(cos(2*PI - angle)*0.0004);
+	ySpeed += factor*(sin(2 * PI - angle)*0.0004);
 }
 
-void Player::reverse()
+void Player::reverse(double factor)
 {
-	xSpeed -= cos(2 * PI - angle)*0.02;
-	ySpeed -= sin(2 * PI - angle)*0.02;
+	xSpeed -= factor*(cos(2 * PI - angle)*0.0002);
+	ySpeed -= factor*(sin(2 * PI - angle)*0.0002);
 }
 
 

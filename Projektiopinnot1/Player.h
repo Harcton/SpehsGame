@@ -14,10 +14,10 @@ public:
 	void updateComponents();
 
 	//Movement
-	void turnRight();
-	void turnLeft();
-	void accelerate();
-	void reverse();
+	void turnRight(double);
+	void turnLeft(double);
+	void accelerate(double);
+	void reverse(double);
 
 
 protected:
