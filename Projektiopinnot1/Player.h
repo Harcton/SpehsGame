@@ -24,6 +24,10 @@ protected:
 	sf::Event mEvent;
 	std::vector<Component*> components;
 	std::vector<Component*>::iterator componentIt;
+
+	double mouseDirection;
+	sf::Vector2i mousePosition;
+
 };
 
 #endif

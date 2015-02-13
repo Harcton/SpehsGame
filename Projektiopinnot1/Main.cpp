@@ -20,7 +20,7 @@ void main()
 
 	sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Wrench Space"};
 	mWindow.setFramerateLimit(60);
-	mWindow.setMouseCursorVisible(false);
+	mWindow.setMouseCursorVisible(true);
 
 
 	Game game(mWindow);
