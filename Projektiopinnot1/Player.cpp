@@ -62,10 +62,10 @@ bool Player::update()
 		for (unsigned int k = 0; k < components[i]->types.size(); k++)
 		if (components[i]->types[k] == turret)
 		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-				components[i]->angle += 0.03;
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-				components[i]->angle -= 0.03;
+			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			//	components[i]->angle += 0.03;
+			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+			//	components[i]->angle -= 0.03;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
 				components[i]->fire();
 		}

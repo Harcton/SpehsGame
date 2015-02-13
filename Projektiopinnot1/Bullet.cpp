@@ -57,6 +57,8 @@ bool Bullet::update()
 		}
 
 
+
+
 	
 	return Object::update();
 }

@@ -16,6 +16,7 @@ public:
 
 private:
 	std::vector<Bullet*>::iterator bulletIt;
+	double maxAngle;
 };
 
 #endif
