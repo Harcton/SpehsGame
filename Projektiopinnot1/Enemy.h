@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 class Object;
+class Component;
 
 class Enemy : public Object
 {
@@ -10,10 +11,12 @@ public:
 	~Enemy();
 
 	bool update();
-	void enemyAI();
 
 private:
 	std::vector<Object*>& refVector;
+	void enemyAI();
+	void updateComponents();
+
 	double playerDirection;
 	bool follow;
 	double distance;
@@ -21,6 +24,10 @@ private:
 	int followingDistance;
 	double maxTurnSpeed;
 	double snappingAngle;
+	int timer;
+
+	std::vector<Component*> components;
+	std::vector<Component*>::iterator componentIt;
 };
 
 #endif

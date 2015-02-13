@@ -10,7 +10,6 @@
 
 Player::~Player()
 {
-
 	while (!components.empty())
 	{
 		delete components.back();
@@ -26,10 +25,6 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	spr.setOrigin(50, 50);
 	textureRadius = 50;	
 
-	components.push_back(new Turret(this, this, -30, -50));
-	components.push_back(new Turret(this, this, -30, 50));
-	components.push_back(new Turret(this, this, -20, -90));
-	components.push_back(new Turret(this, this, -20, 90));
 	components.push_back(new Turret(this, this, 30, 0));
 }
 
@@ -72,7 +67,7 @@ bool Player::update()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 				components[i]->angle -= 0.03;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-				components[i]->bullets.push_back(new Bullet(components[i], components[i]->master->mWindow, components[i]->master->mGame, components[i]->x, components[i]->y, components[i]->angle, 25));
+				components[i]->fire();
 		}
 	}
 
@@ -95,8 +90,6 @@ void Player::accelerate()
 {
 	xSpeed += cos(2*PI - angle)*0.04;
 	ySpeed += sin(2 * PI - angle)*0.04;
-
-
 }
 
 void Player::reverse()
@@ -104,7 +97,6 @@ void Player::reverse()
 	xSpeed -= cos(2 * PI - angle)*0.02;
 	ySpeed -= sin(2 * PI - angle)*0.02;
 }
-
 
 
 void Player::updateComponents()

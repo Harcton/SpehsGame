@@ -2,6 +2,9 @@
 #include "Game.h"
 #include "Object.h"
 #include "Enemy.h"
+#include "Component.h"
+#include "Bullet.h"
+#include "Turret.h"
 
 
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector) : refVector(rVector), Object(windowref, game)
@@ -11,16 +14,22 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	spr.setOrigin(50, 50);
 	textureRadius = 50;
 
-	followingDistance = 300;
+	followingDistance = 250;
 	detectionDistance = 600;
 	maxTurnSpeed = 0.07;
-	snappingAngle = 0.5;
+	snappingAngle = 0.2;
+
+	components.push_back(new Turret(this, centerObj, 0, 0));
 }
 
 
 Enemy::~Enemy()
 {
-		
+	while (!components.empty())
+	{
+		delete components.back();
+		components.pop_back();
+	}
 }
 
 
@@ -61,8 +70,9 @@ bool Enemy::update()
 	{
 		turnSpeed = -maxTurnSpeed;
 	}
-		
+	
 	enemyAI();
+	updateComponents();
 	
 	return Object::update();
 }
@@ -77,13 +87,23 @@ void Enemy::enemyAI()
 		follow = true;
 		xSpeed += cos(2 * PI - angle)*(distance/700);
 		ySpeed += sin(2 * PI - angle)*(distance/700);
+
+		if (timer == 6)
+		{
+			if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
+			{
+				components[0]->fire();
+				timer = 0;
+			}
+		}
+		else
+			timer++;
 	}
 	else if (distance < followingDistance)
 	{
 		follow = true;
-
-		xSpeed -= xSpeed*0.5;
-		ySpeed -= xSpeed*0.5;
+		xSpeed -= 0.1;
+		ySpeed -= 0.1;		
 	}
 	else if (distance > detectionDistance)
 	{
@@ -103,13 +123,18 @@ void Enemy::enemyAI()
 
 	if (follow == true)
 	{
-		if (angle < playerDirection-snappingAngle)
+		if (angle < playerDirection - snappingAngle)
 		{
 			turnSpeed += maxTurnSpeed/4;
 		}
-		else if (angle > playerDirection+snappingAngle)
+		else if (angle > playerDirection + snappingAngle)
 		{
 			turnSpeed -= maxTurnSpeed/4;
+		}
+
+		if (angle / playerDirection > 1.1 || angle / playerDirection < 0.9)
+		{
+			
 		}
 	}
 	else
@@ -117,8 +142,26 @@ void Enemy::enemyAI()
 		if (turnSpeed > 0.005)
 		{
 			turnSpeed = turnSpeed*0.9;
-			angle -= turnSpeed;
+			turnSpeed = -turnSpeed;
 			
 		}
 	}
+
+}
+
+
+void Enemy::updateComponents()
+{
+	for (componentIt = components.begin(); componentIt != components.end();)
+		if ((*componentIt)->update() == false)
+		{
+		delete (*componentIt);
+		componentIt = components.erase(componentIt);
+		}
+		else
+		{
+			++componentIt;
+		}
+	for (unsigned int i = 0; i < components.size(); i++)
+		components[i]->draw();
 }

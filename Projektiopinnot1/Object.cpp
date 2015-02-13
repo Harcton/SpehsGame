@@ -54,6 +54,29 @@ bool Object::update()
 	else if (angle < 0)
 		angle += 2*PI;
 
+	//acceleration??
+
+	//scrSpeeds
+	scrSpeedX = 7 * xSpeed * abs(xSpeed);
+	scrSpeedY = 7 * ySpeed * abs(ySpeed);
+	if (scrSpeedX > WINDOW_WIDTH / 2 - centerObj->textureRadius)
+	{
+		scrSpeedX = WINDOW_WIDTH / 2 - centerObj->textureRadius;
+	}
+	else if (scrSpeedX < -WINDOW_WIDTH / 2 + centerObj->textureRadius)
+	{
+		scrSpeedX = -WINDOW_WIDTH / 2 + centerObj->textureRadius;
+	}
+
+	if (scrSpeedY > WINDOW_HEIGHT / 2 - centerObj->textureRadius)
+	{
+		scrSpeedY = WINDOW_HEIGHT / 2 - centerObj->textureRadius;
+	}
+	else if (scrSpeedY < -WINDOW_HEIGHT / 2 + centerObj->textureRadius)
+	{
+		scrSpeedY = -WINDOW_HEIGHT / 2 + centerObj->textureRadius;
+	}
+
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
 	{
@@ -62,8 +85,8 @@ bool Object::update()
 	}
 	else
 	{//Player update, make the player object appear in the center of the screen
-		screenX = WINDOW_WIDTH / 2 - (7 * xSpeed);
-		screenY = WINDOW_HEIGHT / 2 - (7 * ySpeed);
+		screenX = WINDOW_WIDTH / 2 - (scrSpeedX);
+		screenY = WINDOW_HEIGHT / 2 - (scrSpeedY);
 	}
 
 	//Apply variables

@@ -20,6 +20,7 @@ public:
 	Component(Object*, Object*, double, double);
 
 	virtual bool update();
+	virtual void fire(){}
 	void draw();
 
 	Object* master;

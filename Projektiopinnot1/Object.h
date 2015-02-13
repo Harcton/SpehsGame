@@ -31,6 +31,11 @@ public:
 	double xSpeed = 0;
 	double ySpeed = 0;
 	double turnSpeed; // +CCW, -CW
+	double xAcc;
+	double yAcc;
+
+	double scrSpeedX;
+	double scrSpeedY;
 
 	//Get methods
 	int& getHpRef(){ return hp; }

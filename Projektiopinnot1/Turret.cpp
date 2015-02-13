@@ -52,5 +52,5 @@ void Turret::updateBullets()
 
 void Turret::fire()
 {
-
+	bullets.push_back(new Bullet(this, this->master->mWindow, this->master->mGame, this->x, this->y, this->angle, 25));
 }
