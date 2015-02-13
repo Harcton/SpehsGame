@@ -60,9 +60,22 @@ bool Player::update()
 		turnSpeed = 0;
 	}
 
-
-
 	updateComponents();
+
+	for (unsigned int i = 0; i < components.size(); i++)
+	{
+		for (unsigned int k = 0; k < components[i]->types.size(); k++)
+		if (components[i]->types[k] == turret)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+				components[i]->angle += 0.03;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+				components[i]->angle -= 0.03;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+				components[i]->bullets.push_back(new Bullet(components[i], components[i]->master->mWindow, components[i]->master->mGame, components[i]->x, components[i]->y, components[i]->angle, 25));
+		}
+	}
+
 
 	Object::update();
 	return true;

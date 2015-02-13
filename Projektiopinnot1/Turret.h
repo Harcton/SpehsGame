@@ -15,7 +15,6 @@ public:
 	void updateBullets();
 
 private:
-	std::vector<Bullet*> bullets;
 	std::vector<Bullet*>::iterator bulletIt;
 };
 

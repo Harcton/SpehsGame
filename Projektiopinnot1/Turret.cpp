@@ -18,18 +18,12 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	spr.setTexture(tex);
 	spr.setOrigin(20, 50);
 
-
+	types.push_back(turret);
 }
 
 
 bool Turret::update()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		angle += 0.03;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-		angle -= 0.03;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-		bullets.push_back(new Bullet(this, master->mWindow, master->mGame, x, y, angle, 25));
 
 	updateBullets();
 

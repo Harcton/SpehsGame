@@ -4,6 +4,13 @@
 
 
 class Object;
+class Bullet;
+
+enum componentType
+{
+	hull,
+	turret,
+};
 
 
 class Component
@@ -29,13 +36,14 @@ public:
 	double screenX;
 	double screenY;
 
-
+	std::vector<componentType> types;
+	std::vector<Bullet*> bullets;
+	double angle;
 
 protected:
 	sf::Texture tex;
 	sf::Sprite spr;
 	
-	double angle;
 };
 
 #endif
