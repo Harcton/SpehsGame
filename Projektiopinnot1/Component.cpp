@@ -19,8 +19,15 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 
 bool Component::update()
 {
+	//Angle
 	angle += master->turnSpeed;
+	if (angle > 2 * PI)
+		angle -= 2 * PI;
+	else if (angle < 0)
+		angle += 2 * PI;
 
+
+	// X/Y
 	x = master->x + xOffset*cos(master->angle) + yOffset*sin(master->angle);
 	y = master->y - xOffset*sin(master->angle) + yOffset*cos(master->angle);
 
