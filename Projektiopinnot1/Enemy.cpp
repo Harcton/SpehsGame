@@ -11,7 +11,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	spr.setOrigin(50, 50);
 	textureRadius = 50;
 
-	followingDistance = 250;
+	followingDistance = 300;
 	detectionDistance = 600;
 	maxTurnSpeed = 0.07;
 	snappingAngle = 0.5;
@@ -33,7 +33,7 @@ bool Enemy::update()
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
 	
-	//limit the speed
+	//limit speed
 	if (xSpeed > 5)
 	{
 		xSpeed = 5;
@@ -81,8 +81,9 @@ void Enemy::enemyAI()
 	else if (distance < followingDistance)
 	{
 		follow = true;
-		xSpeed -= -xSpeed*0.01;
-		ySpeed -= -xSpeed*0.01;
+
+		xSpeed -= xSpeed*0.5;
+		ySpeed -= xSpeed*0.5;
 	}
 	else if (distance > detectionDistance)
 	{
@@ -104,11 +105,11 @@ void Enemy::enemyAI()
 	{
 		if (angle < playerDirection-snappingAngle)
 		{
-			turnSpeed += maxTurnSpeed/3;
+			turnSpeed += maxTurnSpeed/4;
 		}
 		else if (angle > playerDirection+snappingAngle)
 		{
-			turnSpeed -= maxTurnSpeed/3;
+			turnSpeed -= maxTurnSpeed/4;
 		}
 	}
 	else
