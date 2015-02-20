@@ -13,11 +13,12 @@ public:
 	void fire();
 	bool update();
 	void updateBullets();
-	void fixAngle();
+	//void fixAngle();
+
 
 private:
 	std::vector<Bullet*>::iterator bulletIt;
-	double maxAngle;
+
 };
 
 #endif
