@@ -25,6 +25,7 @@ protected:
 	std::vector<Component*> components;
 	std::vector<Component*>::iterator componentIt;
 
+	bool controller;
 	double mouseDirection;
 	sf::Vector2i mousePosition;
 

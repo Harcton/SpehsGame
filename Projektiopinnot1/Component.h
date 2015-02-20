@@ -24,7 +24,7 @@ public:
 
 	//Virtual functions
 	virtual void fire(){}
-	virtual void fixAngle(){}
+	//virtual void fixAngle(){}
 
 
 	Object* master;
@@ -44,6 +44,8 @@ public:
 	std::vector<componentType> types;
 	std::vector<Bullet*> bullets;
 	double angle;
+	double turningSpeed;
+	double maxAngle;
 
 protected:
 	sf::Texture tex;

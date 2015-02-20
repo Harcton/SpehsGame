@@ -17,7 +17,8 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	tex.loadFromFile("Texture/turret.png");
 	spr.setTexture(tex);
 	spr.setOrigin(20, 50);
-	maxAngle = PI/3;
+	maxAngle = PI/2;
+	turningSpeed = PI/40;
 
 	types.push_back(turret);
 }
@@ -110,46 +111,46 @@ bool Turret::update()
 	}
 	return true;
 }
-
-void Turret::fixAngle()
-{
-	if (master->angle >= maxAngle && master->angle <= 2 * PI - maxAngle)
-	{
-		if (angle < master->angle - maxAngle)
-			angle = master->angle - maxAngle;
-		else if (angle > master->angle + maxAngle)
-			angle = master->angle + maxAngle;
-	}
-	else
-	{
-		if (master->angle >= 0 && master->angle < maxAngle) //master angle is within 0 -> +maxAngle
-		{
-			if (angle > master->angle)
-			{
-				if (angle < master->angle + PI)
-				{
-					if (angle > master->angle + maxAngle)
-						angle = master->angle + maxAngle;
-				}
-				else if (angle < master->angle + 2 * PI - maxAngle)
-					angle = master->angle + 2 * PI - maxAngle;
-			}
-		}
-		else //master angle is within 0 -> -maxAngle
-		{
-			if (angle < master->angle) //if angle is out of the {0 -> -maxAngle} sector  ->it might be invalid
-			{
-				if (angle > master->angle - PI)
-				{
-					if (angle < master->angle - maxAngle) //A
-						angle = master->angle - maxAngle;
-				}
-				else if (angle > master->angle - 2 * PI + maxAngle) //B
-					angle = master->angle - 2 * PI + maxAngle;
-			}
-		}
-	}
-}
+//
+//void Turret::fixAngle()
+//{
+//	if (master->angle >= maxAngle && master->angle <= 2 * PI - maxAngle)
+//	{
+//		if (angle < master->angle - maxAngle)
+//			angle = master->angle - maxAngle;
+//		else if (angle > master->angle + maxAngle)
+//			angle = master->angle + maxAngle;
+//	}
+//	else
+//	{
+//		if (master->angle >= 0 && master->angle < maxAngle) //master angle is within 0 -> +maxAngle
+//		{
+//			if (angle > master->angle)
+//			{
+//				if (angle < master->angle + PI)
+//				{
+//					if (angle > master->angle + maxAngle)
+//						angle = master->angle + maxAngle;
+//				}
+//				else if (angle < master->angle + 2 * PI - maxAngle)
+//					angle = master->angle + 2 * PI - maxAngle;
+//			}
+//		}
+//		else //master angle is within 0 -> -maxAngle
+//		{
+//			if (angle < master->angle) //if angle is out of the {0 -> -maxAngle} sector  ->it might be invalid
+//			{
+//				if (angle > master->angle - PI)
+//				{
+//					if (angle < master->angle - maxAngle) //A
+//						angle = master->angle - maxAngle;
+//				}
+//				else if (angle > master->angle - 2 * PI + maxAngle) //B
+//					angle = master->angle - 2 * PI + maxAngle;
+//			}
+//		}
+//	}
+//}
 
 
 
