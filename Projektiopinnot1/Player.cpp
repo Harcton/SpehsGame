@@ -46,11 +46,15 @@ bool Player::update()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		turnRight(100);
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		xSpeed = 0;
 		ySpeed = 0;
 		turnSpeed = 0;
+
+		relativeSpeedX = 0;
+		relativeSpeedY = 0;
 	}
 
 
@@ -117,12 +121,18 @@ void Player::accelerate(double factor)
 {
 	xSpeed += factor*(cos(2*PI - angle)*0.0004);
 	ySpeed += factor*(sin(2 * PI - angle)*0.0004);
+
+	relativeSpeedX += factor*(cos(2 * PI - angle)*0.0004);
+	relativeSpeedY += factor*(sin(2 * PI - angle)*0.0004);
 }
 
 void Player::reverse(double factor)
 {
 	xSpeed -= factor*(cos(2 * PI - angle)*0.0002);
 	ySpeed -= factor*(sin(2 * PI - angle)*0.0002);
+
+	relativeSpeedX -= factor*(cos(2 * PI - angle)*0.0004);
+	relativeSpeedY -= factor*(sin(2 * PI - angle)*0.0004);
 }
 
 

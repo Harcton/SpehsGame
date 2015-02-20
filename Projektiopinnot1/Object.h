@@ -32,7 +32,7 @@ public:
 	double ySpeed = 0;
 	double turnSpeed; // +CCW, -CW
 
-	double accTimer;
+	int accTimer;
 	double xAcc;
 	double yAcc;
 	double xSpeed0;
@@ -40,6 +40,8 @@ public:
 
 	double scrSpeedX;
 	double scrSpeedY;
+	double relativeSpeedX;
+	double relativeSpeedY;
 
 	//Get methods
 	int& getHpRef(){ return hp; }

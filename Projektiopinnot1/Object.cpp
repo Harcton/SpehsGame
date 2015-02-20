@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Object.h"
 
+#include <math.h>
+
 Object::~Object()
 {
 }
@@ -70,30 +72,40 @@ bool Object::update()
 	}
 	xAcc = (xSpeed / xSpeed0);
 	yAcc = (ySpeed / ySpeed0);
-
-	//std::cout << centerObj->xAcc << " " << centerObj->yAcc << std::endl;
+	
+	//REALTIVESPEED VALUES WOBBLE TOO MUCH - FIX!!!!!
 
 	//scrSpeeds
-	scrSpeedX = 7 * xSpeed * abs(xSpeed);
-	scrSpeedY = 7 * ySpeed * abs(ySpeed);
-	if (scrSpeedX > WINDOW_WIDTH / 2 - centerObj->textureRadius)
+	//Check if ship is accelerating, limit and set scrSpeed
+	if (centerObj->xAcc == 1 || centerObj->xAcc == -1)
 	{
-		scrSpeedX = WINDOW_WIDTH / 2 - centerObj->textureRadius;
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
+		{
+			scrSpeedX = 0.99 * scrSpeedX;
+			relativeSpeedX = 0.99 * relativeSpeedX;
+		}
 	}
-	else if (scrSpeedX < -WINDOW_WIDTH / 2 + centerObj->textureRadius)
+	else
 	{
-		scrSpeedX = -WINDOW_WIDTH / 2 + centerObj->textureRadius;
+		scrSpeedX += relativeSpeedX * (abs(relativeSpeedX));
+		if (screenY>WINDOW_WIDTH / 2)
+			relativeSpeedX -= scrSpeedX / 4000;
 	}
-
-	if (scrSpeedY > WINDOW_HEIGHT / 2 - centerObj->textureRadius)
+	if (centerObj->yAcc == 1 || centerObj->yAcc == -1)
 	{
-		scrSpeedY = WINDOW_HEIGHT / 2 - centerObj->textureRadius;
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
+		{
+			scrSpeedY = 0.99 * scrSpeedY;
+			relativeSpeedY = 0.99 * relativeSpeedY;
+		}
 	}
-	else if (scrSpeedY < -WINDOW_HEIGHT / 2 + centerObj->textureRadius)
+	else
 	{
-		scrSpeedY = -WINDOW_HEIGHT / 2 + centerObj->textureRadius;
+		scrSpeedY += relativeSpeedY * (abs(relativeSpeedY));
+		if (screenY>WINDOW_HEIGHT/2)
+			relativeSpeedY -= scrSpeedY / 2000;
 	}
-
+	
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
 	{
