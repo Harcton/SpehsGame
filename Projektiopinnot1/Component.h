@@ -18,6 +18,7 @@ class Component
 public:
 	~Component();
 	Component(Object*, Object*, double, double);
+	friend class Player;
 
 	virtual bool update();
 	void draw();
@@ -50,6 +51,8 @@ public:
 protected:
 	sf::Texture tex;
 	sf::Sprite spr;
+
+	bool mouseAim;
 	
 };
 

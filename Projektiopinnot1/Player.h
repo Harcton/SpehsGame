@@ -13,12 +13,13 @@ public:
 	bool update();
 	void updateComponents();
 
-	//Movement
+	//Handle input
 	void turnRight(double);
 	void turnLeft(double);
 	void accelerate(double);
 	void reverse(double);
-
+	void zoomIn(double);
+	void zoomOut(double);
 
 protected:
 	sf::Event mEvent;
