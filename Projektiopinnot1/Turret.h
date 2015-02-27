@@ -19,8 +19,6 @@ public:
 
 private:
 	std::vector<Bullet*>::iterator bulletIt;
-	bool mouseAim = false;
-
 };
 
 #endif

@@ -21,6 +21,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	turningSpeed = PI/40;
 
 	types.push_back(turret);
+	mouseAim = true;
 }
 
 

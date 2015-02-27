@@ -254,7 +254,7 @@ bool Player::update()
 						}
 						else
 						{
-							if (components[i]->angle > turretMinAngle)
+							if (components[i]->angle > turretMinAngle - components[i]->turningSpeed)
 								components[i]->angle += components[i]->turningSpeed;
 							else if (components[i]->angle < turretMaxAngle)
 								components[i]->angle += components[i]->turningSpeed;
@@ -270,7 +270,7 @@ bool Player::update()
 						}
 						else
 						{
-							if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle)
+							if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
 								components[i]->angle -= components[i]->turningSpeed;
 							else if (components[i]->angle > turretMinAngle)
 								components[i]->angle -= components[i]->turningSpeed;
@@ -344,7 +344,6 @@ bool Player::update()
 void Player::turnRight(double factor)
 {
 	turnSpeed -= factor*(PI / 180000);
-	std::cout << "\nTurning right...";
 }
 
 void Player::turnLeft(double factor)
