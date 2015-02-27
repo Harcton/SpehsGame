@@ -100,7 +100,7 @@ void Game::updateBackgrounds()
 		}
 		else
 			++bgIt;
-	if (backgrounds.size() < 10)
+	if (backgrounds.size() < 7)
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 
 	for (unsigned int i = 0; i < backgrounds.size(); i++)

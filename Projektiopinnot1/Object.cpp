@@ -24,6 +24,7 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 		y = centerObj->y + irandom(-SPAWN_RANGE, SPAWN_RANGE);
 
 	spr.setPosition(x, y);
+
 }
 Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref)
 {
@@ -73,39 +74,45 @@ bool Object::update()
 	xAcc = (xSpeed / xSpeed0);
 	yAcc = (ySpeed / ySpeed0);
 	
-	//REALTIVESPEED VALUES WOBBLE TOO MUCH - FIX!!!!!
 
+	xScreenDistance = (WINDOW_WIDTH / 2.5 - abs(scrSpeedX)) / (WINDOW_WIDTH / 2.5);
+	yScreenDistance = (WINDOW_HEIGHT / 2.5 - abs(scrSpeedY)) / (WINDOW_WIDTH / 2.5);
 	//scrSpeeds
 	//Check if ship is accelerating, limit and set scrSpeed
+	//X
+		//NOT ACCELERATING
 	if (centerObj->xAcc == 1 || centerObj->xAcc == -1)
 	{
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
 		{
-			scrSpeedX = 0.99 * scrSpeedX;
-			relativeSpeedX = 0.99 * relativeSpeedX;
+			scrSpeedX = 0.98 * scrSpeedX;
+			relativeSpeedX = 0.95 * relativeSpeedX;
 		}
 	}
+		//ACCELERATING
 	else
 	{
-		scrSpeedX += relativeSpeedX * (abs(relativeSpeedX));
-		if (screenY>WINDOW_WIDTH / 2)
-			relativeSpeedX -= scrSpeedX / 4000;
+		scrSpeedX += (relativeSpeedX * abs(relativeSpeedX)) * xScreenDistance;
 	}
+
+
+	//Y
+		//NOT ACCELERATING
 	if (centerObj->yAcc == 1 || centerObj->yAcc == -1)
 	{
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
 		{
-			scrSpeedY = 0.99 * scrSpeedY;
-			relativeSpeedY = 0.99 * relativeSpeedY;
+			scrSpeedY = 0.98 * scrSpeedY;
+			relativeSpeedY = 0.95 * relativeSpeedY;
 		}
 	}
+		//ACCELERATING
 	else
 	{
-		scrSpeedY += relativeSpeedY * (abs(relativeSpeedY));
-		if (screenY>WINDOW_HEIGHT/2)
-			relativeSpeedY -= scrSpeedY / 2000;
+		scrSpeedY += (relativeSpeedY * abs(relativeSpeedY)) * yScreenDistance;
 	}
 	
+
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
 	{

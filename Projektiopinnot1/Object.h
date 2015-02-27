@@ -42,6 +42,8 @@ public:
 	double scrSpeedY;
 	double relativeSpeedX;
 	double relativeSpeedY;
+	double xScreenDistance;
+	double yScreenDistance;
 
 	//Get methods
 	int& getHpRef(){ return hp; }

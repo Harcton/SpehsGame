@@ -13,7 +13,7 @@
 
 
 #define PI 3.14159265
-#define SPAWN_RANGE 500
+#define SPAWN_RANGE 1000
 #define DESPAWN_RANGE 2000
 
 extern int WINDOW_WIDTH;
