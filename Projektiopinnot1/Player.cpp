@@ -24,60 +24,42 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	spr.setTexture(tex);
 	spr.setOrigin(50, 50);
 	textureRadius = 50;	
+	
 
-	if (sf::Joystick::isConnected(0))
-		controller = true;
-	else
-		controller = false;
-	/*
 	components.push_back(new Turret(this, this, 30, 0));
 	components.push_back(new Turret(this, this, -10, -30));
 	components.push_back(new Turret(this, this, -10, -60));
 	components.push_back(new Turret(this, this, -10, 30));
 	components.push_back(new Turret(this, this, -10, 60));
-<<<<<<< HEAD
-	*/
-=======
 
 
 	//Dynamic key binding
 	MyKeys key;
+	//Keyboard setup
 
 	//Controller setup
-	key.inputType = joystickInput;
-	key.axisType = positiveAxis;
-	key.joystickIndex = 0;
-	key.joystickAxis = sf::Joystick::X;
+	key.inputType = keyboardInput;
+	key.keyCode = sf::Keyboard::D;
 	Keys[key_turnRight] = key;
 
-	key.inputType = joystickInput;
-	key.axisType = negativeAxis;
-	key.joystickIndex = 0;
-	key.joystickAxis = sf::Joystick::X;
+	key.inputType = keyboardInput;
+	key.keyCode = sf::Keyboard::A;
 	Keys[key_turnLeft] = key;
 
-	key.inputType = joystickInput;
-	key.axisType = positiveAxis;
-	key.joystickIndex = 0;
-	key.joystickAxis = sf::Joystick::Z;
+	key.inputType = keyboardInput;
+	key.keyCode = sf::Keyboard::S;
 	Keys[key_reverse] = key;
 
-	key.inputType = joystickInput;
-	key.axisType = negativeAxis;
-	key.joystickIndex = 0;
-	key.joystickAxis = sf::Joystick::Z;
+	key.inputType = keyboardInput;
+	key.keyCode = sf::Keyboard::W;
 	Keys[key_accelerate] = key;
 
-	key.inputType = joystickInput;
-	key.axisType = noAxis;
-	key.joystickIndex = 0;
-	key.joystickButton = 7;
+	key.inputType = keyboardInput;
+	key.keyCode = sf::Keyboard::Period;
 	Keys[key_zoomIn] = key;
 
-	key.inputType = joystickInput;
-	key.axisType = noAxis;
-	key.joystickIndex = 0;
-	key.joystickButton = 6;
+	key.inputType = keyboardInput;
+	key.keyCode = sf::Keyboard::Comma;
 	Keys[key_zoomOut] = key;
 
 	//Handle turrets
@@ -85,45 +67,84 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	for (unsigned int i = 0; i < components.size(); i++)
 		for (unsigned int k = 0; k < components[i]->types.size(); k++)
 			if (components[i]->types[k] == turret)
-				turretCount++;	
+				turretCount++;
 	for (int i = 0; i < turretCount; i++)
 	{//Turret rotation
-		key.inputType = joystickInput;
-		key.axisType = noAxis;
-		key.joystickIndex = 0;
-		key.joystickButton = 4;
-		Keys[i+1] = key;
-		key.joystickButton = 5;
-		Keys[-1*(i+1)] = key;
+		key.inputType = keyboardInput;
+		key.keyCode = sf::Keyboard::E;
+		Keys[-1 * (i + 1)] = key;
+		key.keyCode = sf::Keyboard::Q;
+		Keys[i + 1] = key;
+		//Turret fire
+		key.inputType = keyboardInput;
+		key.keyCode = sf::Keyboard::Return;
+		Keys[i + 1 + 0.1] = key;
 	}
-	//Turret fire
-	key.inputType = joystickInput;
-	key.axisType = noAxis;
-	key.joystickIndex = 0;
-	key.joystickButton = 0;
-	Keys[1.1] = key;
-	key.inputType = joystickInput;
-	key.axisType = noAxis;
-	key.joystickIndex = 0;
-	key.joystickButton = 1;
-	Keys[2.1] = key;
-	key.inputType = joystickInput;
-	key.axisType = noAxis;
-	key.joystickIndex = 0;
-	key.joystickButton = 2;
-	Keys[3.1] = key;
-	key.inputType = joystickInput;
-	key.axisType = noAxis;
-	key.joystickIndex = 0;
-	key.joystickButton = 3;
-	Keys[4.1] = key;
-	key.inputType = joystickInput;
-	key.axisType = noAxis;
-	key.joystickIndex = 0;
-	key.joystickButton = 2;
-	Keys[5.1] = key;
 
->>>>>>> origin/master
+
+
+
+
+	//Controller setup
+	//key.inputType = joystickInput;
+	//key.axisType = positiveAxis;
+	//key.joystickIndex = 0;
+	//key.joystickAxis = sf::Joystick::X;
+	//Keys[key_turnRight] = key;
+
+	//key.inputType = joystickInput;
+	//key.axisType = negativeAxis;
+	//key.joystickIndex = 0;
+	//key.joystickAxis = sf::Joystick::X;
+	//Keys[key_turnLeft] = key;
+
+	//key.inputType = joystickInput;
+	//key.axisType = positiveAxis;
+	//key.joystickIndex = 0;
+	//key.joystickAxis = sf::Joystick::Z;
+	//Keys[key_reverse] = key;
+
+	//key.inputType = joystickInput;
+	//key.axisType = negativeAxis;
+	//key.joystickIndex = 0;
+	//key.joystickAxis = sf::Joystick::Z;
+	//Keys[key_accelerate] = key;
+
+	//key.inputType = joystickInput;
+	//key.axisType = noAxis;
+	//key.joystickIndex = 0;
+	//key.joystickButton = 7;
+	//Keys[key_zoomIn] = key;
+
+	//key.inputType = joystickInput;
+	//key.axisType = noAxis;
+	//key.joystickIndex = 0;
+	//key.joystickButton = 6;
+	//Keys[key_zoomOut] = key;
+
+	////Handle turrets
+	//int turretCount = 0;
+	//for (unsigned int i = 0; i < components.size(); i++)
+	//	for (unsigned int k = 0; k < components[i]->types.size(); k++)
+	//		if (components[i]->types[k] == turret)
+	//			turretCount++;	
+	//for (int i = 0; i < turretCount; i++)
+	//{//Turret rotation
+	//	key.inputType = joystickInput;
+	//	key.axisType = noAxis;
+	//	key.joystickIndex = 0;
+	//	key.joystickButton = 4;
+	//	Keys[i+1] = key;
+	//	key.joystickButton = 5;
+	//	Keys[-1 * (i + 1)] = key;
+	//	//Turret fire
+	//	key.inputType = joystickInput;
+	//	key.axisType = noAxis;
+	//	key.joystickIndex = 0;
+	//	key.joystickButton = 0;
+	//	Keys[i + 1 + 0.1] = key;
+	//}
+
 }
 
 bool Player::update()
@@ -207,8 +228,8 @@ bool Player::update()
 
 
 
-	//Components//
-		{
+
+		{//Components
 			int turretCount = 0;
 			for (unsigned int i = 0; i < components.size(); i++)
 			{
@@ -226,7 +247,7 @@ bool Player::update()
 						turretMaxAngle -= 2 * PI;
 
 					if (testInput(Keys[turretCount]) && components[i]->mouseAim == false)
-					{
+					{//Rotate turret i CCW
 						if (turretMaxAngle > turretMinAngle)
 						{
 							if (components[i]->angle < turretMaxAngle)
@@ -242,7 +263,7 @@ bool Player::update()
 					}
 
 					if (testInput(Keys[-1 * turretCount]) && components[i]->mouseAim == false)
-					{
+					{//Rotate turret i CW
 						if (turretMaxAngle > turretMinAngle)
 						{
 							if (components[i]->angle > turretMinAngle)
@@ -250,7 +271,7 @@ bool Player::update()
 						}
 						else
 						{
-							if (components[i]->angle >= 0)
+							if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle)
 								components[i]->angle -= components[i]->turningSpeed;
 							else if (components[i]->angle > turretMinAngle)
 								components[i]->angle -= components[i]->turningSpeed;
