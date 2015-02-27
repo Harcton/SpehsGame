@@ -109,8 +109,8 @@ bool Object::update()
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
 	{
-		screenX = centerObj->screenX +(x - centerObj->x);
-		screenY = centerObj->screenY + (y - centerObj->y);
+		screenX = centerObj->screenX + resFactor*zoomFactor*(x - centerObj->x);
+		screenY = centerObj->screenY + resFactor*zoomFactor*(y - centerObj->y);
 	}
 	else
 	{//Player update, make the player object appear in the center of the screen
@@ -120,7 +120,7 @@ bool Object::update()
 
 	//Apply variables
 	spr.setPosition(screenX, screenY);
-	spr.setScale(scale, scale);
+	spr.setScale(scale*resFactor*zoomFactor, scale*resFactor*zoomFactor);
 	spr.setRotation(360 - (angle/PI)*180);
 	return true;
 }
