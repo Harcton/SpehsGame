@@ -4,6 +4,14 @@
 #include "Player.h"
 
 
+<<<<<<< HEAD
+=======
+
+//int WINDOW_WIDTH = 1920;
+//int WINDOW_HEIGHT = 1080;
+
+
+>>>>>>> origin/master
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
 double resFactor = WINDOW_HEIGHT/1080.0;
@@ -11,6 +19,10 @@ double zoomFactor = 1;
 //Global controll settings
 std::map<float, MyKeys> Keys;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 
 void main()
 {

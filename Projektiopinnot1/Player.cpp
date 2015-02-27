@@ -26,6 +26,14 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	textureRadius = 50;	
 	
 
+<<<<<<< HEAD
+=======
+	if (sf::Joystick::isConnected(0))
+		controller = true;
+	else
+		controller = false;
+
+>>>>>>> origin/master
 	components.push_back(new Turret(this, this, 30, 0));
 	components.push_back(new Turret(this, this, -10, -30));
 	components.push_back(new Turret(this, this, -10, -60));
@@ -80,6 +88,7 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 		key.keyCode = sf::Keyboard::Return;
 		Keys[i + 1 + 0.1] = key;
 	}
+<<<<<<< HEAD
 
 
 
@@ -144,6 +153,34 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	//	key.joystickButton = 0;
 	//	Keys[i + 1 + 0.1] = key;
 	//}
+=======
+	//Turret fire
+	key.inputType = joystickInput;
+	key.axisType = noAxis;
+	key.joystickIndex = 0;
+	key.joystickButton = 0;
+	Keys[1.1] = key;
+	key.inputType = joystickInput;
+	key.axisType = noAxis;
+	key.joystickIndex = 0;
+	key.joystickButton = 1;
+	Keys[2.1] = key;
+	key.inputType = joystickInput;
+	key.axisType = noAxis;
+	key.joystickIndex = 0;
+	key.joystickButton = 2;
+	Keys[3.1] = key;
+	key.inputType = joystickInput;
+	key.axisType = noAxis;
+	key.joystickIndex = 0;
+	key.joystickButton = 3;
+	Keys[4.1] = key;
+	key.inputType = joystickInput;
+	key.axisType = noAxis;
+	key.joystickIndex = 0;
+	key.joystickButton = 2;
+	Keys[5.1] = key;
+>>>>>>> origin/master
 
 }
 
