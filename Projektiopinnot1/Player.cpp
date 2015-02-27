@@ -29,15 +29,12 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 		controller = true;
 	else
 		controller = false;
-	/*
+
 	components.push_back(new Turret(this, this, 30, 0));
 	components.push_back(new Turret(this, this, -10, -30));
 	components.push_back(new Turret(this, this, -10, -60));
 	components.push_back(new Turret(this, this, -10, 30));
 	components.push_back(new Turret(this, this, -10, 60));
-<<<<<<< HEAD
-	*/
-=======
 
 
 	//Dynamic key binding
@@ -123,7 +120,6 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	key.joystickButton = 2;
 	Keys[5.1] = key;
 
->>>>>>> origin/master
 }
 
 bool Player::update()
