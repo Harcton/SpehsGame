@@ -6,9 +6,10 @@
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
-
-/*int WINDOW_WIDTH = 1920;
-int WINDOW_HEIGHT = 1080;*/
+double resFactor = WINDOW_HEIGHT/1080.0;
+double zoomFactor = 1;
+//Global controll settings
+std::map<float, MyKeys> Keys;
 
 
 void main()
@@ -18,7 +19,7 @@ void main()
 	srand((unsigned)time(&t));
 
 
-	sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Wrench Space"};
+	sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Wrench Space"}; //, sf::Style::Fullscreen
 	mWindow.setFramerateLimit(60);
 	mWindow.setMouseCursorVisible(true);
 
@@ -64,4 +65,28 @@ double getDistance(double x1, double y1, double x2, double y2)
 	int yDiff = abs(y1 - y2);
 
 	return sqrt(pow(xDiff, 2) + pow(yDiff, 2));
+}
+
+bool testInput(MyKeys k)
+{
+	//Mouse
+	if (k.inputType == mouseInput && sf::Mouse::isButtonPressed(k.mouseButton))
+		return (true);
+	else if (k.inputType == mouseInput)
+		return false;
+	
+	//Keyboard
+	if (k.inputType == keyboardInput && sf::Keyboard::isKeyPressed(k.keyCode))
+		return (true);
+	else if (k.inputType == keyboardInput)
+		return false;
+	
+	//Joystick
+	if (sf::Joystick::isConnected(k.joystickIndex) == false)
+		return false;
+	if (k.inputType == joystickInput && ((k.axisType == positiveAxis && sf::Joystick::getAxisPosition(k.joystickIndex, k.joystickAxis) > k.threshold) || (k.axisType == negativeAxis && sf::Joystick::getAxisPosition(k.joystickIndex, k.joystickAxis) < -k.threshold) || (k.axisType == noAxis && sf::Joystick::isButtonPressed(k.joystickIndex, k.joystickButton))))
+		return true;
+
+
+	return (false);
 }

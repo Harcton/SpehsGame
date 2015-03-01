@@ -19,6 +19,7 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 	spr.setOrigin(50, 50);
 	angle = (irandom(0, 360)/double(360)) * (2*PI);
 	scale = double(irandom(0, 500) + 100) / 100;
+	turnSpeed = irandom(-1, 1)*0.1 / double(360);
 
 	hasCollisionChecks = false;
 
@@ -30,6 +31,5 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 
 bool Background::updateBackground()
 {
-
 	return Object::update();
 }

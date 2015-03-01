@@ -31,11 +31,13 @@ bool Component::update()
 	x = master->x + xOffset*cos(master->angle) + yOffset*sin(master->angle);
 	y = master->y - xOffset*sin(master->angle) + yOffset*cos(master->angle);
 
-	screenX = centerObj->screenX + (x - centerObj->x);
-	screenY = centerObj->screenY + (y - centerObj->y);
+	screenX = centerObj->screenX + resFactor*zoomFactor*(x - centerObj->x);
+	screenY = centerObj->screenY + resFactor*zoomFactor*(y - centerObj->y);
 
 	spr.setPosition(screenX, screenY);
 	spr.setRotation(360 - (angle / PI) * 180);
+	spr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+
 
 	return true;
 }

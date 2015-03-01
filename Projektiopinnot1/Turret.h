@@ -9,15 +9,16 @@ class Turret : public Component
 public:
 	~Turret();
 	Turret(Object*, Object*, double, double);
+	friend class Player;
 	
 	void fire();
 	bool update();
 	void updateBullets();
-	void fixAngle();
+	//void fixAngle();
+
 
 private:
 	std::vector<Bullet*>::iterator bulletIt;
-	double maxAngle;
 };
 
 #endif

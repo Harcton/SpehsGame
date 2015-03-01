@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Object.h"
 
+#include <math.h>
+
 Object::~Object()
 {
 }
@@ -22,6 +24,7 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 		y = centerObj->y + irandom(-SPAWN_RANGE, SPAWN_RANGE);
 
 	spr.setPosition(x, y);
+
 }
 Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref)
 {
@@ -70,35 +73,51 @@ bool Object::update()
 	}
 	xAcc = (xSpeed / xSpeed0);
 	yAcc = (ySpeed / ySpeed0);
+	
 
-	//std::cout << centerObj->xAcc << " " << centerObj->yAcc << std::endl;
-
+	xScreenDistance = (WINDOW_WIDTH / 2.5 - abs(scrSpeedX)) / (WINDOW_WIDTH / 2.5);
+	yScreenDistance = (WINDOW_HEIGHT / 2.5 - abs(scrSpeedY)) / (WINDOW_WIDTH / 2.5);
 	//scrSpeeds
-	scrSpeedX = 7 * xSpeed * abs(xSpeed);
-	scrSpeedY = 7 * ySpeed * abs(ySpeed);
-	if (scrSpeedX > WINDOW_WIDTH / 2 - centerObj->textureRadius)
+	//Check if ship is accelerating, limit and set scrSpeed
+	//X
+		//NOT ACCELERATING
+	if (centerObj->xAcc == 1 || centerObj->xAcc == -1)
 	{
-		scrSpeedX = WINDOW_WIDTH / 2 - centerObj->textureRadius;
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
+		{
+			scrSpeedX = 0.98 * scrSpeedX;
+			relativeSpeedX = 0.95 * relativeSpeedX;
+		}
 	}
-	else if (scrSpeedX < -WINDOW_WIDTH / 2 + centerObj->textureRadius)
+		//ACCELERATING
+	else
 	{
-		scrSpeedX = -WINDOW_WIDTH / 2 + centerObj->textureRadius;
+		scrSpeedX += (relativeSpeedX * abs(relativeSpeedX)) * xScreenDistance;
 	}
 
-	if (scrSpeedY > WINDOW_HEIGHT / 2 - centerObj->textureRadius)
+
+	//Y
+		//NOT ACCELERATING
+	if (centerObj->yAcc == 1 || centerObj->yAcc == -1)
 	{
-		scrSpeedY = WINDOW_HEIGHT / 2 - centerObj->textureRadius;
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
+		{
+			scrSpeedY = 0.98 * scrSpeedY;
+			relativeSpeedY = 0.95 * relativeSpeedY;
+		}
 	}
-	else if (scrSpeedY < -WINDOW_HEIGHT / 2 + centerObj->textureRadius)
+		//ACCELERATING
+	else
 	{
-		scrSpeedY = -WINDOW_HEIGHT / 2 + centerObj->textureRadius;
+		scrSpeedY += (relativeSpeedY * abs(relativeSpeedY)) * yScreenDistance;
 	}
+	
 
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
 	{
-		screenX = centerObj->screenX +(x - centerObj->x);
-		screenY = centerObj->screenY + (y - centerObj->y);
+		screenX = centerObj->screenX + resFactor*zoomFactor*(x - centerObj->x);
+		screenY = centerObj->screenY + resFactor*zoomFactor*(y - centerObj->y);
 	}
 	else
 	{//Player update, make the player object appear in the center of the screen
@@ -108,7 +127,7 @@ bool Object::update()
 
 	//Apply variables
 	spr.setPosition(screenX, screenY);
-	spr.setScale(scale, scale);
+	spr.setScale(scale*resFactor*zoomFactor, scale*resFactor*zoomFactor);
 	spr.setRotation(360 - (angle/PI)*180);
 	return true;
 }
