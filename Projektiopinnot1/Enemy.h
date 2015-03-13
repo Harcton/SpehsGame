@@ -11,6 +11,7 @@ public:
 	~Enemy();
 
 	bool update();
+	void complexUpdate();
 
 private:
 	std::vector<Object*>& refVector;
@@ -19,16 +20,18 @@ private:
 	void bomberAI();
 	void updateComponents();
 	void updateAI();
-	void complexUpdate();
 
+	Component* nearestComponent;
 	double playerDirection;
 	bool follow;
 	double distance;
 	int detectionDistance;
 	int followingDistance;
 	double maxTurnSpeed;
+	double maxSpeed;
 	double snappingAngle;
 	int timer;
+
 	int complexUpdateTimer;
 
 	int typeOfEnemy;

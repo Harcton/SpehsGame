@@ -20,6 +20,7 @@ public:
 	~Component();
 	Component(Object*, Object*, double, double);
 	friend class Player;
+	friend class Enemy;
 
 	virtual bool update();
 	void draw();

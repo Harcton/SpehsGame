@@ -16,12 +16,13 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	spr.setOrigin(50, 50);
 	textureRadius = 50;
 
-	followingDistance = 250;
-	detectionDistance = 600;
+	followingDistance = 500;
+	detectionDistance = 1100;
 	maxTurnSpeed = 0.07;
+	maxSpeed = 4;
 	snappingAngle = 0.2;
 	complexUpdateTimer = 0;
-
+	complexUpdate();
 }
 
 
@@ -40,19 +41,22 @@ bool Enemy::update()
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
 
-	playerDirection = -1 * atan2(mGame->playerObj->y - y, mGame->playerObj->x - x);
+	playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
 	
 	//limit speed
-	if (xSpeed > 5)
-		xSpeed = 5;
-	else if (ySpeed > 5)
-		ySpeed = 5;
-	if (xSpeed < -5)
-		xSpeed = -5;
-	else if (ySpeed < -5)
-		ySpeed = -5;
+	//x/ySpeed no bueno
+	if (this->xSpeed > maxSpeed)
+		this->xSpeed = maxSpeed;
+	else if (this->ySpeed > maxSpeed)
+		this->ySpeed = maxSpeed;
+	if (this->xSpeed < -maxSpeed)
+		this->xSpeed = -maxSpeed;
+	else if (this->ySpeed < -maxSpeed)
+		this->ySpeed = -maxSpeed;
+
+	std::cout << this->xSpeed+this->ySpeed << std::endl;
 
 
 	//limit turnSpeed
@@ -77,10 +81,11 @@ bool Enemy::update()
 
 void Enemy::enemyAI()
 {
-	distance = getDistance(x, y, mGame->playerObj->x, mGame->playerObj->y);
+
+	distance = getDistance(x, y, nearestComponent->x, nearestComponent->y);
 
 	//"fix collision"
-	if (distance < this->textureRadius + mGame->playerObj->textureRadius)
+	if (distance < this->textureRadius + nearestComponent->textureRadius)
 	{
 		//somethingsomething..?
 		std::cout << "oops!" << std::endl;
@@ -178,9 +183,10 @@ void Enemy::updateComponents()
 
 void Enemy::bomberAI()
 {
+	distance = getDistance(x, y, nearestComponent->x, nearestComponent->y);
 
 	//"fix collision"
-	if (distance < this->textureRadius + mGame->playerObj->textureRadius + 10)
+	if (distance < this->textureRadius + nearestComponent->textureRadius + 10)
 	{
 		//explosion?
 		this->hp = 0;
@@ -255,12 +261,30 @@ void Enemy::enemyInitialize()
 
 void Enemy::complexUpdate()
 {
-	double tempDistance;
+	double tempDistance = 0;
+	int tempIndex = -1;
+
 
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
-		tempDistance = getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);		
+		if (i == 0)
+		{
+			tempDistance = getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
+			tempIndex = i;
+		}
+		else if (tempDistance > getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y))
+		{
+			tempDistance = getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
+			tempIndex = i;
+		}
 	}
 
-	complexUpdateTimer = 60;
+	if (tempIndex != -1)
+		nearestComponent = mGame->playerObj->components[tempIndex];
+	else
+	{
+		//What if player dies???????
+	}
+
+	complexUpdateTimer = 10 + irandom(0,10); //?
 }
