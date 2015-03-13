@@ -20,6 +20,7 @@ private:
 	void bomberAI();
 	void updateComponents();
 	void updateAI();
+	void explosion();
 
 	Component* nearestComponent;
 	double playerDirection;
