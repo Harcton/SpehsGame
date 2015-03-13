@@ -307,13 +307,11 @@ bool Player::update()
 							{//Case 1.1 
 								if (mouseDirection < angle && mouseDirection > angle - PI)
 								{
-									std::cout << " 1.1-";
 									if (components[i]->angle > turretMinAngle)
 										components[i]->angle -= components[i]->turningSpeed;
 								}
 								else if (mouseDirection > angle || mouseDirection < angle - PI)
 								{
-									std::cout << " 1.1+";
 									if (components[i]->angle < turretMaxAngle && components[i]->angle > turretMinAngle - components[i]->turningSpeed)
 									{
 											components[i]->angle += components[i]->turningSpeed;										
@@ -324,13 +322,11 @@ bool Player::update()
 							{//Case 1.2
 								if (mouseDirection > angle && mouseDirection < angle + PI)
 								{// +
-									std::cout << " 1.2+";
 									if (components[i]->angle < turretMaxAngle)
 										components[i]->angle += components[i]->turningSpeed;
 								}
 								else if (mouseDirection < angle || mouseDirection > angle + PI)
 								{// -
-									std::cout << " 1.2-";
 									if (components[i]->angle > turretMinAngle)
 										components[i]->angle -= components[i]->turningSpeed;
 								}
@@ -351,7 +347,6 @@ bool Player::update()
 							{
 								if ((angle >= PI && (mouseDirection > angle || mouseDirection < angle - PI)) || (angle < PI && mouseDirection > angle && mouseDirection < angle + PI))
 								{// +
-									std::cout << " 2+";
 									if (turretMinAngle > components[i]->angle)//'+components[i]
 									{
 										if (components[i]->angle < turretMaxAngle || components[i]->angle > turretMinAngle)
@@ -363,7 +358,6 @@ bool Player::update()
 								}
 								else
 								{// -
-									std::cout << " 2-";
 									if (turretMinAngle > components[i]->angle)//'+components[i]
 									{
 										if (components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
@@ -393,7 +387,6 @@ bool Player::update()
 							{
 								if ((angle >= PI && (mouseDirection > angle || mouseDirection < angle - PI)) || (angle < PI && mouseDirection > angle && mouseDirection < angle + PI))//(mouseDirection > angle || mouseDirection < (angle - PI))
 								{// +
-									std::cout << " 3+";
 									if (turretMaxAngle > components[i]->angle)
 									{
 										if (components[i]->angle < turretMaxAngle)
@@ -409,7 +402,6 @@ bool Player::update()
 								}
 								else
 								{// -
-									std::cout << " 3-";
 									if (turretMaxAngle > turretMinAngle)
 									{
 										if (components[i]->angle > turretMinAngle)
