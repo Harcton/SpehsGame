@@ -20,6 +20,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	detectionDistance = 600;
 	maxTurnSpeed = 0.07;
 	snappingAngle = 0.2;
+	complexUpdateTimer = 0;
 
 }
 
@@ -60,6 +61,11 @@ bool Enemy::update()
 	else if (turnSpeed < -maxTurnSpeed)
 		turnSpeed = -maxTurnSpeed;
 	
+	//Complex update
+	complexUpdateTimer--;
+	if (complexUpdateTimer <= 0)
+		complexUpdate();
+
 	//update AI accordingly
 	updateAI();
 
@@ -172,7 +178,6 @@ void Enemy::updateComponents()
 
 void Enemy::bomberAI()
 {
-	distance = getDistance(x, y, mGame->playerObj->x, mGame->playerObj->y);
 
 	//"fix collision"
 	if (distance < this->textureRadius + mGame->playerObj->textureRadius + 10)
@@ -245,4 +250,17 @@ void Enemy::enemyInitialize()
 	{
 		tex.loadFromFile("Texture/enemy_base.png");
 	}
+}
+
+
+void Enemy::complexUpdate()
+{
+	double tempDistance;
+
+	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
+	{
+		tempDistance = getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);		
+	}
+
+	complexUpdateTimer = 60;
 }

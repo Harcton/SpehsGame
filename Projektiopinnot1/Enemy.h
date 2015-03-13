@@ -19,6 +19,7 @@ private:
 	void bomberAI();
 	void updateComponents();
 	void updateAI();
+	void complexUpdate();
 
 	double playerDirection;
 	bool follow;
@@ -28,6 +29,7 @@ private:
 	double maxTurnSpeed;
 	double snappingAngle;
 	int timer;
+	int complexUpdateTimer;
 
 	int typeOfEnemy;
 

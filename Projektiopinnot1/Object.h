@@ -12,6 +12,7 @@ public:
 	Object(sf::RenderWindow&, Game*, int, int);
 	Object(sf::RenderWindow&, Game*);
 	friend class Component;
+	friend class Enemy;
 
 	virtual bool update();
 	void checkCollisions(unsigned int);
