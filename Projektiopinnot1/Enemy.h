@@ -12,6 +12,8 @@ public:
 
 	bool update();
 	void complexUpdate();
+	void checkBulletCollision(Bullet*);
+	void removeComponent(int);
 
 private:
 	std::vector<Object*>& refVector;

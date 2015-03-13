@@ -6,6 +6,7 @@
 
 Turret::~Turret()
 {
+	std::cout << "turretDeconstructor ";
 	while (!bullets.empty())
 	{
 		delete bullets.back();
@@ -14,6 +15,7 @@ Turret::~Turret()
 }
 Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mstr, cntr, xo, yo)
 {
+	std::cout << "turretConstructor ";
 	tex.loadFromFile("Texture/turret.png");
 	spr.setTexture(tex);
 	spr.setOrigin(20, 50);
@@ -28,7 +30,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 
 bool Turret::update()
 {
-
+	std::cout << "turretUpdate ";
 	updateBullets();
 
 	if (Component::update() == false)

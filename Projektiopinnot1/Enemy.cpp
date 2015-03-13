@@ -12,10 +12,6 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	typeOfEnemy = irandom(1, 2); //remove randomness later
 	enemyInitialize();
 
-	spr.setTexture(tex);
-	spr.setOrigin(50, 50);
-	textureRadius = 50;
-
 	followingDistance = 500;
 	detectionDistance = 1100;
 	maxTurnSpeed = 0.07;
@@ -79,8 +75,17 @@ bool Enemy::update()
 
 void Enemy::enemyAI()
 {
-
 	distance = getDistance(x, y, nearestComponent->x, nearestComponent->y);
+
+	// IGNORE FOR NOW !
+	//testing lazors
+	/*sf::VertexArray line(sf::LinesStrip, 2);
+	line[0].position = sf::Vector2f(this->x, this->y);
+	line[1].position = sf::Vector2f(nearestComponent->x, nearestComponent->y);
+	line[0].color = sf::Color::Red;
+	line[1].color = sf::Color::Red;
+	mWindow.draw(line);*/
+
 
 	//"fix collision"
 	if (distance < this->textureRadius + nearestComponent->textureRadius)
@@ -99,7 +104,10 @@ void Enemy::enemyAI()
 		{
 			if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
 			{
-				components[0]->fire();
+				for (unsigned int i = 0; i < components.size(); i++)
+					for (unsigned int k = 0; k < components[i]->types.size(); k++)
+						if (components[i]->types[k] == ct_turret)
+							components[i]->fire();
 				timer = 0;
 			}
 		}
@@ -164,6 +172,8 @@ void Enemy::enemyAI()
 
 void Enemy::updateComponents()
 {
+	std::cout << components.size() << " "; // COUT
+
 	for (componentIt = components.begin(); componentIt != components.end();)
 		if ((*componentIt)->update() == false)
 		{
@@ -245,14 +255,19 @@ void Enemy::updateAI()
 
 void Enemy::enemyInitialize()
 {
+	//ENEMY DON'T DIE WHEN DIED!!
 	if (typeOfEnemy == 1)
 	{
-		tex.loadFromFile("Texture/enemy_base_green.png");
-		components.push_back(new Turret(this, centerObj, 0, 0));
+		components.push_back(new Component(this, mGame->playerObj, -50, -50));
+		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_green.png");
+		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+		components[components.size() - 1]->createChild(-50, -50, ct_turret);
 	}
 	else if (typeOfEnemy == 2)
 	{
-		tex.loadFromFile("Texture/enemy_base.png");
+		components.push_back(new Component(this, mGame->playerObj, -50, -50));
+		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base.png");
+		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 	}
 }
 
@@ -292,9 +307,54 @@ void Enemy::explosion()
 {
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
-		if (getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->textureRadius*3)
+		if (getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->textureRadius*3)
 		{
 			mGame->playerObj->components[i]->hp -= 50;
 		}
 	}
 }
+
+
+
+void Enemy::checkBulletCollision(Bullet* b)
+{
+	for (unsigned int i = 0; i < components.size(); i++)
+	{
+		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y, components[i]->x - b->x);
+		if (b->collisionCheckAngle < 0)
+			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
+
+
+		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x, components[i]->y);
+		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
+
+		if (b->checkCollisionDistance < b->checkCollisionRange)
+		{
+			if (b->canDamage == true)
+			{
+				components[i]->hp -= b->damage;
+				b->canDamage = false;
+				x += 6 * cos(angle);
+				y += -6 * sin(angle);
+			}
+
+			//Bounce
+			b->speed = b->speed*0.75;
+			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
+			b->xSpeed = cos(2 * PI - b->angle) * b->speed;
+			b->ySpeed = sin(2 * PI - b->angle) * b->speed;
+		}
+	}
+}
+
+
+void Enemy::removeComponent(int cid)
+{
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->id == cid)
+		{
+		delete components[i];
+		components.erase(components.begin() + i);
+		}
+}
+
