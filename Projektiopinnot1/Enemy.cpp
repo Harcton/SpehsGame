@@ -183,10 +183,9 @@ void Enemy::bomberAI()
 {
 	distance = getDistance(x, y, nearestComponent->x, nearestComponent->y);
 
-	//"fix collision"
 	if (distance < this->textureRadius + nearestComponent->textureRadius + 10)
 	{
-		//explosion?
+		//explosion
 		this->hp = 0;
 		explosion();
 		std::cout << "boom!" << std::endl;
