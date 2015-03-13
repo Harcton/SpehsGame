@@ -55,9 +55,7 @@ bool Enemy::update()
 		this->xSpeed = -maxSpeed;
 	else if (this->ySpeed < -maxSpeed)
 		this->ySpeed = -maxSpeed;
-
-	std::cout << this->xSpeed+this->ySpeed << std::endl;
-
+	
 
 	//limit turnSpeed
 	if (turnSpeed > maxTurnSpeed)
@@ -190,6 +188,7 @@ void Enemy::bomberAI()
 	{
 		//explosion?
 		this->hp = 0;
+		explosion();
 		std::cout << "boom!" << std::endl;
 	}
 
@@ -287,4 +286,16 @@ void Enemy::complexUpdate()
 	}
 
 	complexUpdateTimer = 10 + irandom(0,10); //?
+}
+
+
+void Enemy::explosion()
+{
+	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
+	{
+		if (getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->textureRadius*3)
+		{
+			mGame->playerObj->components[i]->hp -= 50;
+		}
+	}
 }
