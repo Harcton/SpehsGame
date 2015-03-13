@@ -22,6 +22,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 
 	types.push_back(ct_turret);
 	mouseAim = true;
+	textureRadius = 20;
 }
 
 

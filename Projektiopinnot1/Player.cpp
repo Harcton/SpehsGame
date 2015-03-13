@@ -5,7 +5,8 @@
 #include "Component.h"
 #include "Bullet.h"
 #include "Turret.h"
-
+#include "GridData.h"
+#include "PlayerData.h"
 
 
 Player::~Player()
@@ -15,28 +16,34 @@ Player::~Player()
 		delete components.back();
 		components.pop_back();
 	}
+
 }
 Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object(windowref, game, cx, cy)
 {
 	centerObj = this;
 
+	data = new PlayerData;
+	loadPlayerData();
 	
 	//Core component
-	components.push_back(new Component(this, this, -50, -50));
-	components[components.size() - 1]->spr.setTexture(skeletonTex);
-	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
+	//components.push_back(new Component(this, this, -50, -50));
+	//components[components.size() - 1]->spr.setTexture(skeletonTex);
+	//components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 	//
-	components[0]->createChild(-150, 50, ct_hull);
-	components[0]->createChild(-50, 50, ct_hull);
-	components[0]->createChild(50, 50, ct_hull);
-	components[0]->createChild(-150, -150, ct_hull);
-	components[0]->createChild(-50, -150, ct_hull);
-	components[0]->createChild(50, -150, ct_hull);
+	//components[0]->createChild(-150, 50, ct_hull);
+	//components[0]->createChild(-50, 50, ct_hull);
+	//components[0]->createChild(50, 50, ct_hull);
+	//components[0]->createChild(-150, -150, ct_hull);
+	//components[0]->createChild(-50, -150, ct_hull);
+	//components[0]->createChild(50, -150, ct_hull);
 
-	components[0]->createChild(-150, -50, ct_hull);
-	components[0]->createChild(50, -50, ct_hull);
-	components[0]->createChild(150, -50, ct_hull);
-	components[components.size() - 1]->createChild(200, 0, ct_turret);
+	//components[0]->createChild(-150, -50, ct_hull);
+	//components[0]->createChild(50, -50, ct_hull);
+	//components[0]->createChild(150, -50, ct_hull);
+	//components[components.size() - 1]->createChild(200, 0, ct_turret);
+
+
+
 
 	//components.push_back(new Turret(this, this, 30, 0));
 	//components.push_back(new Turret(this, this, -10, -30));
@@ -538,4 +545,63 @@ void Player::removeComponent(int cid)
 		delete components[i];
 		components.erase(components.begin() + i);
 		}
+}
+
+void Player::loadPlayerData()
+{
+	while (!components.empty())
+	{
+		delete components.back();
+		components.pop_back();
+	}
+
+	//Search for core
+	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
+		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
+		{
+		if (data->grid[ex][ey]->core == true)
+			{
+			addFromGrid(ex, ey);
+			}
+		}
+}
+
+void Player::addFromGrid(int gx, int gy)
+{
+	components.push_back(new Component(this, this, -550 + 100 * gx, -550 + 100 * gy));
+	components[components.size() - 1]->spr.setTexture(skeletonTex);
+	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
+	
+	if (data->grid[gx][gy]->turret == 1)
+		components[components.size() - 1]->createChild(-500 + 100 * gx, -500 + 100 * gy, ct_turret);
+	
+	//Handle children	
+	if (data->grid[gx][gy]->childUp == true)
+	{
+		int tempIndex = 0;
+		tempIndex = components.size();
+		addFromGrid(gx, gy - 1);
+		components[tempIndex-1]->childComponents.push_back(components[tempIndex]->id);
+	}
+	if (data->grid[gx][gy]->childDown == true)
+	{
+		int tempIndex = 0;
+		tempIndex = components.size();
+		addFromGrid(gx, gy + 1);
+		components[tempIndex - 1]->childComponents.push_back(components[tempIndex]->id);
+	}
+	if (data->grid[gx][gy]->childRight == true)
+	{
+		int tempIndex = 0;
+		tempIndex = components.size();
+		addFromGrid(gx + 1, gy);
+		components[tempIndex - 1]->childComponents.push_back(components[tempIndex]->id);
+	}
+	if (data->grid[gx][gy]->childLeft == true)
+	{
+		int tempIndex = 0;
+		tempIndex = components.size();
+		addFromGrid(gx - 1, gy);
+		components[tempIndex - 1]->childComponents.push_back(components[tempIndex]->id);
+	}
 }

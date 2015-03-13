@@ -9,6 +9,7 @@ public:
 	~PlayerData();
 	friend class Player;
 
+	GridData* grid[11][11];
 
 private:
 

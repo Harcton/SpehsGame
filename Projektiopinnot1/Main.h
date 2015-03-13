@@ -17,6 +17,9 @@
 #define SPAWN_RANGE 1000
 #define DESPAWN_RANGE 2000
 
+#define EDITOR_WIDTH 11
+#define EDITOR_HEIGHT 11
+
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 extern double resFactor;
