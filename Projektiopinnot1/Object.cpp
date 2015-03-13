@@ -86,14 +86,14 @@ bool Object::update()
 	{
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
 		{
-			scrSpeedX = 0.98 * scrSpeedX;
+			scrSpeedX = 0.99 * scrSpeedX;
 			relativeSpeedX = 0.95 * relativeSpeedX;
 		}
 	}
 		//ACCELERATING
 	else
 	{
-		scrSpeedX += (relativeSpeedX * abs(relativeSpeedX)) * xScreenDistance;
+		scrSpeedX += (relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.4);
 	}
 
 
@@ -103,14 +103,14 @@ bool Object::update()
 	{
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
 		{
-			scrSpeedY = 0.98 * scrSpeedY;
+			scrSpeedY = 0.99 * scrSpeedY;
 			relativeSpeedY = 0.95 * relativeSpeedY;
 		}
 	}
 		//ACCELERATING
 	else
 	{
-		scrSpeedY += (relativeSpeedY * abs(relativeSpeedY)) * yScreenDistance;
+		scrSpeedY += (relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.4);
 	}
 	
 
