@@ -1,6 +1,7 @@
 #include "Main.h"
 #include "Game.h"
 #include "Object.h"
+#include "Bullet.h"
 
 #include <math.h>
 
@@ -169,4 +170,34 @@ void Object::checkCollisions(unsigned int selfIndex)
 				x += -3 * cos(collisionCheckAngle);
 			}
 		}
+}
+
+
+void Object::checkBulletCollision(Bullet* b)
+{
+
+	b->collisionCheckAngle = -1 * atan2(y - b->y, x - b->x);
+	if (b->collisionCheckAngle < 0)
+		b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
+
+
+	b->checkCollisionDistance = getDistance(b->x, b->y, x, y);
+	b->checkCollisionRange = b->textureRadius + textureRadius;
+
+	if (b->checkCollisionDistance < b->checkCollisionRange)
+	{
+		if (b->canDamage == true)
+		{
+			hp -= b->damage;
+			b->canDamage = false;
+			x += 6 * cos(angle);
+			y += -6 * sin(angle);
+		}
+
+		b->speed = b->speed*0.75;
+
+		b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
+		b->xSpeed = cos(2 * PI - b->angle) * b->speed;
+		b->ySpeed = sin(2 * PI - b->angle) * b->speed;
+	}
 }

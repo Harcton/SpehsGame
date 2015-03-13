@@ -12,6 +12,8 @@ public:
 
 	bool update();
 	void updateComponents();
+	void checkBulletCollision(Bullet*);
+	void removeComponent(int);
 
 	//Handle input
 	void turnRight(double);
@@ -23,7 +25,6 @@ public:
 
 protected:
 	sf::Event mEvent;
-	std::vector<Component*> components;
 	std::vector<Component*>::iterator componentIt;
 
 	bool controller;

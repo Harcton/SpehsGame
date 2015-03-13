@@ -20,17 +20,30 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 {
 	centerObj = this;
 
-	tex.loadFromFile("Texture/ship_base.png");
-	spr.setTexture(tex);
-	spr.setOrigin(50, 50);
-	textureRadius = 50;	
 	
-	components.push_back(new Turret(this, this, 30, 0));
-	components.push_back(new Turret(this, this, -10, -30));
-	components.push_back(new Turret(this, this, -10, -60));
-	components.push_back(new Turret(this, this, -10, 30));
-	components.push_back(new Turret(this, this, -10, 60));
+	//Component test
+	components.push_back(new Component(this, this, -50, -50));
+	components[components.size() - 1]->tex.loadFromFile("Texture/ship_base.png");
+	components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+	components[0]->createChild(-120, -50, 0);
+	components[1]->createChild(-190, -50, 0);
+	components[2]->createChild(-260, -50, 0);
+	components[3]->createChild(-260, -100, 0);
+	components[3]->createChild(-260, 0, 0);
+	components[4]->createChild(-240, -130, 0);
+	components[5]->createChild(-240, 30, 0);
 
+	//Front "shield"
+	components[0]->createChild(0, -35, 0);
+	components[0]->createChild(-20, -15, 0);
+	components[0]->createChild(0, -65, 0);
+	components[0]->createChild(-20, -85, 0);
+
+	//components.push_back(new Turret(this, this, 30, 0));
+	//components.push_back(new Turret(this, this, -10, -30));
+	//components.push_back(new Turret(this, this, -10, -60));
+	//components.push_back(new Turret(this, this, -10, 30));
+	//components.push_back(new Turret(this, this, -10, 60));
 
 	//Dynamic key binding
 	MyKeys key;
@@ -75,8 +88,8 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 		key.keyCode = sf::Keyboard::Q;
 		Keys[i + 1] = key;
 		//Turret fire
-		key.inputType = keyboardInput;
-		key.keyCode = sf::Keyboard::Return;
+		key.inputType = mouseInput;
+		key.mouseButton = sf::Mouse::Left;
 		Keys[i + 1 + 0.1] = key;
 	}
 
@@ -483,4 +496,47 @@ void Player::updateComponents()
 		}
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->draw();
+}
+
+void Player::checkBulletCollision(Bullet* b)
+{
+	for (unsigned int i = 0; i < components.size(); i++)
+	{
+		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y, components[i]->x - b->x);
+		if (b->collisionCheckAngle < 0)
+			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
+
+
+		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x, components[i]->y);
+		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
+
+		if (b->checkCollisionDistance < b->checkCollisionRange)
+		{
+			if (b->canDamage == true)
+			{
+				components[i]->hp -= b->damage;
+				b->canDamage = false;
+				x += 6 * cos(angle);
+				y += -6 * sin(angle);
+			}
+
+			b->speed = b->speed*0.75;
+
+			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
+			b->xSpeed = cos(2 * PI - b->angle) * b->speed;
+			b->ySpeed = sin(2 * PI - b->angle) * b->speed;
+		}
+	}
+
+}
+
+
+void Player::removeComponent(int cid)
+{
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->id == cid)
+		{
+		delete components[i];
+		components.erase(components.begin() + i);
+		}
 }

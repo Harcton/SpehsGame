@@ -3,6 +3,7 @@
 
 
 class Game;
+class Bullet;
 
 class Object
 {
@@ -10,9 +11,12 @@ public:
 	~Object();
 	Object(sf::RenderWindow&, Game*, int, int);
 	Object(sf::RenderWindow&, Game*);
+	friend class Component;
 
 	virtual bool update();
 	void checkCollisions(unsigned int);
+	virtual void checkBulletCollision(Bullet*);
+	virtual void removeComponent(int){};
 	void draw();
 
 	sf::Texture tex;
@@ -56,6 +60,7 @@ public:
 
 protected:
 	Object* centerObj;
+	std::vector<Component*> components;
 	int opacity = 0;
 	double collisionCheckAngle;
 	double checkCollisionDistance;

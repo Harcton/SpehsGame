@@ -17,6 +17,7 @@ public:
 	//void fixAngle();
 
 
+
 private:
 	std::vector<Bullet*>::iterator bulletIt;
 };

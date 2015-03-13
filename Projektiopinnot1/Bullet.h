@@ -10,6 +10,9 @@ class Bullet : public Object
 public:
 	Bullet(Component*, sf::RenderWindow&, Game*, int, int, double, double);
 	~Bullet();
+	friend class Object;
+	friend class Player;
+	friend class Enemy;
 
 	bool update();
 

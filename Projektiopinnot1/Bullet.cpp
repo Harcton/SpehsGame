@@ -28,37 +28,12 @@ bool Bullet::update()
 	for (unsigned int i = 0; i < mGame->objects.size(); i++)
 		if (mGame->objects[i] != master->master)
 		{
-		collisionCheckAngle = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
-		if (collisionCheckAngle < 0)
-			collisionCheckAngle = ((2 * PI) + collisionCheckAngle);
-
-
-		checkCollisionDistance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
-		checkCollisionRange = textureRadius + mGame->objects[i]->textureRadius;
-
-		if (checkCollisionDistance < checkCollisionRange)
-		{
-			if (canDamage == true)
-			{
-				mGame->objects[i]->getHpRef() -= damage;
-				canDamage = false;
-				mGame->objects[i]->x += 6 * cos(angle);
-				mGame->objects[i]->y += -6*sin(angle);
-			}
-				
-			speed = speed*0.75;
-			if (speed < 10)
-				return false;
-
-			angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
-			xSpeed = cos(2 * PI - angle) * speed;
-			ySpeed = sin(2 * PI - angle) * speed;
-		}
+		mGame->objects[i]->checkBulletCollision(this);
 		}
 
 
-
-
+	if (speed < 10)
+		return false;
 	
 	return Object::update();
 }

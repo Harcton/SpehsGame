@@ -5,6 +5,7 @@
 
 class Object;
 class Bullet;
+static int currentId = 0;
 
 enum componentType
 {
@@ -22,6 +23,7 @@ public:
 
 	virtual bool update();
 	void draw();
+	void createChild(double, double, int);
 
 	//Virtual functions
 	virtual void fire(){}
@@ -30,6 +32,7 @@ public:
 
 	Object* master;
 	Object* centerObj;
+	int masterComponent;
 
 	//offset compared to master origin
 	double xOffset;
@@ -53,6 +56,11 @@ protected:
 	sf::Sprite spr;
 
 	bool mouseAim;
+	int id;
+	std::vector<int> childComponents;
+	int hp;
+	int textureRadius;
+
 	
 };
 

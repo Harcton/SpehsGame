@@ -5,20 +5,31 @@
 
 Component::~Component()
 {
+	for (unsigned int i = 0; i < childComponents.size(); i++)
+	{
+		master->removeComponent(childComponents[i]);
+	}
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 {
+	currentId++;
+	id = currentId;
+
 	master = mstr;
 	centerObj = cntr;
-	angle = master->angle;
 
 	xOffset = xo;
 	yOffset = yo;
 
+	hp = 100;
+	textureRadius = 50;
 }
 
 bool Component::update()
 {
+	if (hp <= 0)
+		return false;
+
 	//Angle
 	angle += master->turnSpeed;
 	if (angle > 2 * PI)
@@ -38,6 +49,7 @@ bool Component::update()
 	spr.setRotation(360 - (angle / PI) * 180);
 	spr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
 
+	spr.setColor(sf::Color(255, 255 * (hp / 100.f), 255 * (hp / 100.f)));
 
 	return true;
 }
@@ -46,4 +58,14 @@ bool Component::update()
 void Component::draw()
 {
 	master->mWindow.draw(spr);
+}
+
+void Component::createChild(double ox, double oy, int tp)
+{
+	master->components.push_back(new Component(master, centerObj, ox, oy));
+	master->components[master->components.size() - 1]->tex.loadFromFile("Texture/ship_base.png");
+	master->components[master->components.size() - 1]->spr.setTexture(master->components[master->components.size() - 1]->tex);
+	childComponents.push_back(master->components[master->components.size()-1]->id);
+
+
 }
