@@ -22,6 +22,9 @@ extern int WINDOW_HEIGHT;
 extern double resFactor;
 extern double zoomFactor;
 
+//global textures
+extern sf::Texture skeletonTex;
+
 
 
 double getDistance(double, double, double, double);

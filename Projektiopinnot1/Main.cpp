@@ -11,9 +11,15 @@ double zoomFactor = 1;
 //Global controll settings
 std::map<float, MyKeys> Keys;
 
+//Global textures
+sf::Texture skeletonTex;
+
 
 void main()
 {
+
+	skeletonTex.loadFromFile("Texture/skeleton.png");
+
 	//Randomize randomization...
 	time_t t;
 	srand((unsigned)time(&t));

@@ -19,25 +19,22 @@ Player::~Player()
 Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object(windowref, game, cx, cy)
 {
 	centerObj = this;
-	skeletonTex.loadFromFile("Texture/skeleton.png");
 
 	
 	//Component test
 	components.push_back(new Component(this, this, -50, -50));
 	components[components.size() - 1]->spr.setTexture(skeletonTex);
-	components[0]->createChild(20, -50, 0);
-	components[1]->createChild(90, -50, 0);
-	components[2]->createChild(160, -50, 0);
-	components[3]->createChild(160, -100, 0);
-	components[3]->createChild(160, 0, 0);
-	components[4]->createChild(140, -130, 0);
-	components[5]->createChild(140, 30, 0);
+	components[0]->createChild(-150, 50, 0);
+	components[0]->createChild(-50, 50, 0);
+	components[0]->createChild(50, 50, 0);
+	components[0]->createChild(-150, -150, 0);
+	components[0]->createChild(-50, -150, 0);
+	components[0]->createChild(50, -150, 0);
 
-	//Front "shield"
-	components[0]->createChild(0, -35, 0);
-	components[0]->createChild(-20, -15, 0);
-	components[0]->createChild(0, -65, 0);
-	components[0]->createChild(-20, -85, 0);
+	components[0]->createChild(-150, -50, 0);
+	components[0]->createChild(50, -50, 0);
+	components[0]->createChild(150, -50, 0);
+	components[components.size() - 1]->createChild(150, -50, 1);
 
 	//components.push_back(new Turret(this, this, 30, 0));
 	//components.push_back(new Turret(this, this, -10, -30));

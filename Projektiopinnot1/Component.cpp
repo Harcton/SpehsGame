@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Object.h"
 #include "Component.h"
+#include "Turret.h"
 
 Component::~Component()
 {
@@ -23,6 +24,8 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 
 	hp = 100;
 	textureRadius = 50;
+	spr.setTexture(skeletonTex);
+	spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 }
 
 bool Component::update()
@@ -62,9 +65,19 @@ void Component::draw()
 
 void Component::createChild(double ox, double oy, int tp)
 {
-	master->components.push_back(new Component(master, centerObj, ox, oy));
-	master->components[master->components.size() - 1]->spr.setTexture();
-	childComponents.push_back(master->components[master->components.size()-1]->id);
+	switch (tp)
+	{
+	case 0:
+		master->components.push_back(new Component(master, centerObj, ox, oy));
+		childComponents.push_back(master->components[master->components.size()-1]->id);
+		break;
+	case 1: //Turret
+		master->components.push_back(new Turret(master, centerObj, ox, oy));
+		childComponents.push_back(master->components[master->components.size() - 1]->id);
+		std::cout << "TURRET";
+		break;
+
+	}
 
 
 }

@@ -30,7 +30,6 @@ protected:
 	bool controller;
 	double mouseDirection;
 	sf::Vector2i mousePosition;
-	sf::Texture skeletonTex;
 
 };
 
