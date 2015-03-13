@@ -19,19 +19,19 @@ Player::~Player()
 Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object(windowref, game, cx, cy)
 {
 	centerObj = this;
+	skeletonTex.loadFromFile("Texture/skeleton.png");
 
 	
 	//Component test
 	components.push_back(new Component(this, this, -50, -50));
-	components[components.size() - 1]->tex.loadFromFile("Texture/ship_base.png");
-	components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
-	components[0]->createChild(-120, -50, 0);
-	components[1]->createChild(-190, -50, 0);
-	components[2]->createChild(-260, -50, 0);
-	components[3]->createChild(-260, -100, 0);
-	components[3]->createChild(-260, 0, 0);
-	components[4]->createChild(-240, -130, 0);
-	components[5]->createChild(-240, 30, 0);
+	components[components.size() - 1]->spr.setTexture(skeletonTex);
+	components[0]->createChild(20, -50, 0);
+	components[1]->createChild(90, -50, 0);
+	components[2]->createChild(160, -50, 0);
+	components[3]->createChild(160, -100, 0);
+	components[3]->createChild(160, 0, 0);
+	components[4]->createChild(140, -130, 0);
+	components[5]->createChild(140, 30, 0);
 
 	//Front "shield"
 	components[0]->createChild(0, -35, 0);

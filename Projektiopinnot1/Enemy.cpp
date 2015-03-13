@@ -16,8 +16,8 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	spr.setOrigin(50, 50);
 	textureRadius = 50;
 
-	followingDistance = 250;
-	detectionDistance = 600;
+	followingDistance = 500;
+	detectionDistance = 1100;
 	maxTurnSpeed = 0.07;
 	snappingAngle = 0.2;
 	complexUpdateTimer = 0;
