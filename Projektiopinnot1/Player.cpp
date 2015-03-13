@@ -519,8 +519,8 @@ void Player::checkBulletCollision(Bullet* b)
 				y += -6 * sin(angle);
 			}
 
+			//Bounce
 			b->speed = b->speed*0.75;
-
 			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
 			b->xSpeed = cos(2 * PI - b->angle) * b->speed;
 			b->ySpeed = sin(2 * PI - b->angle) * b->speed;

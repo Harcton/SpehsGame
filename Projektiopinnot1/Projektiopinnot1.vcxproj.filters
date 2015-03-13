@@ -61,7 +61,7 @@
       <Filter>Source Files\Ship editor</Filter>
     </ClCompile>
     <ClCompile Include="GridData.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Ship editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +99,7 @@
       <Filter>Header Files\Ship editor</Filter>
     </ClInclude>
     <ClInclude Include="GridData.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Ship editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

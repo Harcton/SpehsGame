@@ -74,7 +74,6 @@ void Component::createChild(double ox, double oy, componentType tp)
 	case ct_turret: //Turret
 		master->components.push_back(new Turret(master, centerObj, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
-		std::cout << "TURRET";
 		break;
 
 	}

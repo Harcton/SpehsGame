@@ -175,7 +175,6 @@ void Object::checkCollisions(unsigned int selfIndex)
 
 void Object::checkBulletCollision(Bullet* b)
 {
-
 	b->collisionCheckAngle = -1 * atan2(y - b->y, x - b->x);
 	if (b->collisionCheckAngle < 0)
 		b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);

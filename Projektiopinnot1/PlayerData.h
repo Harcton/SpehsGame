@@ -7,7 +7,8 @@ class PlayerData
 public:
 	PlayerData();
 	~PlayerData();
-	
+	friend class Player;
+
 
 private:
 

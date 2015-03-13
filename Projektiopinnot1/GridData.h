@@ -5,11 +5,14 @@
 class GridData
 {
 public:
-	GridData();
 	~GridData();
+	GridData();
+	friend class PlayerData;
 
 private:
-
+	bool skeleton;
+	int turret;
+	int engine;
 };
 
 #endif
