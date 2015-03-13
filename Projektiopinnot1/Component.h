@@ -53,8 +53,8 @@ public:
 	double maxAngle;
 
 protected:
-	sf::Texture tex;
 	sf::Sprite spr;
+	sf::Texture tex;
 
 	bool mouseAim;
 	int id;

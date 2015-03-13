@@ -63,8 +63,7 @@ void Component::draw()
 void Component::createChild(double ox, double oy, int tp)
 {
 	master->components.push_back(new Component(master, centerObj, ox, oy));
-	master->components[master->components.size() - 1]->tex.loadFromFile("Texture/ship_base.png");
-	master->components[master->components.size() - 1]->spr.setTexture(master->components[master->components.size() - 1]->tex);
+	master->components[master->components.size() - 1]->spr.setTexture();
 	childComponents.push_back(master->components[master->components.size()-1]->id);
 
 
