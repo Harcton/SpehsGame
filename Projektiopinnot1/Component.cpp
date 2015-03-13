@@ -24,8 +24,6 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 
 	hp = 100;
 	textureRadius = 50;
-	spr.setTexture(skeletonTex);
-	spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 }
 
 bool Component::update()
@@ -63,15 +61,17 @@ void Component::draw()
 	master->mWindow.draw(spr);
 }
 
-void Component::createChild(double ox, double oy, int tp)
+void Component::createChild(double ox, double oy, componentType tp)
 {
 	switch (tp)
 	{
-	case 0:
+	case ct_hull:
 		master->components.push_back(new Component(master, centerObj, ox, oy));
-		childComponents.push_back(master->components[master->components.size()-1]->id);
+		childComponents.push_back(master->components[master->components.size() - 1]->id);
+		master->components[master->components.size() - 1]->spr.setTexture(skeletonTex);
+		master->components[master->components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 		break;
-	case 1: //Turret
+	case ct_turret: //Turret
 		master->components.push_back(new Turret(master, centerObj, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
 		std::cout << "TURRET";
