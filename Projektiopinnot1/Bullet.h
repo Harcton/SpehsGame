@@ -20,7 +20,7 @@ private:
 	Component* master;
 	double speed;
 	bool canDamage = true;
-	int damage = 5;
+	int damage = 15;
 
 };
 

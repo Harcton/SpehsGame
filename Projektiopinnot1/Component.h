@@ -1,17 +1,16 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+enum componentType
+{
+	ct_hull,
+	ct_turret
+};
 
 
 class Object;
 class Bullet;
 static int currentId = 0;
-
-enum componentType
-{
-	hull,
-	turret,
-};
 
 
 class Component
@@ -24,7 +23,7 @@ public:
 
 	virtual bool update();
 	void draw();
-	void createChild(double, double, int);
+	void createChild(double, double, componentType);
 
 	//Virtual functions
 	virtual void fire(){}

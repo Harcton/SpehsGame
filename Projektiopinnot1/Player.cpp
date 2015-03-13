@@ -21,20 +21,22 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	centerObj = this;
 
 	
-	//Component test
+	//Core component
 	components.push_back(new Component(this, this, -50, -50));
 	components[components.size() - 1]->spr.setTexture(skeletonTex);
-	components[0]->createChild(-150, 50, 0);
-	components[0]->createChild(-50, 50, 0);
-	components[0]->createChild(50, 50, 0);
-	components[0]->createChild(-150, -150, 0);
-	components[0]->createChild(-50, -150, 0);
-	components[0]->createChild(50, -150, 0);
+	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
+	//
+	components[0]->createChild(-150, 50, ct_hull);
+	components[0]->createChild(-50, 50, ct_hull);
+	components[0]->createChild(50, 50, ct_hull);
+	components[0]->createChild(-150, -150, ct_hull);
+	components[0]->createChild(-50, -150, ct_hull);
+	components[0]->createChild(50, -150, ct_hull);
 
-	components[0]->createChild(-150, -50, 0);
-	components[0]->createChild(50, -50, 0);
-	components[0]->createChild(150, -50, 0);
-	components[components.size() - 1]->createChild(150, -50, 1);
+	components[0]->createChild(-150, -50, ct_hull);
+	components[0]->createChild(50, -50, ct_hull);
+	components[0]->createChild(150, -50, ct_hull);
+	components[components.size() - 1]->createChild(200, 0, ct_turret);
 
 	//components.push_back(new Turret(this, this, 30, 0));
 	//components.push_back(new Turret(this, this, -10, -30));
@@ -75,7 +77,7 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	int turretCount = 0;
 	for (unsigned int i = 0; i < components.size(); i++)
 		for (unsigned int k = 0; k < components[i]->types.size(); k++)
-			if (components[i]->types[k] == turret)
+			if (components[i]->types[k] == ct_turret)
 				turretCount++;
 	for (int i = 0; i < turretCount; i++)
 	{//Turret rotation
@@ -226,7 +228,7 @@ bool Player::update()
 			int turretCount = 0;
 			for (unsigned int i = 0; i < components.size(); i++)
 			for (unsigned int k = 0; k < components[i]->types.size(); k++)
-				if (components[i]->types[k] == turret)
+				if (components[i]->types[k] == ct_turret)
 				{
 				turretCount++;
 				if (testInput(Keys[turretCount + 0.1]))
@@ -244,7 +246,7 @@ bool Player::update()
 			{
 				//Look through component i's types vector
 				for (unsigned int k = 0; k < components[i]->types.size(); k++)
-					if (components[i]->types[k] == turret)
+					if (components[i]->types[k] == ct_turret)
 					{//Turret i
 					turretCount++;
 
