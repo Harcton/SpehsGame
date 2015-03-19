@@ -20,9 +20,11 @@ private:
 	void enemyInitialize();
 	void enemyAI();
 	void bomberAI();
+	void laserAI();
 	void updateComponents();
 	void updateAI();
 	void explosion();
+	void fireMahLazors();
 
 	Component* nearestComponent;
 	double playerDirection;
@@ -36,6 +38,7 @@ private:
 	int timer;
 
 	int complexUpdateTimer;
+	int complexIndex;
 
 	int typeOfEnemy;
 

@@ -50,6 +50,9 @@ public:
 	double xScreenDistance;
 	double yScreenDistance;
 
+	double relativeXCoordinate;
+	double relativeYCoordinate;
+
 	//Get methods
 	int& getHpRef(){ return hp; }
 

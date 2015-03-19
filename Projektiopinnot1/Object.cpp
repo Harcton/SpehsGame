@@ -58,6 +58,12 @@ bool Object::update()
 	else if (angle < 0)
 		angle += 2*PI;
 
+	//Relative coordinates for screen
+	//+ left x right -
+	//+ up y down -
+	relativeXCoordinate = -(mGame->playerObj->x - this->x) + (WINDOW_WIDTH/2);
+	relativeYCoordinate = -(mGame->playerObj->y - this->y) + (WINDOW_HEIGHT/2);
+
 	//acceleration timer
 	if (accTimer <= 1)
 	{
@@ -93,7 +99,7 @@ bool Object::update()
 		//ACCELERATING
 	else
 	{
-		scrSpeedX += (relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.4);
+		scrSpeedX += ((relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.2))*zoomFactor;
 	}
 
 
@@ -110,7 +116,7 @@ bool Object::update()
 		//ACCELERATING
 	else
 	{
-		scrSpeedY += (relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.4);
+		scrSpeedY += ((relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.2))*zoomFactor;
 	}
 	
 

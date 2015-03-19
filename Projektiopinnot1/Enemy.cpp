@@ -7,9 +7,15 @@
 #include "Turret.h"
 
 
+//Player collision detection is wonky(?)
+//rework AI structure
+//fix teh lazors
+//maek cool enemis
+
+
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector) : refVector(rVector), Object(windowref, game)
 {
-	typeOfEnemy = irandom(1, 2); //remove randomness later
+	typeOfEnemy = irandom(1, 3); //remove randomness later
 	enemyInitialize();
 
 	followingDistance = 500;
@@ -36,6 +42,13 @@ bool Enemy::update()
 {	
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (components[i]->hp <= 0)
+		{
+			return false;
+		}
+	}
 
 	playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
 	if (playerDirection < 0)
@@ -75,17 +88,7 @@ bool Enemy::update()
 
 void Enemy::enemyAI()
 {
-	distance = getDistance(x, y, nearestComponent->x, nearestComponent->y);
-
-	// IGNORE FOR NOW !
-	//testing lazors
-	/*sf::VertexArray line(sf::LinesStrip, 2);
-	line[0].position = sf::Vector2f(this->x, this->y);
-	line[1].position = sf::Vector2f(nearestComponent->x, nearestComponent->y);
-	line[0].color = sf::Color::Red;
-	line[1].color = sf::Color::Red;
-	mWindow.draw(line);*/
-
+	distance = getDistance(this->components[complexIndex]->x, this->components[complexIndex]->y, nearestComponent->x, nearestComponent->y);
 
 	//"fix collision"
 	if (distance < this->textureRadius + nearestComponent->textureRadius)
@@ -99,6 +102,7 @@ void Enemy::enemyAI()
 		follow = true;
 		xSpeed += cos(2 * PI - angle)*(distance/700);
 		ySpeed += sin(2 * PI - angle)*(distance/700);
+
 
 		if (timer == 6)
 		{
@@ -170,9 +174,93 @@ void Enemy::enemyAI()
 }
 
 
+void Enemy::laserAI()
+{
+	distance = getDistance(this->components[complexIndex]->x, this->components[complexIndex]->y, nearestComponent->x, nearestComponent->y);
+
+	//"fix collision"
+	if (distance < this->textureRadius + nearestComponent->textureRadius)
+	{
+		//somethingsomething..?
+		std::cout << "ooops!" << std::endl;
+	}
+
+	if (distance > followingDistance && distance < detectionDistance)
+	{
+		follow = true;
+		xSpeed += cos(2 * PI - angle)*(distance / 700);
+		ySpeed += sin(2 * PI - angle)*(distance / 700);
+
+
+		if (timer == 6)
+		{
+			if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
+			{
+				fireMahLazors();
+			}
+		}
+		else
+			timer++;
+	}
+	else if (distance < followingDistance)
+	{
+		follow = true;
+		if (xSpeed < 0)
+			xSpeed -= 0.2;
+		else if (xSpeed > 0)
+			xSpeed += 0.2;
+		if (ySpeed < 0)
+			ySpeed -= 0.2;
+		else if (ySpeed > 0)
+			ySpeed += 0.2;
+	}
+	else if (distance > detectionDistance)
+	{
+		follow = false;
+		xSpeed = xSpeed*0.96;
+		ySpeed = ySpeed*0.96;
+		if (xSpeed > -0.01 && xSpeed < 0.01)
+		{
+			xSpeed = 0;
+		}
+		if (ySpeed > -0.01 && ySpeed < 0.01)
+		{
+			ySpeed = 0;
+		}
+	}
+
+
+	if (follow == true)
+	{
+		if (angle < playerDirection - snappingAngle)
+		{
+			turnSpeed += maxTurnSpeed / 4;
+		}
+		else if (angle > playerDirection + snappingAngle)
+		{
+			turnSpeed -= maxTurnSpeed / 4;
+		}
+
+		if (angle / playerDirection > 1.1 || angle / playerDirection < 0.9)
+		{
+
+		}
+	}
+	else
+	{
+		if (turnSpeed > 0.005)
+		{
+			turnSpeed = turnSpeed*0.9;
+			//?
+		}
+	}
+
+}
+
+
 void Enemy::updateComponents()
 {
-	std::cout << components.size() << " "; // COUT
+	//std::cout << components.size() << " "; // COUT
 
 	for (componentIt = components.begin(); componentIt != components.end();)
 		if ((*componentIt)->update() == false)
@@ -191,7 +279,7 @@ void Enemy::updateComponents()
 
 void Enemy::bomberAI()
 {
-	distance = getDistance(x, y, nearestComponent->x, nearestComponent->y);
+	distance = getDistance(this->components[complexIndex]->x, this->components[complexIndex]->y, nearestComponent->x, nearestComponent->y);
 
 	if (distance < this->textureRadius + nearestComponent->textureRadius + 10)
 	{
@@ -250,23 +338,30 @@ void Enemy::updateAI()
 		enemyAI();
 	else if (typeOfEnemy == 2)
 		bomberAI();
+	else if (typeOfEnemy == 3)
+		laserAI();
 }
 
 
 void Enemy::enemyInitialize()
 {
-	//ENEMY DON'T DIE WHEN DIED!!
-	if (typeOfEnemy == 1)
+	if (typeOfEnemy == 1) //standard turret dude
 	{
 		components.push_back(new Component(this, mGame->playerObj, -50, -50));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_green.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 		components[components.size() - 1]->createChild(-50, -50, ct_turret);
 	}
-	else if (typeOfEnemy == 2)
+	else if (typeOfEnemy == 2) //suicidebomber
 	{
 		components.push_back(new Component(this, mGame->playerObj, -50, -50));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base.png");
+		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+	}
+	else if (typeOfEnemy == 3) //laser
+	{
+		components.push_back(new Component(this, mGame->playerObj, -50, -50));
+		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_purple.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 	}
 }
@@ -277,21 +372,24 @@ void Enemy::complexUpdate()
 	double tempDistance = 0;
 	int tempIndex = -1;
 
-
-	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
+	for (int u = 0; u < this->components.size(); u++)
 	{
-		if (i == 0)
+		for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 		{
-			tempDistance = getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
-			tempIndex = i;
-		}
-		else if (tempDistance > getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y))
-		{
-			tempDistance = getDistance(x, y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
-			tempIndex = i;
+			if (i == 0)
+			{
+				tempDistance = getDistance(this->components[u]->x, this->components[u]->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
+				tempIndex = i;
+				complexIndex = u;
+			}
+			else if (tempDistance > getDistance(this->components[u]->x, this->components[u]->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y))
+			{
+				tempDistance = getDistance(this->components[u]->x, this->components[u]->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
+				tempIndex = i;
+				complexIndex = u;
+			}
 		}
 	}
-
 	if (tempIndex != -1)
 		nearestComponent = mGame->playerObj->components[tempIndex];
 	else
@@ -307,13 +405,13 @@ void Enemy::explosion()
 {
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
-		if (getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->textureRadius*3)
+		if (getDistance(this->components[complexIndex]->x, this->components[complexIndex]->y, mGame->playerObj->components[i]->x,
+				mGame->playerObj->components[i]->y) < this->components[complexIndex]->textureRadius * 2)
 		{
 			mGame->playerObj->components[i]->hp -= 50;
 		}
 	}
 }
-
 
 
 void Enemy::checkBulletCollision(Bullet* b)
@@ -358,3 +456,17 @@ void Enemy::removeComponent(int cid)
 		}
 }
 
+
+void Enemy::fireMahLazors()
+{
+	//Lazors
+	sf::VertexArray line(sf::Lines, 2);
+	line[0].position = sf::Vector2f(this->relativeXCoordinate, this->relativeYCoordinate);
+	line[1].position = sf::Vector2f(-(mGame->playerObj->x - nearestComponent->x) + WINDOW_WIDTH / 2, -(mGame->playerObj->y - nearestComponent->y) + WINDOW_HEIGHT / 2);
+
+	//line[0].position = sf::Vector2f(this->components[complexIndex]->x + WINDOW_WIDTH / 2, this->components[complexIndex]->y - WINDOW_HEIGHT / 2);
+	//line[1].position = sf::Vector2f(nearestComponent->x + mGame->playerObj->x, nearestComponent->y - mGame->playerObj->y); 
+	line[0].color = sf::Color::Red;
+	line[1].color = sf::Color::Red;
+	mWindow.draw(line);
+}
