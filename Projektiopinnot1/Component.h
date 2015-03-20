@@ -18,6 +18,7 @@ class Component
 public:
 	~Component();
 	Component(Object*, Object*, double, double);
+	Component(Object*, Object*, double, double, int, int);
 	friend class Player;
 	friend class Enemy;
 
@@ -61,7 +62,8 @@ protected:
 	int hp;
 	int textureRadius;
 
-	
+	int gridLocationX;
+	int gridLocationY;
 };
 
 #endif

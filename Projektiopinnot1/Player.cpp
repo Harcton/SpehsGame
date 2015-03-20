@@ -542,6 +542,12 @@ void Player::removeComponent(int cid)
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
 		{
+		int tX = components[i]->gridLocationX;
+		int tY = components[i]->gridLocationY;
+		//Delete the component save data
+		delete data->grid[tX][tY];
+		data->grid[tX][tY] = new GridData;
+		//Delete the actual component
 		delete components[i];
 		components.erase(components.begin() + i);
 		}
@@ -555,7 +561,7 @@ void Player::loadPlayerData()
 		components.pop_back();
 	}
 
-	//Search for core
+	//Search for the core and start adding child components in chain reaction
 	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
 		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
 		{
@@ -565,12 +571,12 @@ void Player::loadPlayerData()
 			}
 		}
 }
-
 void Player::addFromGrid(int gx, int gy)
 {
-	components.push_back(new Component(this, this, -550 + 100 * gx, -550 + 100 * gy));
+	components.push_back(new Component(this, this, -500 + 100 * gx, -500 + 100 * gy));
 	components[components.size() - 1]->spr.setTexture(skeletonTex);
 	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
+	components[components.size() - 1]->spr.setOrigin(50,50);
 	
 	if (data->grid[gx][gy]->turret == 1)
 		components[components.size() - 1]->createChild(-500 + 100 * gx, -500 + 100 * gy, ct_turret);

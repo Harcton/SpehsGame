@@ -11,9 +11,9 @@ public:
 	friend class Player;
 
 private:
-	bool skeleton = false;
 	int turret = 0;
 	int engine = 0;
+	int armor = 0;
 
 	bool childUp = false;
 	bool childRight = false;

@@ -11,6 +11,12 @@ Component::~Component()
 		master->removeComponent(childComponents[i]);
 	}
 }
+Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy)
+{
+	Component::Component(mstr, cntr, xo, yo);
+	gridLocationX = gx;
+	gridLocationY = gy;
+}
 Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 {
 	currentId++;
