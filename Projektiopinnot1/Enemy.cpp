@@ -39,7 +39,13 @@ void Enemy::enemyInitialize()
 		components.push_back(new Component(this, mGame->playerObj, -50, -50));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_green.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
-		components[components.size() - 1]->createChild(-50, -50, ct_turret);
+		components.push_back(new Turret(this, centerObj, -50, -50));
+		components[components.size()-2]->childComponents.push_back(components[components.size() - 1]->id);
+
+
+		components.push_back(new Component(this, mGame->playerObj, -150, -50));
+		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_green.png");
+		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 	}
 	else if (typeOfEnemy == et_bomber)
 	{

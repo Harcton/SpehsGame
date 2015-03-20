@@ -20,31 +20,6 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	data = new PlayerData;
 	loadPlayerData();
 	
-	//Core component
-	//components.push_back(new Component(this, this, -50, -50));
-	//components[components.size() - 1]->spr.setTexture(skeletonTex);
-	//components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
-	//
-	//components[0]->createChild(-150, 50, ct_hull);
-	//components[0]->createChild(-50, 50, ct_hull);
-	//components[0]->createChild(50, 50, ct_hull);
-	//components[0]->createChild(-150, -150, ct_hull);
-	//components[0]->createChild(-50, -150, ct_hull);
-	//components[0]->createChild(50, -150, ct_hull);
-
-	//components[0]->createChild(-150, -50, ct_hull);
-	//components[0]->createChild(50, -50, ct_hull);
-	//components[0]->createChild(150, -50, ct_hull);
-	//components[components.size() - 1]->createChild(200, 0, ct_turret);
-
-
-
-
-	//components.push_back(new Turret(this, this, 30, 0));
-	//components.push_back(new Turret(this, this, -10, -30));
-	//components.push_back(new Turret(this, this, -10, -60));
-	//components.push_back(new Turret(this, this, -10, 30));
-	//components.push_back(new Turret(this, this, -10, 60));
 
 	//Dynamic key binding
 	MyKeys key;
@@ -534,7 +509,6 @@ void Player::checkBulletCollision(Bullet* b)
 
 void Player::removeComponent(int cid)
 {
-	std::cout << "\nremoving player child component...";
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
 		{
@@ -578,32 +552,29 @@ void Player::addFromGrid(int gx, int gy)
 		components[components.size() - 1]->createChild(-500 + 100 * gx, -500 + 100 * gy, ct_turret);
 	
 	//Handle children	
+	int selfIndex = components.size() - 1;
 	if (data->grid[gx][gy]->childUp == true)
 	{
-		int tempIndex = 0;
-		tempIndex = components.size();
+		int tempIndex = components.size();
 		addFromGrid(gx, gy - 1);
-		components[tempIndex-1]->childComponents.push_back(components[tempIndex]->id);
+		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
 	if (data->grid[gx][gy]->childDown == true)
 	{
-		int tempIndex = 0;
-		tempIndex = components.size();
+		int tempIndex = components.size();
 		addFromGrid(gx, gy + 1);
-		components[tempIndex - 1]->childComponents.push_back(components[tempIndex]->id);
+		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
 	if (data->grid[gx][gy]->childRight == true)
 	{
-		int tempIndex = 0;
-		tempIndex = components.size();
+		int tempIndex = components.size();
 		addFromGrid(gx + 1, gy);
-		components[tempIndex - 1]->childComponents.push_back(components[tempIndex]->id);
+		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
 	if (data->grid[gx][gy]->childLeft == true)
 	{
-		int tempIndex = 0;
-		tempIndex = components.size();
+		int tempIndex = components.size();
 		addFromGrid(gx - 1, gy);
-		components[tempIndex - 1]->childComponents.push_back(components[tempIndex]->id);
+		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
 }
