@@ -27,6 +27,7 @@ extern double zoomFactor;
 
 //global textures
 extern sf::Texture skeletonTex;
+extern sf::Texture commanderShipTex;
 
 
 

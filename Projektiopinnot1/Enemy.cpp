@@ -7,12 +7,6 @@
 #include "Turret.h"
 
 
-//Player collision detection is wonky(?)
-//rework AI structure
-//fix teh lazors
-//maek cool enemis
-
-
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector, TypeOfAI tp) : refVector(rVector), Object(windowref, game)
 {
 	typeOfEnemy = tp;
@@ -21,7 +15,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	followingDistance = 500;
 	detectionDistance = 1100;
 	maxTurnSpeed = 0.07;
-	maxSpeed = 3;
+	maxSpeed = 3; //?
 	snappingAngle = 0.15;
 }
 
@@ -62,42 +56,47 @@ void Enemy::enemyInitialize()
 	else if (typeOfEnemy == et_commander)
 	{
 		maxTurnSpeed = 0.01;
-		maxSpeed = 0.5;
+		maxSpeed = 2;
 		followingDistance = 700;
-		for (int u = 0; u < 2; u++)
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				components.push_back(new Component(this, mGame->playerObj, -50, -50));
-				components[components.size() - 1]->tex.loadFromFile("Texture/enemy_commander_ship.png");
-				components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
-				components[components.size() - 1]->spr.setTextureRect(sf::IntRect(i*100, u*100, 100, 100));
-			}
-		}
+		snappingAngle = 0.005;
+
+		components.push_back(new Component(this, mGame->playerObj, -50, -100));
+		components[components.size() - 1]->spr.setTexture(commanderShipTex);
+		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(100, 0, 100, 100));
+		components.push_back(new Component(this, mGame->playerObj, -150, -100));
+		components[components.size() - 1]->spr.setTexture(commanderShipTex);
+		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(0, 0, 100, 100));
+		components.push_back(new Component(this, mGame->playerObj, 50, -100));
+		components[components.size() - 1]->spr.setTexture(commanderShipTex);
+		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(200, 0, 100, 100));
+		components[components.size() - 3]->childComponents.push_back(components[components.size() - 1]->id);
+		components[components.size() - 3]->childComponents.push_back(components[components.size() - 2]->id);
+
+		components.push_back(new Component(this, mGame->playerObj, -50, 0));
+		components[components.size() - 1]->spr.setTexture(commanderShipTex);
+		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(100, 100, 100, 100));
+		components.push_back(new Component(this, mGame->playerObj, -150, 0));
+		components[components.size() - 1]->spr.setTexture(commanderShipTex);
+		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(0, 100, 100, 100));
+		components.push_back(new Component(this, mGame->playerObj, 50, 0));
+		components[components.size() - 1]->spr.setTexture(commanderShipTex);
+		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(200, 100, 100, 100));
+		components[components.size() - 3]->childComponents.push_back(components[components.size() - 1]->id);
+		components[components.size() - 3]->childComponents.push_back(components[components.size() - 2]->id);
 	}
 }
 
 
 bool Enemy::update()
 {
+	std::cout << this->xSpeed << std::endl;
+
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
 
 	if (components.size() <= 0)
 		return false;
 	
-	//limit speed
-	//x/ySpeed no bueno
-	if (this->xSpeed > maxSpeed)
-		this->xSpeed = maxSpeed;
-	else if (this->ySpeed > maxSpeed)
-		this->ySpeed = maxSpeed;
-	if (this->xSpeed < -maxSpeed)
-		this->xSpeed = -maxSpeed;
-	else if (this->ySpeed < -maxSpeed)
-		this->ySpeed = -maxSpeed;
-	
-
 	//limit turnSpeed
 	if (turnSpeed > maxTurnSpeed)
 		turnSpeed = maxTurnSpeed;
@@ -137,6 +136,17 @@ bool Enemy::update()
 
 	//update AI accordingly
 	enemyAI();
+
+	//limit speed
+	//x/ySpeed NO BUENO
+	if (this->xSpeed > maxSpeed)
+		this->xSpeed = maxSpeed;
+	else if (this->ySpeed > maxSpeed)
+		this->ySpeed = maxSpeed;
+	if (this->xSpeed < -maxSpeed)
+		this->xSpeed = -maxSpeed;
+	else if (this->ySpeed < -maxSpeed)
+		this->ySpeed = -maxSpeed;
 
 	updateComponents();
 	
@@ -223,11 +233,17 @@ void Enemy::enemyAI()
 	{
 		if (angle < playerDirection - snappingAngle)
 		{
-			turnSpeed += maxTurnSpeed/5;
+			if (typeOfEnemy == et_commander)
+				turnSpeed += maxTurnSpeed / 20;
+			else
+				turnSpeed += maxTurnSpeed/5;
 		}
 		else if (angle > playerDirection + snappingAngle)
 		{
-			turnSpeed -= maxTurnSpeed/5;
+			if (typeOfEnemy == et_commander)
+				turnSpeed -= maxTurnSpeed / 20;
+			else
+				turnSpeed -= maxTurnSpeed/5;
 		}
 	}
 	else

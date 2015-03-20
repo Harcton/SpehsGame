@@ -126,7 +126,7 @@ void Game::updateObjects()
 		//if (flipCoin())
 		//	objects.push_back(new Debris(mWindow, this, objects));
 		//else
-			objects.push_back(new Enemy(mWindow, this, objects, et_commander)); //spawn different enemy types
+			objects.push_back(new Enemy(mWindow, this, objects, et_laser)); //spawn different enemy types
 	for (unsigned int i = 0; i < objects.size(); i++)
 		objects[i]->draw();
 }

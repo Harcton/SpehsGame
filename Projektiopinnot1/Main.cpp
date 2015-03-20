@@ -13,12 +13,14 @@ std::map<float, MyKeys> Keys;
 
 //Global textures
 sf::Texture skeletonTex;
+sf::Texture commanderShipTex;
 
 
 void main()
 {
 
 	skeletonTex.loadFromFile("Texture/skeleton.png");
+	commanderShipTex.loadFromFile("Texture/enemy_commander_ship.png");
 
 	//Randomize randomization...
 	time_t t;
