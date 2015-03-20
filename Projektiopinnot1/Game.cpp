@@ -38,6 +38,7 @@ void Game::run()
 	//Filling objects vector with something
 	objects.push_back(new Player(mWindow, this, 0, 0));
 	playerObj = objects[0];
+
 	/*
 	for (unsigned int i = 0; i < 20; i++)
 		objects.push_back(new Debris(mWindow, this, objects));
@@ -49,7 +50,7 @@ void Game::run()
 	for (int i = 0; i < 10; i++)
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 
-		
+	
 
 
 
@@ -85,7 +86,7 @@ void Game::run()
 		mWindow.display();
 		/////////////
 
-	}		
+	}
 }
 
 
@@ -123,8 +124,8 @@ void Game::updateObjects()
 	if (objects.size() < 2)		
 		//if (flipCoin())
 		//	objects.push_back(new Debris(mWindow, this, objects));
-		//else		
-			objects.push_back(new Enemy(mWindow, this, objects));
+		//else
+			objects.push_back(new Enemy(mWindow, this, objects, et_laser)); //spawn different enemy types
 	for (unsigned int i = 0; i < objects.size(); i++)
 		objects[i]->draw();
 }

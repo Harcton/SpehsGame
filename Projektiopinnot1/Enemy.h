@@ -1,13 +1,20 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+enum TypeOfAI
+{
+	et_standard,
+	et_laser,
+	et_bomber
+};
+
 class Object;
 class Component;
 
 class Enemy : public Object
 {
 public:
-	Enemy(sf::RenderWindow&, Game*, std::vector<Object*>&);
+	Enemy(sf::RenderWindow&, Game*, std::vector<Object*>&, TypeOfAI);
 	~Enemy();
 
 	bool update();
@@ -19,10 +26,7 @@ private:
 	std::vector<Object*>& refVector;
 	void enemyInitialize();
 	void enemyAI();
-	void bomberAI();
-	void laserAI();
 	void updateComponents();
-	void updateAI();
 	void explosion();
 	void fireMahLazors();
 
@@ -40,7 +44,7 @@ private:
 	int complexUpdateTimer;
 	int complexIndex;
 
-	int typeOfEnemy;
+	TypeOfAI typeOfEnemy;
 
 	std::vector<Component*> components;
 	std::vector<Component*>::iterator componentIt;
