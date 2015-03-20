@@ -281,7 +281,7 @@ void Enemy::bomberAI()
 {
 	distance = getDistance(this->components[complexIndex]->x, this->components[complexIndex]->y, nearestComponent->x, nearestComponent->y);
 
-	if (distance < this->textureRadius + nearestComponent->textureRadius + 10)
+	if (distance < this->textureRadius + nearestComponent->textureRadius)
 	{
 		//explosion
 		this->hp = 0;
@@ -406,7 +406,7 @@ void Enemy::explosion()
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
 		if (getDistance(this->components[complexIndex]->x, this->components[complexIndex]->y, mGame->playerObj->components[i]->x,
-				mGame->playerObj->components[i]->y) < this->components[complexIndex]->textureRadius * 2)
+				mGame->playerObj->components[i]->y) < this->components[complexIndex]->textureRadius)
 		{
 			mGame->playerObj->components[i]->hp -= 50;
 		}
@@ -461,11 +461,9 @@ void Enemy::fireMahLazors()
 {
 	//Lazors
 	sf::VertexArray line(sf::Lines, 2);
-	line[0].position = sf::Vector2f(this->relativeXCoordinate, this->relativeYCoordinate);
-	line[1].position = sf::Vector2f(-(mGame->playerObj->x - nearestComponent->x) + WINDOW_WIDTH / 2, -(mGame->playerObj->y - nearestComponent->y) + WINDOW_HEIGHT / 2);
-
-	//line[0].position = sf::Vector2f(this->components[complexIndex]->x + WINDOW_WIDTH / 2, this->components[complexIndex]->y - WINDOW_HEIGHT / 2);
-	//line[1].position = sf::Vector2f(nearestComponent->x + mGame->playerObj->x, nearestComponent->y - mGame->playerObj->y); 
+	line[0].position = sf::Vector2f(this->screenX, this->screenY);
+	line[1].position = sf::Vector2f(nearestComponent->screenX, nearestComponent->screenY);
+	//line[1].position = sf::Vector2f(-(mGame->playerObj->x - nearestComponent->x) + WINDOW_WIDTH / 2, -(mGame->playerObj->y - nearestComponent->y) + WINDOW_HEIGHT / 2);
 	line[0].color = sf::Color::Red;
 	line[1].color = sf::Color::Red;
 	mWindow.draw(line);

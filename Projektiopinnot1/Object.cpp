@@ -58,11 +58,6 @@ bool Object::update()
 	else if (angle < 0)
 		angle += 2*PI;
 
-	//Relative coordinates for screen
-	//+ left x right -
-	//+ up y down -
-	relativeXCoordinate = -(mGame->playerObj->x - this->x) + (WINDOW_WIDTH/2);
-	relativeYCoordinate = -(mGame->playerObj->y - this->y) + (WINDOW_HEIGHT/2);
 
 	//acceleration timer
 	if (accTimer <= 1)
