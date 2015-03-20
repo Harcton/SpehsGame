@@ -31,7 +31,7 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 {
 	currentId++;
 	id = currentId;
-
+	//std::cout << "\nComponent " << id << " constructor";
 	master = mstr;
 	centerObj = cntr;
 
