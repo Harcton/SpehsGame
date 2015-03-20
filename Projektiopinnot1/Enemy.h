@@ -18,7 +18,6 @@ public:
 	~Enemy();
 
 	bool update();
-	void complexUpdate();
 	void checkBulletCollision(Bullet*);
 	void removeComponent(int);
 
@@ -40,10 +39,7 @@ private:
 	double maxSpeed;
 	double snappingAngle;
 	int timer;
-
-	int complexUpdateTimer;
-	int complexIndex;
-
+	
 	TypeOfAI typeOfEnemy;
 
 	std::vector<Component*> components;
