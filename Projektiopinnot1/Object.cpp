@@ -7,6 +7,13 @@
 
 Object::~Object()
 {
+	while (!components.empty())
+	{
+		std::cout << "\n~Object: components: " << components.size();
+		std::cout << "\n~Object: Removing component";
+		delete components.back();
+		components.pop_back();
+	}
 }
 Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 {

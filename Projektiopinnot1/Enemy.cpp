@@ -29,12 +29,8 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 
 
 Enemy::~Enemy()
-{
-	while (!components.empty())
-	{
-		delete components.back();
-		components.pop_back();
-	}
+{//Enemy constructor CANNOT BE CALLED FROM Game.cpp! Game's objects's vector calls for object destructor instead...
+	//std::cout << "\nEnemy deconstructor";
 }
 
 
@@ -42,13 +38,9 @@ bool Enemy::update()
 {	
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
-	for (int i = 0; i < components.size(); i++)
-	{
-		if (components[i]->hp <= 0)
-		{
-			return false;
-		}
-	}
+
+	if (components.size() <= 0)
+		return false;
 
 	playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
 	if (playerDirection < 0)
@@ -94,7 +86,7 @@ void Enemy::enemyAI()
 	if (distance < this->textureRadius + nearestComponent->textureRadius)
 	{
 		//somethingsomething..?
-		std::cout << "oops!" << std::endl;
+		//std::cout << "oops!" << std::endl;
 	}
 
 	if (distance > followingDistance && distance < detectionDistance)
@@ -182,7 +174,7 @@ void Enemy::laserAI()
 	if (distance < this->textureRadius + nearestComponent->textureRadius)
 	{
 		//somethingsomething..?
-		std::cout << "ooops!" << std::endl;
+		//std::cout << "ooops!" << std::endl;
 	}
 
 	if (distance > followingDistance && distance < detectionDistance)
@@ -275,7 +267,6 @@ void Enemy::updateComponents()
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->draw();
 }
-
 
 void Enemy::bomberAI()
 {
@@ -448,6 +439,7 @@ void Enemy::checkBulletCollision(Bullet* b)
 
 void Enemy::removeComponent(int cid)
 {
+	std::cout << "\nremoving enemy child component...";
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
 		{

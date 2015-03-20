@@ -10,13 +10,8 @@
 
 
 Player::~Player()
-{
-	while (!components.empty())
-	{
-		delete components.back();
-		components.pop_back();
-	}
-
+{//Player constructor CANNOT BE CALLED FROM Game.cpp! Game's objects's vector calls for object destructor instead...
+	//std::cout << "\nBegin player DECONSTRUCTOR";
 }
 Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object(windowref, game, cx, cy)
 {
@@ -539,6 +534,7 @@ void Player::checkBulletCollision(Bullet* b)
 
 void Player::removeComponent(int cid)
 {
+	std::cout << "\nremoving player child component...";
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
 		{
