@@ -118,6 +118,7 @@ void Game::updateObjects()
 		{
 		delete * obIt;
 		obIt = objects.erase(obIt);
+		std::cout << "\nGame.cpp: Removing object";
 		}
 		else
 			++obIt;

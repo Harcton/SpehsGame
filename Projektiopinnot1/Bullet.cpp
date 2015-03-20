@@ -7,6 +7,7 @@
 
 Bullet::~Bullet()
 {
+	//Object::~Object();
 }
 Bullet::Bullet(Component* mstr, sf::RenderWindow& w, Game* game, int x, int y, double angl, double spd) : Object(w, game, x, y)
 {

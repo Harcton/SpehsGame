@@ -6,9 +6,19 @@
 
 Component::~Component()
 {
+	std::cout << "\componentDECONSTRUCTOR";
+
+	//Remove child components
 	for (unsigned int i = 0; i < childComponents.size(); i++)
 	{
 		master->removeComponent(childComponents[i]);
+	}
+
+	//Remove bullets
+	while (!bullets.empty())
+	{
+		delete bullets.back();
+		bullets.pop_back();
 	}
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy)
