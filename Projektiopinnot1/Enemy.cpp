@@ -53,6 +53,22 @@ void Enemy::enemyInitialize()
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_purple.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 	}
+	else if (typeOfEnemy == et_commander)
+	{
+		maxTurnSpeed = 0.01;
+		maxSpeed = 0.5;
+		followingDistance = 700;
+		for (int u = 0; u < 2; u++)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				components.push_back(new Component(this, mGame->playerObj, -50, -50));
+				components[components.size() - 1]->tex.loadFromFile("Texture/enemy_commander_ship.png");
+				components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+				components[components.size() - 1]->spr.setTextureRect(sf::IntRect(i*100, u*100, 100, 100));
+			}
+		}
+	}
 }
 
 
@@ -143,9 +159,9 @@ void Enemy::enemyAI()
 		xSpeed += cos(2 * PI - angle)*(distance/700);
 		ySpeed += sin(2 * PI - angle)*(distance/700);
 
-		if (typeOfEnemy != et_bomber)
+		if (typeOfEnemy == et_standard || typeOfEnemy == et_laser)
 		{
-			if (timer == 7)
+			if (timer == 8)
 			{
 				if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
 				{
@@ -158,18 +174,28 @@ void Enemy::enemyAI()
 					}
 					if (typeOfEnemy == et_laser)
 						fireMahLazors();
-					timer = 0;
+					timer = irandom(-10,0);
 				}
 			}
 			else
 				timer++;
 		}
 	}
-	else if (distance < followingDistance && typeOfEnemy != et_bomber)
+	else if (distance < followingDistance)
 	{
-		follow = true;
-		xSpeed += (cos(2 * PI - angle)*(distance / 700))*-1;
-		ySpeed += (sin(2 * PI - angle)*(distance / 700))*-1;
+		if (typeOfEnemy != et_bomber)
+		{
+			follow = true;
+			xSpeed -= (cos(2 * PI - angle)*(distance / 1200));
+			ySpeed -= (sin(2 * PI - angle)*(distance / 1200));
+		}
+		else if (typeOfEnemy == et_bomber)
+		{
+			follow = true;
+			xSpeed += (cos(2 * PI - angle)*(distance / 500));
+			ySpeed += (sin(2 * PI - angle)*(distance / 500));
+		}
+
 	}
 	else if (distance > detectionDistance)
 	{
@@ -191,16 +217,11 @@ void Enemy::enemyAI()
 	{
 		if (angle < playerDirection - snappingAngle)
 		{
-			turnSpeed += maxTurnSpeed/4;
+			turnSpeed += maxTurnSpeed/5;
 		}
 		else if (angle > playerDirection + snappingAngle)
 		{
-			turnSpeed -= maxTurnSpeed/4;
-		}
-
-		if (angle / playerDirection > 1.1 || angle / playerDirection < 0.9)
-		{
-			
+			turnSpeed -= maxTurnSpeed/5;
 		}
 	}
 	else
@@ -298,7 +319,7 @@ void Enemy::fireMahLazors()
 	line[1].position = sf::Vector2f(nearestComponent->screenX - 15 + irandom(0, 30), nearestComponent->screenY - 15 + irandom(0, 30));
 	line[0].color = sf::Color::Red;
 	line[1].color = sf::Color::Red;
-	nearestComponent->hp -= 2;
+	nearestComponent->hp -= 3;
 
 	mWindow.draw(line);
 }

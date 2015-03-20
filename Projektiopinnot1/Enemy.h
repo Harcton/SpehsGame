@@ -5,7 +5,8 @@ enum TypeOfAI
 {
 	et_standard,
 	et_laser,
-	et_bomber
+	et_bomber,
+	et_commander
 };
 
 class Object;
