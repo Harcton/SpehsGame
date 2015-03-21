@@ -17,8 +17,8 @@
 #define SPAWN_RANGE 1000
 #define DESPAWN_RANGE 2000
 
-#define EDITOR_WIDTH 11
-#define EDITOR_HEIGHT 11
+#define EDITOR_WIDTH 41
+#define EDITOR_HEIGHT 41
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -35,6 +35,7 @@ double getDistance(double, double, double, double);
 int irandom(int min, int max);
 bool flipCoin();
 bool rollDie(unsigned int sides);
+void limitZoom();
 
 
 

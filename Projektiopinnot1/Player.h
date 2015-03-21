@@ -34,7 +34,9 @@ protected:
 	bool controller;
 	double mouseDirection;
 	sf::Vector2i mousePosition;
-	PlayerData* data;
+
+	int coreX = (1 - EDITOR_WIDTH) / 2;
+	int coreY = (1 - EDITOR_HEIGHT) / 2;
 
 };
 

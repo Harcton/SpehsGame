@@ -9,7 +9,7 @@ public:
 	~PlayerData();
 	friend class Player;
 
-	GridData* grid[11][11];
+	GridData* grid[EDITOR_WIDTH][EDITOR_HEIGHT];
 
 private:
 

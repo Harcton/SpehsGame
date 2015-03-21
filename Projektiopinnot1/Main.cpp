@@ -98,3 +98,12 @@ bool testInput(MyKeys k)
 
 	return (false);
 }
+
+
+void limitZoom()
+{
+	if (zoomFactor < 0.2)
+		zoomFactor = 0.2;
+	if (zoomFactor > 4)
+		zoomFactor = 4;
+}

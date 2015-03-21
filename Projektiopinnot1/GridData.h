@@ -9,6 +9,7 @@ public:
 	GridData();
 	friend class PlayerData;
 	friend class Player;
+	friend class ShipEditor;
 
 private:
 	int turret = 0;

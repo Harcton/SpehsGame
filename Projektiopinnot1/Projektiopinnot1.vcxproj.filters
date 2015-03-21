@@ -63,6 +63,9 @@
     <ClCompile Include="GridData.cpp">
       <Filter>Source Files\Ship editor</Filter>
     </ClCompile>
+    <ClCompile Include="ShipEditor.cpp">
+      <Filter>Source Files\Ship editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files\Ship editor</Filter>
     </ClInclude>
     <ClInclude Include="GridData.h">
+      <Filter>Header Files\Ship editor</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipEditor.h">
       <Filter>Header Files\Ship editor</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,6 +4,7 @@
 
 class Game;
 class Bullet;
+class PlayerData;
 
 class Object
 {
@@ -62,6 +63,7 @@ public:
 protected:
 	Object* centerObj;
 	std::vector<Component*> components;
+	PlayerData* data;//Only for player objects
 	int opacity = 0;
 	double collisionCheckAngle;
 	double checkCollisionDistance;

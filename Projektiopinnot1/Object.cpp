@@ -1,5 +1,9 @@
 #include "Main.h"
 #include "Game.h"
+
+#include "GridData.h"
+#include "PlayerData.h"
+
 #include "Object.h"
 #include "Bullet.h"
 
@@ -14,6 +18,7 @@ Object::~Object()
 		delete components.back();
 		components.pop_back();
 	}
+	delete data;
 }
 Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 {

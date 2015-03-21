@@ -7,6 +7,7 @@
 #include "Turret.h"
 #include "GridData.h"
 #include "PlayerData.h"
+#include "ShipEditor.h"
 
 
 Player::~Player()
@@ -152,6 +153,12 @@ bool Player::update()
 		relativeSpeedY = 0;
 	}
 
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
+	{
+		ShipEditor editor(mWindow, *data);
+		editor.run();
+	}
 
 
 		//Accelerate
@@ -448,13 +455,11 @@ void Player::reverse(double factor)
 void Player::zoomIn(double f)
 {
 	zoomFactor += 0.01;
-	std::cout << "\nZooming in...";
 }
 
 void Player::zoomOut(double f)
 {
 	zoomFactor -= 0.01;
-	std::cout << "\nZooming out...";
 }
 
 void Player::updateComponents()
@@ -537,19 +542,21 @@ void Player::loadPlayerData()
 		{
 		if (data->grid[ex][ey]->core == true)
 			{
+			coreX = ex;
+			coreY = ey;
 			addFromGrid(ex, ey);
 			}
 		}
 }
 void Player::addFromGrid(int gx, int gy)
 {
-	components.push_back(new Component(this, this, -500 + 100 * gx, -500 + 100 * gy));
+	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100));
 	components[components.size() - 1]->spr.setTexture(skeletonTex);
 	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 	components[components.size() - 1]->spr.setOrigin(50,50);
 	
 	if (data->grid[gx][gy]->turret == 1)
-		components[components.size() - 1]->createChild(-500 + 100 * gx, -500 + 100 * gy, ct_turret);
+		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, ct_turret);
 	
 	//Handle children	
 	int selfIndex = components.size() - 1;

@@ -29,6 +29,7 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, i
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 {
+	std::cout << "\component constructor";
 	currentId++;
 	id = currentId;
 	//std::cout << "\nComponent " << id << " constructor";
