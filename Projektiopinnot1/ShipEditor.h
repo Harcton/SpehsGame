@@ -1,6 +1,12 @@
 #ifndef SHIPEDITOR_H
 #define SHIPEDITOR_H
 
+enum EditorFocus
+{
+	ef_base,
+	ef_component,
+	ef_configuration
+};
 
 
 class ShipEditor
@@ -15,9 +21,22 @@ public:
 	void updateGridSpriteLocations();
 	void updateMouseGrab();
 
+	void rotateGlowAngle();
+	void drawSelectedRect();
+	void drawSelectionShadeHighlight();
+	void drawInheritanceSprites();
+	void scrapComponent(int, int);
+
+	//Input
+	void mouseLeftPressed();
+	void zoom(int);
+
 private:
 	PlayerData& playerData;
 	sf::RenderWindow& mWindow;
+	float scaleFactor;
+	float glowAngle = 0; //What it does is... spin around in the game loop. Can be used to apply glowing effects
+	float glowAmount = 0; // 0.0 - 1.0
 
 	float cameraX = 0; //(EDITOR_WIDTH / 2) * 100;
 	float cameraY = 0; //(EDITOR_HEIGHT / 2) * 100;
@@ -32,7 +51,15 @@ private:
 	std::vector<sf::VertexArray> horizontalLines;
 	std::vector<sf::VertexArray> verticalLines;
 	std::vector<sf::Sprite> gridSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
+	std::vector<sf::Sprite> inheritanceSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
 
+	EditorFocus focus = ef_base;
+	int selectedX = -1;
+	int selectedY = -1;
+	sf::RectangleShape selectedRect;
+	sf::RectangleShape shadeRect;
+
+	sf::Texture inheritanceArrowTex;
 
 };
 

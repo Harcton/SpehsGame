@@ -6,7 +6,7 @@
 
 Component::~Component()
 {
-	std::cout << "\componentDECONSTRUCTOR";
+	std::cout << "  componentDECONSTRUCTOR";
 
 	//Remove child components
 	for (unsigned int i = 0; i < childComponents.size(); i++)
@@ -21,15 +21,15 @@ Component::~Component()
 		bullets.pop_back();
 	}
 }
-Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy)
+Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy) : Component::Component(mstr, cntr, xo, yo)
 {
-	Component::Component(mstr, cntr, xo, yo);
 	gridLocationX = gx;
 	gridLocationY = gy;
+
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 {
-	std::cout << "\component constructor";
+	std::cout << "  componentConstructor";
 	currentId++;
 	id = currentId;
 	//std::cout << "\nComponent " << id << " constructor";
@@ -46,7 +46,11 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 bool Component::update()
 {
 	if (hp <= 0)
+	{
+		std::cout << "\nComponent destroyed! [" << gridLocationX << ", " << gridLocationY << "]";
+		master->notifyComponentDestruction(id);
 		return false;
+	}
 
 	//Angle
 	angle += master->turnSpeed;

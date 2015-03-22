@@ -35,7 +35,7 @@ double getDistance(double, double, double, double);
 int irandom(int min, int max);
 bool flipCoin();
 bool rollDie(unsigned int sides);
-void limitZoom();
+float limitZoom();
 
 
 

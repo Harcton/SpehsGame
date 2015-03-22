@@ -5,7 +5,7 @@
 
 PlayerData::~PlayerData()
 {
-	std::cout << "\ndeleting grid data..";
+	std::cout << "\nDeallocating all player data memory..";
 	//free grid element memory
 	for (unsigned int ex = 0; ex < EDITOR_WIDTH; ex++)
 		for (unsigned int ey = 0; ey < EDITOR_HEIGHT; ey++)
@@ -38,6 +38,11 @@ PlayerData::PlayerData()
 
 
 	grid[6][3]->armor = 1;
+	grid[6][3]->childRight = true;
+	grid[6][3]->childLeft = true;
+
+	grid[5][3]->armor = 1;
+	grid[7][3]->armor = 1;
 	grid[6][7]->armor = 1;
 
 	//grid[6][3]->turret = 1;

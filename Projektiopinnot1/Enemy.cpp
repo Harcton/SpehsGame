@@ -341,7 +341,7 @@ void Enemy::fireMahLazors()
 	line[1].position = sf::Vector2f(nearestComponent->screenX - 15 + irandom(0, 30), nearestComponent->screenY - 15 + irandom(0, 30));
 	line[0].color = sf::Color::Red;
 	line[1].color = sf::Color::Red;
-	nearestComponent->hp -= 3;
+	nearestComponent->hp -= 10;
 
 	mWindow.draw(line);
 }

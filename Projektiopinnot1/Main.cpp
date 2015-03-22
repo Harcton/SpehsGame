@@ -99,11 +99,19 @@ bool testInput(MyKeys k)
 	return (false);
 }
 
-
-void limitZoom()
+//Returns the amount cut-out from the zoomFactor
+float limitZoom()
 {
+	float cutValue = 0;
 	if (zoomFactor < 0.2)
+	{
+		cutValue += 0.2 - zoomFactor;
 		zoomFactor = 0.2;
-	if (zoomFactor > 4)
+	}
+	else if (zoomFactor > 4)
+	{
+		cutValue += zoomFactor - 4;
 		zoomFactor = 4;
+	}
+	return cutValue;
 }

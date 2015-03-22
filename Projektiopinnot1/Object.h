@@ -19,6 +19,7 @@ public:
 	void checkCollisions(unsigned int);
 	virtual void checkBulletCollision(Bullet*);
 	virtual void removeComponent(int){};
+	virtual void notifyComponentDestruction(int){};
 	void draw();
 
 	sf::Texture tex;

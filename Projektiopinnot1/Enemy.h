@@ -20,7 +20,8 @@ public:
 
 	bool update();
 	void checkBulletCollision(Bullet*);
-	void removeComponent(int);
+	void removeComponent(int); 
+	void notifyComponentDestruction(int){};
 
 private:
 	std::vector<Object*>& refVector;

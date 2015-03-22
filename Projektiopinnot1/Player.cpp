@@ -155,10 +155,7 @@ bool Player::update()
 
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
-	{
-		ShipEditor editor(mWindow, *data);
-		editor.run();
-	}
+		editShip();
 
 
 		//Accelerate
@@ -517,19 +514,21 @@ void Player::removeComponent(int cid)
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
 		{
-		int tX = components[i]->gridLocationX;
-		int tY = components[i]->gridLocationY;
-		//Delete the component save data
-		delete data->grid[tX][tY];
-		data->grid[tX][tY] = new GridData;
-		//Delete the actual component
-		delete components[i];
-		components.erase(components.begin() + i);
+		components[i]->hp = -1;
+		//int tX = components[i]->gridLocationX;
+		//int tY = components[i]->gridLocationY;
+		////Delete the component save data
+		//delete data->grid[tX][tY];
+		//data->grid[tX][tY] = new GridData;
+		////Delete the actual component
+		//delete components[i];
+		//components.erase(components.begin() + i);
 		}
 }
 
 void Player::loadPlayerData()
 {
+	angle = 0;
 	while (!components.empty())
 	{
 		delete components.back();
@@ -548,12 +547,15 @@ void Player::loadPlayerData()
 			}
 		}
 }
+
+//This is the only way allowed to add components to a player ship
 void Player::addFromGrid(int gx, int gy)
 {
-	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100));
+	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100, gx, gy));
 	components[components.size() - 1]->spr.setTexture(skeletonTex);
 	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 	components[components.size() - 1]->spr.setOrigin(50,50);
+	componentIdGrid[gx][gy] = components[components.size() - 1]->id;
 	
 	if (data->grid[gx][gy]->turret == 1)
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, ct_turret);
@@ -584,4 +586,45 @@ void Player::addFromGrid(int gx, int gy)
 		addFromGrid(gx - 1, gy);
 		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
+}
+
+void Player::editShip()
+{
+	ShipEditor editor(mWindow, *data);
+	editor.run();
+	loadPlayerData();
+}
+
+//This method is called from the component destructor. (For Enemy class it has no use)
+void Player::notifyComponentDestruction(int id)
+{
+	int gx = -1;
+	int gy = -1;
+
+	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
+		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
+			if (componentIdGrid[ex][ey] == id)
+			{
+				gx = ex;
+				gy = ey;
+			}
+	if (gx < 0 && gy < 0)
+	{
+		return;
+	}
+	
+	//Notify parent component
+	if (gx > 0)
+		data->grid[gx + 1][gy]->childLeft = false;
+	if (gx < EDITOR_WIDTH - 1)
+		data->grid[gx - 1][gy]->childRight = false;
+	if (gy > 0)
+		data->grid[gx][gy - 1]->childDown = false;
+	if (gy < EDITOR_HEIGHT - 1)
+		data->grid[gx][gy + 1]->childUp = false;
+
+	//Remove actual data
+	componentIdGrid[gx][gy] = -1;
+	delete data->grid[gx][gy];
+	data->grid[gx][gy] = new GridData();
 }
