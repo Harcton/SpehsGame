@@ -89,7 +89,7 @@ void Enemy::enemyInitialize()
 
 bool Enemy::update()
 {
-	std::cout << this->xSpeed << std::endl;
+	//std::cout << this->xSpeed << std::endl;
 
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
@@ -341,7 +341,7 @@ void Enemy::fireMahLazors()
 	line[1].position = sf::Vector2f(nearestComponent->screenX - 15 + irandom(0, 30), nearestComponent->screenY - 15 + irandom(0, 30));
 	line[0].color = sf::Color::Red;
 	line[1].color = sf::Color::Red;
-	nearestComponent->hp -= 10;
+	nearestComponent->hp -= 1;
 
 	mWindow.draw(line);
 }

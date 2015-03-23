@@ -32,7 +32,6 @@ public:
 protected:
 	sf::Event mEvent;
 	std::vector<Component*>::iterator componentIt;
-	int componentIdGrid[EDITOR_WIDTH][EDITOR_HEIGHT] = {}; //A grid containing the id's of corresponding component
 
 	bool controller;
 	double mouseDirection;

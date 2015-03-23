@@ -321,7 +321,11 @@ bool Player::update()
 								else if (mouseDirection < angle || mouseDirection > angle + PI)
 								{// -
 									if (components[i]->angle > turretMinAngle)
+									{
 										components[i]->angle -= components[i]->turningSpeed;
+										if (components[i]->angle > turretMaxAngle)
+											components[i]->angle = turretMinAngle;
+									}
 								}
 							}
 						}
@@ -555,7 +559,6 @@ void Player::addFromGrid(int gx, int gy)
 	components[components.size() - 1]->spr.setTexture(skeletonTex);
 	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 	components[components.size() - 1]->spr.setOrigin(50,50);
-	componentIdGrid[gx][gy] = components[components.size() - 1]->id;
 	
 	if (data->grid[gx][gy]->turret == 1)
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, ct_turret);
@@ -601,14 +604,15 @@ void Player::notifyComponentDestruction(int id)
 	int gx = -1;
 	int gy = -1;
 
-	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
-		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
-			if (componentIdGrid[ex][ey] == id)
-			{
-				gx = ex;
-				gy = ey;
-			}
-	if (gx < 0 && gy < 0)
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->id == id)
+		{
+		gx = components[i]->gridLocationX;
+		gy = components[i]->gridLocationY;
+		}
+
+	
+	if (gx < 0 || gy < 0)
 	{
 		return;
 	}
@@ -624,7 +628,6 @@ void Player::notifyComponentDestruction(int id)
 		data->grid[gx][gy + 1]->childUp = false;
 
 	//Remove actual data
-	componentIdGrid[gx][gy] = -1;
 	delete data->grid[gx][gy];
 	data->grid[gx][gy] = new GridData();
 }

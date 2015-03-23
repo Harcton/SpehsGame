@@ -75,38 +75,36 @@ void ShipEditor::run()
 			mouseGrab = false;
 
 		//Handle events
-		mWindow.pollEvent(mEvent);
-		switch (mEvent.type)
+		while (mWindow.pollEvent(mEvent))
 		{
-		case sf::Event::MouseWheelMoved:
-			zoom(mEvent.mouseWheel.delta);
-			mEvent.mouseWheel.delta = 0;
-			scaleFactor = resFactor*zoomFactor;
-			break;
-		case sf::Event::MouseButtonPressed:
-			switch (mEvent.mouseButton.button)
+			switch (mEvent.type)
 			{
-			case sf::Mouse::Left:
-			mouseLeftPressed();
+			case sf::Event::MouseWheelMoved:
+				zoom(mEvent.mouseWheel.delta);
+				mEvent.mouseWheel.delta = 0;
+				scaleFactor = resFactor*zoomFactor;
 				break;
-			}
-			break;
-		case sf::Event::KeyPressed:
-			switch (mEvent.key.code)
-			{
-			case sf::Keyboard::Delete:
-				scrapComponent(selectedX, selectedY);
-				updateGridSpriteTextures();
-				focus = ef_base;
+			case sf::Event::MouseButtonPressed:
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					mouseLeftPressed();
+
 				break;
-			case sf::Keyboard::Escape:
-				selectedX = -1;
-				selectedY = -1;
-				focus = ef_base;
-				break;
+			case sf::Event::KeyPressed:
+				switch (mEvent.key.code)
+				{
+				case sf::Keyboard::Delete:
+					scrapComponent(selectedX, selectedY);
+					updateGridSpriteTextures();
+					focus = ef_base;
+					break;
+				case sf::Keyboard::Escape:
+					selectedX = -1;
+					selectedY = -1;
+					focus = ef_base;
+					break;
+				}
 			}
 		}
-		
 
 		//Drawing
 		mWindow.clear(sf::Color(40, 90, 235));
@@ -263,16 +261,37 @@ void ShipEditor::mouseLeftPressed()
 	switch (focus)
 	{
 	case ef_base:
-		selectedX = int((cameraX + mousePos.x / scaleFactor) / (100.0));
-		selectedY = int((cameraY + mousePos.y / scaleFactor) / (100.0));
+		if (((cameraX + mousePos.x / scaleFactor) / 100.0 > 0) 
+			&& ((cameraX + mousePos.x / scaleFactor) / 100.0 < EDITOR_WIDTH) 
+			&& ((cameraY + mousePos.y / scaleFactor) / (100.0) > 0)
+			&& ((cameraY + mousePos.y / scaleFactor) / (100.0) < EDITOR_HEIGHT))
+		{
+			selectedX = int((cameraX + mousePos.x / scaleFactor) / (100.0));
+			selectedY = int((cameraY + mousePos.y / scaleFactor) / (100.0));
+		}
+		else
+		{
+			selectedX = -1;
+			selectedY = -1;
+			focus = ef_base;
+			break;
+		}
+
 		if (playerData.grid[selectedX][selectedY]->armor > 0)
 			focus = ef_component;
 		else
 			focus = ef_base;
+		std::cout << "\nSelected: " << selectedX << ", " << selectedY;
 		break;
 	case ef_component:
-		int checkX = int((cameraX + mousePos.x / scaleFactor) / (100.0));
-		int checkY = int((cameraY + mousePos.y / scaleFactor) / (100.0));
+		int checkX = -1;
+		if ((cameraX + mousePos.x / scaleFactor) / 100.0 > 0)
+			 checkX = (cameraX + mousePos.x / scaleFactor) / (100.0);
+		
+
+		int checkY = -1;
+		if ((cameraY + mousePos.y / scaleFactor) / (100.0) > 0)
+			checkY = (cameraY + mousePos.y / scaleFactor) / (100.0);
 		
 		//Up
 		if (checkX == selectedX && checkY == selectedY - 1 && checkY >= 0 && playerData.grid[checkX][checkY]->armor == 0)
@@ -284,7 +303,7 @@ void ShipEditor::mouseLeftPressed()
 			updateGridSpriteTextures();
 		}
 		//Down
-		if (checkX == selectedX && checkY == selectedY + 1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY]->armor == 0)
+		else if (checkX == selectedX && checkY == selectedY + 1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY]->armor == 0)
 		{
 			playerData.grid[selectedX][selectedY]->childDown = true;
 			playerData.grid[checkX][checkY]->armor = 1;
@@ -293,7 +312,7 @@ void ShipEditor::mouseLeftPressed()
 			updateGridSpriteTextures();
 		}
 		//Left
-		if (checkX == selectedX - 1 && checkY == selectedY && checkX >= 0 && playerData.grid[checkX][checkY]->armor == 0)
+		else if (checkX == selectedX - 1 && checkY == selectedY && checkX >= 0 && playerData.grid[checkX][checkY]->armor == 0)
 		{
 			playerData.grid[selectedX][selectedY]->childLeft = true;
 			playerData.grid[checkX][checkY]->armor = 1;
@@ -302,13 +321,34 @@ void ShipEditor::mouseLeftPressed()
 			updateGridSpriteTextures();
 		}
 		//Right
-		if (checkX == selectedX + 1 && checkY == selectedY && checkX < EDITOR_WIDTH && playerData.grid[checkX][checkY]->armor == 0)
+		else if (checkX == selectedX + 1 && checkY == selectedY && checkX < EDITOR_WIDTH && playerData.grid[checkX][checkY]->armor == 0)
 		{
 			playerData.grid[selectedX][selectedY]->childRight = true;
 			playerData.grid[checkX][checkY]->armor = 1;
 			selectedX = checkX;
 			selectedY = checkY;
 			updateGridSpriteTextures();
+		}
+		else if (checkX > -1 && checkX < EDITOR_WIDTH && checkY > -1 && checkY < EDITOR_HEIGHT)
+		{
+			if (selectedX == checkX && selectedY == checkY)
+			{
+				selectedX = -1;
+				selectedY = -1;
+				focus = ef_base;
+				break;
+			}
+
+			selectedX = checkX;
+			selectedY = checkY;
+			if (playerData.grid[selectedX][selectedY]->armor < 1)
+				focus = ef_base;
+		}
+		else
+		{
+			selectedX = -1;
+			selectedY = -1;
+			focus = ef_base;
 		}
 		break;
 	}
