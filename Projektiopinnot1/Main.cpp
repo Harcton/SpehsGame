@@ -13,6 +13,9 @@ std::map<float, MyKeys> Keys;
 
 //Global textures
 sf::Texture skeletonTex;
+sf::Texture editorTurretTex;
+sf::Texture editorEngineTex;
+
 sf::Texture commanderShipTex;
 
 
@@ -20,6 +23,9 @@ void main()
 {
 
 	skeletonTex.loadFromFile("Texture/skeleton.png");
+	editorTurretTex.loadFromFile("Texture/turret.png");
+	
+
 	commanderShipTex.loadFromFile("Texture/enemy_commander_ship.png");
 
 	//Randomize randomization...

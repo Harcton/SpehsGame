@@ -27,6 +27,8 @@ extern double zoomFactor;
 
 //global textures
 extern sf::Texture skeletonTex;
+extern sf::Texture editorTurretTex;
+extern sf::Texture editorEngineTex;
 extern sf::Texture commanderShipTex;
 
 
@@ -80,6 +82,18 @@ struct MyKeys
 };
 extern std::map<float, MyKeys> Keys;
 bool testInput(MyKeys k);
+
+
+enum ButtonId
+{
+	bi_false,
+	bi_true,
+	bi_actionTurret,
+	bi_actionEngine,
+	bi_actionConfiguration,
+	bi_actionScrap,
+};
+
 #define key_shoot 0.1
 #define key_turnRight 0.2
 #define key_turnLeft 0.3

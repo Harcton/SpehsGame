@@ -5,9 +5,11 @@ enum EditorFocus
 {
 	ef_base,
 	ef_component,
+	ef_actions,
 	ef_configuration
 };
 
+class Button;
 
 class ShipEditor
 {
@@ -25,10 +27,12 @@ public:
 	void drawSelectedRect();
 	void drawSelectionShadeHighlight();
 	void drawInheritanceSprites();
+	void drawActions();
 	void scrapComponent(int, int);
 
 	//Input
 	void mouseLeftPressed();
+	void mouseRightPressed();
 	void zoom(int);
 
 private:
@@ -52,6 +56,7 @@ private:
 	std::vector<sf::VertexArray> verticalLines;
 	std::vector<sf::Sprite> gridSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
 	std::vector<sf::Sprite> inheritanceSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
+	std::vector<Button> actionButtons;
 
 	EditorFocus focus = ef_base;
 	int selectedX = -1;

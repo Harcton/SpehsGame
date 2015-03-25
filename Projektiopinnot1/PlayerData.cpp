@@ -48,7 +48,7 @@ PlayerData::PlayerData()
 	//grid[6][3]->turret = 1;
 	//grid[6][4]->turret = 1;
 	grid[6][5]->turret = 1;
-	//grid[6][6]->turret = 1;
+	grid[6][6]->turret = 1;
 	//grid[6][7]->turret = 1;
 	//End of Debug ship editor//
 	///////////////////////////
