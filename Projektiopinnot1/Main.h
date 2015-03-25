@@ -76,11 +76,12 @@ struct MyKeys
 	int joystickIndex = 0;
 	//axis sub
 	sf::Joystick::Axis joystickAxis;
-	double threshold = 20;
+	float threshold = 20;
 	//button sub
 	int joystickButton = 0;
 };
-extern std::map<float, MyKeys> Keys;
+extern std::map<float, MyKeys> coreKeys;
+extern std::map<float, MyKeys> componentKeys;
 bool testInput(MyKeys k);
 
 

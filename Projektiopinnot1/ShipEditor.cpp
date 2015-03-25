@@ -377,6 +377,17 @@ void ShipEditor::mouseLeftPressed()
 				else
 				{
 					playerData.grid[selectedX][selectedY]->turret = 1;
+					playerData.grid[selectedX][selectedY]->mouseAim = true;
+					playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter = false;
+					playerData.grid[selectedX][selectedY]->turretFire.inputType = mouseInput;
+					playerData.grid[selectedX][selectedY]->turretFire.mouseButton = sf::Mouse::Left;
+					//playerData.grid[selectedX][selectedY]->turretLeft.inputType = keyboardInput;
+					//playerData.grid[selectedX][selectedY]->turretLeft.keyCode = sf::Keyboard::Z;
+					//playerData.grid[selectedX][selectedY]->turretRight.inputType = keyboardInput;
+					//playerData.grid[selectedX][selectedY]->turretRight.keyCode = sf::Keyboard::X;
+					//playerData.grid[selectedX][selectedY]->turretFire.inputType = keyboardInput;
+					//playerData.grid[selectedX][selectedY]->turretFire.keyCode = sf::Keyboard::Space;
+					
 					updateGridSpriteTextures();
 				}
 				focus = ef_base;

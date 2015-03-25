@@ -20,6 +20,7 @@ public:
 	void notifyComponentDestruction(int);
 	void addFromGrid(int, int);
 	void editShip();
+	void loadKeybindings();
 
 	//Handle input
 	void turnRight(double);

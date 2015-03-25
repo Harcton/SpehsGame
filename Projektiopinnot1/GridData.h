@@ -1,6 +1,7 @@
 #ifndef GRIDDATA_H
 #define GRIDDATA_H
 
+struct MyKeys;
 
 class GridData
 {
@@ -22,7 +23,13 @@ private:
 	bool childLeft = false;
 
 	bool core = false;
+	bool mouseAim = false;
+	bool mouseAimRelativeToCenter = true;
 
+	MyKeys turretLeft;
+	MyKeys turretRight;
+	MyKeys turretFire;
+	MyKeys engineThrust;
 };
 
 #endif

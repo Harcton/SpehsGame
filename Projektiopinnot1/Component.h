@@ -4,7 +4,8 @@
 enum componentType
 {
 	ct_hull,
-	ct_turret
+	ct_turret,
+	ct_engine,
 };
 
 
@@ -57,6 +58,7 @@ protected:
 	sf::Texture tex;
 
 	bool mouseAim;
+	bool mouseAimRelativeToCenter;
 	int id;
 	std::vector<int> childComponents;
 	int hp;
