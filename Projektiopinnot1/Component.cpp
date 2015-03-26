@@ -82,17 +82,17 @@ void Component::draw()
 	master->mWindow.draw(spr);
 }
 
-void Component::createChild(double ox, double oy, componentType tp)
+void Component::createChild(double ox, double oy, component::Type tp)
 {
 	switch (tp)
 	{
-	case ct_hull:
+	case component::hull:
 		master->components.push_back(new Component(master, centerObj, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
 		master->components[master->components.size() - 1]->spr.setTexture(skeletonTex);
 		master->components[master->components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 		break;
-	case ct_turret: //Turret
+	case component::turret: //Turret
 		master->components.push_back(new Turret(master, centerObj, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
 		break;

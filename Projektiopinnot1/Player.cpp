@@ -189,7 +189,7 @@ bool Player::update()
 			int turretCount = 0;
 			for (unsigned int i = 0; i < components.size(); i++)
 			for (unsigned int k = 0; k < components[i]->types.size(); k++)
-				if (components[i]->types[k] == ct_turret)
+				if (components[i]->types[k] == component::turret)
 				{
 				turretCount++;
 				if (testInput(componentKeys[components[i]->id + 0.1]))
@@ -207,7 +207,7 @@ bool Player::update()
 			{
 				//Look through component i's types vector
 				for (unsigned int k = 0; k < components[i]->types.size(); k++)
-					if (components[i]->types[k] == ct_turret)
+					if (components[i]->types[k] == component::turret)
 					{//Turret i
 					turretCount++;
 
@@ -567,7 +567,7 @@ void Player::addFromGrid(int gx, int gy)
 	
 	if (data->grid[gx][gy]->turret == 1)
 	{
-		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, ct_turret);
+		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
 	}
@@ -651,7 +651,7 @@ void Player::loadKeybindings()
 	for (unsigned int i = 0; i < components.size(); i++)
 		for (unsigned int k = 0; k < components[i]->types.size(); k++)
 		{
-		if (components[i]->types[k] == ct_turret)
+		if (components[i]->types[k] == component::turret)
 		{
 			std::cout << "\nBinding turret keys...";
 			components[i]->mouseAim = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAim;
@@ -660,7 +660,7 @@ void Player::loadKeybindings()
 			componentKeys[-1 * components[i]->id] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
 			componentKeys[0.1 + components[i]->id] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
 		}
-		if (components[i]->types[k] == ct_engine)
+		if (components[i]->types[k] == component::engine)
 		{
 			componentKeys[0.1 + components[i]->id] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
 		}

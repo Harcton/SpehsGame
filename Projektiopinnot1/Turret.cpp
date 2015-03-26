@@ -15,7 +15,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	maxAngle = PI/3;
 	turningSpeed = PI/40;
 
-	types.push_back(ct_turret);
+	types.push_back(component::turret);
 	mouseAim = true;
 	textureRadius = 20;
 }

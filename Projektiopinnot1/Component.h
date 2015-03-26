@@ -1,12 +1,17 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
-
-enum componentType
+namespace component
 {
-	ct_hull,
-	ct_turret,
-	ct_engine,
-};
+
+
+	enum Type
+	{
+		hull,
+		turret,
+		engine,
+	};
+
+}
 
 
 class Object;
@@ -25,7 +30,7 @@ public:
 
 	virtual bool update();
 	void draw();
-	void createChild(double, double, componentType);
+	void createChild(double, double, component::Type);
 
 	//Virtual functions
 	virtual void fire(){}
@@ -47,7 +52,7 @@ public:
 	double screenX;
 	double screenY;
 
-	std::vector<componentType> types;
+	std::vector<component::Type> types;
 	std::vector<Bullet*> bullets;
 	double angle;
 	double turningSpeed;

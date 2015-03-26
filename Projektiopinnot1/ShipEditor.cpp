@@ -73,10 +73,8 @@ void ShipEditor::run()
 				mouseGrabY = mousePos.y;
 				grabCameraOriginX = cameraX;
 				grabCameraOriginY = cameraY;
-			}
-			
+			}			
 			mouseGrab = true;
-
 		}
 		else
 			mouseGrab = false;
@@ -103,12 +101,12 @@ void ShipEditor::run()
 				case sf::Keyboard::Delete:
 					scrapComponent(selectedX, selectedY);
 					updateGridSpriteTextures();
-					focus = ef_base;
+					focus = editor::base;
 					break;
 				case sf::Keyboard::Escape:
 					selectedX = -1;
 					selectedY = -1;
-					focus = ef_base;
+					focus = editor::base;
 					break;
 				}
 			}
@@ -141,7 +139,7 @@ void ShipEditor::run()
 		drawSelectionShadeHighlight();
 		drawInheritanceSprites();
 
-		if (focus == ef_actions)
+		if (focus == editor::actions)
 			drawActions();
 
 		mWindow.display();
@@ -262,11 +260,11 @@ void ShipEditor::rotateGlowAngle()
 
 void ShipEditor::mouseLeftPressed()
 {
-		int checkX = -1;
-		int checkY = -1;
+	checkX = -1;
+	checkY = -1;
 	switch (focus)
 	{
-	case ef_base:
+	case editor::base:
 		if (((cameraX + mousePos.x / scaleFactor) / 100.0 > 0) 
 			&& ((cameraX + mousePos.x / scaleFactor) / 100.0 < EDITOR_WIDTH)
 			&& ((cameraY + mousePos.y / scaleFactor) / (100.0) > 0)
@@ -279,21 +277,19 @@ void ShipEditor::mouseLeftPressed()
 		{
 			selectedX = -1;
 			selectedY = -1;
-			focus = ef_base;
+			focus = editor::base;
 			break;
 		}
 
 		if (playerData.grid[selectedX][selectedY]->armor > 0)
-			focus = ef_component;
+			focus = editor::component;
 		else
-			focus = ef_base;
+			focus = editor::base;
 		std::cout << "\nSelected: " << selectedX << ", " << selectedY;
 		break;
-	case ef_component:
+	case editor::component:
 		if ((cameraX + mousePos.x / scaleFactor) / 100.0 > 0)
 			 checkX = (cameraX + mousePos.x / scaleFactor) / (100.0);
-		
-
 		if ((cameraY + mousePos.y / scaleFactor) / (100.0) > 0)
 			checkY = (cameraY + mousePos.y / scaleFactor) / (100.0);
 		
@@ -339,23 +335,23 @@ void ShipEditor::mouseLeftPressed()
 			{
 				selectedX = -1;
 				selectedY = -1;
-				focus = ef_base;
+				focus = editor::base;
 				break;
 			}
 
 			selectedX = checkX;
 			selectedY = checkY;
 			if (playerData.grid[selectedX][selectedY]->armor < 1)
-				focus = ef_base;
+				focus = editor::base;
 		}
 		else
 		{
 			selectedX = -1;
 			selectedY = -1;
-			focus = ef_base;
+			focus = editor::base;
 		}
 		break;
-	case ef_actions:
+	case editor::actions:
 		//ButtonId pressedButton = bi_false;
 		//ButtonId temp_pressedButton = bi_false;
 		//for (unsigned int i = 0; i < actionButtons.size(); i++)
@@ -368,6 +364,7 @@ void ShipEditor::mouseLeftPressed()
 			switch (actionButtons[i].checkIfPressed(mousePos))
 			{
 			case bi_false:
+				focus = editor::base;
 				break;
 			case bi_actionTurret:
 				if (playerData.grid[selectedX][selectedY]->turret > 0)
@@ -390,15 +387,15 @@ void ShipEditor::mouseLeftPressed()
 					
 					updateGridSpriteTextures();
 				}
-				focus = ef_base;
+				focus = editor::base;
 				break;
 			case bi_actionEngine:
 
-				focus = ef_base;
+				focus = editor::base;
 				break;
 			case bi_actionConfiguration:
 
-				focus = ef_configuration;
+				focus = editor::configuration;
 				break;
 
 			}
@@ -409,18 +406,33 @@ void ShipEditor::mouseLeftPressed()
 }
 void ShipEditor::mouseRightPressed()
 {
+	checkX = -1;
+	checkY = -1;
 	switch (focus)
 	{
 	default:
 		break;
-	case ef_component:
-		focus = ef_actions; 
-		for (unsigned int i = 0; i < actionButtons.size(); i++)
-		{
-			actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + 30 * i);
-			actionButtons[i].text.setPosition(mousePos.x +10*resFactor, mousePos.y + 30 * i);
-		}
+	case editor::component:
+		if ((cameraX + mousePos.x / scaleFactor) / 100.0 > 0)
+			checkX = (cameraX + mousePos.x / scaleFactor) / (100.0);
+		if ((cameraY + mousePos.y / scaleFactor) / (100.0) > 0)
+			checkY = (cameraY + mousePos.y / scaleFactor) / (100.0);
 
+		if (checkX == selectedX && checkY == selectedY)
+		{
+			focus = editor::actions;
+			for (unsigned int i = 0; i < actionButtons.size(); i++)
+			{
+				actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + 30 * i);
+				actionButtons[i].text.setPosition(mousePos.x + 10 * resFactor, mousePos.y + 30 * i);
+				mouseGrab = false;
+			}
+		}
+		break;
+	case editor::actions:
+		//Do not use mouse grabiing while actions window is open
+		mouseGrab = false;
+		std::cout << "mousegrabFALSE";
 		break;
 	}
 }
@@ -494,7 +506,7 @@ void ShipEditor::drawInheritanceSprites()
 }
 void ShipEditor::drawSelectionShadeHighlight()
 {
-	if (focus != ef_component)
+	if (focus != editor::component)
 		return;
 
 	mWindow.draw(shadeRect);

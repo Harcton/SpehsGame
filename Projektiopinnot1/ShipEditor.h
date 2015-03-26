@@ -1,13 +1,17 @@
 #ifndef SHIPEDITOR_H
 #define SHIPEDITOR_H
 
-enum EditorFocus
+namespace editor
 {
-	ef_base,
-	ef_component,
-	ef_actions,
-	ef_configuration
-};
+	enum Focus
+	{
+		base,
+		component,
+		actions,
+		configuration
+	};
+}
+
 
 class Button;
 
@@ -51,6 +55,8 @@ private:
 	float mouseGrabY = 0;
 	float grabCameraOriginX = 0;
 	float grabCameraOriginY = 0;
+	int checkX;
+	int checkY;
 
 	std::vector<sf::VertexArray> horizontalLines;
 	std::vector<sf::VertexArray> verticalLines;
@@ -58,7 +64,7 @@ private:
 	std::vector<sf::Sprite> inheritanceSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
 	std::vector<Button> actionButtons;
 
-	EditorFocus focus = ef_base;
+	editor::Focus focus = editor::base;
 	int selectedX = -1;
 	int selectedY = -1;
 	sf::RectangleShape selectedRect;

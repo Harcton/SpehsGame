@@ -1,7 +1,6 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-
 /*
 The constructor parameters are:
 button id (use bi_true if not using id system)
