@@ -67,6 +67,7 @@ struct MyKeys
 
 	//Mouse
 	sf::Mouse::Button mouseButton;
+	AxisType wheelInput = noAxis;
 
 	//Keyboard
 	sf::Keyboard::Key keyCode;
@@ -82,7 +83,7 @@ struct MyKeys
 };
 extern std::map<float, MyKeys> coreKeys;
 extern std::map<float, MyKeys> componentKeys;
-bool testInput(MyKeys k);
+bool testInput(MyKeys k, sf::Event&);
 
 
 enum ButtonId

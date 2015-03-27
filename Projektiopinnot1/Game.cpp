@@ -32,7 +32,6 @@ Game::~Game()
 
 void Game::run()
 {
-	sf::Event mEvent;
 	
 
 	//Filling objects vector with something

@@ -83,11 +83,21 @@ double getDistance(double x1, double y1, double x2, double y2)
 	return sqrt(pow(xDiff, 2) + pow(yDiff, 2));
 }
 
-bool testInput(MyKeys k)
+bool testInput(MyKeys k, sf::Event& mEvent)
 {
 	//Mouse
-	if (k.inputType == mouseInput && sf::Mouse::isButtonPressed(k.mouseButton))
-		return (true);
+	if (k.inputType == mouseInput && sf::Mouse::isButtonPressed(k.mouseButton) && k.wheelInput == noAxis)
+		return true;
+	else if (k.inputType == mouseInput && k.wheelInput != noAxis)
+	{
+		if (mEvent.type == sf::Event::MouseWheelMoved)
+			if ((mEvent.mouseWheel.delta > 0 && k.wheelInput == positiveAxis) || (mEvent.mouseWheel.delta < 0 && k.wheelInput == negativeAxis))
+			{
+				mEvent.mouseWheel.delta = 0;
+				return true;
+			}
+		return false;		
+	}
 	else if (k.inputType == mouseInput)
 		return false;
 	

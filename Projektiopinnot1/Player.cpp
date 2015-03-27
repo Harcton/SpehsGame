@@ -139,35 +139,35 @@ bool Player::update()
 
 
 		//Accelerate
-	if (testInput(coreKeys[key_accelerate]))
+	if (testInput(coreKeys[key_accelerate], mGame->mEvent))
 		if (coreKeys[key_accelerate].axisType != noAxis)
 			accelerate(abs(sf::Joystick::getAxisPosition(coreKeys[key_accelerate].joystickIndex, coreKeys[key_accelerate].joystickAxis)));
 			else
 				accelerate(100);
 
 		//Reverse
-	if (testInput(coreKeys[key_reverse]))
+	if (testInput(coreKeys[key_reverse], mGame->mEvent))
 		if (coreKeys[key_reverse].axisType != noAxis)
 			reverse(abs(sf::Joystick::getAxisPosition(coreKeys[key_reverse].joystickIndex, coreKeys[key_reverse].joystickAxis)));
 			else
 				reverse(100);
 
 		//Turn right
-	if (testInput(coreKeys[key_turnRight]))
+	if (testInput(coreKeys[key_turnRight], mGame->mEvent))
 		if (coreKeys[key_turnRight].axisType != noAxis)
 			turnRight(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnRight].joystickIndex, coreKeys[key_turnRight].joystickAxis)));
 			else
 				turnRight(100);
 
 		//Turn left
-	if (testInput(coreKeys[key_turnLeft]))
+	if (testInput(coreKeys[key_turnLeft], mGame->mEvent))
 		if (coreKeys[key_turnLeft].axisType != noAxis)
 			turnLeft(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnLeft].joystickIndex, coreKeys[key_turnLeft].joystickAxis)));
 			else
 				turnLeft(100);
 
 		//Zoom in
-	if (testInput(coreKeys[key_zoomIn]))
+	if (testInput(coreKeys[key_zoomIn], mGame->mEvent))
 		{
 		if (coreKeys[key_zoomIn].axisType != noAxis)
 				zoomIn(abs(sf::Joystick::getAxisPosition(coreKeys[key_zoomIn].joystickIndex, coreKeys[key_zoomIn].joystickAxis)));
@@ -176,7 +176,7 @@ bool Player::update()
 		}
 
 		//Zoom out
-	if (testInput(coreKeys[key_zoomOut]))
+	if (testInput(coreKeys[key_zoomOut], mGame->mEvent))
 		{
 		if (coreKeys[key_zoomOut].axisType != noAxis)
 			zoomOut(abs(sf::Joystick::getAxisPosition(coreKeys[key_zoomOut].joystickIndex, coreKeys[key_zoomOut].joystickAxis)));
@@ -192,7 +192,7 @@ bool Player::update()
 				if (components[i]->types[k] == component::turret)
 				{
 				turretCount++;
-				if (testInput(componentKeys[components[i]->id + 0.1]))
+				if (testInput(componentKeys[components[i]->id + 0.1], mGame->mEvent))
 					components[i]->fire();
 				}
 		}//End of fire turrets
@@ -218,7 +218,7 @@ bool Player::update()
 					if (turretMaxAngle > 2 * PI)
 						turretMaxAngle -= 2 * PI;
 
-					if (testInput(componentKeys[components[i]->id]) && components[i]->mouseAim == false)
+					if (testInput(componentKeys[components[i]->id], mGame->mEvent) && components[i]->mouseAim == false)
 					{//Rotate turret i CCW
 						if (turretMaxAngle > turretMinAngle)
 						{
@@ -234,7 +234,7 @@ bool Player::update()
 						}
 					}
 
-					if (testInput(componentKeys[-1 * components[i]->id]) && components[i]->mouseAim == false)
+					if (testInput(componentKeys[-1 * components[i]->id], mGame->mEvent) && components[i]->mouseAim == false)
 					{//Rotate turret i CW
 						if (turretMaxAngle > turretMinAngle)
 						{

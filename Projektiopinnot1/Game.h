@@ -19,6 +19,7 @@ public:
 	std::vector<Object*> objects;
 	void updateBackgrounds();
 	void updateObjects();
+	sf::Event mEvent;
 
 protected:
 	sf::RenderWindow& mWindow;
