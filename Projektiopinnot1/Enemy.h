@@ -35,11 +35,16 @@ private:
 	double playerDirection;
 	bool follow;
 	double distance;
-	int detectionDistance;
-	int followingDistance;
-	double maxTurnSpeed;
+
+	int detectionDistance;	//aggro range
+	int followingDistance;	//close range
+	int actionDistance;		//action range
+
+	double maxTurnSpeed; //more like normal turningspeed...
 	double maxSpeed;
-	double snappingAngle;
+	double snappingAngle; //?
+	bool rotationDirection; //true CW, false CCW
+	int laserCounter;
 	int timer;
 	
 	TypeOfAI typeOfEnemy;

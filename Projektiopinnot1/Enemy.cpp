@@ -12,11 +12,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	typeOfEnemy = tp;
 	enemyInitialize();
 
-	followingDistance = 500;
-	detectionDistance = 1100;
-	maxTurnSpeed = 0.07;
-	maxSpeed = 3; //?
-	snappingAngle = 0.15;
+	detectionDistance = SPAWN_RANGE;
 }
 
 
@@ -30,35 +26,45 @@ void Enemy::enemyInitialize()
 {
 	if (typeOfEnemy == et_standard)
 	{
+		followingDistance = 500;
+		actionDistance = 1000;
+		maxTurnSpeed = 0.014;
+		maxSpeed = 3;
+
 		components.push_back(new Component(this, mGame->playerObj, -50, -50));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_green.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
-		components.push_back(new Turret(this, centerObj, -50, -50));
+		components.push_back(new Turret(this, centerObj, 0, 0));
 		components[components.size()-2]->childComponents.push_back(components[components.size() - 1]->id);
-
-
-		components.push_back(new Component(this, mGame->playerObj, -150, -50));
-		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_green.png");
-		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 	}
 	else if (typeOfEnemy == et_bomber)
 	{
+		followingDistance = 600;
+		actionDistance = SPAWN_RANGE - 500;
+		maxTurnSpeed = 0.01;
+		maxSpeed = 2;
+
 		components.push_back(new Component(this, mGame->playerObj, -50, -50));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 	}
 	else if (typeOfEnemy == et_laser)
 	{
+		followingDistance = 400;
+		actionDistance = SPAWN_RANGE - 1000;
+		maxTurnSpeed = 0.015;
+		maxSpeed = 9;
+
 		components.push_back(new Component(this, mGame->playerObj, -50, -50));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_purple.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
 	}
 	else if (typeOfEnemy == et_commander)
 	{
-		maxTurnSpeed = 0.01;
-		maxSpeed = 2;
-		followingDistance = 700;
-		snappingAngle = 0.005;
+		followingDistance = 1000;
+		actionDistance = SPAWN_RANGE - 200;
+		maxTurnSpeed = 0.001;
+		maxSpeed = 1; 
 
 		components.push_back(new Component(this, mGame->playerObj, -50, -100));
 		components[components.size() - 1]->spr.setTexture(commanderShipTex);
@@ -89,11 +95,8 @@ void Enemy::enemyInitialize()
 
 bool Enemy::update()
 {
-	//std::cout << this->xSpeed << std::endl;
-
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
-
 	if (components.size() <= 0)
 		return false;
 	
@@ -134,11 +137,7 @@ bool Enemy::update()
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
 
-	//update AI accordingly
-	enemyAI();
-
 	//limit speed
-	//x/ySpeed NO BUENO
 	if (this->xSpeed > maxSpeed)
 		this->xSpeed = maxSpeed;
 	else if (this->ySpeed > maxSpeed)
@@ -147,6 +146,9 @@ bool Enemy::update()
 		this->xSpeed = -maxSpeed;
 	else if (this->ySpeed < -maxSpeed)
 		this->ySpeed = -maxSpeed;
+
+	//update AI accordingly
+	enemyAI();
 
 	updateComponents();
 	
@@ -158,10 +160,23 @@ void Enemy::enemyAI()
 {
 	distance = getDistance(this->x, this->y, nearestComponent->x, nearestComponent->y);
 
-	//"fix collision"
+	//update laserCounter
+	if (laserCounter <= 2)
+	{
+		rotationDirection = true;
+	}
+	else if (laserCounter > 2 && laserCounter < 6)
+	{
+		rotationDirection = false;
+	}
+	else if (laserCounter >= 6)
+	{
+		laserCounter = irandom(-5,1);
+	}
+
+	//literally inside the player
 	if (distance < this->textureRadius + nearestComponent->textureRadius)
 	{
-		//somethingsomething..?
 		if (typeOfEnemy == et_bomber)
 		{
 			explosion();
@@ -169,11 +184,57 @@ void Enemy::enemyAI()
 		}
 	}
 
-	if (distance > followingDistance && distance < detectionDistance)
+	//too close
+	if (distance < followingDistance)
+	{
+		if (typeOfEnemy != et_bomber)
+		{
+			follow = true;
+			xSpeed = -(cos(2 * PI - angle))*maxSpeed;
+			ySpeed = -(sin(2 * PI - angle))*maxSpeed;
+		}
+		else
+		{
+			follow = true;
+			xSpeed += (cos(2 * PI - angle));
+			ySpeed += (sin(2 * PI - angle));
+		}
+
+	}
+	//action distance
+	else if (distance > followingDistance && distance < actionDistance)
 	{
 		follow = true;
-		xSpeed += cos(2 * PI - angle)*(distance/700);
-		ySpeed += sin(2 * PI - angle)*(distance/700);
+		if (typeOfEnemy == et_laser)
+		{
+			if (rotationDirection == true)
+			{
+				xSpeed = (-sin(angle))*maxSpeed;
+				ySpeed = (-cos(angle))*maxSpeed;
+			}
+			else if (rotationDirection == false)
+			{
+				xSpeed = (sin(angle))*maxSpeed;
+				ySpeed = (cos(angle))*maxSpeed;
+			}
+
+			//blink?
+		}
+		else if (typeOfEnemy == et_standard)
+		{
+			xSpeed += (cos(2 * PI - angle));
+			ySpeed += (sin(2 * PI - angle));
+		}
+		else if (typeOfEnemy == et_commander)
+		{
+			xSpeed += (cos(2 * PI - angle));
+			ySpeed += (sin(2 * PI - angle));
+		}
+		else //bomber
+		{
+			xSpeed += (cos(2 * PI - angle));
+			ySpeed += (sin(2 * PI - angle));
+		}
 
 		if (typeOfEnemy == et_standard || typeOfEnemy == et_laser)
 		{
@@ -191,29 +252,22 @@ void Enemy::enemyAI()
 					if (typeOfEnemy == et_laser)
 						fireMahLazors();
 					timer = irandom(-10,0);
+					laserCounter++;
 				}
 			}
 			else
 				timer++;
 		}
 	}
-	else if (distance < followingDistance)
+	//too far
+	else if (distance > actionDistance && distance < detectionDistance)
 	{
-		if (typeOfEnemy != et_bomber)
-		{
-			follow = true;
-			xSpeed -= (cos(2 * PI - angle)*(distance / 1200));
-			ySpeed -= (sin(2 * PI - angle)*(distance / 1200));
-		}
-		else if (typeOfEnemy == et_bomber)
-		{
-			follow = true;
-			xSpeed += (cos(2 * PI - angle)*(distance / 500));
-			ySpeed += (sin(2 * PI - angle)*(distance / 500));
-		}
-
+		follow = true;
+		xSpeed = cos(2 * PI - angle)*maxSpeed;
+		ySpeed = sin(2 * PI - angle)*maxSpeed;
 	}
-	else if (distance > detectionDistance)
+	//outside of range
+	else
 	{
 		follow = false;
 		xSpeed = xSpeed*0.96;
@@ -229,29 +283,90 @@ void Enemy::enemyAI()
 	}
 
 
-	if (follow == true)
+	if (follow == true) //set angle to match playerdirection
 	{
-		if (angle < playerDirection - snappingAngle)
+		if (angle >= 0 && angle < PI/2) //1st quarter
 		{
-			if (typeOfEnemy == et_commander)
-				turnSpeed += maxTurnSpeed / 20;
+			if (playerDirection < PI && playerDirection > angle)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+			else if (playerDirection < angle || playerDirection > PI*1.5)
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
+			else if (playerDirection < angle+PI)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
 			else
-				turnSpeed += maxTurnSpeed/5;
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
 		}
-		else if (angle > playerDirection + snappingAngle)
+		else if (angle >= PI/2 && angle < PI) //2nd quarter
 		{
-			if (typeOfEnemy == et_commander)
-				turnSpeed -= maxTurnSpeed / 20;
+			if (playerDirection < PI*1.5 && playerDirection > angle)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+			else if (playerDirection < angle)
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
+			else if (playerDirection > angle + PI)
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
 			else
-				turnSpeed -= maxTurnSpeed/5;
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+		}
+		else if (angle >= PI && angle < PI*1.5)//3rd quarter
+		{
+			if (playerDirection > angle)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+			else if (playerDirection < angle && playerDirection > PI/2)
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
+			else if (playerDirection < angle - PI)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+			else
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
+		}
+		else //4th quarter
+		{
+			if (playerDirection > angle || playerDirection < PI/2)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+			else if (playerDirection > PI && playerDirection < angle)
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
+			else if (playerDirection < angle - PI)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+			else
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
 		}
 	}
 	else
 	{
-		if (turnSpeed > 0.005)
+		if (turnSpeed > 0.001)
 		{
 			turnSpeed = turnSpeed*0.9;
-			//?
 		}
 	}
 
@@ -281,7 +396,7 @@ void Enemy::explosion()
 {
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
-		if (getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->textureRadius * 2)
+		if (getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < components[0]->textureRadius * 2)
 		{
 			mGame->playerObj->components[i]->hp -= 50;
 		}
@@ -338,7 +453,7 @@ void Enemy::fireMahLazors()
 	//Lazors
 	sf::VertexArray line(sf::Lines, 2);
 	line[0].position = sf::Vector2f(this->screenX, this->screenY);
-	line[1].position = sf::Vector2f(nearestComponent->screenX - 15 + irandom(0, 30), nearestComponent->screenY - 15 + irandom(0, 30));
+	line[1].position = sf::Vector2f(nearestComponent->screenX - (15 + irandom(0, 30))*resFactor*zoomFactor, nearestComponent->screenY - (15 + irandom(0, 30))*resFactor*zoomFactor);
 	line[0].color = sf::Color::Red;
 	line[1].color = sf::Color::Red;
 	nearestComponent->hp -= 1;
