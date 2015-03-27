@@ -85,15 +85,23 @@ extern std::map<float, MyKeys> componentKeys;
 bool testInput(MyKeys k);
 
 
-
 enum ButtonId
 {
 	bi_false,
 	bi_true,
+	bi_actionUpgradeArmor,
 	bi_actionTurret,
 	bi_actionEngine,
 	bi_actionConfiguration,
 	bi_actionScrap,
+
+	bi_confExit,
+	bi_confBindAccelerate,
+	bi_confBindReverse,
+	bi_confBindTurnRight,
+	bi_confBindTurnLeft,
+	bi_confBindZoomIn,
+	bi_confBindZoomOut,
 };
 
 #define key_shoot 0.1

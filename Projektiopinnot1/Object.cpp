@@ -13,8 +13,8 @@ Object::~Object()
 {
 	while (!components.empty())
 	{
-		std::cout << "\n~Object: components: " << components.size();
-		std::cout << "\n~Object: Removing component";
+		//std::cout << "\n~Object: components: " << components.size();
+		//std::cout << "\n~Object: Removing component";
 		delete components.back();
 		components.pop_back();
 	}
