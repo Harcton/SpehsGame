@@ -6,7 +6,7 @@
 
 Component::~Component()
 {
-	std::cout << "  componentDECONSTRUCTOR";
+	//std::cout << "  componentDECONSTRUCTOR";
 
 	//Remove child components
 	for (unsigned int i = 0; i < childComponents.size(); i++)
@@ -29,7 +29,7 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, i
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 {
-	std::cout << "  componentConstructor";
+	//std::cout << "  componentConstructor";
 	currentId++;
 	id = currentId;
 	//std::cout << "\nComponent " << id << " constructor";
