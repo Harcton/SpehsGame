@@ -30,6 +30,9 @@ public:
 	double x;
 	double y;
 
+	double massCenterX;
+	double massCenterY;
+
 	double screenY;
 	double screenX;
 

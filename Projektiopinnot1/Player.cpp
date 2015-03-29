@@ -21,6 +21,8 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	data = new PlayerData;
 	loadPlayerData();
 	loadKeybindings();
+	massCenterX = 0;
+	massCenterY = 0;
 
 
 	//Initialise core key bindings
@@ -425,7 +427,6 @@ bool Player::update()
 	//////////////
 
 
-
 	Object::update();
 	return true;
 }
@@ -557,6 +558,43 @@ void Player::loadPlayerData()
 			addFromGrid(ex, ey);
 			}
 		}
+
+
+	//Calculate center of mass
+	int temp_componentCount = 0;
+	int temp_rowWeight[EDITOR_WIDTH] = {};
+	int temp_pillarWeight[EDITOR_HEIGHT] = {};
+
+	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
+		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
+		{
+		if (data->grid[ex][ey]->armor > 0)
+		{
+			temp_componentCount++;
+			temp_pillarWeight[ex] += 1;
+			temp_rowWeight[ey] += 1;
+		}
+		}
+
+	double centerX = 0;
+	double centerY = 0;
+	
+	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
+	{
+		centerX += (temp_pillarWeight[ex] * (1 + ex));
+	}
+	centerX = centerX / temp_componentCount;
+	massCenterX = 100.0*(centerX - double(coreX+1));
+
+	for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
+	{
+		centerY += (temp_rowWeight[ey] * (1 + ey));
+	}
+	centerY = centerY / temp_componentCount;
+	massCenterY = 100.0*(centerY - double(coreY + 1));
+
+	std::cout << "\nMass center X: " << massCenterX;
+	std::cout << "\nMass center Y: " << massCenterY;
 }
 
 //This is the only way allowed to add components to a player ship

@@ -26,6 +26,9 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 	centerObj = game->playerObj;
 	scale = 1;
 
+	massCenterX = 0;
+	massCenterY = 0;
+
 	//Randomize x/y
 	if (flipCoin())
 		x = centerObj->x + irandom(-SPAWN_RANGE, SPAWN_RANGE);
@@ -60,7 +63,11 @@ bool Object::update()
 	}
 
 	//Update variable values
-	angle += turnSpeed;
+	x += cos(angle)*massCenterX - cos(angle + turnSpeed)*massCenterX + sin(angle)*massCenterY - sin(angle+turnSpeed)*massCenterY;
+	y -= sin(angle)*massCenterX - sin(angle + turnSpeed)*massCenterX - cos(angle)*massCenterY + cos(angle + turnSpeed)*massCenterY;
+	angle += turnSpeed;	
+	
+
 	x += xSpeed;
 	y += ySpeed;
 
@@ -135,8 +142,8 @@ bool Object::update()
 	}
 	else
 	{//Player update, make the player object appear in the center of the screen
-		screenX = WINDOW_WIDTH / 2 - (scrSpeedX);
-		screenY = WINDOW_HEIGHT / 2 - (scrSpeedY);
+		screenX = WINDOW_WIDTH / 2 - (scrSpeedX) - (massCenterX*cos(angle) + massCenterY*sin(angle))*resFactor*zoomFactor;
+		screenY = WINDOW_HEIGHT / 2 - (scrSpeedY)+(massCenterX*sin(angle) - massCenterY*cos(angle))*resFactor*zoomFactor;
 	}
 
 	//Apply variables
