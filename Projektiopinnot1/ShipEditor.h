@@ -44,6 +44,7 @@ public:
 	void rotateGlowAngle();
 
 
+	void drawWindow();
 	void drawSelectedRect();
 	void drawSelectionShadeHighlight();
 	void drawInheritanceSprites();
@@ -93,7 +94,9 @@ private:
 	int selectedY = -1;
 	sf::RectangleShape selectedRect;
 	sf::RectangleShape shadeRect;
-	sf::RectangleShape configurationRect;
+	sf::RectangleShape configurationRect1;
+	sf::RectangleShape configurationRect2;
+	sf::RectangleShape configurationRect3;
 
 	//Editor textures
 	sf::Texture inheritanceArrowTex;

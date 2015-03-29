@@ -461,11 +461,13 @@ void Player::reverse(double factor)
 void Player::zoomIn(double f)
 {
 	zoomFactor += 0.01;
+	limitZoom();
 }
 
 void Player::zoomOut(double f)
 {
 	zoomFactor -= 0.01;
+	limitZoom();
 }
 
 void Player::updateComponents()

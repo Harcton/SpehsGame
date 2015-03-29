@@ -40,6 +40,9 @@ Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float s
 
 bool Button::mouseOverlap(sf::Vector2i& mousePos)
 {
+	if (id == bi_false)
+		return false;
+
 	if (type == bt_text)
 	{
 		if (mousePos.x > buttonRectangle.getPosition().x &&

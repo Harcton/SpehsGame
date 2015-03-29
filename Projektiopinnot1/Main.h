@@ -20,6 +20,7 @@
 #define EDITOR_WIDTH 41
 #define EDITOR_HEIGHT 41
 
+
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 extern double resFactor;

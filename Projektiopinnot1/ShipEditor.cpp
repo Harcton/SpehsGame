@@ -4,6 +4,13 @@
 #include "PlayerData.h"
 #include "ShipEditor.h"
 
+#define CONF_X1 int(100 * resFactor)
+#define CONF_Y1 int(75 * resFactor)
+#define CONF_WIDTH int(WINDOW_WIDTH - 200 * resFactor)
+#define CONF_HEIGHT int(WINDOW_HEIGHT - 150 * resFactor)
+#define CONF_X2 int(CONF_X1 + CONF_WIDTH)
+#define CONF_Y2 int(CONF_Y1 + CONF_HEIGHT)
+
 
 
 ShipEditor::~ShipEditor()
@@ -15,9 +22,15 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	scaleFactor = resFactor*zoomFactor;
 	shadeRect.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
 	shadeRect.setFillColor(sf::Color(0, 0, 0, 100));
-	configurationRect.setSize(sf::Vector2f(WINDOW_WIDTH - 200 * resFactor, WINDOW_HEIGHT - 150 * resFactor));
-	configurationRect.setPosition(100 * resFactor, 75 * resFactor);
-	configurationRect.setFillColor(sf::Color(110, 110, 115));
+	configurationRect1.setSize(sf::Vector2f(CONF_WIDTH + 10*resFactor, CONF_HEIGHT + 10*resFactor));
+	configurationRect1.setPosition(CONF_X1 - 5*resFactor, CONF_Y1 - 5*resFactor);
+	configurationRect1.setFillColor(sf::Color(140, 140, 145));
+	configurationRect2.setSize(sf::Vector2f(CONF_WIDTH, CONF_HEIGHT));
+	configurationRect2.setPosition(CONF_X1, CONF_Y1);
+	configurationRect2.setFillColor(sf::Color(100, 100, 105));
+	configurationRect3.setSize(sf::Vector2f(CONF_WIDTH - 20*resFactor, CONF_HEIGHT - 70*resFactor));
+	configurationRect3.setPosition(CONF_X1 + 10*resFactor, CONF_Y1 + 60*resFactor);
+	configurationRect3.setFillColor(sf::Color(110, 110, 115));
 
 
 	//Load editor textures
@@ -36,24 +49,39 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 	//Configuration buttons
 	configurationButtons.push_back(Button(bi_confExit, WINDOW_WIDTH/resFactor - 150, 75, xButtonTex, 2, font1));
-	int temp_y1 = int(75 * resFactor);
-	int temp_y2 = int(50 * resFactor);
+	int temp_buttonHeight = int(50 * resFactor);
+	int temp_button1X1 = CONF_X1 + temp_buttonHeight;
+	int temp_button2Width = 400;
+	int temp_button1Width = CONF_WIDTH - temp_button2Width - (temp_button1X1 - CONF_X1);
+	int temp_button2X1 = CONF_X2 - temp_button2Width - 500*resFactor; 
 
 	//Core configuration buttons
-	coreConfigurationButtons.push_back(Button(bi_false, 100 * resFactor, temp_y1, WINDOW_WIDTH - 250 * resFactor, 50 * resFactor, " Ship core configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_false, 150 * resFactor, temp_y1 + temp_y2*2, WINDOW_WIDTH - 250 * resFactor, 50 * resFactor, " Ship controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	//Main header
+	coreConfigurationButtons.push_back(Button(bi_false, CONF_X1, CONF_Y1, CONF_WIDTH - 50 * resFactor, temp_buttonHeight, " Ship core configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	//Ship controlls background
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1 - 10 * resFactor, CONF_Y1 + temp_buttonHeight * 2 - 10 * resFactor, temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight*7 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	short temp_bg1Index = coreConfigurationButtons.size() - 1;
+	//Ship controls header
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 2, temp_button2X1 + temp_button2Width - temp_button1X1, temp_buttonHeight, " Ship controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	//Acceleration & binding key
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 3, temp_button1Width, temp_buttonHeight, " Accelerate", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, temp_button2X1, CONF_Y1 + temp_buttonHeight * 3, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_accelerate]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	//Reverse & binding key
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 4, temp_button1Width, temp_buttonHeight, " Reverse", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindReverse, temp_button2X1, CONF_Y1 + temp_buttonHeight * 4, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_reverse]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	//Turn right & binding key
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 5, temp_button1Width, temp_buttonHeight, " Turn right", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, temp_button2X1, CONF_Y1 + temp_buttonHeight * 5, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_turnRight]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	//Turn left & binding key
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 6, temp_button1Width, temp_buttonHeight, " Turn left", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, temp_button2X1, CONF_Y1 + temp_buttonHeight * 6, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_turnLeft]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	//Ziim in & bindong key
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 7, temp_button1Width, temp_buttonHeight, " Zoom in", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, temp_button2X1, CONF_Y1 + temp_buttonHeight * 7, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_zoomIn]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	//Zoom out & binding key
+	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 8, temp_button1Width, temp_buttonHeight, " Zoom out", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, temp_button2X1, CONF_Y1 + temp_buttonHeight * 8, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_zoomOut]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	
-	coreConfigurationButtons.push_back(Button(bi_false, 150 * resFactor, temp_y1 + temp_y2 * 3, WINDOW_WIDTH - 250 * resFactor, 50 * resFactor, " Accelerate", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, WINDOW_WIDTH - 450 * resFactor, temp_y1 + temp_y2 * 3, 350 * resFactor, 50 * resFactor, getInputAsString(coreKeys[key_accelerate]), int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-
-	coreConfigurationButtons.push_back(Button(bi_false, 150 * resFactor, temp_y1 + temp_y2 * 4, WINDOW_WIDTH - 250 * resFactor, 50 * resFactor, " Reverse", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));	
-	coreConfigurationButtons.push_back(Button(bi_confBindReverse, WINDOW_WIDTH - 450 * resFactor, temp_y1 + temp_y2 * 4, 350 * resFactor, 50 * resFactor, getInputAsString(coreKeys[key_reverse]), int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	
-	coreConfigurationButtons.push_back(Button(bi_false, 150 * resFactor, temp_y1 + temp_y2 * 5, WINDOW_WIDTH - 250 * resFactor, 50 * resFactor, " Turn right", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, WINDOW_WIDTH - 450 * resFactor, temp_y1 + temp_y2 * 5, 350 * resFactor, 50 * resFactor, getInputAsString(coreKeys[key_turnRight]), int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	
-	coreConfigurationButtons.push_back(Button(bi_false, 150 * resFactor, temp_y1 + temp_y2 * 6, WINDOW_WIDTH - 250 * resFactor, 50 * resFactor, " Turn left", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, WINDOW_WIDTH - 450 * resFactor, temp_y1 + temp_y2 * 6, 350 * resFactor, 50 * resFactor, getInputAsString(coreKeys[key_turnLeft]), int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 
 	//Component configuration buttons
 
@@ -90,14 +118,17 @@ void ShipEditor::run()
 			keepRunning = false;
 
 		//Movement
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-			cameraY -= 8 / scaleFactor;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-			cameraY += 8 / scaleFactor;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			cameraX -= 8 / scaleFactor;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-			cameraX += 8 / scaleFactor;
+		if (focus == editor::base || focus == editor::component)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+				cameraY -= 8 / scaleFactor;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+				cameraY += 8 / scaleFactor;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+				cameraX -= 8 / scaleFactor;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+				cameraX += 8 / scaleFactor;
+		}
 
 		//Mouse grabbing
 		mousePos = sf::Mouse::getPosition(mWindow);
@@ -148,44 +179,53 @@ void ShipEditor::run()
 			}
 		}
 
-		//Drawing
-		mWindow.clear(sf::Color(40, 90, 235));
-		rotateGlowAngle();
 
-		//Update camera position when mouseGrabbing
-		if (mouseGrab == true)
-			updateMouseGrab();
+			/////////////////////
+		   /**/drawWindow();/**/
+		  /////////////////////
 
-		//Selection highlight
-		drawSelectedRect();
 
-		//Handle visual lines
-		updateLines();
-		for (unsigned int i = 0; i < horizontalLines.size(); i++)
-			mWindow.draw(horizontalLines[i]);
-		for (unsigned int i = 0; i < verticalLines.size(); i++)
-			mWindow.draw(verticalLines[i]);
-
-		//Draw component sprites
-		updateGridSpriteLocations();
-		for (int x = 0; x < EDITOR_WIDTH; x++)
-			for (int y = 0; y < EDITOR_HEIGHT; y++)
-				for (unsigned int i = 0; i < gridSprites[x][y].size(); i++)
-					mWindow.draw(gridSprites[x][y][i]);
-		drawSelectionShadeHighlight();
-		drawInheritanceSprites();
-
-		if (focus == editor::actions)
-			drawActions();
-		else if (focus == editor::configuration)
-			drawConfigurations();
-
-		mWindow.display();
 	}
 
 
 }
 
+void ShipEditor::drawWindow()
+{
+	//Drawing
+	mWindow.clear(sf::Color(40, 90, 235));
+	rotateGlowAngle();
+
+	//Update camera position when mouseGrabbing
+	if (mouseGrab == true)
+		updateMouseGrab();
+
+	//Selection highlight
+	drawSelectedRect();
+
+	//Handle visual lines
+	updateLines();
+	for (unsigned int i = 0; i < horizontalLines.size(); i++)
+		mWindow.draw(horizontalLines[i]);
+	for (unsigned int i = 0; i < verticalLines.size(); i++)
+		mWindow.draw(verticalLines[i]);
+
+	//Draw component sprites
+	updateGridSpriteLocations();
+	for (int x = 0; x < EDITOR_WIDTH; x++)
+		for (int y = 0; y < EDITOR_HEIGHT; y++)
+			for (unsigned int i = 0; i < gridSprites[x][y].size(); i++)
+				mWindow.draw(gridSprites[x][y][i]);
+	drawSelectionShadeHighlight();
+	drawInheritanceSprites();
+
+	if (focus == editor::actions)
+		drawActions();
+	else if (focus == editor::configuration)
+		drawConfigurations();
+
+	mWindow.display();
+}
 
 void ShipEditor::updateLines()
 {
@@ -463,20 +503,40 @@ void ShipEditor::mouseLeftPressed()
 				switch (coreConfigurationButtons[i].checkIfPressed(mousePos))
 			{
 				case bi_confBindAccelerate:
+					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
 					coreKeys[key_accelerate] = detectKey(bi_confBindAccelerate);
 					coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_accelerate]));
 					break;
 				case bi_confBindReverse:
+					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
 					coreKeys[key_reverse] = detectKey(bi_confBindReverse);
 					coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_reverse]));
 					break;
 				case bi_confBindTurnRight:
+					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
 					coreKeys[key_turnRight] = detectKey(bi_confBindTurnRight);
 					coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_turnRight]));
 					break;
 				case bi_confBindTurnLeft:
+					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
 					coreKeys[key_turnLeft] = detectKey(bi_confBindTurnLeft);
 					coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_turnLeft]));
+					break;
+				case bi_confBindZoomIn:
+					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
+					coreKeys[key_zoomIn] = detectKey(bi_confBindZoomIn);
+					coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_zoomIn]));
+					break;
+				case bi_confBindZoomOut:
+					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
+					coreKeys[key_zoomOut] = detectKey(bi_confBindZoomOut);
+					coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_zoomOut]));
 					break;
 
 			}
@@ -503,10 +563,18 @@ void ShipEditor::mouseRightPressed()
 			selectedX = checkX;
 			selectedY = checkY;
 			focus = editor::actions;
+			if (playerData.grid[selectedX][selectedY]->core == false)
 			for (unsigned int i = 0; i < actionButtons.size(); i++)
-			{
+			{			
 				actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + 30 * i * resFactor);
-				actionButtons[i].text.setPosition(mousePos.x + 10 * resFactor, mousePos.y + 30 * i * resFactor);
+				actionButtons[i].text.setPosition(mousePos.x + 10 * resFactor, mousePos.y + 30 * i * resFactor);				
+			}
+			else
+			{
+				actionButtons[0].buttonRectangle.setPosition(mousePos.x, mousePos.y);
+				actionButtons[0].text.setPosition(mousePos.x + 10 * resFactor, mousePos.y);
+				actionButtons[actionButtons.size()-1].buttonRectangle.setPosition(mousePos.x, mousePos.y + 30 * resFactor);
+				actionButtons[actionButtons.size()-1].text.setPosition(mousePos.x + 10 * resFactor, mousePos.y + 30 * resFactor);
 			}
 		}
 
@@ -605,15 +673,25 @@ void ShipEditor::drawSelectedRect()
 }
 void ShipEditor::drawActions()
 {
-	for (unsigned int i = 0; i < actionButtons.size(); i++)
+
+	if (playerData.grid[selectedX][selectedY]->core == false)
 	{
 		actionButtons[0].text.setString("Component [" + std::to_string(selectedX) + "][" + std::to_string(selectedY) + "]");
-		actionButtons[i].draw(mWindow, mousePos);
+		for (unsigned int i = 0; i < actionButtons.size(); i++)
+			actionButtons[i].draw(mWindow, mousePos);
+	}
+	else
+	{
+		actionButtons[0].text.setString("Core [" + std::to_string(selectedX) + "][" + std::to_string(selectedY) + "]");
+		actionButtons[0].draw(mWindow, mousePos);
+		actionButtons[actionButtons.size()-1].draw(mWindow, mousePos);
 	}
 }
 void ShipEditor::drawConfigurations()
 {
-	mWindow.draw(configurationRect);
+	mWindow.draw(configurationRect1);
+	mWindow.draw(configurationRect2);
+	mWindow.draw(configurationRect3);
 	for (unsigned int i = 0; i < configurationButtons.size(); i++)
 	{
 		configurationButtons[i].draw(mWindow, mousePos);
@@ -738,10 +816,10 @@ MyKeys ShipEditor::detectKey(ButtonId targetButton)
 }
 std::string ShipEditor::getInputAsString(MyKeys input)
 {
-	std::string str = "";
+	std::string str = "  ";
 	if (input.inputType == keyboardInput)
 	{
-		str = "Keyboard::";
+		str += "Keyboard::";
 		switch (input.keyCode)
 		{
 		case sf::Keyboard::A:        ///< The A key
@@ -951,7 +1029,7 @@ std::string ShipEditor::getInputAsString(MyKeys input)
 	}
 	else if (input.inputType == mouseInput)
 	{
-		str = "Mouse::";
+		str += "Mouse::";
 		switch (input.wheelInput)
 		{
 		case noAxis:
@@ -984,7 +1062,7 @@ std::string ShipEditor::getInputAsString(MyKeys input)
 	}
 	else if (input.inputType == joystickInput)
 	{
-		str = "Joystick " + std::to_string(input.joystickIndex) + "::";
+		str += "Joystick " + std::to_string(input.joystickIndex) + "::";
 		switch (input.axisType)
 		{
 		case noAxis:
