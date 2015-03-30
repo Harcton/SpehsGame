@@ -44,6 +44,8 @@ public:
 	//offset compared to master origin
 	double xOffset;
 	double yOffset;
+	double xOffsetOriginal;
+	double yOffsetOriginal;
 	
 	// actual coordinates in space 
 	double x;

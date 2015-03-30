@@ -21,6 +21,7 @@ public:
 	void addFromGrid(int, int);
 	void editShip();
 	void loadKeybindings();
+	void calculateCenterOfMass();
 
 	//Handle input
 	void turnRight(double);
@@ -41,6 +42,9 @@ protected:
 	int coreX = (1 - EDITOR_WIDTH) / 2;
 	int coreY = (1 - EDITOR_HEIGHT) / 2;
 
+	int shipMass = 0;
+	int shipWidth = 0;
+	int shipHeight = 0;
 };
 
 #endif

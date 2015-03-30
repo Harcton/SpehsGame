@@ -433,12 +433,12 @@ bool Player::update()
 
 void Player::turnRight(double factor)
 {
-	turnSpeed -= factor*(PI / 180000);
+	turnSpeed -= factor*(PI / 180000)*(10.0 / (10 + shipMass));
 }
 
 void Player::turnLeft(double factor)
 {
-	turnSpeed += factor*(PI / 180000);
+	turnSpeed += factor*(PI / 180000)*(10.0 / (10 + shipMass));
 }
 
 void Player::accelerate(double factor)
@@ -559,7 +559,12 @@ void Player::loadPlayerData()
 			}
 		}
 
+	calculateCenterOfMass();
 
+}
+
+void Player::calculateCenterOfMass()
+{
 	//Calculate center of mass
 	int temp_componentCount = 0;
 	int temp_rowWeight[EDITOR_WIDTH] = {};
@@ -575,16 +580,16 @@ void Player::loadPlayerData()
 			temp_rowWeight[ey] += 1;
 		}
 		}
-
+	shipMass = temp_componentCount;
 	double centerX = 0;
 	double centerY = 0;
-	
+
 	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
 	{
 		centerX += (temp_pillarWeight[ex] * (1 + ex));
 	}
 	centerX = centerX / temp_componentCount;
-	massCenterX = 100.0*(centerX - double(coreX+1));
+	massCenterX = 100.0*(centerX - double(coreX + 1));
 
 	for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
 	{
@@ -593,8 +598,39 @@ void Player::loadPlayerData()
 	centerY = centerY / temp_componentCount;
 	massCenterY = 100.0*(centerY - double(coreY + 1));
 
-	std::cout << "\nMass center X: " << massCenterX;
-	std::cout << "\nMass center Y: " << massCenterY;
+	//Apply center of mass to all the components
+	for (unsigned int i = 0; i < components.size(); i++)
+	{
+		components[i]->xOffset = components[i]->xOffsetOriginal - massCenterX;
+		components[i]->yOffset = components[i]->yOffsetOriginal - massCenterY;
+	}
+
+	//Calculate ship width and height
+	int temp_firstHorizontal = -1;
+	int temp_firstVertical = -1;
+	int temp_lastHorizontal = -1;
+	int temp_lastVertical = -1;
+	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
+		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
+		{
+		if (data->grid[ex][ey]->armor > 0 && temp_firstHorizontal == -1)
+			temp_firstHorizontal = ex;
+		if (data->grid[ex][ey]->armor > 0)
+			temp_lastHorizontal = ex;
+		}
+	for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
+		for (int ex = 0; ex < EDITOR_WIDTH; ex++)
+		{
+		if (data->grid[ex][ey]->armor > 0 && temp_firstVertical == -1)
+			temp_firstVertical = ey;
+		if (data->grid[ex][ey]->armor > 0)
+			temp_lastVertical = ey;
+		}
+	shipWidth = temp_lastHorizontal - temp_firstHorizontal + 1;
+	shipHeight = temp_lastVertical - temp_firstVertical + 1;
+
+	std::cout << "\nShip width/height: " << shipWidth << " / " << shipHeight;
+	std::cout << "\nShip component mass: " << shipMass;
 }
 
 //This is the only way allowed to add components to a player ship
@@ -668,18 +704,20 @@ void Player::notifyComponentDestruction(int id)
 	}
 	
 	//Notify parent component
-	if (gx > 0)
-		data->grid[gx + 1][gy]->childLeft = false;
 	if (gx < EDITOR_WIDTH - 1)
+		data->grid[gx + 1][gy]->childLeft = false;
+	if (gx > 0)
 		data->grid[gx - 1][gy]->childRight = false;
-	if (gy > 0)
-		data->grid[gx][gy - 1]->childDown = false;
 	if (gy < EDITOR_HEIGHT - 1)
 		data->grid[gx][gy + 1]->childUp = false;
+	if (gy > 0)
+		data->grid[gx][gy - 1]->childDown = false;
 
 	//Remove actual data
 	delete data->grid[gx][gy];
 	data->grid[gx][gy] = new GridData();
+
+	calculateCenterOfMass();
 }
 
 void Player::loadKeybindings()

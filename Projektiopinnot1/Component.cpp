@@ -38,6 +38,8 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 
 	xOffset = xo;
 	yOffset = yo;
+	xOffsetOriginal = xo;
+	yOffsetOriginal = yo;
 
 	hp = 100;
 	textureRadius = 50;
@@ -45,6 +47,10 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 
 bool Component::update()
 {
+	//Spin damage
+	if (rollDie(200) == 0)
+		hp -= floor((getDistance(0, 0, xOffset, yOffset)*master->turnSpeed)/40);
+
 	if (hp <= 0)
 	{
 		std::cout << "\nComponent destroyed! [" << gridLocationX << ", " << gridLocationY << "]";
