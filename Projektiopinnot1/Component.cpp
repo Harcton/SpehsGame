@@ -49,7 +49,7 @@ bool Component::update()
 {
 	//Spin damage
 	if (rollDie(200) == 0)
-		hp -= floor((getDistance(0, 0, xOffset, yOffset)*master->turnSpeed)/40);
+		hp -= floor((getDistance(0, 0, xOffset, yOffset)*abs(master->turnSpeed))/40);
 
 	if (hp <= 0)
 	{
