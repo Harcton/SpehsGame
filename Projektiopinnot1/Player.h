@@ -34,6 +34,7 @@ public:
 protected:
 	sf::Event mEvent;
 	std::vector<Component*>::iterator componentIt;
+	float joystickDirection = 0;
 
 	bool controller;
 	double mouseDirection;
@@ -45,6 +46,11 @@ protected:
 	int shipMass = 0;
 	int shipWidth = 0;
 	int shipHeight = 0;
+
+	float preferredTurnSpeed;
+	//Temporal variables to be used in frequent loops
+	float temp_angleVar;
+	float temp_accelerationPower;
 };
 
 #endif

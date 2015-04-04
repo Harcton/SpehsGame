@@ -139,34 +139,109 @@ bool Player::update()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 		editShip();
 
-
+	if (directionalMovement == false)
+	{
 		//Accelerate
-	if (testInput(coreKeys[key_accelerate], mGame->mEvent))
-		if (coreKeys[key_accelerate].axisType != noAxis)
-			accelerate(abs(sf::Joystick::getAxisPosition(coreKeys[key_accelerate].joystickIndex, coreKeys[key_accelerate].joystickAxis)));
+		if (testInput(coreKeys[key_accelerate], mGame->mEvent))
+			if (coreKeys[key_accelerate].axisType != noAxis)
+				accelerate(abs(sf::Joystick::getAxisPosition(coreKeys[key_accelerate].joystickIndex, coreKeys[key_accelerate].joystickAxis)));
 			else
 				accelerate(100);
+		//Turn right
+		if (testInput(coreKeys[key_turnRight], mGame->mEvent))
+			if (coreKeys[key_turnRight].axisType != noAxis)
+				turnRight(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnRight].joystickIndex, coreKeys[key_turnRight].joystickAxis)));
+			else
+				turnRight(100);
+		//Turn left
+		if (testInput(coreKeys[key_turnLeft], mGame->mEvent))
+			if (coreKeys[key_turnLeft].axisType != noAxis)
+				turnLeft(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnLeft].joystickIndex, coreKeys[key_turnLeft].joystickAxis)));
+			else
+				turnLeft(100);
+	}
+	else if (abs(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)) + abs(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)) > 15)
+	{//Detect directional movement
+		joystickDirection = -1 * atan2(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis), sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis));
+		if (joystickDirection < 0)
+			joystickDirection = 2 * PI + joystickDirection;
 
-		//Reverse
+		temp_angleVar = abs(angle - joystickDirection);
+		if (temp_angleVar > PI)
+			temp_angleVar = 2 * PI - temp_angleVar;
+		if (temp_angleVar < PI / 90)
+			turnSpeed = 0;
+
+		temp_accelerationPower = 100*abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)/100, 2)) + abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)/100, 2));
+		std::cout << "\n" << temp_accelerationPower;
+		if (temp_accelerationPower > 10)
+		{
+			if (temp_angleVar < PI / 2)
+			{
+				if (temp_accelerationPower > 100)
+					temp_accelerationPower = 100;
+				accelerate(temp_accelerationPower);
+
+			}
+		}
+
+		preferredTurnSpeed = rotationSpeed * 1920;
+		if (angle < PI)
+		{
+			if (joystickDirection < angle)
+			{
+				if (turnSpeed > -1*preferredTurnSpeed)
+				turnRight(100);
+
+			}
+			else if (angle + PI > joystickDirection)
+			{
+				if (turnSpeed < preferredTurnSpeed)
+				turnLeft(100); 
+			}
+			else
+			{
+				if (turnSpeed > -1 * preferredTurnSpeed)
+				turnRight(100);
+
+			}
+		}
+		else
+		{
+			if (joystickDirection > angle)
+			{
+				if (turnSpeed < preferredTurnSpeed)
+				turnLeft(100);
+
+			}
+			else if (angle - PI < joystickDirection)
+			{
+				if (turnSpeed > -1 * preferredTurnSpeed)
+				turnRight(100);
+
+			}
+			else
+			{
+				if (turnSpeed < preferredTurnSpeed)
+				turnLeft(100);
+
+			}
+		}
+	}
+	else
+	{//DirectionalMovement == true && no input -> slow down rotation
+		if (turnSpeed > 100 * rotationSpeed*(10.0 / (10 + shipMass)))
+			turnRight(100);
+		else if (turnSpeed < -100 * rotationSpeed*(10.0 / (10 + shipMass)))
+			turnLeft(100);
+	}
+
+	//Reverse
 	if (testInput(coreKeys[key_reverse], mGame->mEvent))
 		if (coreKeys[key_reverse].axisType != noAxis)
 			reverse(abs(sf::Joystick::getAxisPosition(coreKeys[key_reverse].joystickIndex, coreKeys[key_reverse].joystickAxis)));
-			else
-				reverse(100);
-
-		//Turn right
-	if (testInput(coreKeys[key_turnRight], mGame->mEvent))
-		if (coreKeys[key_turnRight].axisType != noAxis)
-			turnRight(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnRight].joystickIndex, coreKeys[key_turnRight].joystickAxis)));
-			else
-				turnRight(100);
-
-		//Turn left
-	if (testInput(coreKeys[key_turnLeft], mGame->mEvent))
-		if (coreKeys[key_turnLeft].axisType != noAxis)
-			turnLeft(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnLeft].joystickIndex, coreKeys[key_turnLeft].joystickAxis)));
-			else
-				turnLeft(100);
+		else
+			reverse(100);
 
 		//Zoom in
 	if (testInput(coreKeys[key_zoomIn], mGame->mEvent))
@@ -176,7 +251,6 @@ bool Player::update()
 			else
 				zoomIn(100);
 		}
-
 		//Zoom out
 	if (testInput(coreKeys[key_zoomOut], mGame->mEvent))
 		{
@@ -194,7 +268,7 @@ bool Player::update()
 				if (components[i]->types[k] == component::turret)
 				{
 				turretCount++;
-				if (testInput(componentKeys[components[i]->id + 0.1], mGame->mEvent))
+				if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + 0.0001], mGame->mEvent))
 					components[i]->fire();
 				}
 		}//End of fire turrets
@@ -220,7 +294,7 @@ bool Player::update()
 					if (turretMaxAngle > 2 * PI)
 						turretMaxAngle -= 2 * PI;
 
-					if (testInput(componentKeys[components[i]->id], mGame->mEvent) && components[i]->mouseAim == false)
+					if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001], mGame->mEvent) && components[i]->mouseAim == false)
 					{//Rotate turret i CCW
 						if (turretMaxAngle > turretMinAngle)
 						{
@@ -236,7 +310,7 @@ bool Player::update()
 						}
 					}
 
-					if (testInput(componentKeys[-1 * components[i]->id], mGame->mEvent) && components[i]->mouseAim == false)
+					if (testInput(componentKeys[-1 * (components[i]->gridLocationX + components[i]->gridLocationY*0.001)], mGame->mEvent) && components[i]->mouseAim == false)
 					{//Rotate turret i CW
 						if (turretMaxAngle > turretMinAngle)
 						{
@@ -433,30 +507,30 @@ bool Player::update()
 
 void Player::turnRight(double factor)
 {
-	turnSpeed -= factor*(PI / 180000)*(10.0 / (10 + shipMass));
+	turnSpeed -= factor*rotationSpeed*(10.0 / (10 + shipMass));
 }
 
 void Player::turnLeft(double factor)
 {
-	turnSpeed += factor*(PI / 180000)*(10.0 / (10 + shipMass));
+	turnSpeed += factor*rotationSpeed*(10.0 / (10 + shipMass));
 }
 
 void Player::accelerate(double factor)
 {
-	xSpeed += factor*(cos(2*PI - angle)*0.0004);
-	ySpeed += factor*(sin(2 * PI - angle)*0.0004);
+	xSpeed += factor*(cos(2*PI - angle)*movementSpeed);
+	ySpeed += factor*(sin(2 * PI - angle)*movementSpeed);
 
-	relativeSpeedX += factor*(cos(2 * PI - angle)*0.0004);
-	relativeSpeedY += factor*(sin(2 * PI - angle)*0.0004);
+	relativeSpeedX += factor*(cos(2 * PI - angle)*movementSpeed);
+	relativeSpeedY += factor*(sin(2 * PI - angle)*movementSpeed);
 }
 
 void Player::reverse(double factor)
 {
-	xSpeed -= factor*(cos(2 * PI - angle)*0.0002);
-	ySpeed -= factor*(sin(2 * PI - angle)*0.0002);
+	xSpeed -= factor*(cos(2 * PI - angle)*movementSpeed*0.6);
+	ySpeed -= factor*(sin(2 * PI - angle)*movementSpeed)*0.6;
 
-	relativeSpeedX -= factor*(cos(2 * PI - angle)*0.0004);
-	relativeSpeedY -= factor*(sin(2 * PI - angle)*0.0004);
+	relativeSpeedX -= factor*(cos(2 * PI - angle)*movementSpeed);
+	relativeSpeedY -= factor*(sin(2 * PI - angle)*movementSpeed);
 }
 
 void Player::zoomIn(double f)
@@ -734,13 +808,13 @@ void Player::loadKeybindings()
 			std::cout << "\nBinding turret keys...";
 			components[i]->mouseAim = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAim;
 			components[i]->mouseAimRelativeToCenter = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAimRelativeToCenter;
-			componentKeys[components[i]->id] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretLeft;
-			componentKeys[-1 * components[i]->id] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
-			componentKeys[0.1 + components[i]->id] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretLeft;
+			componentKeys[-1 * (components[i]->gridLocationX + components[i]->gridLocationY*0.001)] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + 0.0001] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
 		}
 		if (components[i]->types[k] == component::engine)
 		{
-			componentKeys[0.1 + components[i]->id] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + 0.0002] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
 		}
 		}
 }

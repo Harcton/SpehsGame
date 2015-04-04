@@ -68,6 +68,9 @@ bool Button::mouseOverlap(sf::Vector2i& mousePos)
 
 ButtonId Button::checkIfPressed(sf::Vector2i& mousePos)
 {
+	if (visible == false)
+		return bi_false;
+
 	if (mouseOverlap(mousePos))
 		return id;
 	else
@@ -76,6 +79,9 @@ ButtonId Button::checkIfPressed(sf::Vector2i& mousePos)
 
 void Button::draw(sf::RenderWindow& window, sf::Vector2i& mousePos)
 {
+	if (visible == false)
+		return;
+
 	//Set color
 	if (type == bt_text)
 	{
@@ -96,4 +102,11 @@ void Button::draw(sf::RenderWindow& window, sf::Vector2i& mousePos)
 		window.draw(spr);
 	}
 
+}
+
+void Button::setPosition(float x_pos, float y_pos)
+{
+	buttonRectangle.setPosition(x_pos, y_pos);
+	text.setPosition(x_pos, y_pos);
+	spr.setPosition(x_pos, y_pos);
 }

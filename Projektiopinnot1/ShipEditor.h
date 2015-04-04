@@ -54,7 +54,9 @@ public:
 
 	//Input
 	MyKeys detectKey(ButtonId);
+	std::pair<int, sf::Joystick::Axis> detectAxis();
 	std::string getInputAsString(MyKeys);
+	std::string getAxisAsString(sf::Joystick::Axis);
 	void mouseLeftPressed();
 	void mouseRightPressed();
 	void zoom(int);
@@ -67,6 +69,15 @@ private:
 	float glowAngle = 0; //What it does is... spin around in the game loop. Can be used to apply glowing effects
 	float glowAmount = 0; // 0.0 - 1.0
 	sf::Font font1;
+
+	//Temps
+	int temp_buttonHeight;
+	int temp_button1X1;
+	int temp_button2Width;
+	int temp_button1Width;
+	int temp_button2X1;
+	std::pair<int, sf::Joystick::Axis> temp_idAxisPair;
+
 
 	float cameraX = 0; //(EDITOR_WIDTH / 2) * 100;
 	float cameraY = 0; //(EDITOR_HEIGHT / 2) * 100;
@@ -87,7 +98,8 @@ private:
 	std::vector<Button> actionButtons;
 	std::vector<Button> configurationButtons;
 	std::vector<Button> coreConfigurationButtons;
-	std::vector<Button> componentConfigurationButtons;
+	std::vector<Button> turretConfigurationButtons;
+	std::vector<Button> engineConfigurationButtons;
 
 	editor::Focus focus = editor::base;
 	int selectedX = -1;

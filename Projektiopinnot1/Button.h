@@ -32,6 +32,7 @@ font reference... (not in use)
 	bool mouseOverlap(sf::Vector2i& mousePos);
 	ButtonId checkIfPressed(sf::Vector2i& mousePos);
 	void draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos);
+	void setPosition(float, float);
 
 private:
 	ButtonType type;
@@ -40,6 +41,7 @@ private:
 	sf::Text text;
 	sf::Font& font;
 	sf::Sprite spr;
+	bool visible = true;
 
 	//Rectangle original colors
 	int red;

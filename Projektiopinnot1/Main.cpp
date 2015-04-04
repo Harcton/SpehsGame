@@ -9,9 +9,19 @@ int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
 double resFactor = WINDOW_HEIGHT/1080.0;
 double zoomFactor = 1;
-//Global controll settings
+//Global control settings
+bool directionalMovement = true;
+int moveJoystickId = 0;
+sf::Joystick::Axis horizontalMoveAxis = sf::Joystick::Axis::X;
+sf::Joystick::Axis verticalMoveAxis = sf::Joystick::Axis::Y;
 std::map<float, MyKeys> coreKeys;
 std::map<float, MyKeys> componentKeys;
+
+bool starMap = false;
+float radarRange = 0;
+float radarSpeed = 0;
+float movementSpeed = 0.0004;
+float rotationSpeed = PI / 180000;
 
 //Global textures
 sf::Texture skeletonTex;
@@ -132,4 +142,13 @@ float limitZoom()
 		zoomFactor = 4;
 	}
 	return cutValue;
+}
+
+
+std::string getBoolAsString(bool b)
+{
+	if (b)
+		return "True";
+	else
+		return "False";
 }

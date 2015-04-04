@@ -39,6 +39,7 @@ int irandom(int min, int max);
 bool flipCoin();
 bool rollDie(unsigned int sides);
 float limitZoom();
+std::string getBoolAsString(bool b);
 
 
 
@@ -84,6 +85,15 @@ struct MyKeys
 };
 extern std::map<float, MyKeys> coreKeys;
 extern std::map<float, MyKeys> componentKeys;
+extern bool directionalMovement;
+extern int moveJoystickId;
+extern sf::Joystick::Axis horizontalMoveAxis;
+extern sf::Joystick::Axis verticalMoveAxis;
+extern bool starMap;
+extern float radarRange;
+extern float radarSpeed;
+extern float movementSpeed;
+extern float rotationSpeed;
 bool testInput(MyKeys k, sf::Event&);
 
 
@@ -98,12 +108,27 @@ enum ButtonId
 	bi_actionScrap,
 
 	bi_confExit,
+	bi_confNodeDirectionalMovement,
+	bi_confBindVerticalMoveAxis,
+	bi_confBindHorizontalMoveAxis,
 	bi_confBindAccelerate,
-	bi_confBindReverse,
 	bi_confBindTurnRight,
 	bi_confBindTurnLeft,
+	bi_confBindReverse,
 	bi_confBindZoomIn,
 	bi_confBindZoomOut,
+
+	bi_confNodeDirectionalTargetting,
+	bi_confBindVerticalTargettingAxis,
+	bi_confBindHorizontalTargettingAxis,
+	bi_confBindFire,
+	bi_confBindReload,
+	bi_confNodeHoldToFire,
+	bi_confBindTurnTurretRight,
+	bi_confBindTurnTurretLeft,
+
+	bi_confBindThrust,
+	bi_confNodeHoldToThrust,
 };
 
 #define key_shoot 0.1

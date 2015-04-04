@@ -7,8 +7,8 @@ GridData::~GridData()
 }
 GridData::GridData()
 {
-	//turretFire.inputType = mouseInput;
-	//turretFire.mouseButton = sf::Mouse::Left;
+	turretFire.inputType = mouseInput;
+	turretFire.mouseButton = sf::Mouse::Left;
 }
 
 
