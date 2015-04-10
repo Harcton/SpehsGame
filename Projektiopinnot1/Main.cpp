@@ -10,7 +10,7 @@ int WINDOW_HEIGHT = 720;
 double resFactor = WINDOW_HEIGHT/1080.0;
 double zoomFactor = 1;
 //Global control settings
-bool directionalMovement = true;
+bool directionalMovement = false;
 int moveJoystickId = 0;
 sf::Joystick::Axis horizontalMoveAxis = sf::Joystick::Axis::X;
 sf::Joystick::Axis verticalMoveAxis = sf::Joystick::Axis::Y;

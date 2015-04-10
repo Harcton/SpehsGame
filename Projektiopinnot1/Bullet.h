@@ -13,6 +13,7 @@ public:
 	friend class Object;
 	friend class Player;
 	friend class Enemy;
+	friend class Turret;
 
 	bool update();
 

@@ -18,13 +18,29 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	types.push_back(component::turret);
 	mouseAim = true;
 	textureRadius = 20;
+	
+	canFireTimer = 0;
+
+	capacity = 10;			// magazine/thrust charge
+	magazine = capacity;
+	rechargeInterval = 120;	//Reload/thrust recharge speed
+	maxSpeed = 25;			//max bullet speed
+	damage = 15;			//Turret damage
+	fireRateInterval = 20;
 }
 
 
 bool Turret::update()
 {
-	//std::cout << "turretUpdate ";
 	updateBullets();
+
+	canFireTimer--;	
+	if (reloading == true && canFireTimer < 1)
+	{//Reload complete
+		reloading = false;
+		magazine = capacity;
+		hasFired = false;
+	}
 
 	if (Component::update() == false)
 		return false;
@@ -55,7 +71,27 @@ void Turret::updateBullets()
 
 void Turret::fire()
 {
-	bullets.push_back(new Bullet(this, this->master->mWindow, this->master->mGame, this->x, this->y, this->angle, 25));
+	if (canFireTimer > 0)
+		return;
+	if (magazine < 1)
+	{
+		if (reloading == false)
+		{
+			reloading = true;
+			canFireTimer = rechargeInterval;
+		}
+		return;
+	}
+	
+	magazine--;
+	canFireTimer = fireRateInterval;
+	bullets.push_back(new Bullet(this, this->master->mWindow, this->master->mGame, this->x, this->y, this->angle, maxSpeed));
+	bullets[bullets.size() - 1]->damage = damage;
+	hasFired = true;
 }
-
+void Turret::reload()
+{
+	reloading = true;
+	canFireTimer = rechargeInterval;
+}
 

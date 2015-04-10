@@ -21,9 +21,9 @@ private:
 	int maxAngle = 0;
 	float turnSpeed = 0;
 	int capacity = 0; //magazine/charge capacity
-	float rechargeSpeed = 0; //Reload & recharge rate
+	int rechargeSpeed = 0; //Reload & recharge rate
 	float maxSpeed = 0; //bullet/engine speed
-	float recoilTime = 0;
+	int fireRateInterval = 0;
 
 
 	bool hullMount = false;
@@ -36,14 +36,17 @@ private:
 	bool core = false;
 	bool mouseAim = false;
 	bool mouseAimRelativeToCenter = true;
+	bool holdToFire = true;
 
-	bool directionalTargetting = false;
-	sf::Joystick::Axis horizontalAxis;
-	sf::Joystick::Axis verticalAxis;
+	bool directionalAim = false;
+	int directionalJoystickId = 0;
+	sf::Joystick::Axis horizontalAxis = sf::Joystick::Axis::X;
+	sf::Joystick::Axis verticalAxis = sf::Joystick::Axis::Y;
 
+	MyKeys turretFire;
+	MyKeys turretReload;
 	MyKeys turretLeft;
 	MyKeys turretRight;
-	MyKeys turretFire;
 	MyKeys engineThrust;
 };
 

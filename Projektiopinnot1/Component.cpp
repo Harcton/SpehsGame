@@ -25,7 +25,6 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, i
 {
 	gridLocationX = gx;
 	gridLocationY = gy;
-
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 {

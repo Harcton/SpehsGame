@@ -52,6 +52,7 @@ public:
 
 	void drawConfigurations();
 
+
 	//Input
 	MyKeys detectKey(ButtonId);
 	std::pair<int, sf::Joystick::Axis> detectAxis();

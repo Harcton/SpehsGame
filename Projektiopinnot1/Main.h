@@ -20,6 +20,22 @@
 #define EDITOR_WIDTH 41
 #define EDITOR_HEIGHT 41
 
+//Ship core keys
+#define key_turnRight 0.2
+#define key_turnLeft 0.3
+#define key_accelerate 0.4
+#define key_reverse 0.5
+#define key_zoomIn 0.6
+#define key_zoomOut 0.7
+//Component specific key values
+#define KEYB_fire 0.0001
+#define KEYB_thrust 0.0002
+#define KEYB_reload 0.0003
+#define KEYB_vertical 0.0004
+#define KEYB_horizontal 0.0005
+#define KEYB_right 0.0006
+#define KEYB_left 0.0007
+
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -118,12 +134,14 @@ enum ButtonId
 	bi_confBindZoomIn,
 	bi_confBindZoomOut,
 
-	bi_confNodeDirectionalTargetting,
-	bi_confBindVerticalTargettingAxis,
-	bi_confBindHorizontalTargettingAxis,
 	bi_confBindFire,
-	bi_confBindReload,
 	bi_confNodeHoldToFire,
+	bi_confBindReload,
+	bi_confNodeMouseAim,
+	bi_confNodeMouseAimRelative,
+	bi_confNodeDirectionalAim,
+	bi_confBindVerticalAimAxis,
+	bi_confBindHorizontalAimAxis,
 	bi_confBindTurnTurretRight,
 	bi_confBindTurnTurretLeft,
 
@@ -131,18 +149,6 @@ enum ButtonId
 	bi_confNodeHoldToThrust,
 };
 
-#define key_shoot 0.1
-#define key_turnRight 0.2
-#define key_turnLeft 0.3
-#define key_accelerate 0.4
-#define key_reverse 0.5
-#define key_zoomIn 0.6
-#define key_zoomOut 0.7
-//In order to have infinte turrets there must be infinite definitions...
-#define key_turnTurret1Right 1
-#define key_fireTurret1 1.1
-#define key_turnTurret1Left -1
-//...
 
 
 #endif

@@ -173,7 +173,6 @@ bool Player::update()
 			turnSpeed = 0;
 
 		temp_accelerationPower = 100*abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)/100, 2)) + abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)/100, 2));
-		std::cout << "\n" << temp_accelerationPower;
 		if (temp_accelerationPower > 10)
 		{
 			if (temp_angleVar < PI / 2)
@@ -260,18 +259,29 @@ bool Player::update()
 				zoomOut(100);
 		}
 
-		//Fire turrets
+		//Fire/reload turrets
 		{// <-need a scope for turretCount...
 			int turretCount = 0;
 			for (unsigned int i = 0; i < components.size(); i++)
-			for (unsigned int k = 0; k < components[i]->types.size(); k++)
+				for (unsigned int k = 0; k < components[i]->types.size(); k++)
+				{
 				if (components[i]->types[k] == component::turret)
 				{
-				turretCount++;
-				if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + 0.0001], mGame->mEvent))
-					components[i]->fire();
+					turretCount++;
+					if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire], mGame->mEvent))
+					{
+						if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->holdToFire == true ||
+							(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->holdToFire == false && components[i]->hasFired == false))
+							components[i]->fire();
+					}
+					else
+						components[i]->hasFired = false;
 				}
-		}//End of fire turrets
+				if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload], mGame->mEvent))
+					if (components[i]->reloading == false)
+						components[i]->reload(); 				
+				}
+		}//End of fire/reload turrets
 
 
 
@@ -294,38 +304,59 @@ bool Player::update()
 					if (turretMaxAngle > 2 * PI)
 						turretMaxAngle -= 2 * PI;
 
-					if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001], mGame->mEvent) && components[i]->mouseAim == false)
-					{//Rotate turret i CCW
-						if (turretMaxAngle > turretMinAngle)
-						{
-							if (components[i]->angle < turretMaxAngle)
-								components[i]->angle += components[i]->turningSpeed;
+					if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalAim == true)
+					{//Use directional aiming
+						//-------------------
+						if (abs(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxis)) + 
+							abs(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxis)) > 15)
+						{//Detect directional movement
+							joystickDirection = -1 * atan2(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxis), 
+								sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxis));
+
+							if (joystickDirection < 0)
+								joystickDirection = 2 * PI + joystickDirection;
+
+							temp_angleVar = abs(angle - joystickDirection);
+							if (temp_angleVar > PI)
+								temp_angleVar = 2 * PI - temp_angleVar;
+
+							
 						}
-						else
-						{
-							if (components[i]->angle > turretMinAngle - components[i]->turningSpeed)
-								components[i]->angle += components[i]->turningSpeed;
-							else if (components[i]->angle < turretMaxAngle)
-								components[i]->angle += components[i]->turningSpeed;
+						//-------------------
+					}
+					else
+					{//Use manual turret rotation
+						if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left], mGame->mEvent) && components[i]->mouseAim == false)
+						{//Rotate turret i CCW
+							if (turretMaxAngle > turretMinAngle)
+							{
+								if (components[i]->angle < turretMaxAngle)
+									components[i]->angle += components[i]->turningSpeed;
+							}
+							else
+							{
+								if (components[i]->angle > turretMinAngle - components[i]->turningSpeed)
+									components[i]->angle += components[i]->turningSpeed;
+								else if (components[i]->angle < turretMaxAngle)
+									components[i]->angle += components[i]->turningSpeed;
+							}
+						}
+						if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right], mGame->mEvent) && components[i]->mouseAim == false)
+						{//Rotate turret i CW
+							if (turretMaxAngle > turretMinAngle)
+							{
+								if (components[i]->angle > turretMinAngle)
+									components[i]->angle -= components[i]->turningSpeed;
+							}
+							else
+							{
+								if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
+									components[i]->angle -= components[i]->turningSpeed;
+								else if (components[i]->angle > turretMinAngle)
+									components[i]->angle -= components[i]->turningSpeed;
+							}
 						}
 					}
-
-					if (testInput(componentKeys[-1 * (components[i]->gridLocationX + components[i]->gridLocationY*0.001)], mGame->mEvent) && components[i]->mouseAim == false)
-					{//Rotate turret i CW
-						if (turretMaxAngle > turretMinAngle)
-						{
-							if (components[i]->angle > turretMinAngle)
-								components[i]->angle -= components[i]->turningSpeed;
-						}
-						else
-						{
-							if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
-								components[i]->angle -= components[i]->turningSpeed;
-							else if (components[i]->angle > turretMinAngle)
-								components[i]->angle -= components[i]->turningSpeed;
-						}
-					}
-
 
 
 					if (components[i]->mouseAim == true)
@@ -805,16 +836,16 @@ void Player::loadKeybindings()
 		{
 		if (components[i]->types[k] == component::turret)
 		{
-			std::cout << "\nBinding turret keys...";
 			components[i]->mouseAim = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAim;
 			components[i]->mouseAimRelativeToCenter = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAimRelativeToCenter;
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretLeft;
-			componentKeys[-1 * (components[i]->gridLocationX + components[i]->gridLocationY*0.001)] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + 0.0001] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretLeft;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretReload;
 		}
 		if (components[i]->types[k] == component::engine)
 		{
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + 0.0002] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
+			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
 		}
 		}
 }

@@ -12,6 +12,7 @@ public:
 	friend class Player;
 	
 	void fire();
+	void reload();
 	bool update();
 	void updateBullets();
 	//void fixAngle();
@@ -20,6 +21,12 @@ public:
 
 private:
 	std::vector<Bullet*>::iterator bulletIt;
+	int canFireTimer;
+	int magazine;
+
+
+
+
 };
 
 #endif

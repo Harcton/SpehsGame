@@ -6,7 +6,7 @@ Button::~Button()
 {
 }
 Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::string str, int txtsize, sf::Font& fnt, sf::Color color, sf::Color textColor) : font(fnt)
-{
+{//Text button constructor
 	type = bt_text;
 	id = bid;
 	text.setFont(font);
@@ -23,13 +23,9 @@ Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::st
 	buttonRectangle.setPosition(x_pos, y_pos);
 }
 Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float scale, sf::Font& fnt) : font(fnt)
-{
+{//Sprite button constructor
 	type = bt_sprite;
 	id = bid;
-	//if (!tex.loadFromFile(path))
-	//	std::cout << "\nCould not load Button texture: " << path;
-	//else
-	//	std::cout << "\nButton texture loaded succesfully: " << path;
 	spr.setTexture(tex);
 	spr.setTextureRect(sf::IntRect(0, 0, 25, 25));
 	spr.setPosition(x_pos*resFactor, y_pos*resFactor);

@@ -34,6 +34,7 @@ public:
 
 	//Virtual functions
 	virtual void fire(){}
+	virtual void reload(){};
 	//virtual void fixAngle(){}
 
 
@@ -60,6 +61,18 @@ public:
 	double turningSpeed;
 	double maxAngle;
 
+	//Turret/Engine
+	int capacity; // magazine/thrust charge
+	int rechargeInterval; //Reload/thrust recharge speed
+	float maxSpeed; //max bullet speed/ max engine speed
+
+	//Turret
+	int damage; //Turret damage
+	int fireRateInterval;
+
+	//Engine
+	float thrust; //thrust strength
+
 protected:
 	sf::Sprite spr;
 	sf::Texture tex;
@@ -73,6 +86,9 @@ protected:
 
 	int gridLocationX;
 	int gridLocationY;
+
+	bool hasFired = false;
+	bool reloading = false;
 };
 
 #endif

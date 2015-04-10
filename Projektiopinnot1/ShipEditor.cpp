@@ -141,6 +141,9 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 		else
 			coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight * 8 + 20 * resFactor));
 
+
+
+
 	//Turret configuration buttons
 	//Main header
 	turretConfigurationButtons.push_back(Button(bi_false, CONF_X1, CONF_Y1, CONF_WIDTH - 50 * resFactor, temp_buttonHeight, " Turret[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34* resFactor), font1, sf::Color(120,120,125), sf::Color(35,35,40)));
@@ -148,15 +151,40 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1 - 10 * resFactor, CONF_Y1 + temp_buttonHeight * 2 - 10 * resFactor, temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight * 7 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	//Turret controls header
 	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 2, temp_button2X1 + temp_button2Width - temp_button1X1, temp_buttonHeight, " Turret controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
-	//Fire & binding key
+	
+	
+	//Fire
 	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 3, temp_button1Width, temp_buttonHeight, " Fire", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confBindFire, temp_button2X1, CONF_Y1 + temp_buttonHeight * 3, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + 0.0001]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	//Rotate right & binding key
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 4, temp_button1Width, temp_buttonHeight, " Rotate right", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, temp_button2X1, CONF_Y1 + temp_buttonHeight * 4, temp_button2Width, temp_buttonHeight, "...", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	//Rotate left & binding key
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 5, temp_button1Width, temp_buttonHeight, " Rotate left", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, temp_button2X1, CONF_Y1 + temp_buttonHeight * 5, temp_button2Width, temp_buttonHeight, "...", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confBindFire, temp_button2X1, CONF_Y1 + temp_buttonHeight * 3, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_fire]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	//Enable hold to fire
+	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 4, temp_button1Width, temp_buttonHeight, " Enable hold to fire", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confNodeHoldToFire, temp_button2X1, CONF_Y1 + temp_buttonHeight * 4, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	//Reload
+	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 5, temp_button1Width, temp_buttonHeight, " Reload", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confBindReload, temp_button2X1, CONF_Y1 + temp_buttonHeight * 5, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_reload]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	//Mouse aim (1)
+	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 6, temp_button1Width, temp_buttonHeight, " Enable mouse aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confNodeMouseAim, temp_button2X1, CONF_Y1 + temp_buttonHeight * 6, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		//Mouse aim relative to center & node
+		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 7, temp_button1Width, temp_buttonHeight, " Enable mouse aim relative to center", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAimRelative, temp_button2X1, CONF_Y1 + temp_buttonHeight * 7, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	
+		//Directional aim & node (2)
+		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 8, temp_button1Width, temp_buttonHeight, " Enable directional aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeDirectionalAim, temp_button2X1, CONF_Y1 + temp_buttonHeight * 8, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			//Vertical axis
+			turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 9, temp_button1Width, temp_buttonHeight, " Vertical axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindVerticalAimAxis, temp_button2X1, CONF_Y1 + temp_buttonHeight * 9, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_vertical]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			//Horizontal axis
+			turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 10, temp_button1Width, temp_buttonHeight, " Horizontal axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindHorizontalAimAxis, temp_button2X1, CONF_Y1 + temp_buttonHeight * 10, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_horizontal]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		//Manual turret movement (3)
+		//Rotate right & binding key
+		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 11, temp_button1Width, temp_buttonHeight, " Rotate right", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, temp_button2X1, CONF_Y1 + temp_buttonHeight * 11, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_right]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		//Rotate left & binding key
+		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 12, temp_button1Width, temp_buttonHeight, " Rotate left", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, temp_button2X1, CONF_Y1 + temp_buttonHeight * 12, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_left]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 
 
 
@@ -557,6 +585,25 @@ void ShipEditor::mouseLeftPressed()
 			case bi_actionConfiguration:
 				turretConfigurationButtons[0].text.setString(" Turret [ " + std::to_string(selectedX) + ", " + std::to_string(selectedY) + " ] configurations");
 				focus = editor::configuration;
+
+				//Set button strings when entering the conf window
+				for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+					switch (turretConfigurationButtons[i].id)
+				{
+					case bi_confNodeHoldToFire:
+						turretConfigurationButtons[i].text.setString(getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
+						break;
+					case bi_confNodeDirectionalAim:
+						turretConfigurationButtons[i].text.setString(getBoolAsString(playerData.grid[selectedX][selectedY]->directionalAim));
+						break;
+					case bi_confNodeMouseAim:
+						turretConfigurationButtons[i].text.setString(getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAim));
+						break;
+					case bi_confNodeMouseAimRelative:
+						turretConfigurationButtons[i].text.setString(getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter));
+						break;
+				}
+
 				break;
 
 			}
@@ -708,11 +755,97 @@ void ShipEditor::mouseLeftPressed()
 				case bi_confBindFire:
 					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					componentKeys[selectedX + selectedY*0.001 + 0.0001] = detectKey(bi_confBindFire);
-					playerData.grid[selectedX][selectedY]->turretFire = componentKeys[selectedX + selectedY*0.001 + 0.0001];
-					turretConfigurationButtons[i].text.setString(getInputAsString(componentKeys[selectedX + selectedY*0.001 + 0.0001]));
+					componentKeys[selectedX + selectedY*0.001 + KEYB_fire] = detectKey(bi_confBindFire);
+					playerData.grid[selectedX][selectedY]->turretFire = componentKeys[selectedX + selectedY*0.001 + KEYB_fire];
+					turretConfigurationButtons[i].text.setString(getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_fire]));
 					break;
-				
+				case bi_confBindReload:
+					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
+					componentKeys[selectedX + selectedY*0.001 + KEYB_reload] = detectKey(bi_confBindReload);
+					playerData.grid[selectedX][selectedY]->turretReload = componentKeys[selectedX + selectedY*0.001 + KEYB_reload];
+					turretConfigurationButtons[i].text.setString(getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_reload]));
+					break;
+				case bi_confBindTurnTurretRight:
+					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
+					componentKeys[selectedX + selectedY*0.001 + KEYB_right] = detectKey(bi_confBindTurnTurretRight);
+					playerData.grid[selectedX][selectedY]->turretRight = componentKeys[selectedX + selectedY*0.001 + KEYB_right];
+					turretConfigurationButtons[i].text.setString(getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_right]));
+					break;
+				case bi_confBindTurnTurretLeft:
+					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
+					componentKeys[selectedX + selectedY*0.001 + KEYB_left] = detectKey(bi_confBindTurnTurretLeft);
+					playerData.grid[selectedX][selectedY]->turretLeft = componentKeys[selectedX + selectedY*0.001 + KEYB_left];
+					turretConfigurationButtons[i].text.setString(getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_left]));
+					break;
+				case bi_confBindVerticalAimAxis:
+					turretConfigurationButtons[i].text.setString(">Move a joystick axis<");
+					drawWindow();
+					temp_idAxisPair = detectAxis();
+					playerData.grid[selectedX][selectedY]->directionalJoystickId = temp_idAxisPair.first;
+					playerData.grid[selectedX][selectedY]->verticalAxis = temp_idAxisPair.second; // componentKeys[selectedX + selectedY*0.001 + KEYB_vertical].second;
+					turretConfigurationButtons[i].text.setString(getAxisAsString(temp_idAxisPair.second));
+					break;
+				case bi_confBindHorizontalAimAxis:
+					turretConfigurationButtons[i].text.setString(">Move a joystick axis<");
+					drawWindow();
+					temp_idAxisPair = detectAxis();
+					playerData.grid[selectedX][selectedY]->directionalJoystickId = temp_idAxisPair.first;
+					playerData.grid[selectedX][selectedY]->horizontalAxis = temp_idAxisPair.second; // componentKeys[selectedX + selectedY*0.001 + KEYB_vertical].second;
+					turretConfigurationButtons[i].text.setString(getAxisAsString(temp_idAxisPair.second));
+					break;
+
+				//Nodes
+				case bi_confNodeHoldToFire:
+					if (playerData.grid[selectedX][selectedY]->holdToFire == true)
+					{//Set false
+						turretConfigurationButtons[i].text.setString(" False");
+						playerData.grid[selectedX][selectedY]->holdToFire = false;
+					}
+					else
+					{//Set true
+						turretConfigurationButtons[i].text.setString(" True");
+						playerData.grid[selectedX][selectedY]->holdToFire = true;
+					}
+					break;
+				case bi_confNodeMouseAim:
+					if (playerData.grid[selectedX][selectedY]->mouseAim == true)
+					{//Set false
+						turretConfigurationButtons[i].text.setString(" False");
+						playerData.grid[selectedX][selectedY]->mouseAim = false;
+					}
+					else
+					{//Set true
+						turretConfigurationButtons[i].text.setString(" True");
+						playerData.grid[selectedX][selectedY]->mouseAim = true;
+					}
+					break;
+				case bi_confNodeMouseAimRelative:
+					if (playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter == true)
+					{//Set false
+						turretConfigurationButtons[i].text.setString(" False");
+						playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter = false;
+					}
+					else
+					{//Set true
+						turretConfigurationButtons[i].text.setString(" True");
+						playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter = true;
+					}
+					break;
+				case bi_confNodeDirectionalAim:
+					if (playerData.grid[selectedX][selectedY]->directionalAim == true)
+					{//Set false
+						turretConfigurationButtons[i].text.setString(" False");
+						playerData.grid[selectedX][selectedY]->directionalAim = false;
+					}
+					else
+					{//Set true
+						turretConfigurationButtons[i].text.setString(" True");
+						playerData.grid[selectedX][selectedY]->directionalAim = true;
+					}
+					break;
 			}
 		else if (playerData.grid[selectedX][selectedY]->engine > 0)
 			for (unsigned int i = 0; i < engineConfigurationButtons.size(); i++)
