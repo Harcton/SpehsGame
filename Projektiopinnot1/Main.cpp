@@ -38,7 +38,7 @@ void main()
 	editorTurretTex.loadFromFile("Texture/turret.png");
 	
 
-	commanderShipTex.loadFromFile("Texture/enemy_commander_ship.png");
+	commanderShipTex.loadFromFile("Texture/enemy_commander_ship_upgraded.png");
 
 	//Randomize randomization...
 	time_t t;
