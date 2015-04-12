@@ -13,7 +13,8 @@ public:
 	
 	void fire();
 	void reload();
-	bool update();
+	void update();
+	bool alive();
 	void updateBullets();
 	//void fixAngle();
 

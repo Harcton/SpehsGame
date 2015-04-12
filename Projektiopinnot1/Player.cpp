@@ -578,31 +578,38 @@ void Player::zoomOut(double f)
 
 void Player::updateComponents()
 {
-	//Bullet update
-	for (componentIt = components.begin(); componentIt != components.end();)
-		if ((*componentIt)->update() == false)
+	componentIt = components.begin();
+	while (componentIt != components.end())
+	{
+		if ((*componentIt)->alive() == false)
 		{
-		delete (*componentIt);
-		componentIt = components.erase(componentIt);
+			Component* temp_componentPointer = (*componentIt);
+			components.erase(componentIt);
+			delete temp_componentPointer;
+			componentIt = components.begin();
 		}
 		else
-		{
-			++componentIt;
-		}
+			componentIt++;
+	}
+
+
+	for (unsigned int i = 0; i < components.size(); i++)
+		components[i]->update();
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->draw();
 }
 
 void Player::checkBulletCollision(Bullet* b)
 {
+	float temp_coordinateModifier = resFactor*zoomFactor*textureRadius;
 	for (unsigned int i = 0; i < components.size(); i++)
 	{
-		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y, components[i]->x - b->x);
+		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y - temp_coordinateModifier, components[i]->x - b->x - temp_coordinateModifier);
 		if (b->collisionCheckAngle < 0)
 			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
 
 
-		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x, components[i]->y);
+		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x - temp_coordinateModifier, components[i]->y - temp_coordinateModifier);
 		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
 
 		if (b->checkCollisionDistance < b->checkCollisionRange)
@@ -631,7 +638,7 @@ void Player::removeComponent(int cid)
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
 		{
-		components[i]->hp = -1;
+		components[i]->hp = -999;
 		//int tX = components[i]->gridLocationX;
 		//int tY = components[i]->gridLocationY;
 		////Delete the component save data

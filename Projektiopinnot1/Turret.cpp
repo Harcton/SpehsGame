@@ -30,7 +30,11 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 }
 
 
-bool Turret::update()
+bool Turret::alive()
+{
+	return Component::alive();
+}
+void Turret::update()
 {
 	updateBullets();
 
@@ -42,10 +46,8 @@ bool Turret::update()
 		hasFired = false;
 	}
 
-	if (Component::update() == false)
-		return false;
-
-	return true;
+	Component::update();
+	return;
 }
 
 

@@ -64,7 +64,7 @@ void Enemy::enemyInitialize()
 		followingDistance = 1000;
 		actionDistance = SPAWN_RANGE - 200;
 		maxTurnSpeed = 0.001;
-		maxSpeed = 1; 
+		maxSpeed = 1;
 
 		//-9
 		components.push_back(new Component(this, mGame->playerObj, -325, -100)); //Component 3 (REAR)
@@ -115,8 +115,8 @@ void Enemy::enemyInitialize()
 		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(300, 0, 200, 200));
 		components[components.size() - 1]->textureRadius = 100; 
 		//-1
-		components.push_back(new Component(this, mGame->playerObj, -150, -150)); //Component 1 (TANK) //(0,0)
-		components[components.size() - 1]->spr.setOrigin(100, 100); //150
+		components.push_back(new Component(this, mGame->playerObj, -100, -100)); //Component 1 (TANK) //(0,0)
+		components[components.size() - 1]->spr.setOrigin(150, 150); //150
 		components[components.size() - 1]->spr.setTexture(commanderShipTex);
 		components[components.size() - 1]->spr.setTextureRect(sf::IntRect(0, 0, 300, 300));
 		components[components.size() - 1]->textureRadius = 150;
@@ -467,31 +467,22 @@ void Enemy::updateComponents()
 		}
 	}*/
 
-	for (componentIt = components.begin(); componentIt != components.end();)
+	componentIt = components.begin();
+	while (componentIt != components.end())
 	{
-		if ((*componentIt)->update() == false)
+		if ((*componentIt)->alive() == false)
 		{
-			std::vector<int> temp_ids;
-			for (unsigned int i = 0; i < components.size(); i++)
-				temp_ids.push_back(components[i]->id);
-
-
-
-
-
-
-			delete (*componentIt);
-
-
-
-			componentIt = components.erase(componentIt);
+			Component* temp_componentPointer = (*componentIt);
+			components.erase(componentIt);
+			delete temp_componentPointer;
+			componentIt = components.begin();
 		}
 		else
-		{
-			++componentIt;
-		}
+			componentIt++;
 	}
 
+	for (unsigned int i = 0; i < components.size(); i++)
+		components[i]->update();
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->draw();
 }
@@ -511,14 +502,15 @@ void Enemy::explosion()
 
 void Enemy::checkBulletCollision(Bullet* b)
 {
+	float temp_coordinateModifier = resFactor*zoomFactor*textureRadius;
 	for (unsigned int i = 0; i < components.size(); i++)
 	{
-		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y, components[i]->x - b->x);
+		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y - temp_coordinateModifier, components[i]->x - b->x - temp_coordinateModifier);
 		if (b->collisionCheckAngle < 0)
 			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
 
 
-		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x + components[i]->textureRadius, components[i]->y + components[i]->textureRadius);
+		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x - temp_coordinateModifier, components[i]->y - temp_coordinateModifier);
 		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
 
 		if (b->checkCollisionDistance < b->checkCollisionRange)
@@ -546,9 +538,11 @@ void Enemy::removeComponent(int cid)
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
 		{
-		delete components[i];
-		components.erase(components.begin() + i);
-		return;
+		components[i]->hp = -999;
+		//Component* temp_componentPointer = components[i];
+		//components.erase(components.begin() + i);
+		//delete temp_componentPointer;
+		//return;
 		}
 }
 

@@ -42,20 +42,28 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 
 	hp = 100;
 	textureRadius = 50;
+
+
+
 }
 
-bool Component::update()
+bool Component::alive()
 {
-	//Spin damage
-	if (rollDie(200) == 0)
-		hp -= floor((getDistance(0, 0, xOffset, yOffset)*abs(master->turnSpeed))/40);
-
 	if (hp <= 0)
 	{
 		std::cout << "\nComponent destroyed! [" << gridLocationX << ", " << gridLocationY << "]";
 		master->notifyComponentDestruction(id);
 		return false;
 	}
+
+	return true;
+}
+void Component::update()
+{
+	//Spin damage
+	if (rollDie(200) == 0)
+		hp -= floor((getDistance(0, 0, xOffset, yOffset)*abs(master->turnSpeed))/40);
+	
 
 	//Angle
 	angle += master->turnSpeed;
@@ -78,13 +86,28 @@ bool Component::update()
 
 	spr.setColor(sf::Color(255, 255 * (hp / 100.f), 255 * (hp / 100.f)));
 
-	return true;
+	//DEBUG
+	if (drawCollisionCircle == false)
+		return;
+	collisionCircle.setRadius(textureRadius);
+	collisionCircle.setFillColor(sf::Color(95, 125, 255, 70));
+	collisionCircle.setPosition(screenX - resFactor*zoomFactor*textureRadius, screenY - resFactor*zoomFactor*textureRadius);
+	collisionCircle.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+
+
+	return;
 }
 
 
 void Component::draw()
 {
 	master->mWindow.draw(spr);
+
+
+	//DEBUG
+	if (drawCollisionCircle == false)
+		return;
+	master->mWindow.draw(collisionCircle);
 }
 
 void Component::createChild(double ox, double oy, component::Type tp)

@@ -28,7 +28,8 @@ public:
 	friend class Player;
 	friend class Enemy;
 
-	virtual bool update();
+	virtual void update();
+	virtual bool alive();
 	void draw();
 	void createChild(double, double, component::Type);
 
@@ -89,6 +90,11 @@ protected:
 
 	bool hasFired = false;
 	bool reloading = false;
+
+
+	//DEBUG
+	bool drawCollisionCircle = true;
+	sf::CircleShape collisionCircle;
 };
 
 #endif
