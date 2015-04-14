@@ -65,6 +65,7 @@ std::string getBoolAsString(bool b);
 
 
 
+
 //Global controll settings
 enum InputType
 {
