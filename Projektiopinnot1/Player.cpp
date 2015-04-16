@@ -166,14 +166,7 @@ bool Player::update()
 		if (joystickDirection < 0)
 			joystickDirection = 2 * PI + joystickDirection;
 
-		std::cout << "\n" << joystickDirection;
-
-		temp_angleVar = abs(angle - joystickDirection);
-		if (temp_angleVar > PI)
-			temp_angleVar = 2 * PI - temp_angleVar;
-		if (temp_angleVar < PI / 90)
-			turnSpeed = 0;
-
+		//Detect acceleration
 		temp_accelerationPower = 100*abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)/100, 2)) + abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)/100, 2));
 		if (temp_accelerationPower > 10)
 		{
@@ -186,48 +179,35 @@ bool Player::update()
 			}
 		}
 
-		preferredTurnSpeed = rotationSpeed * 1920;
-		if (angle < PI)
+		//Rotation
+		temp_angleVar = angle - joystickDirection;
+		if (abs(temp_angleVar) < PI / 18)
 		{
-			if (joystickDirection < angle)
-			{
-				if (turnSpeed > -1*preferredTurnSpeed)
-				turnRight(100);
-
-			}
-			else if (angle + PI > joystickDirection)
-			{
-				if (turnSpeed < preferredTurnSpeed)
-				turnLeft(100); 
+			turnSpeed = turnSpeed*0.90;
+		}
+		else if (temp_angleVar < 0)
+		{//-
+			if (joystickDirection < angle + PI)
+			{//1st L
+				turnLeft(100);
 			}
 			else
-			{
-				if (turnSpeed > -1 * preferredTurnSpeed)
+			{//4th R
 				turnRight(100);
-
 			}
-		}
+		}//-
 		else
-		{
-			if (joystickDirection > angle)
-			{
-				if (turnSpeed < preferredTurnSpeed)
+		{//+
+			if (joystickDirection < angle - PI)
+			{//2nd L
 				turnLeft(100);
-
-			}
-			else if (angle - PI < joystickDirection)
-			{
-				if (turnSpeed > -1 * preferredTurnSpeed)
-				turnRight(100);
-
 			}
 			else
-			{
-				if (turnSpeed < preferredTurnSpeed)
-				turnLeft(100);
-
+			{//3rd R
+				turnRight(100);
 			}
-		}
+		}//+
+
 	}
 	else
 	{//DirectionalMovement == true && no input -> slow down rotation
@@ -296,7 +276,7 @@ bool Player::update()
 				//Look through component i's types vector
 				for (unsigned int k = 0; k < components[i]->types.size(); k++)
 					if (components[i]->types[k] == component::turret)
-					{//Turret i
+				{//Turret i
 					turretCount++;
 
 					double turretMinAngle = angle - components[i]->maxAngle;
@@ -317,207 +297,37 @@ bool Player::update()
 
 							if (joystickDirection < 0)
 								joystickDirection = 2 * PI + joystickDirection;
-							
-							if (components[i]->angle < PI / 2.0f)
-							{// I
-								std::cout << "\nI";
-								if (components[i]->angle > joystickDirection || components[i]->angle + PI < joystickDirection)
-								{//Right
-									std::cout << "  R";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle >= turretMinAngle && components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle <= turretMaxAngle || components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-								}//EoR
+
+
+							temp_angleVar = components[i]->angle - joystickDirection;
+							if (temp_angleVar < 0)
+							{//-
+								if (joystickDirection < components[i]->angle + PI)
+								{//1st L
+									components[i]->angle += components[i]->turningSpeed;
+								}
 								else
-								{//Left
-									std::cout << "  L";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle <= turretMaxAngle && components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle >= turretMinAngle || components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-								}//EoL
-							}
-							else if (components[i]->angle >= PI / 2.0f && components[i]->angle < PI)
-							{// II
-								std::cout << "\nII";
-								if (components[i]->angle >= joystickDirection || components[i]->angle + PI <= joystickDirection)
-								{//Right
-									std::cout << "  R";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle >= turretMinAngle && components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle <= turretMaxAngle || components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-								}//EoR
-								else
-								{//Left
-									std::cout << "  L";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle <= turretMaxAngle && components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle >= turretMinAngle || components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-								}//EoL
-							}
-							else if (components[i]->angle > PI*1.5)
-							{// IV
-								std::cout << "\nIV";
-								if (components[i]->angle >= joystickDirection && components[i]->angle - PI <= joystickDirection)
-								{//Right
-									std::cout << "  R";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle >= turretMinAngle && components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle <= turretMaxAngle || components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-								}//EoR
-								else
-								{//Left
-									std::cout << "  L";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle <= turretMaxAngle && components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle >= turretMinAngle || components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-								}//EoL
-							}
+								{//4th R
+									components[i]->angle -= components[i]->turningSpeed;
+								}
+							}//-
 							else
-							{// III
-								std::cout << "\nIII";
-								if (components[i]->angle >= joystickDirection && components[i]->angle - PI <= joystickDirection)
-								{//Right
-									std::cout << "  R";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle >= turretMinAngle && components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle <= turretMaxAngle && components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle -= components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMinAngle;
-										}
-									}
-								}//EoR
+							{//+
+								if (joystickDirection < components[i]->angle - PI)
+								{//2nd L
+									components[i]->angle += components[i]->turningSpeed;
+								}
 								else
-								{//Left
-									std::cout << "  L";
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle <= turretMaxAngle && components[i]->angle >= turretMinAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle || components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-									else
-									{
-										if (components[i]->angle >= turretMinAngle && components[i]->angle <= turretMaxAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed;
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-										}
-									}
-								}//EoL
-							}
+								{//3rd R
+									components[i]->angle -= components[i]->turningSpeed;
+								}
+							}//+
 
-
-							
 						}
 						//-------------------
 					}
 					else
-					{//Use manual turret rotation
+					{//Use manual turret rotation (press button)
 						if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left], mGame->mEvent) && components[i]->mouseAim == false)
 						{//Rotate turret i CCW
 							if (turretMaxAngle > turretMinAngle)
@@ -562,162 +372,31 @@ bool Player::update()
 						if (mouseDirection < 0)
 							mouseDirection += 2 * PI;
 
-						if (turretMaxAngle > turretMinAngle)
-						{
-							if (mouseDirection > turretMinAngle && mouseDirection < turretMaxAngle)
-							{//"Case 1"
-								if (components[i]->angle < mouseDirection)
-								{
-									components[i]->angle += components[i]->turningSpeed;
-									if (components[i]->angle > turretMaxAngle)
-										components[i]->angle = turretMaxAngle;
-								}
-								else if (components[i]->angle > mouseDirection)
-								{
-									components[i]->angle -= components[i]->turningSpeed;
-									if (components[i]->angle < turretMinAngle)
-										components[i]->angle = turretMinAngle;
-								}
+						temp_angleVar = components[i]->angle - mouseDirection;
+						if (temp_angleVar < 0)
+						{//-
+							if (mouseDirection < components[i]->angle + PI)
+							{//1st L
+								components[i]->angle += components[i]->turningSpeed;
 							}
-							else if (angle >= PI)
-							{//Case 1.1 
-								if (mouseDirection < angle && mouseDirection > angle - PI)
-								{
-									if (components[i]->angle > turretMinAngle)
-										components[i]->angle -= components[i]->turningSpeed;
-								}
-								else if (mouseDirection > angle || mouseDirection < angle - PI)
-								{
-									if (components[i]->angle < turretMaxAngle && components[i]->angle > turretMinAngle - components[i]->turningSpeed)
-									{
-											components[i]->angle += components[i]->turningSpeed;										
-									}
-								}
+							else
+							{//4th R
+								components[i]->angle -= components[i]->turningSpeed;
 							}
-							else // angle < PI
-							{//Case 1.2
-								if (mouseDirection > angle && mouseDirection < angle + PI)
-								{// +
-									if (components[i]->angle < turretMaxAngle)
-										components[i]->angle += components[i]->turningSpeed;
-								}
-								else if (mouseDirection < angle || mouseDirection > angle + PI)
-								{// -
-									if (components[i]->angle > turretMinAngle)
-									{
-										components[i]->angle -= components[i]->turningSpeed;
-										if (components[i]->angle > turretMaxAngle)
-											components[i]->angle = turretMinAngle;
-									}
-								}
+						}//-
+						else
+						{//+
+							if (mouseDirection < components[i]->angle - PI)
+							{//2nd L
+								components[i]->angle += components[i]->turningSpeed;
 							}
-						}
-						else if (turretMaxAngle + components[i]->turningSpeed >= components[i]->angle)
-						{
-							if (turretMaxAngle >= mouseDirection || mouseDirection >= turretMinAngle)
-							{//"Case 2"
-								if (mouseDirection > components[i]->angle && mouseDirection <= turretMaxAngle)	// I
-								{
-									components[i]->angle += components[i]->turningSpeed;
-									if (components[i]->angle > turretMaxAngle)
-										components[i]->angle = turretMaxAngle;
-								}
-								else if (mouseDirection < components[i]->angle)			// II
-								{
-									components[i]->angle -= components[i]->turningSpeed;
-									if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-										components[i]->angle = turretMinAngle;
-								}
-								else if (mouseDirection >= turretMinAngle)
-								{
-									components[i]->angle -= components[i]->turningSpeed;
-									if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-										components[i]->angle = turretMinAngle;
-								}
+							else
+							{//3rd R
+								components[i]->angle -= components[i]->turningSpeed;
 							}
-							else //mouseDirection is out of range
-							{
-								if ((angle >= PI && (mouseDirection > angle || mouseDirection < angle - PI)) || (angle < PI && mouseDirection > angle && mouseDirection < angle + PI))
-								{// +
-									if (turretMinAngle > components[i]->angle)//'+components[i]
-									{
-										if (components[i]->angle < turretMaxAngle || components[i]->angle > turretMinAngle)
-										{
-											components[i]->angle += components[i]->turningSpeed; 
-											if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-												components[i]->angle = turretMaxAngle;
-
-										}
-									}
-									else
-									{
-										components[i]->angle += components[i]->turningSpeed;
-										if (components[i]->angle > turretMaxAngle && components[i]->angle < turretMinAngle)
-											components[i]->angle = turretMaxAngle;
-									}
-									
-								}
-								else
-								{// -
-									if (turretMinAngle > components[i]->angle)//'+components[i]
-									{
-										if (components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
-											components[i]->angle -= components[i]->turningSpeed;
-										else if (components[i]->angle > turretMinAngle)
-											components[i]->angle -= components[i]->turningSpeed;
-									}
-									else if (components[i]->angle > turretMinAngle)
-									{
-										components[i]->angle -= components[i]->turningSpeed;
-									}
-								}
-							}
-						}
-						else //if (turretMinAngle > turretMaxAngle && components[k]->angle >= turretMaxAngle)
-						{
-							if (mouseDirection <= turretMaxAngle || mouseDirection >= turretMinAngle)
-							{//"Case 3"
-								if (mouseDirection >= 0 && mouseDirection <= turretMaxAngle)					// I
-									components[i]->angle += components[i]->turningSpeed;
-								else if (mouseDirection > components[i]->angle)// II
-									components[i]->angle += components[i]->turningSpeed;
-								else if (mouseDirection < components[i]->angle && mouseDirection >= turretMinAngle)// III
-									components[i]->angle -= components[i]->turningSpeed;
-							}
-							else //mouseDirection is out of range
-							{
-								if ((angle >= PI && (mouseDirection > angle || mouseDirection < angle - PI)) || (angle < PI && mouseDirection > angle && mouseDirection < angle + PI))//(mouseDirection > angle || mouseDirection < (angle - PI))
-								{// +
-									if (turretMaxAngle > components[i]->angle)
-									{
-										if (components[i]->angle < turretMaxAngle)
-											components[i]->angle += components[i]->turningSpeed;
-									}
-									else
-									{
-										if (components[i]->angle < turretMaxAngle)
-											components[i]->angle += components[i]->turningSpeed;
-										else 
-											components[i]->angle += components[i]->turningSpeed;
-									}
-								}
-								else
-								{// -
-									if (turretMaxAngle > turretMinAngle)
-									{
-										if (components[i]->angle > turretMinAngle)
-											components[i]->angle -= components[i]->turningSpeed;
-									}
-									else
-									{
-										if (components[i]->angle > turretMinAngle || components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
-											components[i]->angle -= components[i]->turningSpeed;
-									}
-								}
-							}
-						}
+						}//+
 					}//End of mouse aiming
-					}
+				}
 			}
 		}
 	updateComponents();

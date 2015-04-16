@@ -25,6 +25,9 @@ private:
 	int canFireTimer;
 	int magazine;
 
+	double turretMinAngle;
+	double turretMaxAngle;
+
 
 
 

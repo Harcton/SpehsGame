@@ -46,6 +46,56 @@ void Turret::update()
 		hasFired = false;
 	}
 
+	//Fix angle
+	turretMinAngle = master->angle - maxAngle;
+	turretMaxAngle = master->angle + maxAngle;
+	if (turretMinAngle < 0)
+		turretMinAngle += 2 * PI;
+	if (turretMaxAngle > 2 * PI)
+		turretMaxAngle -= 2 * PI;
+	if (turretMaxAngle > turretMinAngle)
+	{
+		if (angle > turretMaxAngle || angle < turretMinAngle)
+		{//If angle is out of range
+			if (master->angle < PI)
+			{//master angle < 180
+				if (angle < master->angle + PI && angle > turretMaxAngle)
+					angle = turretMaxAngle;
+				else
+					angle = turretMinAngle;
+			}
+			else
+			{//master angle > 180
+				if (angle > master->angle - PI && angle < turretMinAngle)
+					angle = turretMinAngle;
+				else
+					angle = turretMaxAngle;
+			}
+		}
+	}
+	else
+	{//0-angle is interfering
+		if (angle > turretMaxAngle && angle < turretMinAngle)
+		{//If angle is out of range
+			if (master->angle < PI)
+			{//master angle < 180
+				if (angle < master->angle + PI)
+					angle = turretMaxAngle;
+				else
+					angle = turretMinAngle;
+			}
+			else
+			{//master angle > 180
+				if (angle > master->angle - PI)
+					angle = turretMinAngle;
+				else
+					angle = turretMaxAngle;
+			}
+		}
+	}
+
+
+
 	Component::update();
 	return;
 }
