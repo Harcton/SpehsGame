@@ -30,6 +30,8 @@ private:
 	void updateComponents();
 	void explosion();
 	void fireMahLazors();
+	void launchFliers();
+	void dodgeMove();
 
 	Component* nearestComponent;
 	double playerDirection;
@@ -44,8 +46,13 @@ private:
 	double maxSpeed;
 	double snappingAngle; //?
 	bool rotationDirection; //true CW, false CCW
+
+	bool laserBChange = false;
+	int BCounter;
+	int explosionTimer;
 	int laserCounter;
 	int timer;
+	int tempHPMemory;
 	
 	TypeOfAI typeOfEnemy;
 

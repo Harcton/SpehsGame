@@ -6,12 +6,16 @@
 #include "Bullet.h"
 #include "Turret.h"
 
+//HIT BOXING PÄIN *****A AINAKIN COLLISIONNIN KANNALTA?
+//Bomber brken
+//Flier!
 
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector, TypeOfAI tp) : refVector(rVector), Object(windowref, game)
 {
 	typeOfEnemy = tp;
 	enemyInitialize();
 
+	snappingAngle = 0; //doesn't matter atm what this is...
 	detectionDistance = SPAWN_RANGE;
 }
 
@@ -58,6 +62,7 @@ void Enemy::enemyInitialize()
 		components.push_back(new Component(this, mGame->playerObj, -50, -50));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_purple.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+		components[components.size() - 1]->spr.setOrigin(50, 50); //temp fix? ? ?
 	}
 	else if (typeOfEnemy == et_commander)
 	{
@@ -198,7 +203,6 @@ bool Enemy::update()
 		nearestComponent = components[0];
 	}
 
-
 	playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
@@ -216,6 +220,9 @@ bool Enemy::update()
 	//update AI accordingly
 	enemyAI();
 
+	if (timer == 0)
+		tempHPMemory = this->components[0]->hp;
+
 	updateComponents();
 	
 	return Object::update();
@@ -226,7 +233,7 @@ void Enemy::enemyAI()
 {
 	distance = getDistance(this->x, this->y, nearestComponent->x, nearestComponent->y);
 
-	//update laserCounter
+	//update Counters
 	if (laserCounter <= 2)
 	{
 		rotationDirection = true;
@@ -238,7 +245,12 @@ void Enemy::enemyAI()
 	else if (laserCounter >= 6)
 	{
 		laserCounter = irandom(-5,1);
+		laserBChange = true;
 	}
+
+	BCounter++;
+	explosionTimer++;
+	
 
 	//literally inside the player
 	if (distance < this->textureRadius + nearestComponent->textureRadius)
@@ -247,6 +259,16 @@ void Enemy::enemyAI()
 		{
 			explosion();
 			this->hp = 0;
+		}
+	}
+	//componentship inside player
+	for (size_t i = 0; i < this->components.size(); i++)
+	{
+		if (distance < this->components[i]->textureRadius + nearestComponent->textureRadius && explosionTimer > 60)
+		{
+			explosion();
+			this->components[i]->hp -= 75; //WTF
+			explosionTimer = 0;
 		}
 	}
 
@@ -270,41 +292,88 @@ void Enemy::enemyAI()
 	//action distance
 	else if (distance > followingDistance && distance < actionDistance)
 	{
-		follow = true;
 		if (typeOfEnemy == et_laser)
 		{
-			if (rotationDirection == true)
+			if (rotationDirection == true && BCounter > 80)
 			{
-				xSpeed = (-sin(angle))*maxSpeed;
-				ySpeed = (-cos(angle))*maxSpeed;
+				if (laserBChange == true && follow == true)
+				{
+					follow = false;
+
+					xSpeed = (-sin(angle))*maxSpeed;
+					ySpeed = (-cos(angle))*maxSpeed;
+					laserBChange = false;
+					BCounter = 0;
+					dodgeMove();
+				}
+				else
+				{
+					follow = true;
+
+					xSpeed = (-sin(angle))*maxSpeed + irandom(5, 10);
+					ySpeed = (-cos(angle))*maxSpeed + irandom(5, 10);
+					BCounter = 0;
+				}
 			}
-			else if (rotationDirection == false)
+			else if (rotationDirection == false && BCounter > 80)
 			{
-				xSpeed = (sin(angle))*maxSpeed;
-				ySpeed = (cos(angle))*maxSpeed;
+				if (laserBChange == true && follow == true)
+				{
+					follow = false;
+
+					xSpeed = (sin(angle))*maxSpeed;
+					ySpeed = (cos(angle))*maxSpeed;
+					laserBChange = false;
+					BCounter = 0;
+					dodgeMove();
+				}
+				else
+				{
+					follow = true;
+
+					xSpeed = (sin(angle))*maxSpeed + irandom(5, 10);
+					ySpeed = (cos(angle))*maxSpeed + irandom(5, 10);
+					BCounter = 0;
+				}
 			}
 
+			
 			//blink?
 		}
 		else if (typeOfEnemy == et_standard)
 		{
-			xSpeed += (cos(2 * PI - angle));
-			ySpeed += (sin(2 * PI - angle));
+			if (tempHPMemory > this->components[0]->hp && BCounter > 120)
+			{
+				follow = false;
+				BCounter = 0;
+				dodgeMove();
+			}
+			else
+			{
+				xSpeed += (cos(2 * PI - angle));
+				ySpeed += (sin(2 * PI - angle));
+						
+				follow = true;
+			}
 		}
 		else if (typeOfEnemy == et_commander)
 		{
 			xSpeed += (cos(2 * PI - angle));
 			ySpeed += (sin(2 * PI - angle));
+
+			follow = true;
 		}
 		else //bomber
 		{
 			xSpeed += (cos(2 * PI - angle));
 			ySpeed += (sin(2 * PI - angle));
+
+			follow = true;
 		}
 
-		if (typeOfEnemy == et_standard || typeOfEnemy == et_laser)
+		if (typeOfEnemy == et_standard || typeOfEnemy == et_laser || typeOfEnemy == et_commander)
 		{
-			if (timer == 8)
+			if (timer >= 8)
 			{
 				if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
 				{
@@ -315,10 +384,20 @@ void Enemy::enemyAI()
 								if (components[i]->types[k] == component::turret)
 									components[i]->fire();
 					}
-					if (typeOfEnemy == et_laser)
-						fireMahLazors();
-					timer = irandom(-10,0);
-					laserCounter++;
+					if (typeOfEnemy == et_laser && follow == true)
+						if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
+						{
+							fireMahLazors();
+							laserCounter++;
+						}
+
+					timer = irandom(-20, -10);
+				}
+				if (typeOfEnemy == et_commander)
+				{
+					//FIRE ZEH MISSIELS
+					launchFliers();
+					timer = irandom(-60, -30);
 				}
 			}
 			else
@@ -435,7 +514,6 @@ void Enemy::enemyAI()
 			turnSpeed = turnSpeed*0.9;
 		}
 	}
-
 }
 
 
@@ -574,4 +652,76 @@ void Enemy::fireMahLazors()
 	nearestComponent->hp -= 1;
 
 	mWindow.draw(line);
+}
+
+
+void Enemy::dodgeMove() // ._____________.
+{
+	std::cout << "dodge!" << std::endl;
+	if (angle >= 0 && angle < PI / 2) //1st quarter
+	{
+		if (rotationDirection)
+		{
+			turnSpeed += maxTurnSpeed;
+			xSpeed -= (-sin(angle))*maxSpeed;
+			ySpeed -= (-cos(angle))*maxSpeed;
+		}
+		else if (!rotationDirection)
+		{
+			turnSpeed -= maxTurnSpeed;
+			xSpeed += (sin(angle))*maxSpeed;
+			ySpeed += (cos(angle))*maxSpeed;
+		}
+	}
+	else if (angle >= PI / 2 && angle < PI) //2nd quarter
+	{
+		if (rotationDirection)
+		{
+			turnSpeed += maxTurnSpeed;
+			xSpeed -= (-sin(angle))*maxSpeed;
+			ySpeed += (-cos(angle))*maxSpeed;
+		}
+		else if (!rotationDirection)
+		{
+			turnSpeed -= maxTurnSpeed;
+			xSpeed += (sin(angle))*maxSpeed;
+			ySpeed -= (cos(angle))*maxSpeed;
+		}
+	}
+	else if (angle >= PI && angle < PI*1.5)//3rd quarter
+	{
+		if (rotationDirection)
+		{
+			turnSpeed += maxTurnSpeed;
+			xSpeed += (-sin(angle))*maxSpeed;
+			ySpeed += (-cos(angle))*maxSpeed;
+		}
+		else if (!rotationDirection)
+		{
+			turnSpeed -= maxTurnSpeed;
+			xSpeed -= (sin(angle))*maxSpeed;
+			ySpeed -= (cos(angle))*maxSpeed;
+		}
+	}
+	else //4th quarter
+	{
+		if (rotationDirection)
+		{
+			turnSpeed += maxTurnSpeed;
+			xSpeed += (-sin(angle))*maxSpeed;
+			ySpeed -= (-cos(angle))*maxSpeed;
+		}
+		else if (!rotationDirection)
+		{
+			turnSpeed -= maxTurnSpeed;
+			xSpeed -= (sin(angle))*maxSpeed;
+			ySpeed += (cos(angle))*maxSpeed;
+		}
+	}
+}
+
+
+void Enemy::launchFliers()
+{
+	//TBD
 }
