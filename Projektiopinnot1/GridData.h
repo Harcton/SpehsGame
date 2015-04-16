@@ -14,7 +14,7 @@ public:
 
 private:
 	int armor = 0;
-	int rotation = 0; 
+	int angleModifier = 180; 
 	int turret = 0; //Turret damage
 	float engine = 0; //Acceleration increase
 	int repair = 0; //Repair amount
@@ -40,8 +40,10 @@ private:
 
 	bool directionalAim = false;
 	int directionalJoystickId = 0;
-	sf::Joystick::Axis horizontalAxis = sf::Joystick::Axis::X;
-	sf::Joystick::Axis verticalAxis = sf::Joystick::Axis::Y;
+	float verticalAxisPolarity = 1;
+	float horizontalAxisPolarity = 1;
+	sf::Joystick::Axis horizontalAxis;
+	sf::Joystick::Axis verticalAxis;
 
 	MyKeys turretFire;
 	MyKeys turretReload;

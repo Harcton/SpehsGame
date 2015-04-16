@@ -47,26 +47,32 @@ void Turret::update()
 	}
 
 	//Fix angle
-	turretMinAngle = master->angle - maxAngle;
-	turretMaxAngle = master->angle + maxAngle;
+	turretMinAngle = master->angle + angleModifier - maxAngle;
+	turretMaxAngle = master->angle + angleModifier + maxAngle;
 	if (turretMinAngle < 0)
 		turretMinAngle += 2 * PI;
 	if (turretMaxAngle > 2 * PI)
 		turretMaxAngle -= 2 * PI;
+
+	masterAngle = master->angle + angleModifier;
+	if (masterAngle > 2 * PI)
+		masterAngle -= 2 * PI;
+
+
 	if (turretMaxAngle > turretMinAngle)
 	{
 		if (angle > turretMaxAngle || angle < turretMinAngle)
 		{//If angle is out of range
-			if (master->angle < PI)
+			if (masterAngle < PI)
 			{//master angle < 180
-				if (angle < master->angle + PI && angle > turretMaxAngle)
+				if (angle < masterAngle + PI && angle > turretMaxAngle)
 					angle = turretMaxAngle;
 				else
 					angle = turretMinAngle;
 			}
 			else
 			{//master angle > 180
-				if (angle > master->angle - PI && angle < turretMinAngle)
+				if (angle > masterAngle - PI && angle < turretMinAngle)
 					angle = turretMinAngle;
 				else
 					angle = turretMaxAngle;
@@ -77,16 +83,16 @@ void Turret::update()
 	{//0-angle is interfering
 		if (angle > turretMaxAngle && angle < turretMinAngle)
 		{//If angle is out of range
-			if (master->angle < PI)
+			if (masterAngle < PI)
 			{//master angle < 180
-				if (angle < master->angle + PI)
+				if (angle < masterAngle + PI)
 					angle = turretMaxAngle;
 				else
 					angle = turretMinAngle;
 			}
 			else
 			{//master angle > 180
-				if (angle > master->angle - PI)
+				if (angle > masterAngle - PI)
 					angle = turretMinAngle;
 				else
 					angle = turretMaxAngle;

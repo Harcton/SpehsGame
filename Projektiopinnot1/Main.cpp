@@ -12,6 +12,8 @@ double zoomFactor = 1;
 //Global control settings
 bool directionalMovement = false;
 int moveJoystickId = 0;
+int verticalMoveAxisPolarity = 1;
+int horizontalMoveAxisPolarity = 1;
 sf::Joystick::Axis horizontalMoveAxis = sf::Joystick::Axis::X;
 sf::Joystick::Axis verticalMoveAxis = sf::Joystick::Axis::Y;
 std::map<float, MyKeys> coreKeys;

@@ -42,7 +42,7 @@ public:
 	void updateMouseGrab();
 	void scrapComponent(int, int);
 	void rotateGlowAngle();
-
+	void updateTurretConfigurationButtonVisibility();
 
 	void drawWindow();
 	void drawSelectedRect();
@@ -58,6 +58,7 @@ public:
 	std::pair<int, sf::Joystick::Axis> detectAxis();
 	std::string getInputAsString(MyKeys);
 	std::string getAxisAsString(sf::Joystick::Axis);
+	std::string getPolarityAsString(float);
 	void mouseLeftPressed();
 	void mouseRightPressed();
 	void zoom(int);

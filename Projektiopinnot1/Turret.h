@@ -27,7 +27,7 @@ private:
 
 	double turretMinAngle;
 	double turretMaxAngle;
-
+	double masterAngle;
 
 
 

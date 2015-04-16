@@ -59,6 +59,7 @@ public:
 	std::vector<component::Type> types;
 	std::vector<Bullet*> bullets;
 	double angle;
+	double angleModifier = 0;
 	double turningSpeed;
 	double maxAngle;
 

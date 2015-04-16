@@ -162,12 +162,12 @@ bool Player::update()
 	}
 	else if (abs(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)) + abs(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)) > 15)
 	{//Detect directional movement
-		joystickDirection = -1 * atan2(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis), sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis));
+		joystickDirection = -1 * atan2(verticalMoveAxisPolarity*sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis), horizontalMoveAxisPolarity*sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis));
 		if (joystickDirection < 0)
 			joystickDirection = 2 * PI + joystickDirection;
 
 		//Detect acceleration
-		temp_accelerationPower = 100*abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)/100, 2)) + abs(pow(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)/100, 2));
+		temp_accelerationPower = 100*(pow(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)/100, 2) + pow(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)/100, 2));
 		if (temp_accelerationPower > 10)
 		{
 			if (temp_angleVar < PI / 2)
@@ -207,7 +207,6 @@ bool Player::update()
 				turnRight(100);
 			}
 		}//+
-
 	}
 	else
 	{//DirectionalMovement == true && no input -> slow down rotation
@@ -279,12 +278,12 @@ bool Player::update()
 				{//Turret i
 					turretCount++;
 
-					double turretMinAngle = angle - components[i]->maxAngle;
-					double turretMaxAngle = angle + components[i]->maxAngle;
-					if (turretMinAngle < 0)
-						turretMinAngle += 2 * PI;
-					if (turretMaxAngle > 2 * PI)
-						turretMaxAngle -= 2 * PI;
+					//double turretMinAngle = angle - components[i]->maxAngle;
+					//double turretMaxAngle = angle + components[i]->maxAngle;
+					//if (turretMinAngle < 0)
+					//	turretMinAngle += 2 * PI;
+					//if (turretMaxAngle > 2 * PI)
+					//	turretMaxAngle -= 2 * PI;
 
 					if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalAim == true)
 					{//Use directional aiming
@@ -292,9 +291,9 @@ bool Player::update()
 						if (abs(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxis)) + 
 							abs(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxis)) > 15)
 						{//Detect directional movement
-							joystickDirection = -1 * atan2(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxis), 
-								sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxis));
-
+							joystickDirection = -1 * atan2(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxisPolarity * sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxis),
+								data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxisPolarity * sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxis));
+							
 							if (joystickDirection < 0)
 								joystickDirection = 2 * PI + joystickDirection;
 
@@ -330,33 +329,33 @@ bool Player::update()
 					{//Use manual turret rotation (press button)
 						if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left], mGame->mEvent) && components[i]->mouseAim == false)
 						{//Rotate turret i CCW
-							if (turretMaxAngle > turretMinAngle)
-							{
-								if (components[i]->angle < turretMaxAngle)
+							//if (turretMaxAngle > turretMinAngle)
+							//{
+							//	if (components[i]->angle < turretMaxAngle)
 									components[i]->angle += components[i]->turningSpeed;
-							}
-							else
-							{
-								if (components[i]->angle > turretMinAngle - components[i]->turningSpeed)
-									components[i]->angle += components[i]->turningSpeed;
-								else if (components[i]->angle < turretMaxAngle)
-									components[i]->angle += components[i]->turningSpeed;
-							}
+							//}
+							//else
+							//{
+							//	if (components[i]->angle > turretMinAngle - components[i]->turningSpeed)
+							//		components[i]->angle += components[i]->turningSpeed;
+							//	else if (components[i]->angle < turretMaxAngle)
+							//		components[i]->angle += components[i]->turningSpeed;
+							//}
 						}
 						if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right], mGame->mEvent) && components[i]->mouseAim == false)
 						{//Rotate turret i CW
-							if (turretMaxAngle > turretMinAngle)
-							{
-								if (components[i]->angle > turretMinAngle)
+							//if (turretMaxAngle > turretMinAngle)
+							//{
+							//	if (components[i]->angle > turretMinAngle)
 									components[i]->angle -= components[i]->turningSpeed;
-							}
-							else
-							{
-								if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
-									components[i]->angle -= components[i]->turningSpeed;
-								else if (components[i]->angle > turretMinAngle)
-									components[i]->angle -= components[i]->turningSpeed;
-							}
+							//}
+							//else
+							//{
+							//	if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
+							//		components[i]->angle -= components[i]->turningSpeed;
+							//	else if (components[i]->angle > turretMinAngle)
+							//		components[i]->angle -= components[i]->turningSpeed;
+							//}
 						}
 					}
 
@@ -630,6 +629,8 @@ void Player::addFromGrid(int gx, int gy)
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
+		components[components.size() - 1]->angleModifier = data->grid[gx][gy]->angleModifier*(PI/180);
+
 	}
 	
 	//Handle children	
