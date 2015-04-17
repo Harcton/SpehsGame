@@ -24,7 +24,6 @@ public:
 	void setRandomLocation();
 	void setLocation(double, double);
 
-	sf::Texture tex;
 	sf::Sprite spr;
 	double textureRadius;
 	double scale = 1;

@@ -116,7 +116,7 @@ void Component::createChild(double ox, double oy, component::Type tp)
 	case component::hull:
 		master->components.push_back(new Component(master, centerObj, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
-		master->components[master->components.size() - 1]->spr.setTexture(skeletonTex);
+		master->components[master->components.size() - 1]->spr.setTexture(RM.getTexture("skeleton.png"));
 		master->components[master->components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 		break;
 	case component::turret: //Turret

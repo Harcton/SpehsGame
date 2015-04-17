@@ -116,9 +116,6 @@ private:
 	sf::RectangleShape configurationRect3;
 
 	//Editor textures
-	sf::Texture inheritanceArrowTex;
-	sf::Texture xButtonTex;
-	sf::Texture circleSliderTex;
 
 	sf::Sprite circleSliderSpr;
 

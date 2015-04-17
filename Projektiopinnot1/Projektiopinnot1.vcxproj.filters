@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Ship editor">
       <UniqueIdentifier>{ec175908-fdbd-4d8e-be76-31574ff6198e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spehs Game engine type">
+      <UniqueIdentifier>{624ab308-b139-46bc-898c-7049eb616b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spehs Game engine type">
+      <UniqueIdentifier>{4a8e3d2d-8422-4aa5-95c8-d8b7535424dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -69,6 +75,12 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\Spehs Game engine type</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -111,6 +123,12 @@
       <Filter>Header Files\Ship editor</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files\Spehs Game engine type</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

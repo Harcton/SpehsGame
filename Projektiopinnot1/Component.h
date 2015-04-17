@@ -77,7 +77,6 @@ public:
 
 protected:
 	sf::Sprite spr;
-	sf::Texture tex;
 
 	bool mouseAim;
 	bool mouseAimRelativeToCenter;

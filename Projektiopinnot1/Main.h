@@ -11,6 +11,8 @@
 #include <cmath>
 #include <time.h>
 #include <map>
+#include "ResourceManager.h"
+
 
 
 #define PI 3.14159265
@@ -42,13 +44,7 @@ extern int WINDOW_HEIGHT;
 extern double resFactor;
 extern double zoomFactor;
 
-//global textures
-extern sf::Texture skeletonTex;
-extern sf::Texture editorTurretTex;
-extern sf::Texture editorEngineTex;
-extern sf::Texture commanderShipTex;
-
-
+extern ResourceManager RM;
 
 double getDistance(double, double, double, double);
 int irandom(int min, int max);

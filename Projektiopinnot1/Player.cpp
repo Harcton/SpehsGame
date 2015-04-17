@@ -620,7 +620,7 @@ void Player::calculateCenterOfMass()
 void Player::addFromGrid(int gx, int gy)
 {
 	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100, gx, gy));
-	components[components.size() - 1]->spr.setTexture(skeletonTex);
+	components[components.size() - 1]->spr.setTexture(RM.getTexture("skeleton.png"));
 	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
 	components[components.size() - 1]->spr.setOrigin(50,50);
 	

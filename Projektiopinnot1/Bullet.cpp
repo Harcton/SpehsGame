@@ -12,8 +12,7 @@ Bullet::~Bullet()
 Bullet::Bullet(Component* mstr, sf::RenderWindow& w, Game* game, int x, int y, double angl, double spd) : Object(w, game, x, y)
 {
 	master = mstr;
-	tex.loadFromFile("Texture/bullet1.png");
-	spr.setTexture(tex);
+	spr.setTexture(RM.getTexture("bullet1.png"));
 	speed = spd;
 
 	angle = angl;

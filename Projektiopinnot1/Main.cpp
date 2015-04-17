@@ -3,7 +3,7 @@
 #include "Object.h"
 #include "Player.h"
 #include "GridData.h"
-
+#include "ResourceManager.h"
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
@@ -26,21 +26,14 @@ float movementSpeed = 0.0004;
 float rotationSpeed = PI / 180000;
 
 //Global textures
-sf::Texture skeletonTex;
-sf::Texture editorTurretTex;
-sf::Texture editorEngineTex;
-
-sf::Texture commanderShipTex;
+ResourceManager RM;
+void initializeResourceManager(ResourceManager&);
 
 
 void main()
 {
-
-	skeletonTex.loadFromFile("Texture/Player/skeleton.png");
-	editorTurretTex.loadFromFile("Texture/Player/editorTurret.png");
+	initializeResourceManager(RM);
 	
-
-	commanderShipTex.loadFromFile("Texture/enemy_commander_ship_upgraded.png");
 
 	//Randomize randomization...
 	time_t t;
@@ -54,6 +47,46 @@ void main()
 
 	Game game(mWindow);
 	game.run();
+}
+
+
+
+void initializeResourceManager(ResourceManager& rm)
+{
+//TEXTURES
+	//PLAYER
+	rm.loadTexture("Texture/Player/editorTurret.png");
+	rm.loadTexture("Texture/Player/skeleton.png");
+	rm.loadTexture("Texture/Player/turret.png");
+
+	//ENEMY
+	rm.loadTexture("Texture/Enemy/enemy_commander_ship_upgraded.png");
+	rm.loadTexture("Texture/Enemy/Flier.png");
+	rm.loadTexture("Texture/Enemy/enemy_base_purple.png");
+	rm.loadTexture("Texture/Enemy/enemy_base_green.png");
+
+	//MENU
+	rm.loadTexture("Texture/Menu/inheritanceArrow.png");
+	rm.loadTexture("Texture/Menu/xButton.png");
+	rm.loadTexture("Texture/Menu/circleSlider.png");
+	
+	//EFFECTS
+
+	//BACKGROUNDS
+	rm.loadTexture("Texture/Background/sky.png");
+
+	//MISC
+	rm.loadTexture("Texture/Misc/bullet1.png");
+	rm.loadTexture("Texture/Misc/debris1.png");
+
+
+
+//SOUND BUFFERS
+	//coming soon
+
+
+
+	std::cout << "\nResourceManager intialized";
 }
 
 

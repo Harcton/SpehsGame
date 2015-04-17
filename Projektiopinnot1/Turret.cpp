@@ -9,8 +9,7 @@ Turret::~Turret()
 }
 Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mstr, cntr, xo, yo)
 {
-	tex.loadFromFile("Texture/Player/turret.png");
-	spr.setTexture(tex);
+	spr.setTexture(RM.getTexture("turret.png"));
 	spr.setOrigin(20, 50);
 	maxAngle = PI/3;
 	turningSpeed = PI/40;
