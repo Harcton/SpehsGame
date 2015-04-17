@@ -32,12 +32,13 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	configurationRect3.setSize(sf::Vector2f(CONF_WIDTH - 20*resFactor, CONF_HEIGHT - 70*resFactor));
 	configurationRect3.setPosition(CONF_X1 + 10*resFactor, CONF_Y1 + 60*resFactor);
 	configurationRect3.setFillColor(sf::Color(110, 110, 115));
-
-
+	
 	//Load editor textures
 	inheritanceArrowTex.loadFromFile("Texture/inheritanceArrow.png");
 	xButtonTex.loadFromFile("Texture/Menu/xButton.png");
-
+	circleSliderTex.loadFromFile("Texture/Menu/circleSlider.png");
+	circleSliderSpr.setTexture(circleSliderTex);
+	circleSliderSpr.setOrigin(100, 100);
 
 	//Action buttons
 	font1.loadFromFile("Font/ORANGEKI.ttf");
@@ -45,7 +46,8 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	actionButtons.push_back(Button(bi_actionUpgradeArmor, 0, 0, 250 * resFactor, 40 * resFactor, "Upgrade armor", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
 	actionButtons.push_back(Button(bi_actionTurret, 0, 0, 250 * resFactor, 40 * resFactor, "Add turret", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
 	actionButtons.push_back(Button(bi_actionEngine, 0, 0, 250 * resFactor, 40 * resFactor, "Add engine", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionEngine, 0, 0, 250 * resFactor, 40 * resFactor, "Delete", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionScrap, 0, 0, 250 * resFactor, 40 * resFactor, "Delete", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionRotate, 0, 0, 250 * resFactor, 40 * resFactor, "Rotate", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
 	actionButtons.push_back(Button(bi_actionConfiguration, 0, 0, 250 * resFactor, 40 * resFactor, "Configure...", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
 
 	//Configuration buttons
@@ -233,9 +235,13 @@ void ShipEditor::run()
 				cameraX += 8 / scaleFactor;
 		}
 
+		
+
 		//Mouse grabbing
 		mousePos = sf::Mouse::getPosition(mWindow);
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		float temp_distance = getDistance(mousePos.x, mousePos.y, circleSliderSpr.getPosition().x, circleSliderSpr.getPosition().y);
+		if ((focus != editor::rotate && sf::Mouse::isButtonPressed(sf::Mouse::Right)) || 
+			(temp_distance < 100 && focus == editor::rotate && (sf::Mouse::isButtonPressed(sf::Mouse::Left) == true || sf::Mouse::isButtonPressed(sf::Mouse::Right) == true)))
 		{
 			if (mouseGrab == false)
 			{
@@ -247,7 +253,10 @@ void ShipEditor::run()
 			mouseGrab = true;
 		}
 		else
+		{
+			//std::cout << " noGrabbin' ";
 			mouseGrab = false;
+		}
 
 		//Handle events
 		while (mWindow.pollEvent(mEvent))
@@ -272,11 +281,22 @@ void ShipEditor::run()
 					scrapComponent(selectedX, selectedY);
 					updateGridSpriteTextures();
 					focus = editor::base;
+					std::cout << "\nFocus returned to base";
 					break;
 				case sf::Keyboard::Escape:
 					selectedX = -1;
 					selectedY = -1;
+					if (focus == editor::rotate)
+						applyRotation();
 					focus = editor::base;
+					std::cout << "\nFocus returned to base";
+					break;
+				case sf::Keyboard::Return:
+					if (focus == editor::rotate)
+					{
+						applyRotation();
+						focus = editor::base;
+					}
 					break;
 				}
 			}
@@ -326,6 +346,8 @@ void ShipEditor::drawWindow()
 		drawActions();
 	else if (focus == editor::configuration)
 		drawConfigurations();
+	else if (focus == editor::rotate)
+		drawCircleSlider();
 
 	mWindow.display();
 }
@@ -360,6 +382,7 @@ void ShipEditor::updateGridSpriteTextures()
 			{
 				gridSprites[x][y].push_back(sf::Sprite());
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(skeletonTex);
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50);
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setTextureRect(sf::IntRect(1400, 0, 100, 100));
 			}
 
@@ -368,8 +391,8 @@ void ShipEditor::updateGridSpriteTextures()
 			{
 				gridSprites[x][y].push_back(sf::Sprite());
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(editorTurretTex);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(-30, 0); 
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(playerData.grid[x][y]->angleModifier);
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50); 
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y]->angleModifier);
 			}
 			
 			//Add engine sprite
@@ -411,7 +434,7 @@ void ShipEditor::updateGridSpriteLocations()
 		{
 		for (unsigned int i = 0; i < gridSprites[x][y].size(); i++)
 		{//Grid sprites
-			gridSprites[x][y][i].setPosition((x * 100 - cameraX)*scaleFactor, (y * 100 - cameraY)*scaleFactor);
+			gridSprites[x][y][i].setPosition((x * 100 - cameraX)*scaleFactor + 50 * scaleFactor, (y * 100 - cameraY)*scaleFactor + 50 * scaleFactor);
 			gridSprites[x][y][i].setScale(scaleFactor, scaleFactor);
 			if (playerData.grid[x][y]->core == true)
 				gridSprites[x][y][i].setColor(sf::Color(240, 40, 180));
@@ -430,8 +453,21 @@ void ShipEditor::updateMouseGrab()
 	if (focus == editor::actions || focus == editor::configuration)
 		return;
 
-	cameraX = grabCameraOriginX + (mouseGrabX - mousePos.x) / scaleFactor;
-	cameraY = grabCameraOriginY + (mouseGrabY - mousePos.y) / scaleFactor;
+	if (focus == editor::rotate)
+	{
+		double temp_angle = atan2(mousePos.y - circleSliderSpr.getPosition().y, mousePos.x - circleSliderSpr.getPosition().x);
+		if (temp_angle < 0)
+			temp_angle = abs(temp_angle);
+		else
+			temp_angle = PI*2 - temp_angle;
+
+		circleSliderSpr.setRotation(360 - (180/PI)*temp_angle);
+	}
+	else
+	{
+		cameraX = grabCameraOriginX + (mouseGrabX - mousePos.x) / scaleFactor;
+		cameraY = grabCameraOriginY + (mouseGrabY - mousePos.y) / scaleFactor;
+	}
 }
 
 
@@ -467,13 +503,21 @@ void ShipEditor::mouseLeftPressed()
 			selectedX = -1;
 			selectedY = -1;
 			focus = editor::base;
+			std::cout << "\nFocus returned to base";
 			break;
 		}
 
 		if (playerData.grid[selectedX][selectedY]->armor > 0)
+		{
+			std::cout << "\nFocus returned to base";
 			focus = editor::component;
+		}
 		else
+		{
+			std::cout << "\nFocus returned to base";
 			focus = editor::base;
+		}
+
 		std::cout << "\nSelected: " << selectedX << ", " << selectedY;
 		break;
 	case editor::component:
@@ -525,19 +569,24 @@ void ShipEditor::mouseLeftPressed()
 				selectedX = -1;
 				selectedY = -1;
 				focus = editor::base;
+				std::cout << "\nFocus returned to base";
 				break;
 			}
 
 			selectedX = checkX;
 			selectedY = checkY;
 			if (playerData.grid[selectedX][selectedY]->armor < 1)
+			{
 				focus = editor::base;
+				std::cout << "\nFocus returned to base";
+			}
 		}
 		else
 		{
 			selectedX = -1;
 			selectedY = -1;
 			focus = editor::base;
+			std::cout << "\nFocus returned to base";
 		}
 		break;
 	case editor::actions:
@@ -552,9 +601,10 @@ void ShipEditor::mouseLeftPressed()
 		for (unsigned int i = 0; i < actionButtons.size(); i++)
 			switch (actionButtons[i].checkIfPressed(mousePos))
 			{
-			case bi_false:
-				focus = editor::base;
-				break;
+			//case bi_false:
+			//	focus = editor::base;
+			//	std::cout << "\nFocus returned to base (action button id bi_false)";
+			//	break;
 			case bi_actionTurret:
 				if (playerData.grid[selectedX][selectedY]->turret > 0)
 				{
@@ -580,8 +630,13 @@ void ShipEditor::mouseLeftPressed()
 				focus = editor::base;
 				break;
 			case bi_actionEngine:
+				std::cout << "\nSelected Add engine";
 
 				focus = editor::base;
+				break;
+			case bi_actionRotate:
+				std::cout << "\nSelected Rotate";
+				focus = editor::rotate;
 				break;
 			case bi_actionConfiguration:
 				turretConfigurationButtons[0].text.setString(" Turret [ " + std::to_string(selectedX) + ", " + std::to_string(selectedY) + " ] configurations");
@@ -639,6 +694,7 @@ void ShipEditor::mouseLeftPressed()
 			switch (configurationButtons[i].checkIfPressed(mousePos))
 		{
 			case bi_confExit:
+				std::cout << "\nPressed X (close)";
 				focus = editor::base;
 				break;
 
@@ -905,6 +961,8 @@ void ShipEditor::mouseRightPressed()
 		{
 			selectedX = checkX;
 			selectedY = checkY;
+
+			std::cout << "\nEntered actions popup window";
 			focus = editor::actions;
 			if (playerData.grid[selectedX][selectedY]->core == false)
 			for (unsigned int i = 0; i < actionButtons.size(); i++)
@@ -981,6 +1039,12 @@ void ShipEditor::scrapComponent(int x, int y)
 	std::cout << "\n" << x << ", " << y << " Deleted";
 }
 
+void ShipEditor::applyRotation()
+{
+	playerData.grid[selectedX][selectedY]->angleModifier = int(360 - circleSliderSpr.getRotation());
+	std::cout << "\nrotation " << playerData.grid[selectedX][selectedY]->angleModifier;
+	updateGridSpriteTextures();
+}
 
 void ShipEditor::drawInheritanceSprites()
 {
@@ -994,7 +1058,7 @@ void ShipEditor::drawInheritanceSprites()
 }
 void ShipEditor::drawSelectionShadeHighlight()
 {
-	if (focus != editor::component)
+	if (focus != editor::component && focus != editor::rotate)
 		return;
 
 	mWindow.draw(shadeRect);
@@ -1049,6 +1113,12 @@ void ShipEditor::drawConfigurations()
 		for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 			engineConfigurationButtons[i].draw(mWindow, mousePos);
 	
+}
+void ShipEditor::drawCircleSlider()
+{
+	circleSliderSpr.setPosition((selectedX * 100 - cameraX)*scaleFactor + 50 * scaleFactor, (selectedY * 100 - cameraY)*scaleFactor + 50 * scaleFactor);
+	circleSliderSpr.setColor(sf::Color(200+glowAmount*55, 200+glowAmount*55, 200+glowAmount*55));
+	mWindow.draw(circleSliderSpr);
 }
 
 void ShipEditor::updateTurretConfigurationButtonVisibility()

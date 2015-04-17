@@ -9,7 +9,7 @@ Turret::~Turret()
 }
 Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mstr, cntr, xo, yo)
 {
-	tex.loadFromFile("Texture/turret.png");
+	tex.loadFromFile("Texture/Player/turret.png");
 	spr.setTexture(tex);
 	spr.setOrigin(20, 50);
 	maxAngle = PI/3;
@@ -21,12 +21,12 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	
 	canFireTimer = 0;
 
-	capacity = 10;			// magazine/thrust charge
+	capacity = 20;			// magazine/thrust charge
 	magazine = capacity;
 	rechargeInterval = 120;	//Reload/thrust recharge speed
 	maxSpeed = 25;			//max bullet speed
 	damage = 15;			//Turret damage
-	fireRateInterval = 20;
+	fireRateInterval = 5;
 }
 
 
@@ -50,9 +50,13 @@ void Turret::update()
 	turretMinAngle = master->angle + angleModifier - maxAngle;
 	turretMaxAngle = master->angle + angleModifier + maxAngle;
 	if (turretMinAngle < 0)
-		turretMinAngle += 2 * PI;
+		turretMinAngle += 2 * PI;	
+	if (turretMinAngle > 2 * PI)
+		turretMinAngle -= 2 * PI;
 	if (turretMaxAngle > 2 * PI)
 		turretMaxAngle -= 2 * PI;
+	if (turretMaxAngle < 0)
+		turretMaxAngle += 2 * PI;
 
 	masterAngle = master->angle + angleModifier;
 	if (masterAngle > 2 * PI)

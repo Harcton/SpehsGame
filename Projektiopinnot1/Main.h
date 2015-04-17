@@ -123,6 +123,7 @@ enum ButtonId
 	bi_actionUpgradeArmor,
 	bi_actionTurret,
 	bi_actionEngine,
+	bi_actionRotate,
 	bi_actionConfiguration,
 	bi_actionScrap,
 

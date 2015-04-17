@@ -14,7 +14,7 @@ public:
 
 private:
 	int armor = 0;
-	int angleModifier = 180; 
+	int angleModifier = 0; 
 	int turret = 0; //Turret damage
 	float engine = 0; //Acceleration increase
 	int repair = 0; //Repair amount

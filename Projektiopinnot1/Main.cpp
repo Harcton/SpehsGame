@@ -36,8 +36,8 @@ sf::Texture commanderShipTex;
 void main()
 {
 
-	skeletonTex.loadFromFile("Texture/skeleton.png");
-	editorTurretTex.loadFromFile("Texture/turret.png");
+	skeletonTex.loadFromFile("Texture/Player/skeleton.png");
+	editorTurretTex.loadFromFile("Texture/Player/editorTurret.png");
 	
 
 	commanderShipTex.loadFromFile("Texture/enemy_commander_ship_upgraded.png");

@@ -8,6 +8,7 @@ namespace editor
 		base,
 		component,
 		actions,
+		rotate,
 		configuration
 	};
 
@@ -43,12 +44,14 @@ public:
 	void scrapComponent(int, int);
 	void rotateGlowAngle();
 	void updateTurretConfigurationButtonVisibility();
+	void applyRotation();
 
 	void drawWindow();
 	void drawSelectedRect();
 	void drawSelectionShadeHighlight();
 	void drawInheritanceSprites();
 	void drawActions();
+	void drawCircleSlider();
 
 	void drawConfigurations();
 
@@ -115,6 +118,9 @@ private:
 	//Editor textures
 	sf::Texture inheritanceArrowTex;
 	sf::Texture xButtonTex;
+	sf::Texture circleSliderTex;
+
+	sf::Sprite circleSliderSpr;
 
 };
 
