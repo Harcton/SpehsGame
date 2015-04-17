@@ -92,14 +92,16 @@ void Game::run()
 void Game::updateBackgrounds()
 {
 	//Background update
-	for (bgIt = backgrounds.begin(); bgIt != backgrounds.end();)
-		if ((*bgIt)->updateBackground() == false)
+	for (int i = 0; i < backgrounds.size(); i++)
+		if (backgrounds[i]->update() == false)
 		{
-		delete * bgIt;
-		bgIt = backgrounds.erase(bgIt);
+		Object* temp_objPtr = backgrounds[i];
+		backgrounds.erase(backgrounds.begin() + i);
+		delete temp_objPtr;
+
+		i--;
+		std::cout << "\nGame.cpp: Removing background";
 		}
-		else
-			++bgIt;
 	if (backgrounds.size() < 7)
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 
@@ -112,20 +114,67 @@ void Game::updateBackgrounds()
 void Game::updateObjects()
 {
 	//Object update
-	for (obIt = objects.begin(); obIt != objects.end();)
-		if ((*obIt)->update() == false)
+	for (int i = 0; i < objects.size(); i++)
+		if (objects[i]->update() == false)
 		{
-		delete * obIt;
-		obIt = objects.erase(obIt);
+		Object* temp_objPtr = objects[i];
+		objects.erase(objects.begin() + i);
+		delete temp_objPtr;
+
+		i--;
 		std::cout << "\nGame.cpp: Removing object";
 		}
+
+	//for (obIt = objects.begin(); obIt != objects.end();)
+	//	if ((*obIt)->update() == false)
+	//	{
+	//	Object* temp_objPtr = *obIt;
+	//	obIt = objects.erase(obIt);
+	//	delete temp_objPtr;
+
+	//	std::cout << "\nGame.cpp: Removing object";
+	//	}
+	//	else
+	//		++obIt;
+
+	//if (objects.size() < 2)
+	//	//if (flipCoin())
+	//	//	objects.push_back(new Debris(mWindow, this, objects));
+	//	//else
+	//{
+	//	objects.push_back(new Enemy(mWindow, this, objects, et_commander)); //spawn different enemy types
+	//	objects[objects.size() - 1]->setRandomLocation();
+	//}
+
+
+	//TEST GAME 17.4
+	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
+	if (objects.size() < distanceFromStart/1000)
+	{
+		if (distanceFromStart/1000 > 8)
+			spawnRandomization = irandom(1, 3);
 		else
-			++obIt;
-	if (objects.size() < 2)
-		//if (flipCoin())
-		//	objects.push_back(new Debris(mWindow, this, objects));
-		//else
-			objects.push_back(new Enemy(mWindow, this, objects, et_laser)); //spawn different enemy types
+			spawnRandomization = irandom(1, 2);
+
+		if (spawnRandomization == 1)
+		{
+			objects.push_back(new Enemy(mWindow, this, objects, et_standard));
+			objects[objects.size() - 1]->setRandomLocation();
+		}
+		if (spawnRandomization == 2)
+		{
+			objects.push_back(new Enemy(mWindow, this, objects, et_laser));
+			objects[objects.size() - 1]->setRandomLocation();
+		}
+		if (spawnRandomization == 3)
+		{
+			objects.push_back(new Enemy(mWindow, this, objects, et_commander));
+			objects[objects.size() - 1]->setRandomLocation();
+		}
+	}
+
+
+
 	for (unsigned int i = 0; i < objects.size(); i++)
 		objects[i]->draw();
 }

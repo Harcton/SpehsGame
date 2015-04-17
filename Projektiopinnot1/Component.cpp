@@ -43,7 +43,7 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 	hp = 100;
 	textureRadius = 50;
 
-
+	drawCollisionCircle = false;
 
 }
 
@@ -95,7 +95,6 @@ void Component::update()
 	collisionCircle.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
 
 
-	return;
 }
 
 

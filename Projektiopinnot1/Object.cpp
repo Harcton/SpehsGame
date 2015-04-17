@@ -11,6 +11,7 @@
 
 Object::~Object()
 {
+	std::cout << "\nObject destructor begin";
 	while (!components.empty())
 	{
 		//std::cout << "\n~Object: components: " << components.size();
@@ -29,6 +30,23 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 	massCenterX = 0;
 	massCenterY = 0;
 
+}
+Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref)
+{
+	mGame = game;
+	centerObj = mGame->playerObj;
+	x = cx;
+	y = cy;
+}
+
+
+void Object::setLocation(double mx, double my)
+{
+	x = mx;
+	y = my;
+}
+void Object::setRandomLocation()
+{
 	//Randomize x/y
 	if (flipCoin())
 		x = centerObj->x + irandom(-SPAWN_RANGE, SPAWN_RANGE);
@@ -38,16 +56,6 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 		y = centerObj->y + irandom(-SPAWN_RANGE, SPAWN_RANGE);
 	else
 		y = centerObj->y + irandom(-SPAWN_RANGE, SPAWN_RANGE);
-
-	spr.setPosition(x, y);
-
-}
-Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref)
-{
-	mGame = game;
-	centerObj = mGame->playerObj;
-	x = cx;
-	y = cy;
 }
 
 bool Object::update()

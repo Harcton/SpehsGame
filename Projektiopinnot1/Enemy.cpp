@@ -6,9 +6,6 @@
 #include "Bullet.h"
 #include "Turret.h"
 
-//HIT BOXING PÄIN *****A AINAKIN COLLISIONNIN KANNALTA?
-//Bomber brken
-//Flier!
 
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector, TypeOfAI tp) : refVector(rVector), Object(windowref, game)
 {
@@ -34,10 +31,11 @@ void Enemy::enemyInitialize()
 		actionDistance = 1000;
 		maxTurnSpeed = 0.014;
 		maxSpeed = 3;
-
-		components.push_back(new Component(this, mGame->playerObj, -50, -50));
+		
+		components.push_back(new Component(this, mGame->playerObj, 0, 0));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_green.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+		components[components.size() - 1]->spr.setOrigin(50, 50);
 		components.push_back(new Turret(this, centerObj, 0, 0));
 		components[components.size()-2]->childComponents.push_back(components[components.size() - 1]->id);
 	}
@@ -48,9 +46,26 @@ void Enemy::enemyInitialize()
 		maxTurnSpeed = 0.01;
 		maxSpeed = 2;
 
-		components.push_back(new Component(this, mGame->playerObj, -50, -50));
+		components.push_back(new Component(this, mGame->playerObj, 0, 0));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+		components[components.size() - 1]->spr.setOrigin(50, 50);
+	}
+	else if (typeOfEnemy == et_flier)
+	{
+		followingDistance = 75;
+		actionDistance = 85;
+		maxTurnSpeed = 0.1;
+		maxSpeed = 4;
+		if (flipCoin)
+			rotationDirection = false;
+
+		components.push_back(new Component(this, mGame->playerObj, 0, 0));
+		components[components.size() - 1]->tex.loadFromFile("Texture/flier.png");
+		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
+		components[components.size() - 1]->spr.setOrigin(15, 15);
+		components[components.size() - 1]->textureRadius = 30;
+		components[components.size() - 1]->hp = 30;
 	}
 	else if (typeOfEnemy == et_laser)
 	{
@@ -59,10 +74,10 @@ void Enemy::enemyInitialize()
 		maxTurnSpeed = 0.015;
 		maxSpeed = 9;
 
-		components.push_back(new Component(this, mGame->playerObj, -50, -50));
+		components.push_back(new Component(this, mGame->playerObj, 0, 0));
 		components[components.size() - 1]->tex.loadFromFile("Texture/enemy_base_purple.png");
 		components[components.size() - 1]->spr.setTexture(components[components.size() - 1]->tex);
-		components[components.size() - 1]->spr.setOrigin(50, 50); //temp fix? ? ?
+		components[components.size() - 1]->spr.setOrigin(50, 50);
 	}
 	else if (typeOfEnemy == et_commander)
 	{
@@ -261,21 +276,17 @@ void Enemy::enemyAI()
 			this->hp = 0;
 		}
 	}
-	//componentship inside player
-	for (size_t i = 0; i < this->components.size(); i++)
-	{
-		if (distance < this->components[i]->textureRadius + nearestComponent->textureRadius && explosionTimer > 60)
-		{
-			explosion();
-			this->components[i]->hp -= 75; //WTF
-			explosionTimer = 0;
-		}
-	}
 
 	//too close
 	if (distance < followingDistance)
 	{
 		if (typeOfEnemy != et_bomber)
+		{
+			follow = true;
+			xSpeed = -(cos(2 * PI - angle))*maxSpeed;
+			ySpeed = -(sin(2 * PI - angle))*maxSpeed;
+		}
+		else if (typeOfEnemy = et_flier)
 		{
 			follow = true;
 			xSpeed = -(cos(2 * PI - angle))*maxSpeed;
@@ -340,6 +351,20 @@ void Enemy::enemyAI()
 			
 			//blink?
 		}
+		else if (typeOfEnemy == et_flier)
+		{
+			follow = true;
+			if (rotationDirection == true)
+			{				
+				xSpeed += (-sin(angle)) + irandom(-2, 2);
+				ySpeed += (-cos(angle)) + irandom(-2, 2);
+			}
+			else if (rotationDirection == false)
+			{
+				xSpeed += (sin(angle)) + irandom(-2, 2);
+				ySpeed += (cos(angle)) + irandom(-2, 2);
+			}
+		}
 		else if (typeOfEnemy == et_standard)
 		{
 			if (tempHPMemory > this->components[0]->hp && BCounter > 120)
@@ -371,7 +396,7 @@ void Enemy::enemyAI()
 			follow = true;
 		}
 
-		if (typeOfEnemy == et_standard || typeOfEnemy == et_laser || typeOfEnemy == et_commander)
+		if (typeOfEnemy == et_standard || typeOfEnemy == et_laser || typeOfEnemy == et_commander || typeOfEnemy == et_flier)
 		{
 			if (timer >= 8)
 			{
@@ -382,20 +407,31 @@ void Enemy::enemyAI()
 						for (unsigned int i = 0; i < components.size(); i++)
 							for (unsigned int k = 0; k < components[i]->types.size(); k++)
 								if (components[i]->types[k] == component::turret)
+								{
 									components[i]->fire();
+									timer = irandom(-20, -10);
+								}
 					}
 					if (typeOfEnemy == et_laser && follow == true)
+					{
 						if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
 						{
-							fireMahLazors();
+							fireMahLazors(3);
 							laserCounter++;
+							timer = irandom(-20, -10);
 						}
-
-					timer = irandom(-20, -10);
+					}
+					if (typeOfEnemy == et_flier)
+					{
+						if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
+						{
+							fireMahLazors(irandom(0,1));
+							timer = 3;							
+						}
+					}
 				}
 				if (typeOfEnemy == et_commander)
 				{
-					//FIRE ZEH MISSIELS
 					launchFliers();
 					timer = irandom(-60, -30);
 				}
@@ -566,11 +602,11 @@ void Enemy::updateComponents()
 }
 
 
-void Enemy::explosion()
+void Enemy::explosion() //I guess not with componentships
 {
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
-		if (getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < components[0]->textureRadius * 2)
+		if (getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->textureRadius * 2)
 		{
 			mGame->playerObj->components[i]->hp -= 50;
 		}
@@ -641,15 +677,15 @@ void Enemy::notifyComponentDestruction(int cid)
 }
 
 
-void Enemy::fireMahLazors()
+void Enemy::fireMahLazors(int dmg)
 {
 	//Lazors
 	sf::VertexArray line(sf::Lines, 2);
-	line[0].position = sf::Vector2f(this->screenX, this->screenY);
-	line[1].position = sf::Vector2f(nearestComponent->screenX - (15 + irandom(0, 30))*resFactor*zoomFactor, nearestComponent->screenY - (15 + irandom(0, 30))*resFactor*zoomFactor);
+	line[0].position = sf::Vector2f(this->screenX + components[0]->xOffset*resFactor*zoomFactor, this->screenY + components[0]->yOffset*resFactor*zoomFactor);
+	line[1].position = sf::Vector2f(nearestComponent->screenX + (irandom(-15, 15))*resFactor*zoomFactor, nearestComponent->screenY + (irandom(-15, 15))*resFactor*zoomFactor);
 	line[0].color = sf::Color::Red;
 	line[1].color = sf::Color::Red;
-	nearestComponent->hp -= 1;
+	nearestComponent->hp -= dmg;
 
 	mWindow.draw(line);
 }
@@ -723,5 +759,6 @@ void Enemy::dodgeMove() // ._____________.
 
 void Enemy::launchFliers()
 {
-	//TBD
+	mGame->objects.push_back(new Enemy(mWindow, mGame, mGame->objects, et_flier));
+	mGame->objects[mGame->objects.size() - 1]->setLocation(x, y); //randomize a lil bit
 }

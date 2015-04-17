@@ -94,7 +94,7 @@ protected:
 
 
 	//DEBUG
-	bool drawCollisionCircle = true;
+	bool drawCollisionCircle;
 	sf::CircleShape collisionCircle;
 };
 

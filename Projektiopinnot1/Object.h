@@ -21,6 +21,8 @@ public:
 	virtual void removeComponent(int){};
 	virtual void notifyComponentDestruction(int){};
 	void draw();
+	void setRandomLocation();
+	void setLocation(double, double);
 
 	sf::Texture tex;
 	sf::Sprite spr;

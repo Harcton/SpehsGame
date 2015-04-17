@@ -28,6 +28,10 @@ protected:
 	//Iterators
 	std::vector<Object*>::iterator obIt;
 	std::vector<Background*>::iterator bgIt;
+
+	//FOR TEST GAME
+	int distanceFromStart;
+	int spawnRandomization;
 };
 
 #endif

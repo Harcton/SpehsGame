@@ -6,7 +6,8 @@ enum TypeOfAI
 	et_standard,
 	et_laser,
 	et_bomber,
-	et_commander
+	et_commander,
+	et_flier
 };
 
 class Object;
@@ -15,6 +16,7 @@ class Component;
 class Enemy : public Object
 {
 public:
+
 	Enemy(sf::RenderWindow&, Game*, std::vector<Object*>&, TypeOfAI);
 	~Enemy();
 
@@ -29,7 +31,7 @@ private:
 	void enemyAI();
 	void updateComponents();
 	void explosion();
-	void fireMahLazors();
+	void fireMahLazors(int);
 	void launchFliers();
 	void dodgeMove();
 
@@ -56,7 +58,6 @@ private:
 	
 	TypeOfAI typeOfEnemy;
 
-	std::vector<Component*> components;
 	std::vector<Component*>::iterator componentIt;
 };
 
