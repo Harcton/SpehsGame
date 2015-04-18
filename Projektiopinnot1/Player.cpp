@@ -25,6 +25,7 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	massCenterY = 0;
 
 
+
 	//Initialise core key bindings
 	MyKeys key;
 	//Keyboard setup
@@ -123,6 +124,8 @@ bool Player::update()
 	//Update mousePosition
 	mousePosition = sf::Mouse::getPosition(mWindow);
 	mWindow.pollEvent(mEvent);
+
+
 
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))

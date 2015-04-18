@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "Sprite.h"
 
 class Component;
 class PlayerData;
@@ -35,6 +36,7 @@ protected:
 	sf::Event mEvent;
 	std::vector<Component*>::iterator componentIt;
 	float joystickDirection = 0;
+
 
 	bool controller;
 	double mouseDirection;
