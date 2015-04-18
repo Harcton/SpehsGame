@@ -18,6 +18,7 @@ class Enemy : public Object
 public:
 
 	Enemy(sf::RenderWindow&, Game*, std::vector<Object*>&, TypeOfAI);
+	Enemy(sf::RenderWindow&, Game*, std::vector<Object*>&, TypeOfAI, Enemy*); //pointer to master for fliers
 	~Enemy();
 
 	bool update();
@@ -36,6 +37,7 @@ private:
 	void dodgeMove();
 
 	Component* nearestComponent;
+	Enemy* flierMaster;
 	double playerDirection;
 	bool follow;
 	double distance;
@@ -50,6 +52,11 @@ private:
 	bool rotationDirection; //true CW, false CCW
 
 	bool laserBChange = false;
+	bool dodging;
+	bool initiateFlierAssault;
+	int flierAttackCounter;
+	int fliersFollowing;
+	int dodgeCounter;
 	int BCounter;
 	int explosionTimer;
 	int laserCounter;

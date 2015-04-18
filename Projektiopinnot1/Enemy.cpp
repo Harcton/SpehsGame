@@ -12,8 +12,20 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	typeOfEnemy = tp;
 	enemyInitialize();
 
+	dodging = false;
 	snappingAngle = 0; //doesn't matter atm what this is...
 	detectionDistance = SPAWN_RANGE;
+}
+
+
+Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector, TypeOfAI tp, Enemy* fMaster) : refVector(rVector), Object(windowref, game)
+{
+	flierMaster = fMaster;
+	typeOfEnemy = tp;
+	dodging = false;
+	snappingAngle = 0; //doesn't matter atm what this is...
+	detectionDistance = SPAWN_RANGE;
+	enemyInitialize();
 }
 
 
@@ -40,13 +52,13 @@ void Enemy::enemyInitialize()
 	}
 	else if (typeOfEnemy == et_bomber)
 	{
-		followingDistance = 600;
-		actionDistance = SPAWN_RANGE - 500;
+		followingDistance = 300;
+		actionDistance = 600;
 		maxTurnSpeed = 0.01;
 		maxSpeed = 2;
 
 		components.push_back(new Component(this, mGame->playerObj, 0, 0));
-		components[components.size() - 1]->spr.setTexture(RM.getTexture("enemy_base.png"));
+		components[components.size() - 1]->spr.setTexture(RM.getTexture("enemy_base_purple.png"));
 		components[components.size() - 1]->spr.setOrigin(50, 50);
 	}
 	else if (typeOfEnemy == et_flier)
@@ -55,6 +67,7 @@ void Enemy::enemyInitialize()
 		actionDistance = 85;
 		maxTurnSpeed = 0.1;
 		maxSpeed = 4;
+		initiateFlierAssault = false;
 		if (flipCoin)
 			rotationDirection = false;
 
@@ -66,8 +79,8 @@ void Enemy::enemyInitialize()
 	}
 	else if (typeOfEnemy == et_laser)
 	{
-		followingDistance = 400;
-		actionDistance = SPAWN_RANGE - 1000;
+		followingDistance = 350;
+		actionDistance = 600;
 		maxTurnSpeed = 0.015;
 		maxSpeed = 9;
 
@@ -78,9 +91,10 @@ void Enemy::enemyInitialize()
 	else if (typeOfEnemy == et_commander)
 	{
 		followingDistance = 1000;
-		actionDistance = SPAWN_RANGE - 200;
-		maxTurnSpeed = 0.001;
-		maxSpeed = 1;
+		actionDistance = 2000;
+		maxTurnSpeed = 0.003;
+		maxSpeed = 2;
+		initiateFlierAssault = false;
 
 		//-9
 		components.push_back(new Component(this, mGame->playerObj, -325, -100)); //Component 3 (REAR)
@@ -145,7 +159,11 @@ void Enemy::enemyInitialize()
 		components[components.size() - 1]->childComponents.push_back(components[components.size() - 3]->id); //L-FRONT WING TO TANK
 		components[components.size() - 5]->childComponents.push_back(components[components.size() - 7]->id); //L-REAR WING TO L-CORE WING
 		components[components.size() - 6]->childComponents.push_back(components[components.size() - 8]->id); //R-REAR WING TO R-CORE WING
-
+		
+		components.push_back(new Turret(this, centerObj, -200, -150));
+		components[components.size() - 5]->childComponents.push_back(components[components.size() - 1]->id);
+		components.push_back(new Turret(this, centerObj, -200, -50));
+		components[components.size() - 6]->childComponents.push_back(components[components.size() - 1]->id);
 		
 		/*components.push_back(new Component(this, mGame->playerObj, -50, -100));
 		components[components.size() - 1]->spr.setTexture(commanderShipTex);
@@ -231,8 +249,7 @@ bool Enemy::update()
 	//update AI accordingly
 	enemyAI();
 
-	if (timer == 0)
-		tempHPMemory = this->components[0]->hp;
+	tempHPMemory = this->components[0]->hp;
 
 	updateComponents();
 	
@@ -261,7 +278,31 @@ void Enemy::enemyAI()
 
 	BCounter++;
 	explosionTimer++;
+	dodgeCounter--;
+	flierAttackCounter++;
 	
+	//attack?
+	if (typeOfEnemy == et_flier)
+	{
+		if (flierMaster->initiateFlierAssault == true)
+		{
+			this->initiateFlierAssault = true;
+		}
+	}
+	if (typeOfEnemy == et_commander)
+	{
+		if (flierAttackCounter >= 500)
+		{
+			initiateFlierAssault = true;
+			flierAttackCounter = 0;
+			fliersFollowing = 0;
+		}
+		else
+		{
+			initiateFlierAssault = false;
+		}
+	}
+
 
 	//literally inside the player
 	if (distance < this->textureRadius + nearestComponent->textureRadius)
@@ -276,23 +317,36 @@ void Enemy::enemyAI()
 	//too close
 	if (distance < followingDistance)
 	{
-		if (typeOfEnemy != et_bomber)
+		if (typeOfEnemy == et_laser || typeOfEnemy == et_standard || typeOfEnemy == et_flier)
 		{
 			follow = true;
 			xSpeed = -(cos(2 * PI - angle))*maxSpeed;
 			ySpeed = -(sin(2 * PI - angle))*maxSpeed;
 		}
-		else if (typeOfEnemy = et_flier)
+		else if (typeOfEnemy == et_commander)
 		{
 			follow = true;
-			xSpeed = -(cos(2 * PI - angle))*maxSpeed;
-			ySpeed = -(sin(2 * PI - angle))*maxSpeed;
+			xSpeed = -(cos(2 * PI - angle))*(distance / 1000)*maxSpeed;
+			ySpeed = -(sin(2 * PI - angle))*(distance / 1000)*maxSpeed;
+			if (timer >= 8)
+			{
+				if (angle < playerDirection|| angle > -playerDirection) //fix this thing?
+				for (unsigned int i = 0; i < components.size(); i++)
+					for (unsigned int k = 0; k < components[i]->types.size(); k++)
+						if (components[i]->types[k] == component::turret)
+						{
+							components[i]->fire();
+							timer = irandom(-30, -10);
+						}
+			}
+			else
+				timer++;
 		}
 		else
 		{
 			follow = true;
-			xSpeed += (cos(2 * PI - angle));
-			ySpeed += (sin(2 * PI - angle));
+			xSpeed = (cos(2 * PI - angle))*maxSpeed;
+			ySpeed = (sin(2 * PI - angle))*maxSpeed;
 		}
 
 	}
@@ -311,13 +365,14 @@ void Enemy::enemyAI()
 					ySpeed = (-cos(angle))*maxSpeed;
 					laserBChange = false;
 					BCounter = 0;
-					dodgeMove();
+					dodging = true;
+					dodgeCounter = 60;
 				}
 				else
 				{
 					follow = true;
 
-					xSpeed = (-sin(angle))*maxSpeed + irandom(5, 10);
+					xSpeed = (-sin(angle))*maxSpeed + irandom(7, 13);
 					ySpeed = (-cos(angle))*maxSpeed + irandom(5, 10);
 					BCounter = 0;
 				}
@@ -332,25 +387,29 @@ void Enemy::enemyAI()
 					ySpeed = (cos(angle))*maxSpeed;
 					laserBChange = false;
 					BCounter = 0;
-					dodgeMove();
+					dodging = true;
+					dodgeCounter = 60;
 				}
 				else
 				{
 					follow = true;
 
-					xSpeed = (sin(angle))*maxSpeed + irandom(5, 10);
+					xSpeed = (sin(angle))*maxSpeed + irandom(7, 13);
 					ySpeed = (cos(angle))*maxSpeed + irandom(5, 10);
 					BCounter = 0;
 				}
 			}
-
-			
-			//blink?
+			if (dodging == true && dodgeCounter > 0)
+			{
+				dodgeMove();
+			}
+			else
+				dodging = false;
 		}
 		else if (typeOfEnemy == et_flier)
-		{
+		{			
 			follow = true;
-			if (rotationDirection == true)
+			if (rotationDirection == true) //rotation direction to be fixed?
 			{				
 				xSpeed += (-sin(angle)) + irandom(-2, 2);
 				ySpeed += (-cos(angle)) + irandom(-2, 2);
@@ -367,7 +426,7 @@ void Enemy::enemyAI()
 			{
 				follow = false;
 				BCounter = 0;
-				dodgeMove();
+				dodgeMove(); //NO WORKERINO YET
 			}
 			else
 			{
@@ -379,17 +438,41 @@ void Enemy::enemyAI()
 		}
 		else if (typeOfEnemy == et_commander)
 		{
-			xSpeed += (cos(2 * PI - angle));
-			ySpeed += (sin(2 * PI - angle));
+			follow = false;
+			xSpeed = (cos(2 * PI - angle));
+			ySpeed = (sin(2 * PI - angle));
+			if (angle < playerDirection + PI / 2)
+			{
+				turnSpeed += maxTurnSpeed;
+			}
+			else if (angle > playerDirection - PI / 2)
+			{
+				turnSpeed -= maxTurnSpeed;
+			}
 
-			follow = true;
 		}
-		else //bomber
+		else if (typeOfEnemy == et_bomber)
 		{
-			xSpeed += (cos(2 * PI - angle));
-			ySpeed += (sin(2 * PI - angle));
-
-			follow = true;
+			if (dodging == false)
+			{
+				follow = true;
+				xSpeed = (cos(2 * PI - angle))*maxSpeed;
+				ySpeed = (sin(2 * PI - angle))*maxSpeed;
+				
+				if (tempHPMemory > this->components[0]->hp)
+				{
+					dodging = true;
+					dodgeCounter = 40;
+				}
+			}
+			else if (dodging == true && dodgeCounter > 0)
+			{
+				dodgeMove();
+			}
+			else
+			{
+				dodging = false;
+			}
 		}
 
 		if (typeOfEnemy == et_standard || typeOfEnemy == et_laser || typeOfEnemy == et_commander || typeOfEnemy == et_flier)
@@ -408,13 +491,13 @@ void Enemy::enemyAI()
 									timer = irandom(-20, -10);
 								}
 					}
-					if (typeOfEnemy == et_laser && follow == true)
+					if (typeOfEnemy == et_laser && follow == true && dodging == false)
 					{
 						if (angle < playerDirection + snappingAngle || angle > -playerDirection - snappingAngle)
 						{
 							fireMahLazors(3);
 							laserCounter++;
-							timer = irandom(-20, -10);
+							timer = irandom(-25, -15);
 						}
 					}
 					if (typeOfEnemy == et_flier)
@@ -428,8 +511,11 @@ void Enemy::enemyAI()
 				}
 				if (typeOfEnemy == et_commander)
 				{
-					launchFliers();
-					timer = irandom(-60, -30);
+					if (fliersFollowing < 6)
+					{
+						launchFliers();
+						timer = irandom(-60, -30);
+					}
 				}
 			}
 			else
@@ -439,9 +525,104 @@ void Enemy::enemyAI()
 	//too far
 	else if (distance > actionDistance && distance < detectionDistance)
 	{
-		follow = true;
-		xSpeed = cos(2 * PI - angle)*maxSpeed;
-		ySpeed = sin(2 * PI - angle)*maxSpeed;
+		if (typeOfEnemy == et_flier)
+		{
+			if (initiateFlierAssault == false)
+			{
+				//Follow the Commander ship!
+				//Not actually following !!!??!
+				if (angle >= 0 && angle < PI / 2) //1st quarter
+				{
+					if (flierMaster->angle < PI && flierMaster->angle > angle)
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+					else if (flierMaster->angle < angle || flierMaster->angle > PI*1.5)
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+					else if (flierMaster->angle < angle + PI)
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+					else
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+				}
+				else if (angle >= PI / 2 && angle < PI) //2nd quarter
+				{
+					if (flierMaster->angle < PI*1.5 && flierMaster->angle > angle)
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+					else if (flierMaster->angle < angle)
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+					else if (flierMaster->angle > angle + PI)
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+					else
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+				}
+				else if (angle >= PI && angle < PI*1.5)//3rd quarter
+				{
+					if (flierMaster->angle > angle)
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+					else if (flierMaster->angle < angle && flierMaster->angle > PI / 2)
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+					else if (flierMaster->angle < angle - PI)
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+					else
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+				}
+				else //4th quarter
+				{
+					if (flierMaster->angle > angle || flierMaster->angle < PI / 2)
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+					else if (flierMaster->angle > PI && flierMaster->angle < angle)
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+					else if (flierMaster->angle < angle - PI)
+					{
+						turnSpeed += maxTurnSpeed;
+					}
+					else
+					{
+						turnSpeed -= maxTurnSpeed;
+					}
+				}
+				xSpeed = cos(2 * PI - angle)*maxSpeed;
+				ySpeed = sin(2 * PI - angle)*maxSpeed;
+			}
+			else if (initiateFlierAssault == true)
+			{
+				follow = true;
+				xSpeed = cos(2 * PI - angle)*maxSpeed;
+				ySpeed = sin(2 * PI - angle)*maxSpeed;
+			}
+		}
+		else
+		{
+			follow = true;
+			xSpeed = cos(2 * PI - angle)*maxSpeed;
+			ySpeed = sin(2 * PI - angle)*maxSpeed;
+		}
 	}
 	//outside of range
 	else
@@ -687,7 +868,7 @@ void Enemy::fireMahLazors(int dmg)
 }
 
 
-void Enemy::dodgeMove() // ._____________.
+void Enemy::dodgeMove() //NO WORK
 {
 	std::cout << "dodge!" << std::endl;
 	if (angle >= 0 && angle < PI / 2) //1st quarter
@@ -695,14 +876,14 @@ void Enemy::dodgeMove() // ._____________.
 		if (rotationDirection)
 		{
 			turnSpeed += maxTurnSpeed;
-			xSpeed -= (-sin(angle))*maxSpeed;
-			ySpeed -= (-cos(angle))*maxSpeed;
+			xSpeed = (sin(angle))*maxSpeed;
+			ySpeed = (cos(angle))*maxSpeed;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= maxTurnSpeed;
-			xSpeed += (sin(angle))*maxSpeed;
-			ySpeed += (cos(angle))*maxSpeed;
+			xSpeed = (sin(angle))*maxSpeed;
+			ySpeed = (cos(angle))*maxSpeed;
 		}
 	}
 	else if (angle >= PI / 2 && angle < PI) //2nd quarter
@@ -710,14 +891,14 @@ void Enemy::dodgeMove() // ._____________.
 		if (rotationDirection)
 		{
 			turnSpeed += maxTurnSpeed;
-			xSpeed -= (-sin(angle))*maxSpeed;
-			ySpeed += (-cos(angle))*maxSpeed;
+			xSpeed = (sin(angle))*maxSpeed;
+			ySpeed = (-cos(angle))*maxSpeed;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= maxTurnSpeed;
-			xSpeed += (sin(angle))*maxSpeed;
-			ySpeed -= (cos(angle))*maxSpeed;
+			xSpeed = (sin(angle))*maxSpeed;
+			ySpeed = (-cos(angle))*maxSpeed;
 		}
 	}
 	else if (angle >= PI && angle < PI*1.5)//3rd quarter
@@ -725,14 +906,14 @@ void Enemy::dodgeMove() // ._____________.
 		if (rotationDirection)
 		{
 			turnSpeed += maxTurnSpeed;
-			xSpeed += (-sin(angle))*maxSpeed;
-			ySpeed += (-cos(angle))*maxSpeed;
+			xSpeed = (-sin(angle))*maxSpeed;
+			ySpeed = (-cos(angle))*maxSpeed;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= maxTurnSpeed;
-			xSpeed -= (sin(angle))*maxSpeed;
-			ySpeed -= (cos(angle))*maxSpeed;
+			xSpeed = (-sin(angle))*maxSpeed;
+			ySpeed = (-cos(angle))*maxSpeed;
 		}
 	}
 	else //4th quarter
@@ -740,14 +921,14 @@ void Enemy::dodgeMove() // ._____________.
 		if (rotationDirection)
 		{
 			turnSpeed += maxTurnSpeed;
-			xSpeed += (-sin(angle))*maxSpeed;
-			ySpeed -= (-cos(angle))*maxSpeed;
+			xSpeed = (-sin(angle))*maxSpeed;
+			ySpeed = (cos(angle))*maxSpeed;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= maxTurnSpeed;
-			xSpeed -= (sin(angle))*maxSpeed;
-			ySpeed += (cos(angle))*maxSpeed;
+			xSpeed = (-sin(angle))*maxSpeed;
+			ySpeed = (cos(angle))*maxSpeed;
 		}
 	}
 }
@@ -755,6 +936,7 @@ void Enemy::dodgeMove() // ._____________.
 
 void Enemy::launchFliers()
 {
-	mGame->objects.push_back(new Enemy(mWindow, mGame, mGame->objects, et_flier));
+	mGame->objects.push_back(new Enemy(mWindow, mGame, mGame->objects, et_flier, this));
 	mGame->objects[mGame->objects.size() - 1]->setLocation(x, y); //randomize a lil bit
+	fliersFollowing++;
 }

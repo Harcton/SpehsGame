@@ -137,19 +137,16 @@ void Game::updateObjects()
 	//	else
 	//		++obIt;
 
-	//if (objects.size() < 2)
-	//	//if (flipCoin())
-	//	//	objects.push_back(new Debris(mWindow, this, objects));
-	//	//else
-	//{
-	//	objects.push_back(new Enemy(mWindow, this, objects, et_commander)); //spawn different enemy types
-	//	objects[objects.size() - 1]->setRandomLocation();
-	//}
+	if (objects.size() < 2)
+	{
+		objects.push_back(new Enemy(mWindow, this, objects, et_commander)); //spawn different enemy types
+		objects[objects.size() - 1]->setRandomLocation();
+	}
 
 
 	//TEST GAME 17.4
-	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
-	if (objects.size() < distanceFromStart/1000)
+	/*distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
+	if (objects.size() < distanceFromStart/1300)
 	{
 		if (distanceFromStart/1000 > 8)
 			spawnRandomization = irandom(1, 3);
@@ -171,8 +168,8 @@ void Game::updateObjects()
 			objects.push_back(new Enemy(mWindow, this, objects, et_commander));
 			objects[objects.size() - 1]->setRandomLocation();
 		}
-	}
-
+	}*/
+	//
 
 
 	for (unsigned int i = 0; i < objects.size(); i++)
