@@ -55,7 +55,7 @@ void Enemy::enemyInitialize()
 		followingDistance = 300;
 		actionDistance = 600;
 		maxTurnSpeed = 0.01;
-		maxSpeed = 2;
+		maxSpeed = 4;
 
 		components.push_back(new Component(this, mGame->playerObj, 0, 0));
 		components[components.size() - 1]->spr.setTexture(RM.getTexture("enemy_base_purple.png"));
@@ -236,6 +236,9 @@ bool Enemy::update()
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
 
+	//update AI accordingly
+	enemyAI();
+
 	//limit speed
 	if (this->xSpeed > maxSpeed)
 		this->xSpeed = maxSpeed;
@@ -245,10 +248,7 @@ bool Enemy::update()
 		this->xSpeed = -maxSpeed;
 	else if (this->ySpeed < -maxSpeed)
 		this->ySpeed = -maxSpeed;
-
-	//update AI accordingly
-	enemyAI();
-
+	
 	tempHPMemory = this->components[0]->hp;
 
 	updateComponents();
@@ -783,7 +783,7 @@ void Enemy::explosion() //I guess not with componentships
 {
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
-		if (getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->textureRadius * 2)
+		if (getDistance(this->components[0]->x, this->components[0]->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) < this->components[0]->textureRadius * 2)
 		{
 			mGame->playerObj->components[i]->hp -= 50;
 		}
