@@ -43,8 +43,13 @@ public:
 	void updateMouseGrab();
 	void scrapComponent(int, int);
 	void rotateGlowAngle();
-	void updateTurretConfigurationButtonVisibility();
 	void applyRotation();
+	void getTextFileContents(std::string, std::vector<std::string>&);
+	void writeTurretControlSchemes(std::vector<std::string>&);
+	void updateTurretConfigurationButtonVisibility();
+	void updateTurretConfigurationButtonStrings();
+	void reloadTurretControlSchemeList();
+	void updateTurretControlSchemeList();
 
 	void drawWindow();
 	void drawSelectedRect();
@@ -54,6 +59,13 @@ public:
 	void drawCircleSlider();
 
 	void drawConfigurations();
+
+	char getUserInput(sf::Event&);
+
+	//Control schemes
+	void saveTurretControlScheme(std::string);
+	void loadTurretControlScheme(std::string);
+	void deleteTurretControlScheme(std::string);
 
 
 	//Input
@@ -76,11 +88,12 @@ private:
 	sf::Font font1;
 
 	//Temps
-	int temp_buttonHeight;
-	int temp_button1X1;
-	int temp_button2Width;
-	int temp_button1Width;
-	int temp_button2X1;
+	int buttonHeight;
+	int button1X1;
+	int button2Width;
+	int button1Width;
+	int button2X1;
+	int button3X1;
 	std::pair<int, sf::Joystick::Axis> temp_idAxisPair;
 
 
@@ -95,6 +108,10 @@ private:
 	float grabCameraOriginY = 0;
 	int checkX;
 	int checkY;
+	int scrollDelta = 0;
+	int scrollState = 0;
+	std::string saveTurretControlSchemeInput;
+	bool gettingUserInput = false;
 
 	std::vector<sf::VertexArray> horizontalLines;
 	std::vector<sf::VertexArray> verticalLines;
@@ -104,6 +121,7 @@ private:
 	std::vector<Button> configurationButtons;
 	std::vector<Button> coreConfigurationButtons;
 	std::vector<Button> turretConfigurationButtons;
+	std::vector<Button> turretControlSchemeList;
 	std::vector<Button> engineConfigurationButtons;
 
 	editor::Focus focus = editor::base;

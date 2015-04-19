@@ -22,34 +22,18 @@ PlayerData::PlayerData()
 
 	/////////////////////
 	//Debug ship editor:
-	grid[5][5]->armor = 1;
-	grid[5][5]->core = true;
-	grid[5][5]->childRight = true;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)]->armor = 1;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)]->core = true;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)]->childUp = true;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)]->childDown = true;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)]->childLeft = true;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)]->childRight = true;
 
-	grid[6][5]->armor = 1;
-	grid[6][5]->childUp = true;
-	grid[6][5]->childDown = true;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0) - 1]->armor = 1;
+	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0) + 1]->armor = 1;
+	grid[int(EDITOR_WIDTH / 2.0) - 1][int(EDITOR_HEIGHT / 2.0)]->armor = 1;
+	grid[int(EDITOR_WIDTH / 2.0) + 1][int(EDITOR_HEIGHT / 2.0)]->armor = 1;
 
-	grid[6][4]->armor = 1;
-	grid[6][4]->childUp = true;
-
-	grid[6][6]->armor = 1;
-	grid[6][6]->childDown = true;
-
-
-	grid[6][3]->armor = 1;
-	grid[6][3]->childRight = true;
-	grid[6][3]->childLeft = true;
-
-	grid[5][3]->armor = 1;
-	grid[7][3]->armor = 1;
-	grid[6][7]->armor = 1;
-
-	//grid[6][3]->turret = 1;
-	//grid[6][4]->turret = 1;
-	//grid[6][5]->turret = 1;
-	//grid[6][6]->turret = 1;
-	//grid[6][7]->turret = 1;
 	//End of Debug ship editor//
 	///////////////////////////
 }

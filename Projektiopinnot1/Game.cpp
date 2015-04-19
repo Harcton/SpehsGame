@@ -139,7 +139,7 @@ void Game::updateObjects()
 
 	if (objects.size() < 2)
 	{
-		objects.push_back(new Enemy(mWindow, this, objects, et_commander)); //spawn different enemy types
+		objects.push_back(new Enemy(mWindow, this, objects, et_bomber)); //spawn different enemy types
 		objects[objects.size() - 1]->setRandomLocation();
 	}
 

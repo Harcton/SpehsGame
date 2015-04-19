@@ -81,22 +81,24 @@ void Button::draw(sf::RenderWindow& window, sf::Vector2i& mousePos)
 	//Set color
 	if (type == bt_text)
 	{
-	if (mouseOverlap(mousePos) && id != bi_false)
-		buttonRectangle.setFillColor(sf::Color(red-20, green-20, blue-20));
-	else
-		buttonRectangle.setFillColor(sf::Color(red, green, blue));
-
-	window.draw(buttonRectangle);
-	window.draw(text);
-	}
-	else if (type == bt_sprite)
-	{
-		if (mouseOverlap(mousePos) && id != bi_false)
-			spr.setColor(sf::Color(200, 200, 200));
+		if (selected == true)
+			buttonRectangle.setFillColor(sf::Color(red - 35, green - 35, blue - 35));		
+		else if (mouseOverlap(mousePos) && id != bi_false)
+			buttonRectangle.setFillColor(sf::Color(red-20, green-20, blue-20));
 		else
-			spr.setColor(sf::Color(255, 255, 255));
-		window.draw(spr);
-	}
+			buttonRectangle.setFillColor(sf::Color(red, green, blue));
+
+		window.draw(buttonRectangle);
+		window.draw(text);
+		}
+		else if (type == bt_sprite)
+		{
+			if (mouseOverlap(mousePos) && id != bi_false)
+				spr.setColor(sf::Color(200, 200, 200));
+			else
+				spr.setColor(sf::Color(255, 255, 255));
+			window.draw(spr);
+		}
 
 }
 

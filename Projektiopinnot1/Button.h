@@ -42,6 +42,7 @@ private:
 	sf::Font& font;
 	sf::Sprite spr;
 	bool visible = true;
+	bool selected = false;
 
 	//Rectangle original colors
 	int red;

@@ -3,6 +3,9 @@
 #include "GridData.h"
 #include "PlayerData.h"
 #include "ShipEditor.h"
+#include <fstream>
+#include <stdio.h>
+
 
 #define CONF_X1 int(100 * resFactor)
 #define CONF_Y1 int(75 * resFactor)
@@ -32,6 +35,17 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	configurationRect3.setSize(sf::Vector2f(CONF_WIDTH - 20*resFactor, CONF_HEIGHT - 70*resFactor));
 	configurationRect3.setPosition(CONF_X1 + 10*resFactor, CONF_Y1 + 60*resFactor);
 	configurationRect3.setFillColor(sf::Color(110, 110, 115));
+
+	//Focus camera on core
+	for (int sx = 0; sx < EDITOR_WIDTH; sx++)
+	for (int sy = 0; sy < EDITOR_HEIGHT; sy++)
+	if (playerData.grid[sx][sy]->core == true)
+	{
+		int temp_screenWidth = 0.5*(WINDOW_WIDTH/scaleFactor);
+		cameraX = 100 * sx - temp_screenWidth + 50;
+		int temp_screenHeight = 0.5*(WINDOW_HEIGHT/scaleFactor);
+		cameraY = 100 * sy - temp_screenHeight + 50;
+	}
 	
 	//Load editor textures
 	circleSliderSpr.setTexture(RM.getTexture("circleSlider.png"));
@@ -49,51 +63,52 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 	//Configuration buttons
 	configurationButtons.push_back(Button(bi_confExit, WINDOW_WIDTH/resFactor - 150, 75, RM.getTexture("xButton.png"), 2, font1));
-	temp_buttonHeight = CONF_BUTTON_HEIGHT;
-	temp_button1X1 = CONF_X1 + temp_buttonHeight;
-	temp_button2Width = 400;
-	temp_button1Width = CONF_WIDTH - temp_button2Width - (temp_button1X1 - CONF_X1);
-	temp_button2X1 = CONF_X2 - temp_button2Width - 500*resFactor; 
+	buttonHeight = CONF_BUTTON_HEIGHT;
+	button1X1 = CONF_X1 + buttonHeight;
+	button2Width = 250;
+	button1Width = 300;//CONF_WIDTH - button2Width - (button1X1 - CONF_X1);
+	button2X1 = button1X1 + button1Width;//CONF_X2 - button2Width - 500*resFactor;
+	button3X1 = button1X1 + button1Width + button2Width + buttonHeight + 20*resFactor;
 
 	//Core configuration buttons
 	//Main header
-	coreConfigurationButtons.push_back(Button(bi_false, CONF_X1, CONF_Y1, CONF_WIDTH - 50 * resFactor, temp_buttonHeight, " Ship core configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, CONF_X1, CONF_Y1, CONF_WIDTH - 50 * resFactor, buttonHeight, " Ship core configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	//Ship controlls background
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1 - 10 * resFactor, CONF_Y1 + temp_buttonHeight * 2 - 10 * resFactor, temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight*7 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1 - 10 * resFactor, CONF_Y1 + buttonHeight * 2 - 10 * resFactor, button2X1 + button2Width - button1X1 + 20 * resFactor, buttonHeight*7 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	//Ship controls header
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 2, temp_button2X1 + temp_button2Width - temp_button1X1, temp_buttonHeight, " Ship controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 2, button2X1 + button2Width - button1X1, buttonHeight, " Ship controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	//Directional movement & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 3, temp_button1Width, temp_buttonHeight, " Use analog stick movement", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confNodeDirectionalMovement, temp_button2X1, CONF_Y1 + temp_buttonHeight * 3, temp_button2Width, temp_buttonHeight, " " + getBoolAsString(directionalMovement), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 3, button1Width, buttonHeight, " Use analog stick movement", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confNodeDirectionalMovement, button2X1, CONF_Y1 + buttonHeight * 3, button2Width, buttonHeight, " " + getBoolAsString(directionalMovement), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	
 	//VerticalAxis
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 4, temp_button1Width, temp_buttonHeight, " Vertical Axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindVerticalMoveAxis, temp_button2X1, CONF_Y1 + temp_buttonHeight * 4, temp_button2Width, temp_buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(verticalMoveAxis) + " (" + getPolarityAsString(verticalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 4, button1Width, buttonHeight, " Vertical Axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindVerticalMoveAxis, button2X1, CONF_Y1 + buttonHeight * 4, button2Width, buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(verticalMoveAxis) + " (" + getPolarityAsString(verticalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//HorizontalAxis
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 5, temp_button1Width, temp_buttonHeight, " Horizontal Axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindHorizontalMoveAxis, temp_button2X1, CONF_Y1 + temp_buttonHeight * 5, temp_button2Width, temp_buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(horizontalMoveAxis) + " (" + getPolarityAsString(horizontalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 5, button1Width, buttonHeight, " Horizontal Axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindHorizontalMoveAxis, button2X1, CONF_Y1 + buttonHeight * 5, button2Width, buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(horizontalMoveAxis) + " (" + getPolarityAsString(horizontalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 
 	//Turn right & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 4, temp_button1Width, temp_buttonHeight, " Turn right", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, temp_button2X1, CONF_Y1 + temp_buttonHeight * 4, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_turnRight]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 4, button1Width, buttonHeight, " Turn right", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, button2X1, CONF_Y1 + buttonHeight * 4, button2Width, buttonHeight, getInputAsString(coreKeys[key_turnRight]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Turn left & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 5, temp_button1Width, temp_buttonHeight, " Turn left", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, temp_button2X1, CONF_Y1 + temp_buttonHeight * 5, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_turnLeft]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 5, button1Width, buttonHeight, " Turn left", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, button2X1, CONF_Y1 + buttonHeight * 5, button2Width, buttonHeight, getInputAsString(coreKeys[key_turnLeft]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Acceleration & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 6, temp_button1Width, temp_buttonHeight, " Accelerate", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, temp_button2X1, CONF_Y1 + temp_buttonHeight * 6, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_accelerate]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 6, button1Width, buttonHeight, " Accelerate", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, button2X1, CONF_Y1 + buttonHeight * 6, button2Width, buttonHeight, getInputAsString(coreKeys[key_accelerate]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 
 	//Reverse & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 7, temp_button1Width, temp_buttonHeight, " Reverse", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindReverse, temp_button2X1, CONF_Y1 + temp_buttonHeight * 7, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_reverse]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 7, button1Width, buttonHeight, " Reverse", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindReverse, button2X1, CONF_Y1 + buttonHeight * 7, button2Width, buttonHeight, getInputAsString(coreKeys[key_reverse]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Zoom in & bindong key
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 8, temp_button1Width, temp_buttonHeight, " Zoom in", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, temp_button2X1, CONF_Y1 + temp_buttonHeight * 8, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_zoomIn]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 8, button1Width, buttonHeight, " Zoom in", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, button2X1, CONF_Y1 + buttonHeight * 8, button2Width, buttonHeight, getInputAsString(coreKeys[key_zoomIn]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Zoom out & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 9, temp_button1Width, temp_buttonHeight, " Zoom out", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, temp_button2X1, CONF_Y1 + temp_buttonHeight * 9, temp_button2Width, temp_buttonHeight, getInputAsString(coreKeys[key_zoomOut]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 9, button1Width, buttonHeight, " Zoom out", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, button2X1, CONF_Y1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(coreKeys[key_zoomOut]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	
-	//Set directional Movement button visibilities
+	//Set directional Movement button visibilities (core)
 		bool temp_axisState = directionalMovement;
 		bool temp_manualButtonsState = true;
 		if (temp_axisState)
@@ -136,57 +151,68 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 		//Update core conf. background size
 		if (directionalMovement)
-			coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight * 7 + 20 * resFactor));
+			coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 20 * resFactor, buttonHeight * 7 + 20 * resFactor));
 		else
-			coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight * 8 + 20 * resFactor));
+			coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 20 * resFactor, buttonHeight * 8 + 20 * resFactor));
 
 
 
 
 	//Turret configuration buttons
 	//Main header
-	turretConfigurationButtons.push_back(Button(bi_false, CONF_X1, CONF_Y1, CONF_WIDTH - 50 * resFactor, temp_buttonHeight, " Turret[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34* resFactor), font1, sf::Color(120,120,125), sf::Color(35,35,40)));
+	turretConfigurationButtons.push_back(Button(bi_false, CONF_X1, CONF_Y1, CONF_WIDTH - 50 * resFactor, buttonHeight, " Turret[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34* resFactor), font1, sf::Color(120,120,125), sf::Color(35,35,40)));
 	//Ship controls background
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1 - 10 * resFactor, CONF_Y1 + temp_buttonHeight * 2 - 10 * resFactor, temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight * 11 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1 - 10 * resFactor, CONF_Y1 + buttonHeight * 2 - 10 * resFactor, button2X1 + button2Width - button1X1 + 20 * resFactor, buttonHeight * 11 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	//Turret controls header
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 2, temp_button2X1 + temp_button2Width - temp_button1X1, temp_buttonHeight, " Turret controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 2, button2X1 + button2Width - button1X1, buttonHeight, " Turret controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	
 	
 	//Fire
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 3, temp_button1Width, temp_buttonHeight, " Fire", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confBindFire, temp_button2X1, CONF_Y1 + temp_buttonHeight * 3, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_fire]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 3, button1Width, buttonHeight, " Fire", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confBindFire, button2X1, CONF_Y1 + buttonHeight * 3, button2Width, buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_fire]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Enable hold to fire
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 4, temp_button1Width, temp_buttonHeight, " Enable hold to fire", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confNodeHoldToFire, temp_button2X1, CONF_Y1 + temp_buttonHeight * 4, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 4, button1Width, buttonHeight, " Enable hold to fire", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confNodeHoldToFire, button2X1, CONF_Y1 + buttonHeight * 4, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Reload
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 5, temp_button1Width, temp_buttonHeight, " Reload", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confBindReload, temp_button2X1, CONF_Y1 + temp_buttonHeight * 5, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_reload]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 5, button1Width, buttonHeight, " Reload", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confBindReload, button2X1, CONF_Y1 + buttonHeight * 5, button2Width, buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_reload]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Mouse aim (1)
-	turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 6, temp_button1Width, temp_buttonHeight, " Enable mouse aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confNodeMouseAim, temp_button2X1, CONF_Y1 + temp_buttonHeight * 6, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 6, button1Width, buttonHeight, " Enable mouse aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confNodeMouseAim, button2X1, CONF_Y1 + buttonHeight * 6, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 		//Mouse aim relative to center & node
-		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 7, temp_button1Width, temp_buttonHeight, " Enable mouse aim relative to center", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAimRelative, temp_button2X1, CONF_Y1 + temp_buttonHeight * 7, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 7, button1Width, buttonHeight, " Enable mouse aim relative to center", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAimRelative, button2X1, CONF_Y1 + buttonHeight * 7, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	
 		//Directional aim & node (2)
-		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 8, temp_button1Width, temp_buttonHeight, " Enable analog stick aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confNodeDirectionalAim, temp_button2X1, CONF_Y1 + temp_buttonHeight * 8, temp_button2Width, temp_buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 8, button1Width, buttonHeight, " Enable analog stick aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeDirectionalAim, button2X1, CONF_Y1 + buttonHeight * 8, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 			//Vertical axis
-			turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 9, temp_button1Width, temp_buttonHeight, " Vertical axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindVerticalAimAxis, temp_button2X1, CONF_Y1 + temp_buttonHeight * 9, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_vertical]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 9, button1Width, buttonHeight, " Vertical axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindVerticalAimAxis, button2X1, CONF_Y1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_vertical]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 			//Horizontal axis
-			turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 10, temp_button1Width, temp_buttonHeight, " Horizontal axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindHorizontalAimAxis, temp_button2X1, CONF_Y1 + temp_buttonHeight * 10, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_horizontal]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 10, button1Width, buttonHeight, " Horizontal axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindHorizontalAimAxis, button2X1, CONF_Y1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_horizontal]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 		//Manual turret movement (3)
 		//Rotate right & binding key
-		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 11, temp_button1Width, temp_buttonHeight, " Rotate right", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, temp_button2X1, CONF_Y1 + temp_buttonHeight * 11, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_right]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 11, button1Width, buttonHeight, " Rotate right", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, button2X1, CONF_Y1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_right]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 		//Rotate left & binding key
-		turretConfigurationButtons.push_back(Button(bi_false, temp_button1X1, CONF_Y1 + temp_buttonHeight * 12, temp_button1Width, temp_buttonHeight, " Rotate left", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, temp_button2X1, CONF_Y1 + temp_buttonHeight * 12, temp_button2Width, temp_buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_left]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 12, button1Width, buttonHeight, " Rotate left", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, button2X1, CONF_Y1 + buttonHeight * 12, button2Width, buttonHeight, getInputAsString(componentKeys[selectedX + selectedY*0.001 + KEYB_left]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 
 
+		//Control schemes background
+		turretConfigurationButtons.push_back(Button(bi_false, button3X1 - 10 * resFactor, CONF_Y1 + buttonHeight * 2 - 10 * resFactor, button1Width + 20*resFactor, buttonHeight * 11 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+		//Control schemes header
+		turretConfigurationButtons.push_back(Button(bi_false, button3X1, CONF_Y1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 
+
+		//Save control scheme...
+		turretConfigurationButtons.push_back(Button(bi_confSaveTurretScheme, button3X1, CONF_Y1 + buttonHeight * 3, button1Width, buttonHeight, " Save control scheme...", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confLoadTurretScheme, button3X1, CONF_Y1 + buttonHeight * 4, button1Width, buttonHeight, " Load control scheme...", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+
+
+		reloadTurretControlSchemeList();
 
 }
 
@@ -216,11 +242,11 @@ void ShipEditor::run()
 	while (keepRunning)
 	{
 		//Return/quit
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gettingUserInput == false)
 			keepRunning = false;
 
 		//Movement
-		if (focus == editor::base || focus == editor::component)
+		if ((focus == editor::base || focus == editor::component) && gettingUserInput == false)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 				cameraY -= 8 / scaleFactor;
@@ -261,7 +287,14 @@ void ShipEditor::run()
 			switch (mEvent.type)
 			{
 			case sf::Event::MouseWheelMoved:
-				zoom(mEvent.mouseWheel.delta);
+				if (focus != editor::configuration)
+					zoom(mEvent.mouseWheel.delta);
+				else
+				{
+					scrollDelta -= scrollDelta + mEvent.mouseWheel.delta;
+					if (playerData.grid[selectedX][selectedY]->turret > 0)
+						updateTurretControlSchemeList();
+				}
 				mEvent.mouseWheel.delta = 0;
 				scaleFactor = resFactor*zoomFactor;
 				break;
@@ -272,29 +305,82 @@ void ShipEditor::run()
 					mouseRightPressed();
 				break;
 			case sf::Event::KeyPressed:
-				switch (mEvent.key.code)
+				if (gettingUserInput == false)
+					switch (mEvent.key.code)
 				{
-				case sf::Keyboard::Delete:
-					scrapComponent(selectedX, selectedY);
-					updateGridSpriteTextures();
-					focus = editor::base;
-					std::cout << "\nFocus returned to base";
-					break;
-				case sf::Keyboard::Escape:
-					if (focus == editor::rotate)
-						applyRotation();
-					selectedX = -1;
-					selectedY = -1;
-					focus = editor::base;
-					std::cout << "\nFocus returned to base";
-					break;
-				case sf::Keyboard::Return:
-					if (focus == editor::rotate)
-					{
-						applyRotation();
+					case sf::Keyboard::Delete:
+						if (focus == editor::component)
+						{
+							scrapComponent(selectedX, selectedY);
+							updateGridSpriteTextures();
+							focus = editor::base;
+							std::cout << "\nFocus returned to base";
+						}
+						else if (focus == editor::configuration)
+						{
+							for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
+								if (turretControlSchemeList[i].selected == true)
+								{
+									deleteTurretControlScheme(turretControlSchemeList[i].text.getString());
+									break;
+								}
+						}
+						break;
+					case sf::Keyboard::Escape:
+						if (focus == editor::rotate)
+							applyRotation();
+						selectedX = -1;
+						selectedY = -1;
 						focus = editor::base;
+						gettingUserInput = false;
+						std::cout << "\nFocus returned to base";
+						break;
+					case sf::Keyboard::Return:
+						if (focus == editor::rotate)
+						{
+							applyRotation();
+							focus = editor::base;
+						}
+						break;
+				}
+				else
+				{
+					if (focus == editor::configuration && playerData.grid[selectedX][selectedY]->turret > 0)
+					{
+						char temp_char = getUserInput(mEvent);
+						std::string temp_str;
+						switch (temp_char)
+						{
+						default:
+							if (saveTurretControlSchemeInput.size() < 20)
+								saveTurretControlSchemeInput += temp_char;
+							break;
+						case '#':
+							break;
+						case '-':
+							if (saveTurretControlSchemeInput.size() <= 0)
+								break;
+
+							for (unsigned int i = 0; i < saveTurretControlSchemeInput.size()-1; i++)
+								temp_str.push_back(saveTurretControlSchemeInput[i]);
+							
+							saveTurretControlSchemeInput = temp_str;
+							break;
+						case '+':
+							saveTurretControlSchemeInput += ' ';
+							break;
+						case '>':
+							saveTurretControlScheme(saveTurretControlSchemeInput);
+							gettingUserInput = false;
+							break;
+						}
+						
+						if (gettingUserInput == true)
+							for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+							if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
+								turretConfigurationButtons[i].text.setString(saveTurretControlSchemeInput);
 					}
-					break;
+
 				}
 			}
 		}
@@ -693,6 +779,7 @@ void ShipEditor::mouseLeftPressed()
 			case bi_confExit:
 				std::cout << "\nPressed X (close)";
 				focus = editor::base;
+				gettingUserInput = false;
 				break;
 
 		}
@@ -741,9 +828,9 @@ void ShipEditor::mouseLeftPressed()
 
 					//Update background size
 					if (directionalMovement)
-						coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight * 7 + 20 * resFactor));
+						coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 20 * resFactor, buttonHeight * 7 + 20 * resFactor));
 					else
-						coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(temp_button2X1 + temp_button2Width - temp_button1X1 + 20 * resFactor, temp_buttonHeight * 8 + 20 * resFactor));
+						coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 20 * resFactor, buttonHeight * 8 + 20 * resFactor));
 
 					//Update useDirMove bg color
 					for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
@@ -828,6 +915,7 @@ void ShipEditor::mouseLeftPressed()
 					break;
 			}
 		else if (playerData.grid[selectedX][selectedY]->turret > 0)
+		{
 			for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 				switch (turretConfigurationButtons[i].checkIfPressed(mousePos))
 			{
@@ -878,7 +966,7 @@ void ShipEditor::mouseLeftPressed()
 					turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(temp_idAxisPair.second) + " (" + getPolarityAsString(temp_idAxisPair.first) + ")");
 					break;
 
-				//Nodes
+					//Nodes
 				case bi_confNodeHoldToFire:
 					if (playerData.grid[selectedX][selectedY]->holdToFire == true)
 					{//Set false
@@ -929,7 +1017,36 @@ void ShipEditor::mouseLeftPressed()
 					}
 					updateTurretConfigurationButtonVisibility();
 					break;
+					//Control schemes
+				case bi_confSaveTurretScheme:
+					if (gettingUserInput == false)
+					{
+						turretConfigurationButtons[i].text.setString(" >Input name for this control scheme<");
+						saveTurretControlSchemeInput = "";
+						gettingUserInput = true;					
+					}
+					else
+					{
+						saveTurretControlScheme(saveTurretControlSchemeInput);
+						gettingUserInput = false;
+					}
+					break;
+				case bi_confLoadTurretScheme:
+					for (unsigned int j = 0; j < turretControlSchemeList.size(); j++)
+						if (turretControlSchemeList[j].selected == true)
+							loadTurretControlScheme(turretControlSchemeList[j].text.getString());
+					break;
 			}
+			for (unsigned int j = 0; j < turretControlSchemeList.size(); j++)
+				if (turretControlSchemeList[j].mouseOverlap(mousePos) && turretControlSchemeList[j].visible == true && turretControlSchemeList[j].selected == false)
+				{
+				for (unsigned int k = 0; k < turretControlSchemeList.size(); k++)
+					turretControlSchemeList[k].selected = false;
+				turretControlSchemeList[j].selected = true;
+				}
+				else
+					turretControlSchemeList[j].selected = false;
+		}//End of turret conf
 		else if (playerData.grid[selectedX][selectedY]->engine > 0)
 			for (unsigned int i = 0; i < engineConfigurationButtons.size(); i++)
 				switch (engineConfigurationButtons[i].checkIfPressed(mousePos))
@@ -1104,8 +1221,12 @@ void ShipEditor::drawConfigurations()
 		for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
 			coreConfigurationButtons[i].draw(mWindow, mousePos);
 	else if (playerData.grid[selectedX][selectedY]->turret > 0)
+	{
 		for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 			turretConfigurationButtons[i].draw(mWindow, mousePos);
+		for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
+			turretControlSchemeList[i].draw(mWindow, mousePos);
+	}
 	else if (playerData.grid[selectedX][selectedY]->engine > 0)
 		for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 			engineConfigurationButtons[i].draw(mWindow, mousePos);
@@ -1217,7 +1338,503 @@ void ShipEditor::updateTurretConfigurationButtonVisibility()
 }
 
 
+void ShipEditor::saveTurretControlScheme(std::string fileName)
+{
+	if (fileName == "" || fileName == " " || fileName == "  ")
+		return;
 
+	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+		if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
+			turretConfigurationButtons[i].text.setString(" Save control scheme...");
+	
+	gettingUserInput = false;	
+
+	std::ofstream saveFile("Settings/TurretControlSchemes/"+fileName+".dat", std::ofstream::binary | std::ios::out);
+	if (saveFile)
+	{
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
+		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
+		saveFile.close();
+
+		std::string temp_str;
+		std::vector<std::string> temp_schemes;
+		std::ifstream list;
+		list.open("Settings/TurretControlSchemesList.txt");
+		if (!list.fail())
+		{
+			while (std::getline(list, temp_str))
+				temp_schemes.push_back(temp_str);
+
+			list.close();
+
+			bool temp_alreadyListed = false;
+			for (unsigned int i = 0; i < temp_schemes.size(); i++)
+				if (temp_schemes[i] == fileName)
+					temp_alreadyListed = true;
+			if (temp_alreadyListed == false)
+			{//Save the scheme in the list
+				std::ofstream list2;
+				list2.open("Settings/TurretControlSchemesList.txt", std::ios::app);
+				list2 << "\n" << fileName;
+			}
+		}			
+		reloadTurretControlSchemeList();
+	}
+	else
+		std::cout << "\nError. Failed to save turret control scheme";
+}
+
+void ShipEditor::loadTurretControlScheme(std::string fileName)
+{
+	if (fileName == "")
+		return;
+
+	std::ifstream saveFile("Settings/TurretControlSchemes/" + fileName + ".dat", std::ios::binary | std::ios::in);
+	if (saveFile)
+	{
+		std::cout << "\nLoading " << fileName << ".dat...";
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
+		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
+
+		turretConfigurationButtons[2].text.setString(turretConfigurationButtons[2].text.getString() + "    [control scheme \"" + fileName + "\"]");
+
+		updateTurretConfigurationButtonStrings();
+		updateTurretConfigurationButtonVisibility();
+	}
+	else
+		std::cout << "\nError. Failed to load turret control scheme";
+
+}
+
+void ShipEditor::getTextFileContents(std::string filePath, std::vector<std::string>& vector)
+{
+	std::string temp_str;
+	std::fstream list(filePath, std::ios::in | std::ios::out);
+	if (!list.fail())
+	{//Load all scheme names into temp_schemes
+		while (std::getline(list, temp_str))
+			if (temp_str != "" && temp_str != " " && temp_str != "\n" && temp_str != "\0")
+				vector.push_back(temp_str);
+		list.close();
+	}
+}
+
+void ShipEditor::writeTurretControlSchemes(std::vector<std::string>& vector)
+{
+	char* temp_charPtr = "Settings/TurretControlSchemesList.txt";
+	//remove(temp_charPtr);
+
+	std::fstream file;
+	file.open("Settings/TurretControlSchemesList.txt", std::ios::out);
+	if (file.fail())
+		std::cout << "FAIL";
+	else
+		std::cout << "SWEETMUTHERFUKING SUCCESSSSS";
+
+	file.close();
+}
+
+void ShipEditor::deleteTurretControlScheme(std::string fileName)
+{
+	std::cout << "\nDeleting turret control scheme...";
+	//Remove the scheme from the scheme list
+	std::vector<std::string> temp_schemes;
+	getTextFileContents("Settings/TurretControlSchemesList.txt", temp_schemes);
+
+
+	std::cout << "\nContents of temp_schemes:\n[";
+	for (unsigned int i = 0; i < temp_schemes.size(); i++)
+		if (i == temp_schemes.size() - 1)
+			std::cout << temp_schemes[i];
+		else
+			std::cout << temp_schemes[i] << "/";
+	std::cout << "]";
+
+
+	writeTurretControlSchemes(temp_schemes);
+
+
+
+		//Go to the ebeginning of the file
+		//list.clear();
+		//list.seekg(0, std::ios::beg);
+		//for (unsigned int i = 0; i < temp_schemes.size(); i++)
+		//	list << temp_schemes[i] << "\n";
+		//
+		//list << '\0';
+		
+
+
+		//remove("Settings/TurretControlSchemesList.txt");
+
+		//std::ofstream createFile("Settings/TurretControlSchemesList.txt");
+		//createFile.close();
+
+		//list.open("Settings/TurretControlSchemesList.txt", std::ios::out);
+		//if (!list.fail())
+		//{
+		//	std::cout << "\nRewriting TurretControlSchemesList.txt...";
+		//	for (unsigned int i = 0; i < temp_schemes.size(); i++)
+		//		list << temp_schemes[i] << "\n";
+
+		//	list.close();
+		//}
+		//else
+		//	std::cout << "\nFailed to rewrite TurretControlSchemesList.txt";
+
+
+	
+	
+
+
+	//Remove the scheme's .dat file...
+	char temp_charPtr[60] = "Settings/TurretControlSchemes/";
+	for (unsigned int i = 0; i < fileName.size(); i++)
+	{
+		temp_charPtr[30 + i] = fileName[i];
+	}
+	temp_charPtr[30 + fileName.size()] = '.';
+	temp_charPtr[31 + fileName.size()] = 'd';
+	temp_charPtr[32 + fileName.size()] = 'a';
+	temp_charPtr[33 + fileName.size()] = 't';
+	temp_charPtr[34 + fileName.size()] = '\0';
+	remove(temp_charPtr);
+
+
+	reloadTurretControlSchemeList();
+}
+
+
+void ShipEditor::updateTurretConfigurationButtonStrings()
+{
+	//Update turret configuration button strings
+	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+		switch (turretConfigurationButtons[i].id)
+	{
+		case bi_confBindFire:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretFire));
+			break;
+		case bi_confNodeHoldToFire:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
+			break;
+		case bi_confBindReload:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretReload));
+			break;
+		case bi_confNodeMouseAim:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAim));
+			break;
+		case bi_confNodeMouseAimRelative:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter));
+			break;
+		case bi_confNodeDirectionalAim:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->directionalAim));
+			break;
+		case bi_confBindVerticalAimAxis:
+			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->verticalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->verticalAxisPolarity) + ")");
+			break;
+		case bi_confBindHorizontalAimAxis:
+			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->horizontalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->horizontalAxisPolarity) + ")");
+			break;
+		case bi_confBindTurnTurretRight:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretRight));
+			break;
+		case bi_confBindTurnTurretLeft:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretLeft));
+			break;
+		case bi_confSaveTurretScheme:
+			turretConfigurationButtons[i].text.setString(" Save control scheme...");
+			break;
+
+	}
+}
+
+void ShipEditor::reloadTurretControlSchemeList()
+{
+	turretControlSchemeList.clear();
+
+	std::string temp_str;
+	std::vector<std::string> temp_schemes;
+	std::ifstream list;
+	list.open("Settings/TurretControlSchemesList.txt");
+	if (!list.fail())
+	{//Load all scheme names into temp_schemes
+		while (std::getline(list, temp_str))
+			if (temp_str != "" && temp_str != "\0" && temp_str != " ")
+				temp_schemes.push_back(temp_str);
+		list.close();
+	}
+
+	//std::cout << "\ntemp_schemes(reload):\n";
+	//for (unsigned int i = 0; i < temp_schemes.size(); i++)
+	//	std::cout << temp_schemes[i] << '/';
+
+	if (temp_schemes.size() > 0)
+		for (unsigned int i = 0; i < temp_schemes.size(); i++)
+		if (temp_schemes[i] != "")
+			turretControlSchemeList.push_back(Button(bi_confTurretControlScheme, button3X1 + buttonHeight*0.5, CONF_Y1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), font1, 
+			sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
+			sf::Color(35, 35, 40)));
+	
+
+	if (turretControlSchemeList.size() > 0)
+		updateTurretControlSchemeList();
+
+}
+void ShipEditor::updateTurretControlSchemeList()
+{
+	if (scrollDelta != 0)
+		scrollDelta = abs(scrollDelta) / scrollDelta;
+	
+	if (turretControlSchemeList.size() > 8)
+	{
+		if (scrollDelta > 0 && scrollState < turretControlSchemeList.size() - 8)
+			scrollState++;
+		else if (scrollDelta < 0 && scrollState > 0)
+			scrollState--;
+	}
+	else
+		scrollState = 0;
+
+	for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
+	{
+		turretControlSchemeList[i].setPosition(turretControlSchemeList[i].buttonRectangle.getPosition().x, CONF_Y1 + buttonHeight * 5 + buttonHeight*i - buttonHeight*scrollState);
+		turretControlSchemeList[i].text.setPosition(turretControlSchemeList[i].buttonRectangle.getPosition().x + button1Width - buttonHeight*0.5 - turretControlSchemeList[i].text.getGlobalBounds().width - 10*zoomFactor, turretControlSchemeList[i].buttonRectangle.getPosition().y);
+		if (i < scrollState || i > 7 + scrollState)
+			turretControlSchemeList[i].visible = false;
+		else
+			turretControlSchemeList[i].visible = true;
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+char ShipEditor::getUserInput(sf::Event& eventRef)
+{
+	switch (eventRef.key.code)
+	{
+	default:
+		return '#';
+	case sf::Keyboard::Q:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'Q';
+		else
+			return 'q';
+	case sf::Keyboard::W:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'W';
+		else
+			return 'w';
+	case sf::Keyboard::E:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'E';
+		else
+			return 'e';
+	case sf::Keyboard::R:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'R';
+		else
+			return 'r';
+	case sf::Keyboard::T:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'T';
+		else
+			return 't';
+	case sf::Keyboard::Y:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'Y';
+		else
+			return 'y';
+	case sf::Keyboard::U:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'U';
+		else
+			return 'u';
+	case sf::Keyboard::I:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'I';
+		else
+			return 'i';
+	case sf::Keyboard::O:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'O';
+		else
+			return 'o';
+	case sf::Keyboard::P:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'P';
+		else
+			return 'p';
+	case sf::Keyboard::A:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'A';
+		else
+			return 'a';
+	case sf::Keyboard::S:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'S';
+		else
+			return 's';
+	case sf::Keyboard::D:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'D';
+		else
+			return 'd';
+	case sf::Keyboard::F:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'F';
+		else
+			return 'f';
+	case sf::Keyboard::G:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'G';
+		else
+			return 'g';
+	case sf::Keyboard::H:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'H';
+		else
+			return 'h';
+	case sf::Keyboard::J:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'J';
+		else
+			return 'j';
+	case sf::Keyboard::K:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'K';
+		else
+			return 'k';
+	case sf::Keyboard::L:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'L';
+		else
+			return 'l';
+	case sf::Keyboard::Z:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'Z';
+		else
+			return 'z';
+	case sf::Keyboard::X:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'X';
+		else
+			return 'x';
+	case sf::Keyboard::C:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'C';
+		else
+			return 'c';
+	case sf::Keyboard::V:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'V';
+		else
+			return 'v';
+	case sf::Keyboard::B:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'B';
+		else
+			return 'b';
+	case sf::Keyboard::N:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'N';
+		else
+			return 'n';
+	case sf::Keyboard::M:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
+			return 'M';
+		else
+			return 'm';
+	case sf::Keyboard::Num1:
+		return '1';
+	case sf::Keyboard::Num2:
+		return '2';
+	case sf::Keyboard::Num3:
+		return '3';
+	case sf::Keyboard::Num4:
+		return '4';
+	case sf::Keyboard::Num5:
+		return '5';
+	case sf::Keyboard::Num6:
+		return '6';
+	case sf::Keyboard::Num7:
+		return '7';
+	case sf::Keyboard::Num8:
+		return '8';
+	case sf::Keyboard::Num9:
+		return '9';
+	case sf::Keyboard::Num0:
+		return '0';
+	case sf::Keyboard::BackSpace:
+		return '-';
+	case sf::Keyboard::Space:
+		return '+';
+	case sf::Keyboard::Return:
+		return '>';
+	}
+}
 
 MyKeys ShipEditor::detectKey(ButtonId targetButton)
 {
