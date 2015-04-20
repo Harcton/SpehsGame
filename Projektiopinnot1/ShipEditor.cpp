@@ -3,7 +3,6 @@
 #include "GridData.h"
 #include "PlayerData.h"
 #include "ShipEditor.h"
-#include <fstream>
 #include <stdio.h>
 
 
@@ -203,6 +202,7 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 		//Control schemes background
 		turretConfigurationButtons.push_back(Button(bi_false, button3X1 - 10 * resFactor, CONF_Y1 + buttonHeight * 2 - 10 * resFactor, button1Width + 20*resFactor, buttonHeight * 11 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button3X1, CONF_Y1 + buttonHeight * 2, button1Width , buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
 		//Control schemes header
 		turretConfigurationButtons.push_back(Button(bi_false, button3X1, CONF_Y1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 
@@ -319,11 +319,10 @@ void ShipEditor::run()
 						else if (focus == editor::configuration)
 						{
 							for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
-								if (turretControlSchemeList[i].selected == true)
-								{
-									deleteTurretControlScheme(turretControlSchemeList[i].text.getString());
-									break;
-								}
+								if (turretControlSchemeList[i].selected == true)	
+									workingFileName = turretControlSchemeNameList[i];
+									deleteTurretControlScheme();
+								
 						}
 						break;
 					case sf::Keyboard::Escape:
@@ -332,6 +331,10 @@ void ShipEditor::run()
 						selectedX = -1;
 						selectedY = -1;
 						focus = editor::base;
+
+						for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
+							turretControlSchemeList[i].selected = false;
+
 						gettingUserInput = false;
 						std::cout << "\nFocus returned to base";
 						break;
@@ -357,7 +360,7 @@ void ShipEditor::run()
 							break;
 						case '#':
 							break;
-						case '-':
+						case '-'://Backspace
 							if (saveTurretControlSchemeInput.size() <= 0)
 								break;
 
@@ -366,11 +369,18 @@ void ShipEditor::run()
 							
 							saveTurretControlSchemeInput = temp_str;
 							break;
-						case '+':
+						case '+'://Space
 							saveTurretControlSchemeInput += ' ';
 							break;
-						case '>':
-							saveTurretControlScheme(saveTurretControlSchemeInput);
+						case '>'://Enter
+							workingFileName = saveTurretControlSchemeInput;
+							saveTurretControlScheme();
+							gettingUserInput = false;
+							break;
+						case '<'://Escape
+							for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+								if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
+									turretConfigurationButtons[i].text.setString(" Save control scheme...");
 							gettingUserInput = false;
 							break;
 						}
@@ -1023,18 +1033,22 @@ void ShipEditor::mouseLeftPressed()
 					{
 						turretConfigurationButtons[i].text.setString(" >Input name for this control scheme<");
 						saveTurretControlSchemeInput = "";
-						gettingUserInput = true;					
+						gettingUserInput = true;
 					}
 					else
 					{
-						saveTurretControlScheme(saveTurretControlSchemeInput);
+						workingFileName = saveTurretControlSchemeInput;
+						saveTurretControlScheme();
 						gettingUserInput = false;
 					}
 					break;
 				case bi_confLoadTurretScheme:
 					for (unsigned int j = 0; j < turretControlSchemeList.size(); j++)
 						if (turretControlSchemeList[j].selected == true)
-							loadTurretControlScheme(turretControlSchemeList[j].text.getString());
+						{
+						workingFileName = turretControlSchemeNameList[j];
+						loadTurretControlScheme();
+						}
 					break;
 			}
 			for (unsigned int j = 0; j < turretControlSchemeList.size(); j++)
@@ -1338,82 +1352,129 @@ void ShipEditor::updateTurretConfigurationButtonVisibility()
 }
 
 
-void ShipEditor::saveTurretControlScheme(std::string fileName)
+void ShipEditor::saveTurretControlScheme()
 {
-	if (fileName == "" || fileName == " " || fileName == "  ")
+	if (workingFileName == "" || workingFileName == " " || workingFileName == "  " || workingFileName == "\n" || workingFileName == "\0")
 		return;
 
 	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 		if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
 			turretConfigurationButtons[i].text.setString(" Save control scheme...");
 	
-	gettingUserInput = false;	
+	gettingUserInput = false;
 
-	std::ofstream saveFile("Settings/TurretControlSchemes/"+fileName+".dat", std::ofstream::binary | std::ios::out);
-	if (saveFile)
+	mFileStream.open("Settings/TurretControlSchemes/" + workingFileName + ".dat", std::ofstream::binary | std::ios::out);
+	if (mFileStream)
 	{
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
-		saveFile.write((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
-		saveFile.close();
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
+		mFileStream.close();
 
-		std::string temp_str;
-		std::vector<std::string> temp_schemes;
-		std::ifstream list;
-		list.open("Settings/TurretControlSchemesList.txt");
-		if (!list.fail())
+		mFileStream.open("Settings/TurretControlSchemesList.txt");
+		if (!mFileStream.fail())
 		{
-			while (std::getline(list, temp_str))
-				temp_schemes.push_back(temp_str);
+			std::vector<std::string> temp_schemes;
+			std::string temp_str;
+			while (!mFileStream.eof())
+				getline(mFileStream, temp_str);
+			mFileStream.close();
 
-			list.close();
+			std::cout << "\nGetline results:" << temp_str;
+			extractNamesFromString(temp_str, temp_schemes);
 
+
+			//Check if the fileName already exists in schemes.txt
 			bool temp_alreadyListed = false;
 			for (unsigned int i = 0; i < temp_schemes.size(); i++)
-				if (temp_schemes[i] == fileName)
+				if (temp_schemes[i] == workingFileName)
 					temp_alreadyListed = true;
 			if (temp_alreadyListed == false)
 			{//Save the scheme in the list
-				std::ofstream list2;
-				list2.open("Settings/TurretControlSchemesList.txt", std::ios::app);
-				list2 << "\n" << fileName;
+				mFileStream.open("Settings/TurretControlSchemesList.txt", std::ios::app);
+				if (!mFileStream.fail())
+					mFileStream << workingFileName << "#";
+				else
+					std::cout << "\nFailed to save new scheme to TurretControlSchemes.List.txt";
+				mFileStream.close();
 			}
 		}			
 		reloadTurretControlSchemeList();
 	}
 	else
-		std::cout << "\nError. Failed to save turret control scheme";
+		std::cout << "\nError. Failed to save turret control scheme:\n" << "Settings/TurretControlSchemes/" << workingFileName << ".dat";
+
+	mFileStream.close();
 }
 
-void ShipEditor::loadTurretControlScheme(std::string fileName)
+void ShipEditor::extractNamesFromString(std::string& string, std::vector<std::string>& vector)
 {
-	if (fileName == "")
+	std::cout << "\n\nBeginning name extraction...";
+	if (string.size() > 0)
+	{
+		int temp_scheme_index = 0;
+		vector.push_back("");
+		for (unsigned int i = 0; i < string.size(); i++)
+		{
+			if (string[i] != '#')
+				vector[temp_scheme_index] += string[i];
+			else if (i < string.size() - 1)
+			{
+				vector.push_back("");
+				temp_scheme_index++;
+			}
+		}
+	}
+
+
+	//Remove unwanted names
+	for (unsigned int i = 0; i < vector.size(); i++)
+		if (vector[i].size() < 2)
+	{
+		std::cout << "\nErasing (size "<< vector[i].size() << "): " << vector[i];
+		vector.erase(vector.begin() + i);
+		i--;
+	}
+
+	std::cout << "\nName extraction complete...";
+	std::cout << "\nOriginal string: " << string;
+	std::cout << "\nVector: [";
+	for (unsigned int i = 0; i < vector.size(); i++)
+		if (i == vector.size() - 1)
+			std::cout << vector[i];
+		else
+			std::cout << vector[i] << "/";
+	std::cout << "]\n";
+	
+}
+
+void ShipEditor::loadTurretControlScheme()
+{
+	if (workingFileName == "" || workingFileName == " " || workingFileName == "  " || workingFileName == "\n" || workingFileName == "\0")
 		return;
 
-	std::ifstream saveFile("Settings/TurretControlSchemes/" + fileName + ".dat", std::ios::binary | std::ios::in);
-	if (saveFile)
+	mFileStream.open("Settings/TurretControlSchemes/" + workingFileName + ".dat", std::ios::binary | std::ios::in);
+	if (mFileStream)
 	{
-		std::cout << "\nLoading " << fileName << ".dat...";
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
-		saveFile.read((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
-
-		turretConfigurationButtons[2].text.setString(turretConfigurationButtons[2].text.getString() + "    [control scheme \"" + fileName + "\"]");
-
+		std::cout << "\nLoading " << workingFileName << ".dat...";
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
+		mFileStream.close();
 		updateTurretConfigurationButtonStrings();
 		updateTurretConfigurationButtonVisibility();
 	}
@@ -1422,102 +1483,69 @@ void ShipEditor::loadTurretControlScheme(std::string fileName)
 
 }
 
-void ShipEditor::getTextFileContents(std::string filePath, std::vector<std::string>& vector)
-{
-	std::string temp_str;
-	std::fstream list(filePath, std::ios::in | std::ios::out);
-	if (!list.fail())
-	{//Load all scheme names into temp_schemes
-		while (std::getline(list, temp_str))
-			if (temp_str != "" && temp_str != " " && temp_str != "\n" && temp_str != "\0")
-				vector.push_back(temp_str);
-		list.close();
-	}
-}
 
 void ShipEditor::writeTurretControlSchemes(std::vector<std::string>& vector)
 {
-	char* temp_charPtr = "Settings/TurretControlSchemesList.txt";
-	//remove(temp_charPtr);
+	mFileStream.open("Settings/TurretControlSchemesList.txt", std::ios::out);
+	if (!mFileStream.fail())
+	{
+		mFileStream.clear();
+		mFileStream.seekg(0, std::ios::beg);
+		for (unsigned int i = 0; i < vector.size(); i++)
+		{
+			mFileStream << vector[i] << "#";
+		}
+		//Use the null terminator to purge all the unholy lines
+		mFileStream << "###\0";
+	}
 
-	std::fstream file;
-	file.open("Settings/TurretControlSchemesList.txt", std::ios::out);
-	if (file.fail())
-		std::cout << "FAIL";
-	else
-		std::cout << "SWEETMUTHERFUKING SUCCESSSSS";
-
-	file.close();
+	mFileStream.close();
 }
 
-void ShipEditor::deleteTurretControlScheme(std::string fileName)
+void ShipEditor::deleteTurretControlScheme()
 {
-	std::cout << "\nDeleting turret control scheme...";
+	std::cout << "\nDeleting turret control scheme: [" << workingFileName << "]";
 	//Remove the scheme from the scheme list
 	std::vector<std::string> temp_schemes;
-	getTextFileContents("Settings/TurretControlSchemesList.txt", temp_schemes);
+	mFileStream.open("Settings/TurretControlSchemesList.txt");
+	if (!mFileStream.fail())
+	{
+		std::string temp_str;
+		while (!mFileStream.eof())
+			mFileStream >> temp_str;
+		mFileStream.close();
 
+		extractNamesFromString(temp_str, temp_schemes);
 
-	std::cout << "\nContents of temp_schemes:\n[";
-	for (unsigned int i = 0; i < temp_schemes.size(); i++)
-		if (i == temp_schemes.size() - 1)
-			std::cout << temp_schemes[i];
-		else
-			std::cout << temp_schemes[i] << "/";
-	std::cout << "]";
-
+		//Delete fileName from the list
+		for (unsigned int i = 0; i < temp_schemes.size(); i++)
+		{
+			if (temp_schemes[i] == workingFileName)
+			{
+				temp_schemes.erase(temp_schemes.begin() + i);
+				std::cout << "\nDelete complete: " << workingFileName;
+			}
+		}
+	}
 
 	writeTurretControlSchemes(temp_schemes);
 
-
-
-		//Go to the ebeginning of the file
-		//list.clear();
-		//list.seekg(0, std::ios::beg);
-		//for (unsigned int i = 0; i < temp_schemes.size(); i++)
-		//	list << temp_schemes[i] << "\n";
-		//
-		//list << '\0';
-		
-
-
-		//remove("Settings/TurretControlSchemesList.txt");
-
-		//std::ofstream createFile("Settings/TurretControlSchemesList.txt");
-		//createFile.close();
-
-		//list.open("Settings/TurretControlSchemesList.txt", std::ios::out);
-		//if (!list.fail())
-		//{
-		//	std::cout << "\nRewriting TurretControlSchemesList.txt...";
-		//	for (unsigned int i = 0; i < temp_schemes.size(); i++)
-		//		list << temp_schemes[i] << "\n";
-
-		//	list.close();
-		//}
-		//else
-		//	std::cout << "\nFailed to rewrite TurretControlSchemesList.txt";
-
-
-	
-	
-
-
 	//Remove the scheme's .dat file...
 	char temp_charPtr[60] = "Settings/TurretControlSchemes/";
-	for (unsigned int i = 0; i < fileName.size(); i++)
+	for (unsigned int i = 0; i < workingFileName.size(); i++)
 	{
-		temp_charPtr[30 + i] = fileName[i];
+		temp_charPtr[30 + i] = workingFileName[i];
 	}
-	temp_charPtr[30 + fileName.size()] = '.';
-	temp_charPtr[31 + fileName.size()] = 'd';
-	temp_charPtr[32 + fileName.size()] = 'a';
-	temp_charPtr[33 + fileName.size()] = 't';
-	temp_charPtr[34 + fileName.size()] = '\0';
+	temp_charPtr[30 + workingFileName.size()] = '.';
+	temp_charPtr[31 + workingFileName.size()] = 'd';
+	temp_charPtr[32 + workingFileName.size()] = 'a';
+	temp_charPtr[33 + workingFileName.size()] = 't';
+	temp_charPtr[34 + workingFileName.size()] = '\0';
 	remove(temp_charPtr);
 
-
 	reloadTurretControlSchemeList();
+
+	std::cout << "\n-End of delete scheme-";
 }
 
 
@@ -1567,34 +1595,37 @@ void ShipEditor::updateTurretConfigurationButtonStrings()
 void ShipEditor::reloadTurretControlSchemeList()
 {
 	turretControlSchemeList.clear();
+	turretControlSchemeNameList.clear();
 
 	std::string temp_str;
 	std::vector<std::string> temp_schemes;
-	std::ifstream list;
-	list.open("Settings/TurretControlSchemesList.txt");
-	if (!list.fail())
+	mFileStream.open("Settings/TurretControlSchemesList.txt", std::ios::in);
+	if (!mFileStream.fail())
 	{//Load all scheme names into temp_schemes
-		while (std::getline(list, temp_str))
-			if (temp_str != "" && temp_str != "\0" && temp_str != " ")
-				temp_schemes.push_back(temp_str);
-		list.close();
-	}
+		while (!mFileStream.eof())
+			mFileStream >> temp_str;
+		mFileStream.close();
 
+		extractNamesFromString(temp_str, temp_schemes);
+	}
+	std::cout << "\nTemp_schemes.size() @ reloadListElements" <<  temp_schemes.size();
 	//std::cout << "\ntemp_schemes(reload):\n";
 	//for (unsigned int i = 0; i < temp_schemes.size(); i++)
 	//	std::cout << temp_schemes[i] << '/';
 
 	if (temp_schemes.size() > 0)
 		for (unsigned int i = 0; i < temp_schemes.size(); i++)
-		if (temp_schemes[i] != "")
-			turretControlSchemeList.push_back(Button(bi_confTurretControlScheme, button3X1 + buttonHeight*0.5, CONF_Y1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), font1, 
-			sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
-			sf::Color(35, 35, 40)));
-	
+		{
+		turretControlSchemeList.push_back(Button(bi_confTurretControlScheme, button3X1 + buttonHeight*0.5, CONF_Y1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), font1,
+		sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
+		sf::Color(35, 35, 40)));
+		turretControlSchemeNameList.push_back(temp_schemes[i]);
+		}
 
 	if (turretControlSchemeList.size() > 0)
 		updateTurretControlSchemeList();
 
+	std::cout << "\n\nTurretControlSchemeList elements reload complete\n";
 }
 void ShipEditor::updateTurretControlSchemeList()
 {
@@ -1829,10 +1860,12 @@ char ShipEditor::getUserInput(sf::Event& eventRef)
 		return '0';
 	case sf::Keyboard::BackSpace:
 		return '-';
-	case sf::Keyboard::Space:
-		return '+';
+	//case sf::Keyboard::Space:
+	//	return '+';
 	case sf::Keyboard::Return:
 		return '>';
+	case sf::Keyboard::Escape:
+		return '<';
 	}
 }
 

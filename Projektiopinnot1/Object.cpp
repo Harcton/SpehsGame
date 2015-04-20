@@ -11,7 +11,6 @@
 
 Object::~Object()
 {
-	std::cout << "\nObject destructor begin";
 	while (!components.empty())
 	{
 		//std::cout << "\n~Object: components: " << components.size();

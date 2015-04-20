@@ -1,5 +1,6 @@
 #ifndef SHIPEDITOR_H
 #define SHIPEDITOR_H
+#include <fstream>
 
 namespace editor
 {
@@ -44,8 +45,6 @@ public:
 	void scrapComponent(int, int);
 	void rotateGlowAngle();
 	void applyRotation();
-	void getTextFileContents(std::string, std::vector<std::string>&);
-	void writeTurretControlSchemes(std::vector<std::string>&);
 	void updateTurretConfigurationButtonVisibility();
 	void updateTurretConfigurationButtonStrings();
 	void reloadTurretControlSchemeList();
@@ -63,10 +62,11 @@ public:
 	char getUserInput(sf::Event&);
 
 	//Control schemes
-	void saveTurretControlScheme(std::string);
-	void loadTurretControlScheme(std::string);
-	void deleteTurretControlScheme(std::string);
-
+	void saveTurretControlScheme();
+	void loadTurretControlScheme();
+	void deleteTurretControlScheme();
+	void writeTurretControlSchemes(std::vector<std::string>&);
+	void extractNamesFromString(std::string&, std::vector<std::string>&);
 
 	//Input
 	MyKeys detectKey(ButtonId);
@@ -111,6 +111,9 @@ private:
 	int scrollDelta = 0;
 	int scrollState = 0;
 	std::string saveTurretControlSchemeInput;
+	std::string workingFileName;
+	std::fstream mFileStream;
+	std::vector<std::string> turretControlSchemeNameList;
 	bool gettingUserInput = false;
 
 	std::vector<sf::VertexArray> horizontalLines;
