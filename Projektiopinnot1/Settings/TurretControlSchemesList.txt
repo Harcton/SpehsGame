@@ -1,1 +1,1 @@
-mouseDisabledManual####mouseDisabledAnalog1#mouseAiming#
+mouseDisabledManual#mouseDisabledAnalog1#mouseAiming####

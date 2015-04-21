@@ -202,7 +202,10 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 		//Control schemes background
 		turretConfigurationButtons.push_back(Button(bi_false, button3X1 - 10 * resFactor, CONF_Y1 + buttonHeight * 2 - 10 * resFactor, button1Width + 20*resFactor, buttonHeight * 11 + 20 * resFactor, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_false, button3X1, CONF_Y1 + buttonHeight * 2, button1Width , buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button3X1, CONF_Y1 + buttonHeight * 2, button1Width, buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button3X1, CONF_Y1 + buttonHeight * 2, buttonHeight*0.5, buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confScrollUp, button3X1, CONF_Y1 + buttonHeight * 5, buttonHeight*0.5, buttonHeight, "/\\", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
+		turretConfigurationButtons.push_back(Button(bi_confScrollDown, button3X1, CONF_Y1 + buttonHeight * 12, buttonHeight*0.5, buttonHeight, "\\/", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
 		//Control schemes header
 		turretConfigurationButtons.push_back(Button(bi_false, button3X1, CONF_Y1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 
@@ -244,6 +247,8 @@ void ShipEditor::run()
 		//Return/quit
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gettingUserInput == false)
 			keepRunning = false;
+
+		clickTimer++;
 
 		//Movement
 		if ((focus == editor::base || focus == editor::component) && gettingUserInput == false)
@@ -1050,16 +1055,36 @@ void ShipEditor::mouseLeftPressed()
 						loadTurretControlScheme();
 						}
 					break;
+				case bi_confScrollUp:
+					scrollDelta = -1;
+					if (playerData.grid[selectedX][selectedY]->turret > 0)
+						updateTurretControlSchemeList();
+					break;
+				case bi_confScrollDown:
+					scrollDelta = 1;
+					if (playerData.grid[selectedX][selectedY]->turret > 0)
+						updateTurretControlSchemeList();
+					break;
 			}
 			for (unsigned int j = 0; j < turretControlSchemeList.size(); j++)
-				if (turretControlSchemeList[j].mouseOverlap(mousePos) && turretControlSchemeList[j].visible == true && turretControlSchemeList[j].selected == false)
+				if (turretControlSchemeList[j].mouseOverlap(mousePos) && turretControlSchemeList[j].visible == true)
 				{
-				for (unsigned int k = 0; k < turretControlSchemeList.size(); k++)
-					turretControlSchemeList[k].selected = false;
-				turretControlSchemeList[j].selected = true;
+				if (turretControlSchemeList[j].selected == false)
+				{
+					clickTimer = 0;
+					for (unsigned int k = 0; k < turretControlSchemeList.size(); k++)
+						turretControlSchemeList[k].selected = false;
+					turretControlSchemeList[j].selected = true;
+				}
+				else if (clickTimer < 30)
+				{
+					workingFileName = turretControlSchemeNameList[j];
+					loadTurretControlScheme();
+					turretControlSchemeList[j].selected = false;
 				}
 				else
 					turretControlSchemeList[j].selected = false;
+				}
 		}//End of turret conf
 		else if (playerData.grid[selectedX][selectedY]->engine > 0)
 			for (unsigned int i = 0; i < engineConfigurationButtons.size(); i++)

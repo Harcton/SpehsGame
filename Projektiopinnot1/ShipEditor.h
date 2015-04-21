@@ -115,6 +115,7 @@ private:
 	std::fstream mFileStream;
 	std::vector<std::string> turretControlSchemeNameList;
 	bool gettingUserInput = false;
+	int clickTimer = 0;
 
 	std::vector<sf::VertexArray> horizontalLines;
 	std::vector<sf::VertexArray> verticalLines;

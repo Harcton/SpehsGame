@@ -148,6 +148,8 @@ enum ButtonId
 	bi_confTurretControlScheme,
 	bi_confSaveTurretScheme,
 	bi_confLoadTurretScheme,
+	bi_confScrollUp,
+	bi_confScrollDown,
 
 	bi_confBindThrust,
 	bi_confNodeHoldToThrust,
