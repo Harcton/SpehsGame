@@ -1,5 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
+#include "Sprite.h"
+
 namespace component
 {
 
@@ -76,7 +78,8 @@ public:
 	float thrust; //thrust strength
 
 protected:
-	sf::Sprite spr;
+	std::vector<sf::Sprite> sprites;
+	std::vector<sge::Sprite> animatedSprites;
 
 	bool mouseAim;
 	bool mouseAimRelativeToCenter;

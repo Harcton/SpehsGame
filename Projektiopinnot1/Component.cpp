@@ -80,11 +80,18 @@ void Component::update()
 	screenX = centerObj->screenX + resFactor*zoomFactor*(x - centerObj->x);
 	screenY = centerObj->screenY + resFactor*zoomFactor*(y - centerObj->y);
 
-	spr.setPosition(screenX, screenY);
-	spr.setRotation(360 - (angle / PI) * 180);
-	spr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
-
-	spr.setColor(sf::Color(255, 255 * (hp / 100.f), 255 * (hp / 100.f)));
+	for (unsigned int i = 0; i < sprites.size(); i++)
+	{
+		sprites[i].setPosition(screenX, screenY);
+		sprites[i].setRotation(360 - (angle / PI) * 180);
+		sprites[i].setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+	}
+	for (unsigned int i = 0; i < animatedSprites.size(); i++)
+	{
+		animatedSprites[i].setPosition(screenX, screenY);
+		animatedSprites[i].setRotation(360 - (angle / PI) * 180);
+		animatedSprites[i].setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+	}
 
 	//DEBUG
 	if (drawCollisionCircle == false)
@@ -100,8 +107,10 @@ void Component::update()
 
 void Component::draw()
 {
-	master->mWindow.draw(spr);
-
+	for (unsigned int i = 0; i < sprites.size(); i++)
+		master->mWindow.draw(sprites[i]);
+	for (unsigned int i = 0; i < animatedSprites.size(); i++)
+		animatedSprites[i].draw(master->mWindow);
 
 	//DEBUG
 	if (drawCollisionCircle == false)
@@ -116,8 +125,9 @@ void Component::createChild(double ox, double oy, component::Type tp)
 	case component::hull:
 		master->components.push_back(new Component(master, centerObj, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
-		master->components[master->components.size() - 1]->spr.setTexture(RM.getTexture("skeleton.png"));
-		master->components[master->components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
+		master->components[master->components.size() - 1]->sprites.push_back(sf::Sprite());
+		master->components[master->components.size() - 1]->sprites[master->components[master->components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("skeleton.png"));
+		master->components[master->components.size() - 1]->sprites[master->components[master->components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(1400, 0, 100, 100));
 		break;
 	case component::turret: //Turret
 		master->components.push_back(new Turret(master, centerObj, ox, oy));

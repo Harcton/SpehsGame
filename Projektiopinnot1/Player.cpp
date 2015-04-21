@@ -623,9 +623,10 @@ void Player::calculateCenterOfMass()
 void Player::addFromGrid(int gx, int gy)
 {
 	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100, gx, gy));
-	components[components.size() - 1]->spr.setTexture(RM.getTexture("skeleton.png"));
-	components[components.size() - 1]->spr.setTextureRect(sf::IntRect(1400, 0, 100, 100));
-	components[components.size() - 1]->spr.setOrigin(50,50);
+	components[components.size() - 1]->sprites.push_back(sf::Sprite());
+	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("skeleton.png"));
+	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(1400, 0, 100, 100));
+	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
 	
 	if (data->grid[gx][gy]->turret == 1)
 	{

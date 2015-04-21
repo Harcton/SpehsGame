@@ -1397,10 +1397,16 @@ void ShipEditor::saveTurretControlScheme()
 		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
 		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
 		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->directionalJoystickId, sizeof(int));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->verticalAxisPolarity, sizeof(float));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->horizontalAxisPolarity, sizeof(float));
 		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
 		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
 		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
 		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->red, sizeof(int));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->green, sizeof(int));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->blue, sizeof(int));
 		mFileStream.close();
 
 		mFileStream.open("Settings/TurretControlSchemesList.txt");
@@ -1495,10 +1501,16 @@ void ShipEditor::loadTurretControlScheme()
 		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
 		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
 		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->directionalJoystickId, sizeof(int));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->verticalAxisPolarity, sizeof(float));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->horizontalAxisPolarity, sizeof(float));
 		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
 		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
 		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
 		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->red, sizeof(int));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->green, sizeof(int));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->blue, sizeof(int));
 		mFileStream.close();
 		updateTurretConfigurationButtonStrings();
 		updateTurretConfigurationButtonVisibility();

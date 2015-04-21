@@ -13,6 +13,7 @@ public:
 	friend class ShipEditor;
 
 private:
+	//Upgrades
 	int armor = 0;
 	int angleModifier = 0; 
 	int turret = 0; //Turret damage
@@ -24,16 +25,16 @@ private:
 	int rechargeSpeed = 0; //Reload & recharge rate
 	float maxSpeed = 0; //bullet/engine speed
 	int fireRateInterval = 0;
-
-
 	bool hullMount = false;
 
+	//Structural
 	bool childUp = false;
 	bool childRight = false;
 	bool childDown = false;
 	bool childLeft = false;
-
 	bool core = false;
+
+	//Control scheme
 	bool mouseAim = false;
 	bool mouseAimRelativeToCenter = true;
 	bool holdToFire = true;
@@ -45,6 +46,11 @@ private:
 	sf::Joystick::Axis horizontalAxis;
 	sf::Joystick::Axis verticalAxis;
 
+	int red = 255;
+	int green = 255;
+	int blue = 255;
+
+	//MyKeys
 	MyKeys turretFire;
 	MyKeys turretReload;
 	MyKeys turretLeft;
