@@ -150,6 +150,20 @@ enum ButtonId
 	bi_confLoadTurretScheme,
 	bi_confScrollUp,
 	bi_confScrollDown,
+	bi_confScrollBar,
+
+	bi_confChangeJoystickIndexTo0,
+	bi_confChangeJoystickIndexTo1,
+	bi_confChangeJoystickIndexTo2,
+	bi_confChangeJoystickIndexTo3,
+	bi_confChangeJoystickIndexTo4,
+	bi_confChangeJoystickIndexTo5,
+	bi_confChangeJoystickIndexTo6,
+	bi_confChangeJoystickIndexTo7,
+
+	bi_confRedSlider,
+	bi_confGreenSlider,
+	bi_confBlueSlider,
 
 	bi_confBindThrust,
 	bi_confNodeHoldToThrust,

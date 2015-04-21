@@ -27,8 +27,8 @@ Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float s
 	type = bt_sprite;
 	id = bid;
 	spr.setTexture(tex);
-	spr.setTextureRect(sf::IntRect(0, 0, 25, 25));
-	spr.setPosition(x_pos*resFactor, y_pos*resFactor);
+	//spr.setTextureRect(sf::IntRect(0, 0, 25, 25));
+	spr.setPosition(x_pos, y_pos);
 	spr.setScale(scale*resFactor, scale*resFactor);
 
 
@@ -42,9 +42,13 @@ bool Button::mouseOverlap(sf::Vector2i& mousePos)
 	if (type == bt_text)
 	{
 		if (mousePos.x > buttonRectangle.getPosition().x &&
-			mousePos.x < buttonRectangle.getPosition().x + buttonRectangle.getGlobalBounds().width - 5 &&
+			mousePos.x < buttonRectangle.getPosition().x + buttonRectangle.getGlobalBounds().width &&
 			mousePos.y >  buttonRectangle.getPosition().y &&
-			mousePos.y < buttonRectangle.getPosition().y + buttonRectangle.getGlobalBounds().height - 5)
+			mousePos.y < buttonRectangle.getPosition().y + buttonRectangle.getGlobalBounds().height)
+		//if (mousePos.x > buttonRectangle.getPosition().x &&
+		//	mousePos.x < buttonRectangle.getPosition().x + buttonRectangle.getGlobalBounds().width - 5 &&
+		//	mousePos.y >  buttonRectangle.getPosition().y &&
+		//	mousePos.y < buttonRectangle.getPosition().y + buttonRectangle.getGlobalBounds().height - 5)
 			return true;
 		else
 			return false;

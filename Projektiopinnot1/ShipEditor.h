@@ -60,6 +60,9 @@ public:
 	void drawConfigurations();
 
 	char getUserInput(sf::Event&);
+	void adjustColor();
+
+	void closeTurretConfigurations();
 
 	//Control schemes
 	void saveTurretControlScheme();
@@ -87,13 +90,19 @@ private:
 	float glowAmount = 0; // 0.0 - 1.0
 	sf::Font font1;
 
-	//Temps
+	//Button lengths
+	int actionButtonWidth;
+	int actionButtonHeight;
+	int turretConfX1;
+	int turretConfY1;
 	int buttonHeight;
 	int button1X1;
 	int button2Width;
 	int button1Width;
 	int button2X1;
 	int button3X1;
+	int buttonBorder;
+	int scrollBarY1;
 	std::pair<int, sf::Joystick::Axis> temp_idAxisPair;
 
 
@@ -108,6 +117,7 @@ private:
 	float grabCameraOriginY = 0;
 	int checkX;
 	int checkY;
+	bool usingScrollBar = false;
 	int scrollDelta = 0;
 	int scrollState = 0;
 	std::string saveTurretControlSchemeInput;
@@ -116,6 +126,7 @@ private:
 	std::vector<std::string> turretControlSchemeNameList;
 	bool gettingUserInput = false;
 	int clickTimer = 0;
+	int adjustingColor = 0;
 
 	std::vector<sf::VertexArray> horizontalLines;
 	std::vector<sf::VertexArray> verticalLines;
@@ -140,6 +151,7 @@ private:
 	//Editor textures
 
 	sf::Sprite circleSliderSpr;
+	sf::Sprite colorPreviewTurret;
 
 };
 

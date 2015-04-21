@@ -55,7 +55,6 @@ void initializeResourceManager(ResourceManager& rm)
 {
 //TEXTURES
 	//PLAYER
-	rm.loadTexture("Texture/Player/editorTurret.png");
 	rm.loadTexture("Texture/Player/skeleton.png");
 	rm.loadTexture("Texture/Player/turret.png");
 
@@ -70,6 +69,8 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Menu/inheritanceArrow.png");
 	rm.loadTexture("Texture/Menu/xButton.png");
 	rm.loadTexture("Texture/Menu/circleSlider.png");
+	rm.loadTexture("Texture/Menu/slider1.png");
+	rm.loadTexture("Texture/Menu/editorTurret.png");
 	
 	//EFFECTS
 

@@ -28,11 +28,11 @@ private:
 	bool hullMount = false;
 
 	//Structural
+	bool core = false;
 	bool childUp = false;
 	bool childRight = false;
 	bool childDown = false;
 	bool childLeft = false;
-	bool core = false;
 
 	//Control scheme
 	bool mouseAim = false;

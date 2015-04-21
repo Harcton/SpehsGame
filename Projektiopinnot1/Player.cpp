@@ -634,7 +634,11 @@ void Player::addFromGrid(int gx, int gy)
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
 		components[components.size() - 1]->angleModifier = data->grid[gx][gy]->angleModifier*(PI/180);
-
+		//Color all the sprites
+		for (unsigned int i = 0; i < components[components.size() - 1]->sprites.size(); i++)
+			components[components.size() - 1]->sprites[i].setColor(sf::Color(data->grid[gx][gy]->red, data->grid[gx][gy]->green, data->grid[gx][gy]->blue));
+		for (unsigned int i = 0; i < components[components.size() - 1]->animatedSprites.size(); i++)
+			components[components.size() - 1]->animatedSprites[i].setColor(sf::Color(data->grid[gx][gy]->red, data->grid[gx][gy]->green, data->grid[gx][gy]->blue));
 	}
 	
 	//Handle children	
