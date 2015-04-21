@@ -17,7 +17,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	detectionDistance = SPAWN_RANGE;
 }
 
-
+//for fliers
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVector, TypeOfAI tp, Enemy* fMaster) : refVector(rVector), Object(windowref, game)
 {
 	flierMaster = fMaster;
@@ -546,7 +546,7 @@ void Enemy::enemyAI()
 				//Not actually following !!!??!
 				if (angle >= 0 && angle < PI / 2) //1st quarter
 				{
-					if (flierMaster->angle < PI && flierMaster->angle > angle)
+					/*if (flierMaster->angle < PI && flierMaster->angle > angle)
 					{
 						turnSpeed += maxTurnSpeed;
 					}
@@ -561,11 +561,11 @@ void Enemy::enemyAI()
 					else
 					{
 						turnSpeed -= maxTurnSpeed;
-					}
+					}*/
 				}
 				else if (angle >= PI / 2 && angle < PI) //2nd quarter
 				{
-					if (flierMaster->angle < PI*1.5 && flierMaster->angle > angle)
+					/*if (flierMaster->angle < PI*1.5 && flierMaster->angle > angle)
 					{
 						turnSpeed += maxTurnSpeed;
 					}
@@ -580,11 +580,11 @@ void Enemy::enemyAI()
 					else
 					{
 						turnSpeed += maxTurnSpeed;
-					}
+					}*/
 				}
 				else if (angle >= PI && angle < PI*1.5)//3rd quarter
 				{
-					if (flierMaster->angle > angle)
+					/*if (flierMaster->angle > angle)
 					{
 						turnSpeed += maxTurnSpeed;
 					}
@@ -599,11 +599,11 @@ void Enemy::enemyAI()
 					else
 					{
 						turnSpeed -= maxTurnSpeed;
-					}
+					}*/
 				}
 				else //4th quarter
 				{
-					if (flierMaster->angle > angle || flierMaster->angle < PI / 2)
+					/*if (flierMaster->angle > angle || flierMaster->angle < PI / 2)
 					{
 						turnSpeed += maxTurnSpeed;
 					}
@@ -618,10 +618,11 @@ void Enemy::enemyAI()
 					else
 					{
 						turnSpeed -= maxTurnSpeed;
-					}
+					}*/
 				}
-				xSpeed = cos(2 * PI - angle)*maxSpeed;
-				ySpeed = sin(2 * PI - angle)*maxSpeed;
+				xSpeed = cos(2 * PI - angle)*maxSpeed*irandom(0.9, 1.1);
+				ySpeed = sin(2 * PI - angle)*maxSpeed*irandom(0.9, 1.1);
+				turnSpeed += irandom(-1, 1)*maxTurnSpeed;
 			}
 			else if (initiateFlierAssault == true)
 			{
