@@ -13,7 +13,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	enemyInitialize();
 
 	dodging = false;
-	snappingAngle = 0; //doesn't matter atm what this is...
+	snappingAngle = 0.01;
 	detectionDistance = SPAWN_RANGE;
 }
 
@@ -23,7 +23,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	flierMaster = fMaster;
 	typeOfEnemy = tp;
 	dodging = false;
-	snappingAngle = 0; //doesn't matter atm what this is...
+	snappingAngle = 0.01; //doesn't matter atm what this is...
 	detectionDistance = SPAWN_RANGE;
 	enemyInitialize();
 }
@@ -58,7 +58,7 @@ void Enemy::enemyInitialize()
 		maxSpeed = 4;
 
 		components.push_back(new Component(this, mGame->playerObj, 0, 0));
-		components[components.size() - 1]->spr.setTexture(RM.getTexture("enemy_base_purple.png"));
+		components[components.size() - 1]->spr.setTexture(RM.getTexture("enemy_base.png"));
 		components[components.size() - 1]->spr.setOrigin(50, 50);
 	}
 	else if (typeOfEnemy == et_flier)
@@ -205,7 +205,7 @@ bool Enemy::update()
 		turnSpeed = maxTurnSpeed;
 	else if (turnSpeed < -maxTurnSpeed)
 		turnSpeed = -maxTurnSpeed;
-	
+
 	//Complex update
 	double tempDistance = 0;
 	int tempIndex = -1;
@@ -330,7 +330,7 @@ void Enemy::enemyAI()
 			ySpeed = -(sin(2 * PI - angle))*(distance / 1000)*maxSpeed;
 			if (timer >= 8)
 			{
-				if (angle < playerDirection|| angle > -playerDirection) //fix this thing?
+				if (angle < playerDirection + snappingAngle && angle > -playerDirection - snappingAngle)
 				for (unsigned int i = 0; i < components.size(); i++)
 					for (unsigned int k = 0; k < components[i]->types.size(); k++)
 						if (components[i]->types[k] == component::turret)

@@ -48,7 +48,7 @@ private:
 
 	double maxTurnSpeed; //more like normal turningspeed...
 	double maxSpeed;
-	double snappingAngle; //?
+	double snappingAngle;
 	bool rotationDirection; //true CW, false CCW
 
 	bool laserBChange = false;
