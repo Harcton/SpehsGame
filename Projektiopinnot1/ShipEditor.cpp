@@ -35,19 +35,35 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	button2X1 = button1X1 + button1Width;
 	button3X1 = button1X1 + button1Width + button2Width + buttonHeight;
 
+	coreConfX1 = int((WINDOW_WIDTH) / 2.0f - button1Width - button2Width*0.5f - 1.5f * buttonHeight);
+	coreConfY1 = (WINDOW_HEIGHT - 13 * buttonHeight) / 2.0f;
+	coreConfSchemeY = 5;
+
+
 	//Misc graphical stuff
 	scaleFactor = resFactor*zoomFactor;
 	shadeRect.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
 	shadeRect.setFillColor(sf::Color(0, 0, 0, 100));
-	configurationRect1.setSize(sf::Vector2f(CONF_WIDTH + buttonBorder, CONF_HEIGHT + buttonBorder));
-	configurationRect1.setPosition(turretConfX1 - 5 * resFactor, CONF_Y1 - 5 * resFactor);
-	configurationRect1.setFillColor(sf::Color(140, 140, 145));
-	configurationRect2.setSize(sf::Vector2f(CONF_WIDTH, CONF_HEIGHT));
-	configurationRect2.setPosition(turretConfX1, CONF_Y1);
-	configurationRect2.setFillColor(sf::Color(100, 100, 105));
-	configurationRect3.setSize(sf::Vector2f(CONF_WIDTH - 2*buttonBorder, CONF_HEIGHT - 70 * resFactor));
-	configurationRect3.setPosition(turretConfX1 + buttonBorder, CONF_Y1 + 60 * resFactor);
-	configurationRect3.setFillColor(sf::Color(110, 110, 115));
+	//Core conf rects
+	coreConfigurationRect1.setSize(sf::Vector2f(2*buttonBorder + 2*button1Width + button2Width + buttonHeight*3, 15*buttonHeight + 2*buttonBorder));
+	coreConfigurationRect1.setPosition(coreConfX1 - buttonBorder, coreConfY1 - buttonBorder);
+	coreConfigurationRect1.setFillColor(sf::Color(140, 140, 145));
+	coreConfigurationRect2.setSize(sf::Vector2f(2 * button1Width + button2Width + buttonHeight*3, 15 * buttonHeight));
+	coreConfigurationRect2.setPosition(coreConfX1, coreConfY1);
+	coreConfigurationRect2.setFillColor(sf::Color(100, 100, 105));
+	coreConfigurationRect3.setSize(sf::Vector2f(2 * button1Width + button2Width + buttonHeight*3 - 2*buttonBorder, 14 * buttonHeight - 2*buttonBorder));
+	coreConfigurationRect3.setPosition(coreConfX1 + buttonBorder, coreConfY1 + buttonBorder + buttonHeight);
+	coreConfigurationRect3.setFillColor(sf::Color(110, 110, 115));
+	//Turret conf rects
+	turretConfigurationRect1.setSize(sf::Vector2f(3*buttonHeight + 2*button1Width + button2Width + buttonBorder, CONF_HEIGHT + buttonBorder));
+	turretConfigurationRect1.setPosition(turretConfX1 - 5 * resFactor, turretConfY1 - 5 * resFactor);
+	turretConfigurationRect1.setFillColor(sf::Color(140, 140, 145));
+	turretConfigurationRect2.setSize(sf::Vector2f(CONF_WIDTH, CONF_HEIGHT));
+	turretConfigurationRect2.setPosition(turretConfX1, turretConfY1);
+	turretConfigurationRect2.setFillColor(sf::Color(100, 100, 105));
+	turretConfigurationRect3.setSize(sf::Vector2f(CONF_WIDTH - 2 * buttonBorder, CONF_HEIGHT - 70 * resFactor));
+	turretConfigurationRect3.setPosition(turretConfX1 + buttonBorder, turretConfY1 + 60 * resFactor);
+	turretConfigurationRect3.setFillColor(sf::Color(110, 110, 115));
 
 	//Focus camera on core
 	for (int sx = 0; sx < EDITOR_WIDTH; sx++)
@@ -67,12 +83,24 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	//Action buttons
 	font1.loadFromFile("Font/ORANGEKI.ttf");
 	actionButtons.push_back(Button(bi_false, 0, 0, actionButtonWidth, actionButtonHeight, "Component name", int(26 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	actionButtons.push_back(Button(bi_actionUpgradeArmor, 0, 0, actionButtonWidth, actionButtonHeight, "Upgrade armor", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionTurret, 0, 0, actionButtonWidth, actionButtonHeight, "Add turret", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionEngine, 0, 0, actionButtonWidth, actionButtonHeight, "Add engine", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionScrap, 0, 0, actionButtonWidth, actionButtonHeight, "Delete", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionRotate, 0, 0, actionButtonWidth, actionButtonHeight, "Rotate", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionConfiguration, 0, 0, actionButtonWidth, actionButtonHeight, "Configure...", int(25 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionUpgradeArmor, 0, 0, actionButtonWidth, actionButtonHeight, "Upgrades...", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionTurret, 0, 0, actionButtonWidth, actionButtonHeight, "Add turret", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionEngine, 0, 0, actionButtonWidth, actionButtonHeight, "Add engine", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionScrap, 0, 0, actionButtonWidth, actionButtonHeight, "Delete", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionRotate, 0, 0, actionButtonWidth, actionButtonHeight, "Rotate", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionSetTurretScheme, 0, 0, actionButtonWidth, actionButtonHeight, "Set control scheme", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionSetJoystickIndex, 0, 0, actionButtonWidth, actionButtonHeight, "Set joystick index", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionConfiguration, 0, 0, actionButtonWidth, actionButtonHeight, "Configure...", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	//Joystick index action buttons
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick0, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 0", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick1, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 1", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick2, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 2", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick3, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 3", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick4, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 4", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick5, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 5", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick6, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 6", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick7, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 7", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+
 
 	//Configuration buttons
 	//configurationButtons.push_back(Button(bi_confExit, WINDOW_WIDTH/resFactor - 150, 75, RM.getTexture("xButton.png"), 2, font1));
@@ -80,94 +108,55 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 	//Core configuration buttons
 	//Main header
-	coreConfigurationButtons.push_back(Button(bi_false, turretConfX1, CONF_Y1, CONF_WIDTH, buttonHeight, " Ship core configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1, coreConfY1, 2*button1Width + button2Width + buttonHeight*3, buttonHeight, " Ship core configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	//Ship controlls background
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1 - buttonBorder, CONF_Y1 + buttonHeight * 2 - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 7 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 - buttonBorder + buttonHeight, coreConfY1 + buttonHeight * 2 - buttonBorder, button1Width + button2Width + 2 * buttonBorder, buttonHeight * 10 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	//Ship controls header
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 2, button2X1 + button2Width - button1X1, buttonHeight, " Ship controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 2, button1Width + button2Width, buttonHeight, " Ship controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	//Directional movement & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 3, button1Width, buttonHeight, " Use analog stick movement", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confNodeDirectionalMovement, button2X1, CONF_Y1 + buttonHeight * 3, button2Width, buttonHeight, " " + getBoolAsString(directionalMovement), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Use analog stick movement", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confNodeDirectionalMovement, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 3, button2Width, buttonHeight, " " + getBoolAsString(directionalMovement), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//VerticalAxis
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 4, button1Width, buttonHeight, " Vertical Axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindVerticalMoveAxis, button2X1, CONF_Y1 + buttonHeight * 4, button2Width, buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(verticalMoveAxis) + " (" + getPolarityAsString(verticalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Vertical Axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindVerticalMoveAxis, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 4, button2Width, buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(verticalMoveAxis) + " (" + getPolarityAsString(verticalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//HorizontalAxis
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 5, button1Width, buttonHeight, " Horizontal Axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindHorizontalMoveAxis, button2X1, CONF_Y1 + buttonHeight * 5, button2Width, buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(horizontalMoveAxis) + " (" + getPolarityAsString(horizontalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 5, button1Width, buttonHeight, " Horizontal Axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindHorizontalMoveAxis, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 5, button2Width, buttonHeight, " Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(horizontalMoveAxis) + " (" + getPolarityAsString(horizontalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Turn right & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 4, button1Width, buttonHeight, " Turn right", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, button2X1, CONF_Y1 + buttonHeight * 4, button2Width, buttonHeight, getInputAsString(coreKeys[key_turnRight]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 6, button1Width, buttonHeight, " Turn right", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 6, button2Width, buttonHeight, getInputAsString(coreKeys[key_turnRight]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Turn left & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 5, button1Width, buttonHeight, " Turn left", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, button2X1, CONF_Y1 + buttonHeight * 5, button2Width, buttonHeight, getInputAsString(coreKeys[key_turnLeft]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 7, button1Width, buttonHeight, " Turn left", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 7, button2Width, buttonHeight, getInputAsString(coreKeys[key_turnLeft]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Acceleration & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 6, button1Width, buttonHeight, " Accelerate", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, button2X1, CONF_Y1 + buttonHeight * 6, button2Width, buttonHeight, getInputAsString(coreKeys[key_accelerate]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 8, button1Width, buttonHeight, " Accelerate", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 8, button2Width, buttonHeight, getInputAsString(coreKeys[key_accelerate]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Reverse & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 7, button1Width, buttonHeight, " Reverse", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindReverse, button2X1, CONF_Y1 + buttonHeight * 7, button2Width, buttonHeight, getInputAsString(coreKeys[key_reverse]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 9, button1Width, buttonHeight, " Reverse", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindReverse, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(coreKeys[key_reverse]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Zoom in & bindong key
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 8, button1Width, buttonHeight, " Zoom in", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, button2X1, CONF_Y1 + buttonHeight * 8, button2Width, buttonHeight, getInputAsString(coreKeys[key_zoomIn]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 10, button1Width, buttonHeight, " Zoom in", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(coreKeys[key_zoomIn]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Zoom out & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, button1X1, CONF_Y1 + buttonHeight * 9, button1Width, buttonHeight, " Zoom out", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, button2X1, CONF_Y1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(coreKeys[key_zoomOut]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 11, button1Width, buttonHeight, " Zoom out", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(coreKeys[key_zoomOut]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	//Control schemes
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2 - buttonBorder, coreConfY1 + buttonHeight * 2 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * (coreConfSchemeY + 3)+2 * buttonBorder, "", int(34 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 2, button1Width, buttonHeight*(coreConfSchemeY + 3), "", int(34 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(34 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confSaveCoreScheme, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Save control scheme...", int(34 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confLoadCoreScheme, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Load control scheme...", int(34 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	reloadCoreControlSchemeList();
+	//Scrolling
+	coreConfScrollBarY1 = coreConfY1 + buttonHeight * 6;
 	
-	//Set directional Movement button visibilities (core)
-		bool temp_axisState = directionalMovement;
-		bool temp_manualButtonsState = true;
-		if (temp_axisState)
-			temp_manualButtonsState = false;
-		for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
-			switch (coreConfigurationButtons[i].id)
-		{
-			case bi_confBindVerticalMoveAxis:
-			case bi_confBindHorizontalMoveAxis:
-				coreConfigurationButtons[i - 1].visible = temp_axisState; //Label
-				coreConfigurationButtons[i].visible = temp_axisState;
-				break;
-			case bi_confBindAccelerate:
-			case bi_confBindTurnLeft:
-			case bi_confBindTurnRight:
-				coreConfigurationButtons[i - 1].visible = temp_manualButtonsState; //Label
-				coreConfigurationButtons[i].visible = temp_manualButtonsState;
-				break;
-		}
-
-		//Update button locations if dirMov is enabled
-		if (directionalMovement == true)
-			for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
-				if (coreConfigurationButtons[i].id == bi_confBindHorizontalMoveAxis)
-					for (int t = 0; t < 6; t++)
-						coreConfigurationButtons[i + t + 7].setPosition(coreConfigurationButtons[i + t + 7].buttonRectangle.getPosition().x, coreConfigurationButtons[i + t + 7].buttonRectangle.getPosition().y - buttonHeight);
-
-		//Update useDirMove bg color if needed
-		if (directionalMovement == false)
-		for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
-			if (coreConfigurationButtons[i].id == bi_confNodeDirectionalMovement)
-			{
-			coreConfigurationButtons[i - 1].red = 110;
-			coreConfigurationButtons[i - 1].green = 110;
-			coreConfigurationButtons[i - 1].blue = 115;
-			coreConfigurationButtons[i].red = 110;
-			coreConfigurationButtons[i].green = 110;
-			coreConfigurationButtons[i].blue = 115;
-			}
-
-		//Update core conf. background size
-		if (directionalMovement)
-			coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 7 + 2 * buttonBorder));
-		else
-			coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 8 + 2 * buttonBorder));
+	updateCoreConfigurationButtonVisibility();
 
 
 
 	//Turret configuration buttons
 	//Main header
-		turretConfigurationButtons.push_back(Button(bi_false, turretConfX1, turretConfY1 + buttonBorder, int(2 * button1Width + button2Width + buttonHeight * 3), buttonHeight, " Turret[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, turretConfX1, turretConfY1, int(2 * button1Width + button2Width + buttonHeight * 3), buttonHeight, " Turret[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	//Ship controls background
 		turretConfigurationButtons.push_back(Button(bi_false, button1X1 - buttonBorder, turretConfY1 + buttonHeight * 2 - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 11 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	//Turret controls header
@@ -213,10 +202,10 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, button1Width, buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
 	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, buttonHeight*0.5, buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	//Scrolling
-	scrollBarY1 = turretConfY1 + buttonHeight * 6;
+	turretConfScrollBarY1 = turretConfY1 + buttonHeight * 6;
 	turretConfigurationButtons.push_back(Button(bi_confScrollUp, button3X1, turretConfY1 + buttonHeight * 5, buttonHeight*0.5, buttonHeight, "/\\", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
 	turretConfigurationButtons.push_back(Button(bi_confScrollDown, button3X1, turretConfY1 + buttonHeight * 12, buttonHeight*0.5, buttonHeight, "\\/", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
-	turretConfigurationButtons.push_back(Button(bi_confScrollBar, button3X1, scrollBarY1, buttonHeight*0.5, buttonHeight*2, "", int(33 * resFactor), font1, sf::Color(80, 85, 100), sf::Color(55, 55, 55)));
+	turretConfigurationButtons.push_back(Button(bi_confScrollBar, button3X1, turretConfScrollBarY1, buttonHeight*0.5, buttonHeight * 2, "", int(33 * resFactor), font1, sf::Color(80, 85, 100), sf::Color(55, 55, 55)));
 	//Control schemes header
 	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	//Save control scheme...
@@ -344,6 +333,8 @@ void ShipEditor::run()
 					scrollDelta -= scrollDelta + mEvent.mouseWheel.delta;
 					if (playerData.grid[selectedX][selectedY]->turret > 0)
 						updateTurretControlSchemeList();
+					else if (playerData.grid[selectedX][selectedY]->core == true)
+						updateCoreControlSchemeList();
 				}
 				mEvent.mouseWheel.delta = 0;
 				scaleFactor = resFactor*zoomFactor;
@@ -372,10 +363,20 @@ void ShipEditor::run()
 						}
 						else if (focus == editor::configuration)
 						{
+							if (playerData.grid[selectedX][selectedY]->turret > 0)
+							{
 							for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
 								if (turretControlSchemeList[i].selected == true)	
 									workingFileName = turretControlSchemeNameList[i];
-									deleteTurretControlScheme();
+								deleteControlScheme("Settings/TurretControlSchemesList.txt", "Settings/TurretControlSchemes/");
+							}
+							else if (playerData.grid[selectedX][selectedY]->core)
+							{
+								for (unsigned int i = 0; i < coreControlSchemeList.size(); i++)
+									if (coreControlSchemeList[i].selected == true)
+										workingFileName = coreControlSchemeNameList[i];
+								deleteControlScheme("Settings/CoreControlSchemesList.txt", "Settings/CoreControlSchemes/");
+							}
 								
 						}
 						break;
@@ -404,49 +405,57 @@ void ShipEditor::run()
 				}
 				else
 				{
-					if (focus == editor::configuration && playerData.grid[selectedX][selectedY]->turret > 0)
-					{
 						char temp_char = getUserInput(mEvent);
 						std::string temp_str;
 						switch (temp_char)
 						{
 						default:
-							if (saveTurretControlSchemeInput.size() < 20)
-								saveTurretControlSchemeInput += temp_char;
+							if (saveControlSchemeInput.size() < 20)
+								saveControlSchemeInput += temp_char;
 							break;
 						case '#':
 							break;
 						case '-'://Backspace
-							if (saveTurretControlSchemeInput.size() <= 0)
+							if (saveControlSchemeInput.size() <= 0)
 								break;
 
-							for (unsigned int i = 0; i < saveTurretControlSchemeInput.size()-1; i++)
-								temp_str.push_back(saveTurretControlSchemeInput[i]);
+							for (unsigned int i = 0; i < saveControlSchemeInput.size()-1; i++)
+								temp_str.push_back(saveControlSchemeInput[i]);
 							
-							saveTurretControlSchemeInput = temp_str;
+							saveControlSchemeInput = temp_str;
 							break;
 						case '+'://Space
-							saveTurretControlSchemeInput += ' ';
+							saveControlSchemeInput += ' ';
 							break;
 						case '>'://Enter
-							workingFileName = saveTurretControlSchemeInput;
-							saveTurretControlScheme();
+							workingFileName = saveControlSchemeInput;
+							if (playerData.grid[selectedX][selectedY]->turret > 0)
+								saveTurretControlScheme();
+							else if (playerData.grid[selectedX][selectedY]->core == true)
+								saveCoreControlScheme();
 							gettingUserInput = false;
 							break;
 						case '<'://Escape
 							for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 								if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
 									turretConfigurationButtons[i].text.setString(" Save control scheme...");
+							for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
+								if (coreConfigurationButtons[i].id == bi_confSaveCoreScheme)
+									coreConfigurationButtons[i].text.setString(" Save control scheme...");
 							gettingUserInput = false;
 							break;
 						}
 						
 						if (gettingUserInput == true)
+						{
 							for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
-							if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
-								turretConfigurationButtons[i].text.setString(saveTurretControlSchemeInput);
-					}
+								if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
+									turretConfigurationButtons[i].text.setString(saveControlSchemeInput);
+							for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
+								if (coreConfigurationButtons[i].id == bi_confSaveCoreScheme)
+									coreConfigurationButtons[i].text.setString(saveControlSchemeInput);
 
+						}
 				}
 			}
 		}
@@ -637,6 +646,7 @@ void ShipEditor::mouseLeftPressed()
 	//Temp variables
 	bool temp_axisState = directionalMovement;
 	bool temp_manualButtonsState = true;
+	bool temp_dontClose = false;
 
 	checkX = -1;
 	checkY = -1;
@@ -743,63 +753,53 @@ void ShipEditor::mouseLeftPressed()
 		}
 		break;
 	case editor::actions:
-		//ButtonId pressedButton = bi_false;
-		//ButtonId temp_pressedButton = bi_false;
-		//for (unsigned int i = 0; i < actionButtons.size(); i++)
-		//{
-		//	temp_pressedButton = actionButtons[i].checkIfPressed(mousePos);
-		//	if (temp_pressedButton != bi_false)
-		//		pressedButton = temp_pressedButton;
-		//}
+		temp_dontClose = false;
 		for (unsigned int i = 0; i < actionButtons.size(); i++)
 			switch (actionButtons[i].checkIfPressed(mousePos))
 			{
-			//case bi_false:
-			//	focus = editor::base;
-			//	std::cout << "\nFocus returned to base (action button id bi_false)";
-			//	break;
 			case bi_actionTurret:
-				if (playerData.grid[selectedX][selectedY]->turret > 0)
-				{
-
-				}
-				else
+				if (playerData.grid[selectedX][selectedY]->turret == 0)
 				{
 					playerData.grid[selectedX][selectedY]->turret = 1;
 					playerData.grid[selectedX][selectedY]->mouseAim = true;
 					playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter = false;
 					playerData.grid[selectedX][selectedY]->turretFire.inputType = mouseInput;
 					playerData.grid[selectedX][selectedY]->turretFire.mouseButton = sf::Mouse::Left;
-					//Default controls:
-					//playerData.grid[selectedX][selectedY]->turretLeft.inputType = keyboardInput;
-					//playerData.grid[selectedX][selectedY]->turretLeft.keyCode = sf::Keyboard::Z;
-					//playerData.grid[selectedX][selectedY]->turretRight.inputType = keyboardInput;
-					//playerData.grid[selectedX][selectedY]->turretRight.keyCode = sf::Keyboard::X;
-					//playerData.grid[selectedX][selectedY]->turretFire.inputType = keyboardInput;
-					//playerData.grid[selectedX][selectedY]->turretFire.keyCode = sf::Keyboard::Space;
-					
 					updateGridSpriteTextures();
 				}
-				focus = editor::base;
 				break;
 			case bi_actionEngine:
 				std::cout << "\nSelected Add engine";
-
-				focus = editor::base;
 				break;
 			case bi_actionRotate:
 				std::cout << "\nSelected Rotate";
 				focus = editor::rotate;
+				temp_dontClose = true;
 				break;
 			case bi_actionScrap:
 				scrapComponent(selectedX, selectedY);
 				updateGridSpriteTextures();
-				focus = editor::base;
-				std::cout << "\nFocus returned to base";
+				break;
+			case bi_actionSetJoystickIndex:
+				temp_dontClose = true;
+				actionTurretSchemeSelectionOpen = false;
+				if (actionJoystickIndexSelectionOpen == false)
+					actionJoystickIndexSelectionOpen = true;
+				else
+					actionJoystickIndexSelectionOpen = false;
+				break;
+			case bi_actionSetTurretScheme:
+				temp_dontClose = true;
+				actionJoystickIndexSelectionOpen = false;
+				if (actionTurretSchemeSelectionOpen == false)
+					actionTurretSchemeSelectionOpen = true;
+				else
+					actionTurretSchemeSelectionOpen = false;
 				break;
 			case bi_actionConfiguration:
 				turretConfigurationButtons[0].text.setString(" Turret [ " + std::to_string(selectedX) + ", " + std::to_string(selectedY) + " ] configurations");
 				focus = editor::configuration;
+				temp_dontClose = true;//Prevent focus from reverting to base
 
 				updateTurretConfigurationButtonVisibility();
 
@@ -857,15 +857,65 @@ void ShipEditor::mouseLeftPressed()
 						break;
 				}
 
-				break;
+				if (temp_dontClose == false)
+					closeActions(editor::base);
+				break;//from bi_actionConfiguration leftClick
+			}//end of action buttons vector loop
 
+
+			//Quickset joystick index
+			for (unsigned int i = 0; i < actionJoystickIndexButtons.size(); i++)
+				switch (actionJoystickIndexButtons[i].checkIfPressed(mousePos))
+			{
+				case bi_actionSetJoystick0:
+					setSelectionJoystickIndex(0);
+					break;
+				case bi_actionSetJoystick1:
+					setSelectionJoystickIndex(1);
+					break;
+				case bi_actionSetJoystick2:
+					setSelectionJoystickIndex(2);
+					break;
+				case bi_actionSetJoystick3:
+					setSelectionJoystickIndex(3);
+					break;
+				case bi_actionSetJoystick4:
+					setSelectionJoystickIndex(4);
+					break;
+				case bi_actionSetJoystick5:
+					setSelectionJoystickIndex(5);
+					break;
+				case bi_actionSetJoystick6:
+					setSelectionJoystickIndex(6);
+					break;
+				case bi_actionSetJoystick7:
+					setSelectionJoystickIndex(7);
+					break;
+
+			}	
+
+
+
+			//Load turret control scheme
+			for (unsigned int i = 0; i < actionTurretSchemeButtons.size(); i++)
+				if (actionTurretSchemeButtons[i].mouseOverlap(mousePos) && actionTurretSchemeButtons[i].visible == true)
+			{
+				workingFileName = turretControlSchemeNameList[i];
+				loadTurretControlScheme();
+				updateGridSpriteTextures();
 			}
-		
 
-		break;
+
+
+
+			if (temp_dontClose == false)
+				closeActions(editor::base);
+		break;//from actions leftClick
+
 	case editor::configuration:
 		//Core configuration specific:
 		if (playerData.grid[selectedX][selectedY]->core == true)
+		{
 			for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
 				switch (coreConfigurationButtons[i].checkIfPressed(mousePos))
 			{
@@ -874,63 +924,7 @@ void ShipEditor::mouseLeftPressed()
 						directionalMovement = false;
 					else
 						directionalMovement = true;
-					temp_axisState = directionalMovement;
-					if (temp_axisState)
-						temp_manualButtonsState = false;
-					for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
-						switch (coreConfigurationButtons[i].id)
-					{
-						case bi_confBindVerticalMoveAxis:
-						case bi_confBindHorizontalMoveAxis:
-							coreConfigurationButtons[i - 1].visible = temp_axisState; //Label
-							coreConfigurationButtons[i].visible = temp_axisState;							
-							break;
-						case bi_confBindAccelerate:
-						case bi_confBindTurnLeft:
-						case bi_confBindTurnRight:
-							coreConfigurationButtons[i - 1].visible = temp_manualButtonsState; //Label
-							coreConfigurationButtons[i].visible = temp_manualButtonsState;
-							break;
-					}
-
-					//Update button locations
-					for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
-						if (coreConfigurationButtons[i].id == bi_confBindHorizontalMoveAxis)
-							if (directionalMovement == true)
-								for (int t = 0; t < 6; t++)
-									coreConfigurationButtons[i + t + 7].setPosition(coreConfigurationButtons[i + t + 7].buttonRectangle.getPosition().x, coreConfigurationButtons[i + t + 7].buttonRectangle.getPosition().y - buttonHeight);
-							else
-								for (int t = 0; t < 6; t++)
-									coreConfigurationButtons[i + t + 7].setPosition(coreConfigurationButtons[i + t + 7].buttonRectangle.getPosition().x, coreConfigurationButtons[i + t + 7].buttonRectangle.getPosition().y + buttonHeight);
-
-					//Update background size
-					if (directionalMovement)
-						coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 7 + 2 * buttonBorder));
-					else
-						coreConfigurationButtons[1].buttonRectangle.setSize(sf::Vector2f(button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 8 + 2 * buttonBorder));
-
-					//Update useDirMove bg color
-					for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
-					if (coreConfigurationButtons[i].id == bi_confNodeDirectionalMovement)
-					if (directionalMovement == true)
-						{
-							coreConfigurationButtons[i - 1].red = 105;
-							coreConfigurationButtons[i - 1].green = 105;
-							coreConfigurationButtons[i - 1].blue = 110;
-							coreConfigurationButtons[i].red = 105;
-							coreConfigurationButtons[i].green = 105;
-							coreConfigurationButtons[i].blue = 110;
-						}
-						else
-						{
-							coreConfigurationButtons[i - 1].red = 110;
-							coreConfigurationButtons[i - 1].green = 110;
-							coreConfigurationButtons[i - 1].blue = 115;
-							coreConfigurationButtons[i].red = 110;
-							coreConfigurationButtons[i].green = 110;
-							coreConfigurationButtons[i].blue = 115;
-						}
-
+					updateCoreConfigurationButtonVisibility();
 					coreConfigurationButtons[i].text.setString(" " + getBoolAsString(directionalMovement));
 					drawWindow();
 					break;
@@ -990,7 +984,64 @@ void ShipEditor::mouseLeftPressed()
 					coreKeys[key_zoomOut] = detectKey(bi_confBindZoomOut);
 					coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_zoomOut]));
 					break;
+				case bi_confSaveCoreScheme:
+					if (gettingUserInput == false)
+					{
+						coreConfigurationButtons[i].text.setString(" >Input name for this control scheme<");
+						saveControlSchemeInput = "";
+						gettingUserInput = true;
+					}
+					else
+					{
+						workingFileName = saveControlSchemeInput;
+						saveCoreControlScheme();
+						gettingUserInput = false;
+					}
+					break;
+				case bi_confLoadCoreScheme:
+					for (unsigned int j = 0; j < coreControlSchemeList.size(); j++)
+						if (coreControlSchemeList[j].selected == true)
+						{
+						workingFileName = coreControlSchemeNameList[j];
+						loadCoreControlScheme();
+						}
+					break;
+				case bi_confScrollUp:
+					scrollDelta = -1;
+					if (playerData.grid[selectedX][selectedY]->core == true)
+						updateCoreControlSchemeList();
+					break;
+				case bi_confScrollDown:
+					scrollDelta = 1;
+					if (playerData.grid[selectedX][selectedY]->core == true)
+						updateCoreControlSchemeList();
+					break;
+				case bi_confScrollBar:
+					usingScrollBar = true;
+					mouseGrabY = mousePos.y;
+					break;
 			}
+
+			for (unsigned int j = 0; j < coreControlSchemeList.size(); j++)
+				if (coreControlSchemeList[j].mouseOverlap(mousePos) && coreControlSchemeList[j].visible == true)
+				{
+				if (coreControlSchemeList[j].selected == false)
+				{
+					clickTimer = 0;
+					for (unsigned int k = 0; k < coreControlSchemeList.size(); k++)
+						coreControlSchemeList[k].selected = false;
+					coreControlSchemeList[j].selected = true;
+				}
+				else if (clickTimer < 30)
+				{
+					workingFileName = coreControlSchemeNameList[j];
+					loadCoreControlScheme();
+					coreControlSchemeList[j].selected = false;
+				}
+				else
+					coreControlSchemeList[j].selected = false;
+				}
+		}//End of coreConf leftClick
 		else if (playerData.grid[selectedX][selectedY]->turret > 0)
 		{
 			for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
@@ -1102,12 +1153,12 @@ void ShipEditor::mouseLeftPressed()
 					if (gettingUserInput == false)
 					{
 						turretConfigurationButtons[i].text.setString(" >Input name for this control scheme<");
-						saveTurretControlSchemeInput = "";
+						saveControlSchemeInput = "";
 						gettingUserInput = true;
 					}
 					else
 					{
-						workingFileName = saveTurretControlSchemeInput;
+						workingFileName = saveControlSchemeInput;
 						saveTurretControlScheme();
 						gettingUserInput = false;
 					}
@@ -1144,11 +1195,7 @@ void ShipEditor::mouseLeftPressed()
 				case bi_confChangeJoystickIndexTo5:
 				case bi_confChangeJoystickIndexTo6:
 				case bi_confChangeJoystickIndexTo7:
-					playerData.grid[selectedX][selectedY]->directionalJoystickId = turretConfigurationButtons[i].checkIfPressed(mousePos) - bi_confChangeJoystickIndexTo0;
-					playerData.grid[selectedX][selectedY]->turretFire.joystickIndex = turretConfigurationButtons[i].checkIfPressed(mousePos) - bi_confChangeJoystickIndexTo0;
-					playerData.grid[selectedX][selectedY]->turretReload.joystickIndex = turretConfigurationButtons[i].checkIfPressed(mousePos) - bi_confChangeJoystickIndexTo0;
-					playerData.grid[selectedX][selectedY]->turretLeft.joystickIndex = turretConfigurationButtons[i].checkIfPressed(mousePos) - bi_confChangeJoystickIndexTo0;
-					playerData.grid[selectedX][selectedY]->turretRight.joystickIndex = turretConfigurationButtons[i].checkIfPressed(mousePos) - bi_confChangeJoystickIndexTo0;
+					setSelectionJoystickIndex(turretConfigurationButtons[i].checkIfPressed(mousePos) - bi_confChangeJoystickIndexTo0);
 					updateTurretConfigurationButtonStrings();
 					break;
 				//Color adjustments
@@ -1207,30 +1254,182 @@ void ShipEditor::mouseRightPressed()
 
 		//Select component and open component actions
 		if (checkX > -1 && checkX < EDITOR_WIDTH && checkY > -1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY]->armor > 0)
-		{
+		{//Selection is valid
 			selectedX = checkX;
 			selectedY = checkY;
-
 			std::cout << "\nEntered actions popup window";
 			focus = editor::actions;
-			if (playerData.grid[selectedX][selectedY]->core == false)
-			for (unsigned int i = 0; i < actionButtons.size(); i++)
-			{//non-core actions
-				actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + actionButtonHeight*i);
-				actionButtons[i].text.setPosition(mousePos.x + buttonBorder, mousePos.y + actionButtonHeight*i);
-			}
-			else
-			{//Core actions
-				actionButtons[0].buttonRectangle.setPosition(mousePos.x, mousePos.y);
-				actionButtons[0].text.setPosition(mousePos.x + buttonBorder, mousePos.y);
-				actionButtons[actionButtons.size() - 1].buttonRectangle.setPosition(mousePos.x, mousePos.y + actionButtonHeight);
-				actionButtons[actionButtons.size() - 1].text.setPosition(mousePos.x + buttonBorder, mousePos.y + actionButtonHeight);
-			}
+			reloadActions();
 		}
 
 		break;
 	}
 }
+
+void ShipEditor::reloadActions()
+{
+	actionTurretSchemeSelectionOpen = false;
+	actionJoystickIndexSelectionOpen = false;
+
+	int temp_yOffset = 0;
+	int temp_joystickIndexSelectionY = 0;
+	int temp_turretSchemeSelectionY = 0;
+	if (playerData.grid[selectedX][selectedY]->core == false)
+	{//Non core actions
+		for (unsigned int i = 0; i < actionButtons.size(); i++)
+			switch (actionButtons[i].id)
+		{
+			default:
+				actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + actionButtonHeight*(i + temp_yOffset));
+				actionButtons[i].text.setPosition(mousePos.x + buttonBorder, mousePos.y + actionButtonHeight*(i + temp_yOffset));
+				actionButtons[i].visible = true;
+				break;
+				//Only show when no turret/engine
+			case bi_actionTurret:
+			case bi_actionEngine:
+				if (playerData.grid[selectedX][selectedY]->turret < 1 && playerData.grid[selectedX][selectedY]->engine < 1)
+				{
+					actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + actionButtonHeight*(i + temp_yOffset));
+					actionButtons[i].text.setPosition(mousePos.x + buttonBorder, mousePos.y + actionButtonHeight*(i + temp_yOffset));
+					actionButtons[i].visible = true;
+				}
+				else
+				{
+					temp_yOffset--;
+					actionButtons[i].visible = false;
+				}
+				break;
+			//Only show if turret/engine
+			case bi_actionRotate:
+			case bi_actionConfiguration:
+			case bi_actionSetJoystickIndex:
+			case bi_actionSetTurretScheme:
+				if (actionButtons[i].id == bi_actionSetJoystickIndex)
+					temp_joystickIndexSelectionY = i + temp_yOffset;
+				if (actionButtons[i].id == bi_actionSetTurretScheme)
+					temp_turretSchemeSelectionY = i + temp_yOffset;
+
+				if (playerData.grid[selectedX][selectedY]->turret < 1 && playerData.grid[selectedX][selectedY]->engine < 1)
+				{
+					temp_yOffset--;
+					actionButtons[i].visible = false;
+				}
+				else
+				{
+					actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + actionButtonHeight*(i + temp_yOffset));
+					actionButtons[i].text.setPosition(mousePos.x + buttonBorder, mousePos.y + actionButtonHeight*(i + temp_yOffset));
+					actionButtons[i].visible = true;
+				}
+				break;
+		}
+
+		//Joystick index quick selection
+		bool temp_isUnified = true;
+		int temp_checkUnifiedIndex = playerData.grid[selectedX][selectedY]->directionalJoystickId;
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretFire.joystickIndex)
+			temp_isUnified = false;
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretReload.joystickIndex)
+			temp_isUnified = false;
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretLeft.joystickIndex)
+			temp_isUnified = false;
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretRight.joystickIndex)
+			temp_isUnified = false;
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->engineThrust.joystickIndex)
+			temp_isUnified = false;
+		for (unsigned int i = 0; i < actionJoystickIndexButtons.size(); i++)
+		{
+			actionJoystickIndexButtons[i].buttonRectangle.setPosition(mousePos.x + actionButtonWidth, mousePos.y + actionButtonHeight*(i + temp_joystickIndexSelectionY));
+			actionJoystickIndexButtons[i].text.setPosition(mousePos.x + actionButtonWidth + buttonBorder, mousePos.y + actionButtonHeight*(i + temp_joystickIndexSelectionY));
+			if (temp_isUnified == true && temp_checkUnifiedIndex == i)
+				actionJoystickIndexButtons[i].text.setStyle(sf::Text::Style::Bold);
+			else
+				actionJoystickIndexButtons[i].text.setStyle(sf::Text::Style::Regular);
+		}
+
+
+		//Turret control schemes button list
+		actionTurretSchemeButtons.clear();
+		turretControlSchemeNameList.clear();
+		std::string temp_str;
+		std::vector<std::string> temp_schemes;
+		mFileStream.open("Settings/TurretControlSchemesList.txt", std::ios::in);
+		if (!mFileStream.fail())
+		{//Load all scheme names into temp_schemes
+			while (!mFileStream.eof())
+				mFileStream >> temp_str;
+			mFileStream.close();
+			extractNamesFromString(temp_str, temp_schemes);
+		}
+		if (temp_schemes.size() > 0)
+		{
+			//Find suitable coordinates for the list
+			int temp_turretSchemeSelectionX = 0;
+			int temp_schemeListHeight = 0;
+			while (mousePos.y + (temp_schemes.size() + temp_turretSchemeSelectionY)*actionButtonHeight > WINDOW_HEIGHT && mousePos.y + (temp_turretSchemeSelectionY - 1)*actionButtonHeight > 0)
+			{
+				temp_turretSchemeSelectionY--;
+			}
+
+			for (unsigned int i = 0; i < temp_schemes.size(); i++)
+			{
+				if (mousePos.y + (i + temp_turretSchemeSelectionY + 1)*actionButtonHeight > WINDOW_HEIGHT)
+				{//The list is about to go outside screen borders, but worry not for the temp variables shall be changed 
+					temp_turretSchemeSelectionX++;
+					if (temp_schemeListHeight == 0)
+						temp_schemeListHeight = i;
+					temp_turretSchemeSelectionY -= temp_schemeListHeight;
+				}
+
+				actionTurretSchemeButtons.push_back(Button(bi_actionTurretScheme, mousePos.x + (actionButtonWidth * (temp_turretSchemeSelectionX + 1)), mousePos.y + (i + temp_turretSchemeSelectionY)*actionButtonHeight, actionButtonWidth, actionButtonHeight, " " + temp_schemes[i], int(26 * resFactor), font1,
+					sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
+					sf::Color(35, 35, 40)));
+				turretControlSchemeNameList.push_back(temp_schemes[i]);
+			}
+		}
+
+	}
+	else
+	{//Core actions
+		for (unsigned int i = 0; i < actionButtons.size(); i++)
+			actionButtons[i].visible = false;
+		actionButtons[0].buttonRectangle.setPosition(mousePos.x, mousePos.y);
+		actionButtons[0].text.setPosition(mousePos.x + buttonBorder, mousePos.y);
+		actionButtons[0].visible = true;
+		actionButtons[actionButtons.size() - 1].buttonRectangle.setPosition(mousePos.x, mousePos.y + actionButtonHeight);
+		actionButtons[actionButtons.size() - 1].text.setPosition(mousePos.x + buttonBorder, mousePos.y + actionButtonHeight);
+		actionButtons[actionButtons.size() - 1].visible = true;
+	}
+}
+void ShipEditor::drawActions()
+{
+
+	if (playerData.grid[selectedX][selectedY]->core == false)
+	{
+		actionButtons[0].text.setString("Component [" + std::to_string(selectedX) + "][" + std::to_string(selectedY) + "]");
+		for (unsigned int i = 0; i < actionButtons.size(); i++)
+			actionButtons[i].draw(mWindow, mousePos);
+
+		if (actionJoystickIndexSelectionOpen == true)
+			for (unsigned int i = 0; i < actionJoystickIndexButtons.size(); i++)
+				actionJoystickIndexButtons[i].draw(mWindow, mousePos);
+		else if (actionTurretSchemeSelectionOpen == true)
+			for (unsigned int i = 0; i < actionTurretSchemeButtons.size(); i++)
+				actionTurretSchemeButtons[i].draw(mWindow, mousePos);
+	}
+	else
+	{
+		actionButtons[0].text.setString("Core [" + std::to_string(selectedX) + "][" + std::to_string(selectedY) + "]");
+		actionButtons[0].draw(mWindow, mousePos);
+		actionButtons[actionButtons.size() - 1].draw(mWindow, mousePos);
+	}
+}
+void ShipEditor::closeActions(editor::Focus newFocus)
+{
+	focus = newFocus;
+	actionJoystickIndexSelectionOpen = false;
+	actionTurretSchemeSelectionOpen = false;
+}
+
 
 void ShipEditor::zoom(int delta)
 {
@@ -1327,38 +1526,49 @@ void ShipEditor::drawSelectedRect()
 
 	mWindow.draw(selectedRect);
 }
-void ShipEditor::drawActions()
-{
-
-	if (playerData.grid[selectedX][selectedY]->core == false)
-	{
-		actionButtons[0].text.setString("Component [" + std::to_string(selectedX) + "][" + std::to_string(selectedY) + "]");
-		for (unsigned int i = 0; i < actionButtons.size(); i++)
-			actionButtons[i].draw(mWindow, mousePos);
-	}
-	else
-	{
-		actionButtons[0].text.setString("Core [" + std::to_string(selectedX) + "][" + std::to_string(selectedY) + "]");
-		actionButtons[0].draw(mWindow, mousePos);
-		actionButtons[actionButtons.size()-1].draw(mWindow, mousePos);
-	}
-}
 void ShipEditor::drawConfigurations()
 {
-	mWindow.draw(configurationRect1);
-	mWindow.draw(configurationRect2);
-	mWindow.draw(configurationRect3);
+
 	for (unsigned int i = 0; i < configurationButtons.size(); i++)
 		configurationButtons[i].draw(mWindow, mousePos);
 	
 
 	if (playerData.grid[selectedX][selectedY]->core == true)
 	{//Core configurations
+		mWindow.draw(coreConfigurationRect1);
+		mWindow.draw(coreConfigurationRect2);
+		mWindow.draw(coreConfigurationRect3);
 		for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
+			if (coreConfigurationButtons[i].id != bi_confScrollBar)
 			coreConfigurationButtons[i].draw(mWindow, mousePos);
+		else if (coreControlSchemeList.size() > coreConfSchemeY)
+		{//Update and draw the scroll bar
+			if (usingScrollBar == true)
+			{
+				int temp_scrollState = ((/*last*/mousePos.y - mouseGrabY/*first*/) / (buttonHeight*1.0f))*float(coreControlSchemeList.size() - coreConfSchemeY);
+				//temp_scrollState = int((mousePos.y - scrollBarY1) / (buttonHeight*2.0f));
+				if (temp_scrollState < 0)
+					temp_scrollState = 0;
+				else if (temp_scrollState > coreControlSchemeList.size() - coreConfSchemeY)
+					temp_scrollState = coreControlSchemeList.size() - coreConfSchemeY;
+
+				scrollDelta = temp_scrollState - scrollState;
+
+				updateCoreControlSchemeList();
+			}
+
+			coreConfigurationButtons[i].setPosition(coreConfigurationButtons[i].buttonRectangle.getPosition().x, coreConfScrollBarY1 + (float(scrollState) / (coreControlSchemeList.size() - 8.0f))*buttonHeight*4.0f);
+			coreConfigurationButtons[i].draw(mWindow, mousePos);
+		}
+		for (unsigned int i = 0; i < coreControlSchemeList.size(); i++)
+			coreControlSchemeList[i].draw(mWindow, mousePos);
+
 	}
 	else if (playerData.grid[selectedX][selectedY]->turret > 0)
 	{//Turret configurations
+		mWindow.draw(turretConfigurationRect1);
+		mWindow.draw(turretConfigurationRect2);
+		mWindow.draw(turretConfigurationRect3);
 		for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 			if (turretConfigurationButtons[i].id != bi_confScrollBar)
 				turretConfigurationButtons[i].draw(mWindow, mousePos);
@@ -1366,8 +1576,8 @@ void ShipEditor::drawConfigurations()
 			{//Update and draw the scroll bar
 				if (usingScrollBar == true)
 				{
-					int temp_scrollState = scrollState;
-					temp_scrollState = int((mousePos.y - scrollBarY1) / (buttonHeight*2.0f));
+					int temp_scrollState = ((/*last*/mousePos.y - mouseGrabY/*first*/) / (buttonHeight*4.0f))*float(turretControlSchemeList.size() - 8);
+					//temp_scrollState = int((mousePos.y - scrollBarY1) / (buttonHeight*2.0f));
 					if (temp_scrollState < 0)
 						temp_scrollState = 0;
 					else if (temp_scrollState > turretControlSchemeList.size() - 8)
@@ -1378,7 +1588,7 @@ void ShipEditor::drawConfigurations()
 					updateTurretControlSchemeList();
 				}
 
-				turretConfigurationButtons[i].setPosition(turretConfigurationButtons[i].buttonRectangle.getPosition().x, scrollBarY1 + (float(scrollState) / (turretControlSchemeList.size() - 8.0f))*buttonHeight*4.0f);
+				turretConfigurationButtons[i].setPosition(turretConfigurationButtons[i].buttonRectangle.getPosition().x, turretConfScrollBarY1 + (float(scrollState) / (turretControlSchemeList.size() - 8.0f))*buttonHeight*4.0f);
 				turretConfigurationButtons[i].draw(mWindow, mousePos);
 			}
 
@@ -1500,6 +1710,249 @@ void ShipEditor::updateTurretConfigurationButtonVisibility()
 }
 
 
+void ShipEditor::adjustColor()
+{
+	float temp_float = 0;
+	int temp_int = 0;
+	switch (adjustingColor)
+	{
+	default:
+		break;
+	case 1: //Turret red
+		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight) / float(button1Width - buttonHeight);
+		temp_int = int(temp_float * 255);
+		if (temp_int < 0)
+			temp_int = 0;
+		else if (temp_int > 255)
+			temp_int = 255;
+		playerData.grid[selectedX][selectedY]->red = temp_int;
+		break;
+	case 2: //Turret green
+		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight) / float(button1Width - buttonHeight);
+		temp_int = int(temp_float * 255);
+		if (temp_int < 0)
+			temp_int = 0;
+		else if (temp_int > 255)
+			temp_int = 255;
+		playerData.grid[selectedX][selectedY]->green = temp_int;
+		break;
+	case 3: //Turret blue
+		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight) / float(button1Width - buttonHeight);
+		temp_int = int(temp_float * 255);
+		if (temp_int < 0)
+			temp_int = 0;
+		else if (temp_int > 255)
+			temp_int = 255;
+		playerData.grid[selectedX][selectedY]->blue = temp_int;
+		break;
+	}
+	updateTurretColorPreview();
+}
+
+void ShipEditor::updateTurretColorPreview()
+{
+	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+		if (turretConfigurationButtons[i].id == bi_confRedSlider)
+			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->red / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+
+	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+		if (turretConfigurationButtons[i].id == bi_confGreenSlider)
+			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->green / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+
+	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+		if (turretConfigurationButtons[i].id == bi_confBlueSlider)
+			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->blue / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+
+	colorPreviewTurret.setColor(sf::Color(playerData.grid[selectedX][selectedY]->red, playerData.grid[selectedX][selectedY]->green, playerData.grid[selectedX][selectedY]->blue));
+}
+
+void ShipEditor::closeTurretConfigurations()
+{
+	std::cout << "\nClosing turret configurations...";
+	focus = editor::base;
+	gettingUserInput = false;
+	updateGridSpriteTextures();
+}
+
+void ShipEditor::setSelectionJoystickIndex(int index)
+{
+	if (index < 0 || index > 7)
+		return;//invalid index
+
+	playerData.grid[selectedX][selectedY]->directionalJoystickId = index;
+	playerData.grid[selectedX][selectedY]->turretFire.joystickIndex = index;
+	playerData.grid[selectedX][selectedY]->turretReload.joystickIndex = index;
+	playerData.grid[selectedX][selectedY]->turretLeft.joystickIndex = index;
+	playerData.grid[selectedX][selectedY]->turretRight.joystickIndex = index;
+	playerData.grid[selectedX][selectedY]->engineThrust.joystickIndex = index;
+}
+
+void ShipEditor::updateCoreConfigurationButtonVisibility()
+{
+	//Set directional Movement button visibilities (core)
+	bool temp_axisState = directionalMovement;
+	bool temp_manualButtonsState = true;
+	if (temp_axisState)
+		temp_manualButtonsState = false;
+
+	int temp_axisOpacity = 255;
+	int temp_manualOpacity = 255;
+
+	if (temp_manualButtonsState)
+	{
+		temp_axisOpacity = 70;
+		temp_manualOpacity = 255;
+	}
+	else
+	{
+		temp_axisOpacity = 255;
+		temp_manualOpacity = 70;
+	}
+
+	for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
+		switch (coreConfigurationButtons[i].id)
+	{
+		case bi_confBindVerticalMoveAxis:
+		case bi_confBindHorizontalMoveAxis:
+			coreConfigurationButtons[i].text.setColor(sf::Color
+				(coreConfigurationButtons[i].text.getColor().r,
+				coreConfigurationButtons[i].text.getColor().g,
+				coreConfigurationButtons[i].text.getColor().b, temp_axisOpacity));
+			coreConfigurationButtons[i - 1].text.setColor(sf::Color
+				(coreConfigurationButtons[i - 1].text.getColor().r,
+				coreConfigurationButtons[i - 1].text.getColor().g,
+				coreConfigurationButtons[i - 1].text.getColor().b, temp_axisOpacity));
+			break;
+		case bi_confBindAccelerate:
+		case bi_confBindTurnLeft:
+		case bi_confBindTurnRight:
+			coreConfigurationButtons[i].text.setColor(sf::Color
+				(coreConfigurationButtons[i].text.getColor().r,
+				coreConfigurationButtons[i].text.getColor().g,
+				coreConfigurationButtons[i].text.getColor().b, temp_manualOpacity));
+			coreConfigurationButtons[i - 1].text.setColor(sf::Color
+				(coreConfigurationButtons[i - 1].text.getColor().r,
+				coreConfigurationButtons[i - 1].text.getColor().g,
+				coreConfigurationButtons[i - 1].text.getColor().b, temp_manualOpacity));
+			break;
+	}
+}
+
+void ShipEditor::extractNamesFromString(std::string& string, std::vector<std::string>& vector)
+{
+	std::cout << "\n\nBeginning name extraction...";
+	if (string.size() > 0)
+	{
+		int temp_scheme_index = 0;
+		vector.push_back("");
+		for (unsigned int i = 0; i < string.size(); i++)
+		{
+			if (string[i] != '#')
+				vector[temp_scheme_index] += string[i];
+			else if (i < string.size() - 1)
+			{
+				vector.push_back("");
+				temp_scheme_index++;
+			}
+		}
+	}
+
+
+	//Remove unwanted names
+	for (unsigned int i = 0; i < vector.size(); i++)
+		if (vector[i].size() < 2)
+	{
+		std::cout << "\nErasing (size "<< vector[i].size() << "): " << vector[i];
+		vector.erase(vector.begin() + i);
+		i--;
+	}
+
+	std::cout << "\nName extraction complete...";
+	std::cout << "\nOriginal string: " << string;
+	std::cout << "\nVector: [";
+	for (unsigned int i = 0; i < vector.size(); i++)
+		if (i == vector.size() - 1)
+			std::cout << vector[i];
+		else
+			std::cout << vector[i] << "/";
+	std::cout << "]\n";
+	
+}
+
+
+//Writes elements from vector seperated by '#' into .txt, path given in the first paramaeter
+void ShipEditor::writeControlSchemes(std::string path, std::vector<std::string>& vector)
+{
+	mFileStream.open(path, std::ios::out);
+	if (!mFileStream.fail())
+	{
+		mFileStream.clear();
+		mFileStream.seekg(0, std::ios::beg);
+		for (unsigned int i = 0; i < vector.size(); i++)
+		{
+			mFileStream << vector[i] << "#";
+		}
+		//Use the null terminator to purge all the unholy lines
+		mFileStream << "###\0";
+	}
+
+	mFileStream.close();
+}
+
+//Deletes using workingFileName, first parameter list.txt, second parameter directory path
+void ShipEditor::deleteControlScheme(std::string listPath, std::string directoryPath)
+{
+	std::cout << "\nDeleting control scheme: [" << workingFileName << "]";
+	//Remove the scheme from the scheme list
+	std::vector<std::string> temp_schemes;
+	mFileStream.open(listPath);
+	if (!mFileStream.fail())
+	{
+		std::string temp_str;
+		while (!mFileStream.eof())
+			mFileStream >> temp_str;
+		mFileStream.close();
+
+		extractNamesFromString(temp_str, temp_schemes);
+
+		//Delete fileName from the list
+		for (unsigned int i = 0; i < temp_schemes.size(); i++)
+		{
+			if (temp_schemes[i] == workingFileName)
+			{
+				temp_schemes.erase(temp_schemes.begin() + i);
+				std::cout << "\nDelete complete: " << workingFileName;
+			}
+		}
+	}
+
+	writeControlSchemes(listPath, temp_schemes);
+
+	//Remove the scheme's .dat file...
+	char temp_charPtr[60];
+	for (unsigned int i = 0; i < directoryPath.size(); i++)
+		temp_charPtr[i] = directoryPath[i];
+
+	for (unsigned int i = 0; i < workingFileName.size(); i++)
+	{
+		temp_charPtr[workingFileName.size() + i] = workingFileName[i];
+	}
+	temp_charPtr[workingFileName.size() + workingFileName.size()] = '.';
+	temp_charPtr[workingFileName.size()+1 + workingFileName.size()] = 'd';
+	temp_charPtr[workingFileName.size()+2 + workingFileName.size()] = 'a';
+	temp_charPtr[workingFileName.size()+3 + workingFileName.size()] = 't';
+	temp_charPtr[workingFileName.size()+4 + workingFileName.size()] = '\0';
+	remove(temp_charPtr);
+
+	reloadTurretControlSchemeList();
+	reloadCoreControlSchemeList();
+
+	std::cout << "\n-End of delete scheme-";
+}
+
+
+
+//Turret control schemes
 void ShipEditor::saveTurretControlScheme()
 {
 	if (workingFileName == "" || workingFileName == " " || workingFileName == "  " || workingFileName == "\n" || workingFileName == "\0")
@@ -1508,7 +1961,7 @@ void ShipEditor::saveTurretControlScheme()
 	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 		if (turretConfigurationButtons[i].id == bi_confSaveTurretScheme)
 			turretConfigurationButtons[i].text.setString(" Save control scheme...");
-	
+
 	gettingUserInput = false;
 
 	mFileStream.open("Settings/TurretControlSchemes/" + workingFileName + ".dat", std::ofstream::binary | std::ios::out);
@@ -1559,7 +2012,7 @@ void ShipEditor::saveTurretControlScheme()
 					std::cout << "\nFailed to save new scheme to TurretControlSchemes.List.txt";
 				mFileStream.close();
 			}
-		}			
+		}
 		reloadTurretControlSchemeList();
 	}
 	else
@@ -1567,48 +2020,6 @@ void ShipEditor::saveTurretControlScheme()
 
 	mFileStream.close();
 }
-
-void ShipEditor::extractNamesFromString(std::string& string, std::vector<std::string>& vector)
-{
-	std::cout << "\n\nBeginning name extraction...";
-	if (string.size() > 0)
-	{
-		int temp_scheme_index = 0;
-		vector.push_back("");
-		for (unsigned int i = 0; i < string.size(); i++)
-		{
-			if (string[i] != '#')
-				vector[temp_scheme_index] += string[i];
-			else if (i < string.size() - 1)
-			{
-				vector.push_back("");
-				temp_scheme_index++;
-			}
-		}
-	}
-
-
-	//Remove unwanted names
-	for (unsigned int i = 0; i < vector.size(); i++)
-		if (vector[i].size() < 2)
-	{
-		std::cout << "\nErasing (size "<< vector[i].size() << "): " << vector[i];
-		vector.erase(vector.begin() + i);
-		i--;
-	}
-
-	std::cout << "\nName extraction complete...";
-	std::cout << "\nOriginal string: " << string;
-	std::cout << "\nVector: [";
-	for (unsigned int i = 0; i < vector.size(); i++)
-		if (i == vector.size() - 1)
-			std::cout << vector[i];
-		else
-			std::cout << vector[i] << "/";
-	std::cout << "]\n";
-	
-}
-
 void ShipEditor::loadTurretControlScheme()
 {
 	if (workingFileName == "" || workingFileName == " " || workingFileName == "  " || workingFileName == "\n" || workingFileName == "\0")
@@ -1637,121 +2048,12 @@ void ShipEditor::loadTurretControlScheme()
 		mFileStream.close();
 		updateTurretConfigurationButtonStrings();
 		updateTurretConfigurationButtonVisibility();
+		updateTurretColorPreview();
 	}
 	else
 		std::cout << "\nError. Failed to load turret control scheme";
 
 }
-
-
-void ShipEditor::writeTurretControlSchemes(std::vector<std::string>& vector)
-{
-	mFileStream.open("Settings/TurretControlSchemesList.txt", std::ios::out);
-	if (!mFileStream.fail())
-	{
-		mFileStream.clear();
-		mFileStream.seekg(0, std::ios::beg);
-		for (unsigned int i = 0; i < vector.size(); i++)
-		{
-			mFileStream << vector[i] << "#";
-		}
-		//Use the null terminator to purge all the unholy lines
-		mFileStream << "###\0";
-	}
-
-	mFileStream.close();
-}
-
-void ShipEditor::deleteTurretControlScheme()
-{
-	std::cout << "\nDeleting turret control scheme: [" << workingFileName << "]";
-	//Remove the scheme from the scheme list
-	std::vector<std::string> temp_schemes;
-	mFileStream.open("Settings/TurretControlSchemesList.txt");
-	if (!mFileStream.fail())
-	{
-		std::string temp_str;
-		while (!mFileStream.eof())
-			mFileStream >> temp_str;
-		mFileStream.close();
-
-		extractNamesFromString(temp_str, temp_schemes);
-
-		//Delete fileName from the list
-		for (unsigned int i = 0; i < temp_schemes.size(); i++)
-		{
-			if (temp_schemes[i] == workingFileName)
-			{
-				temp_schemes.erase(temp_schemes.begin() + i);
-				std::cout << "\nDelete complete: " << workingFileName;
-			}
-		}
-	}
-
-	writeTurretControlSchemes(temp_schemes);
-
-	//Remove the scheme's .dat file...
-	char temp_charPtr[60] = "Settings/TurretControlSchemes/";
-	for (unsigned int i = 0; i < workingFileName.size(); i++)
-	{
-		temp_charPtr[30 + i] = workingFileName[i];
-	}
-	temp_charPtr[30 + workingFileName.size()] = '.';
-	temp_charPtr[31 + workingFileName.size()] = 'd';
-	temp_charPtr[32 + workingFileName.size()] = 'a';
-	temp_charPtr[33 + workingFileName.size()] = 't';
-	temp_charPtr[34 + workingFileName.size()] = '\0';
-	remove(temp_charPtr);
-
-	reloadTurretControlSchemeList();
-
-	std::cout << "\n-End of delete scheme-";
-}
-
-
-void ShipEditor::updateTurretConfigurationButtonStrings()
-{
-	//Update turret configuration button strings
-	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
-		switch (turretConfigurationButtons[i].id)
-	{
-		case bi_confBindFire:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretFire));
-			break;
-		case bi_confNodeHoldToFire:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
-			break;
-		case bi_confBindReload:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretReload));
-			break;
-		case bi_confNodeMouseAim:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAim));
-			break;
-		case bi_confNodeMouseAimRelative:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter));
-			break;
-		case bi_confNodeDirectionalAim:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->directionalAim));
-			break;
-		case bi_confBindVerticalAimAxis:
-			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->verticalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->verticalAxisPolarity) + ")");
-			break;
-		case bi_confBindHorizontalAimAxis:
-			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->horizontalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->horizontalAxisPolarity) + ")");
-			break;
-		case bi_confBindTurnTurretRight:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretRight));
-			break;
-		case bi_confBindTurnTurretLeft:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretLeft));
-			break;
-		case bi_confSaveTurretScheme:
-			turretConfigurationButtons[i].text.setString(" Save control scheme...");
-			break;
-
-	}
-}
-
 void ShipEditor::reloadTurretControlSchemeList()
 {
 	turretControlSchemeList.clear();
@@ -1811,69 +2113,242 @@ void ShipEditor::updateTurretControlSchemeList()
 		else
 			turretControlSchemeList[i].visible = true;
 	}
-
-
 }
 
-void ShipEditor::adjustColor()
-{
-	float temp_float = 0;
-	int temp_int = 0;
-	switch (adjustingColor)
-	{
-	default:
-		break;
-	case 1: //Turret red
-		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight)/float(button1Width - buttonHeight);
-		temp_int = int(temp_float * 255);
-		if (temp_int < 0)
-			temp_int = 0;
-		else if (temp_int > 255)
-			temp_int = 255;
-		playerData.grid[selectedX][selectedY]->red = temp_int;
-		for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
-			if (turretConfigurationButtons[i].id == bi_confRedSlider)
-			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(temp_int / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
-		break;
-	case 2: //Turret green
-		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight) / float(button1Width - buttonHeight);
-		temp_int = int(temp_float * 255);
-		if (temp_int < 0)
-			temp_int = 0;
-		else if (temp_int > 255)
-			temp_int = 255;
-		playerData.grid[selectedX][selectedY]->green = temp_int;
-		for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
-			if (turretConfigurationButtons[i].id == bi_confGreenSlider)
-			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(temp_int / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
-		break;
-	case 3: //Turret blue
-		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight) / float(button1Width - buttonHeight);
-		temp_int = int(temp_float * 255);
-		if (temp_int < 0)
-			temp_int = 0;
-		else if (temp_int > 255)
-			temp_int = 255;
-		playerData.grid[selectedX][selectedY]->blue = temp_int;
-		for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
-			if (turretConfigurationButtons[i].id == bi_confBlueSlider)
-			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(temp_int / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
-		break;
-	}
 
-	colorPreviewTurret.setColor(sf::Color(playerData.grid[selectedX][selectedY]->red, playerData.grid[selectedX][selectedY]->green, playerData.grid[selectedX][selectedY]->blue));
-}
 
-void ShipEditor::closeTurretConfigurations()
+//Core control schemes
+void ShipEditor::saveCoreControlScheme()
 {
-	std::cout << "\nClosing turret configurations...";
-	focus = editor::base;
+	if (workingFileName == "" || workingFileName == " " || workingFileName == "  " || workingFileName == "\n" || workingFileName == "\0")
+		return;
+
+	for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
+		if (coreConfigurationButtons[i].id == bi_confSaveCoreScheme)
+			coreConfigurationButtons[i].text.setString(" Save control scheme...");
+
 	gettingUserInput = false;
-	updateGridSpriteTextures();
+
+	mFileStream.open("Settings/CoreControlSchemes/" + workingFileName + ".dat", std::ofstream::binary | std::ios::out);
+	if (mFileStream)
+	{
+		mFileStream.write((char*)&coreKeys[key_turnRight], sizeof(MyKeys));
+		mFileStream.write((char*)&coreKeys[key_turnLeft], sizeof(MyKeys));
+		mFileStream.write((char*)&coreKeys[key_accelerate], sizeof(MyKeys));
+		mFileStream.write((char*)&coreKeys[key_reverse], sizeof(MyKeys));
+		mFileStream.write((char*)&coreKeys[key_zoomIn], sizeof(MyKeys));
+		mFileStream.write((char*)&coreKeys[key_zoomOut], sizeof(MyKeys));
+		mFileStream.write((char*)&directionalMovement, sizeof(bool));
+		mFileStream.write((char*)&moveJoystickId, sizeof(int));
+		mFileStream.write((char*)&verticalMoveAxisPolarity, sizeof(int));
+		mFileStream.write((char*)&horizontalMoveAxisPolarity, sizeof(int));
+		mFileStream.write((char*)&horizontalMoveAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.write((char*)&verticalMoveAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.close();
+
+		mFileStream.open("Settings/CoreControlSchemesList.txt");
+		if (!mFileStream.fail())
+		{
+			std::vector<std::string> temp_schemes;
+			std::string temp_str;
+			while (!mFileStream.eof())
+				getline(mFileStream, temp_str);
+			mFileStream.close();
+
+			std::cout << "\nGetline results:" << temp_str;
+			extractNamesFromString(temp_str, temp_schemes);
+			
+			//Check if the fileName already exists in schemes.txt
+			bool temp_alreadyListed = false;
+			for (unsigned int i = 0; i < temp_schemes.size(); i++)
+				if (temp_schemes[i] == workingFileName)
+					temp_alreadyListed = true;
+			if (temp_alreadyListed == false)
+			{//Save the scheme in the list
+				mFileStream.open("Settings/CoreControlSchemesList.txt", std::ios::app);
+				if (!mFileStream.fail())
+					mFileStream << workingFileName << "#";
+				else
+					std::cout << "\nFailed to save new scheme to CoreControlSchemes.List.txt";
+				mFileStream.close();
+			}
+		}
+		reloadCoreControlSchemeList();
+	}
+	else
+		std::cout << "\nError. Failed to save core control scheme:\n" << "Settings/CoreControlSchemes/" << workingFileName << ".dat";
+
+	mFileStream.close();
+}
+void ShipEditor::loadCoreControlScheme()
+{
+	if (workingFileName == "" || workingFileName == " " || workingFileName == "  " || workingFileName == "\n" || workingFileName == "\0")
+		return;
+
+	mFileStream.open("Settings/CoreControlSchemes/" + workingFileName + ".dat", std::ios::binary | std::ios::in);
+	if (mFileStream)
+	{
+		std::cout << "\nLoading " << workingFileName << ".dat...";
+		mFileStream.read((char*)&coreKeys[key_turnRight], sizeof(MyKeys));
+		mFileStream.read((char*)&coreKeys[key_turnLeft], sizeof(MyKeys));
+		mFileStream.read((char*)&coreKeys[key_accelerate], sizeof(MyKeys));
+		mFileStream.read((char*)&coreKeys[key_reverse], sizeof(MyKeys));
+		mFileStream.read((char*)&coreKeys[key_zoomIn], sizeof(MyKeys));
+		mFileStream.read((char*)&coreKeys[key_zoomOut], sizeof(MyKeys));
+		mFileStream.read((char*)&directionalMovement, sizeof(bool));
+		mFileStream.read((char*)&moveJoystickId, sizeof(int));
+		mFileStream.read((char*)&verticalMoveAxisPolarity, sizeof(int));
+		mFileStream.read((char*)&horizontalMoveAxisPolarity, sizeof(int));
+		mFileStream.read((char*)&horizontalMoveAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.read((char*)&verticalMoveAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.close();
+		updateCoreConfigurationButtonStrings();
+		updateCoreConfigurationButtonVisibility();
+	}
+	else
+		std::cout << "\nError. Failed to load core control scheme";
+}
+void ShipEditor::reloadCoreControlSchemeList()
+{
+	coreControlSchemeList.clear();
+	coreControlSchemeNameList.clear();
+
+	std::string temp_str;
+	std::vector<std::string> temp_schemes;
+	mFileStream.open("Settings/CoreControlSchemesList.txt", std::ios::in);
+	if (!mFileStream.fail())
+	{//Load all scheme names into temp_schemes
+		while (!mFileStream.eof())
+			mFileStream >> temp_str;
+		mFileStream.close();
+
+		extractNamesFromString(temp_str, temp_schemes);
+	}
+	std::cout << "\nTemp_schemes.size() @ reloadListElements" << temp_schemes.size();
+
+	if (temp_schemes.size() > 0)
+		for (unsigned int i = 0; i < temp_schemes.size(); i++)
+		{
+		coreControlSchemeList.push_back(Button(bi_confCoreControlScheme, coreConfX1 + button1Width + button2Width + 2.5*buttonHeight, coreConfY1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), font1,
+			sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
+			sf::Color(35, 35, 40)));
+		coreControlSchemeNameList.push_back(temp_schemes[i]);
+		}
+
+	if (coreControlSchemeList.size() > 0)
+		updateCoreControlSchemeList();
+
+	std::cout << "\n\nCoreControlSchemeList elements reload complete\n";
+}
+void ShipEditor::updateCoreControlSchemeList()
+{
+	if (scrollDelta != 0)
+		scrollDelta = abs(scrollDelta) / scrollDelta;
+
+	if (coreControlSchemeList.size() > coreConfSchemeY)
+	{
+		if (scrollDelta > 0 && scrollState < coreControlSchemeList.size() - coreConfSchemeY)
+			scrollState++;
+		else if (scrollDelta < 0 && scrollState > 0)
+			scrollState--;
+	}
+	else
+		scrollState = 0;
+
+	for (unsigned int i = 0; i < coreControlSchemeList.size(); i++)
+	{
+		coreControlSchemeList[i].setPosition(coreControlSchemeList[i].buttonRectangle.getPosition().x, coreConfY1 + buttonHeight * 5 + buttonHeight*i - buttonHeight*scrollState);
+		coreControlSchemeList[i].text.setPosition(coreControlSchemeList[i].buttonRectangle.getPosition().x + button1Width - buttonHeight*0.5 - coreControlSchemeList[i].text.getGlobalBounds().width - buttonBorder, coreControlSchemeList[i].buttonRectangle.getPosition().y);
+		if (i < scrollState || i > coreConfSchemeY - 1 + scrollState)
+			coreControlSchemeList[i].visible = false;
+		else
+			coreControlSchemeList[i].visible = true;
+	}
 }
 
 
 
+
+
+
+
+void ShipEditor::updateTurretConfigurationButtonStrings()
+{
+	//Update turret configuration button strings
+	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
+		switch (turretConfigurationButtons[i].id)
+	{
+		case bi_confBindFire:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretFire));
+			break;
+		case bi_confNodeHoldToFire:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
+			break;
+		case bi_confBindReload:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretReload));
+			break;
+		case bi_confNodeMouseAim:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAim));
+			break;
+		case bi_confNodeMouseAimRelative:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter));
+			break;
+		case bi_confNodeDirectionalAim:
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->directionalAim));
+			break;
+		case bi_confBindVerticalAimAxis:
+			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->verticalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->verticalAxisPolarity) + ")");
+			break;
+		case bi_confBindHorizontalAimAxis:
+			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->horizontalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->horizontalAxisPolarity) + ")");
+			break;
+		case bi_confBindTurnTurretRight:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretRight));
+			break;
+		case bi_confBindTurnTurretLeft:
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretLeft));
+			break;
+		case bi_confSaveTurretScheme:
+			turretConfigurationButtons[i].text.setString(" Save control scheme...");
+			break;
+
+	}
+}
+void ShipEditor::updateCoreConfigurationButtonStrings()
+{
+	//Update core configuration button strings
+	for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
+		switch (coreConfigurationButtons[i].id)
+	{
+		case bi_confNodeDirectionalMovement:
+			coreConfigurationButtons[i].text.setString(" " + getBoolAsString(directionalMovement));
+			break;
+		case bi_confBindVerticalMoveAxis:
+			coreConfigurationButtons[i].text.setString(" Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(verticalMoveAxis) + " (" + getPolarityAsString(verticalMoveAxisPolarity) + ")");
+			break;
+		case bi_confBindHorizontalMoveAxis:
+			coreConfigurationButtons[i].text.setString(" Joystick " + std::to_string(moveJoystickId) + "::" + getAxisAsString(horizontalMoveAxis) + " (" + getPolarityAsString(horizontalMoveAxisPolarity) + ")");
+			break;
+		case bi_confBindAccelerate:
+			coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_accelerate]));
+			break;
+		case bi_confBindTurnRight:
+			coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_turnRight]));
+			break;
+		case bi_confBindTurnLeft:
+			coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_turnLeft]));
+			break;
+		case bi_confBindReverse:
+			coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_reverse]));
+			break;
+		case bi_confBindZoomIn:
+			coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_zoomIn]));
+			break;
+		case bi_confBindZoomOut:
+			coreConfigurationButtons[i].text.setString(getInputAsString(coreKeys[key_zoomOut]));
+			break;
+	}
+}
 
 
 
@@ -2558,5 +3033,5 @@ std::string ShipEditor::getPolarityAsString(float polarity)
 	else if (polarity > 0)
 		return "positive";
 	else
-		return "polarity error";
+		return "polarity error. (polarity == 0 || polarity == N/A)";
 }

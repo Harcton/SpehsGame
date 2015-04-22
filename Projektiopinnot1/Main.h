@@ -112,62 +112,6 @@ extern float rotationSpeed;
 bool testInput(MyKeys k, sf::Event&);
 
 
-enum ButtonId
-{
-	bi_false,
-	bi_true,
-	bi_actionUpgradeArmor,
-	bi_actionTurret,
-	bi_actionEngine,
-	bi_actionRotate,
-	bi_actionConfiguration,
-	bi_actionScrap,
-
-	bi_confExit,
-	bi_confNodeDirectionalMovement,
-	bi_confBindVerticalMoveAxis,
-	bi_confBindHorizontalMoveAxis,
-	bi_confBindAccelerate,
-	bi_confBindTurnRight,
-	bi_confBindTurnLeft,
-	bi_confBindReverse,
-	bi_confBindZoomIn,
-	bi_confBindZoomOut,
-
-	bi_confBindFire,
-	bi_confNodeHoldToFire,
-	bi_confBindReload,
-	bi_confNodeMouseAim,
-	bi_confNodeMouseAimRelative,
-	bi_confNodeDirectionalAim,
-	bi_confBindVerticalAimAxis,
-	bi_confBindHorizontalAimAxis,
-	bi_confBindTurnTurretRight,
-	bi_confBindTurnTurretLeft,
-
-	bi_confTurretControlScheme,
-	bi_confSaveTurretScheme,
-	bi_confLoadTurretScheme,
-	bi_confScrollUp,
-	bi_confScrollDown,
-	bi_confScrollBar,
-
-	bi_confChangeJoystickIndexTo0,
-	bi_confChangeJoystickIndexTo1,
-	bi_confChangeJoystickIndexTo2,
-	bi_confChangeJoystickIndexTo3,
-	bi_confChangeJoystickIndexTo4,
-	bi_confChangeJoystickIndexTo5,
-	bi_confChangeJoystickIndexTo6,
-	bi_confChangeJoystickIndexTo7,
-
-	bi_confRedSlider,
-	bi_confGreenSlider,
-	bi_confBlueSlider,
-
-	bi_confBindThrust,
-	bi_confNodeHoldToThrust,
-};
 
 
 

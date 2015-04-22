@@ -72,14 +72,14 @@
     <ClCompile Include="ShipEditor.cpp">
       <Filter>Source Files\Ship editor</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Spehs Game engine type</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Spehs Game engine type</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,14 +122,14 @@
     <ClInclude Include="ShipEditor.h">
       <Filter>Header Files\Ship editor</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Header Files\Spehs Game engine type</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Spehs Game engine type</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
