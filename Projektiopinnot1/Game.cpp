@@ -103,7 +103,10 @@ void Game::updateBackgrounds()
 		std::cout << "\nGame.cpp: Removing background";
 		}
 	if (backgrounds.size() < 7)
+	{
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
+		backgrounds[backgrounds.size() - 1]->update();
+	}
 
 	for (unsigned int i = 0; i < backgrounds.size(); i++)
 		backgrounds[i]->draw();

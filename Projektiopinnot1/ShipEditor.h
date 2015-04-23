@@ -66,6 +66,7 @@ public:
 	void updateTurretColorPreview();
 
 	void closeTurretConfigurations();
+	void closeCoreConfigurations();
 
 	//Control schemes
 	void extractNamesFromString(std::string&, std::vector<std::string>&);
@@ -172,8 +173,10 @@ private:
 	std::vector<sf::Sprite> inheritanceSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
 
 	//Buttons
+	std::vector<Button> editorBaseButtons;
 	std::vector<Button> actionButtons;
 	std::vector<Button> actionTurretSchemeButtons;
+	std::vector<Button> actionCoreSchemeButtons;
 	std::vector<Button> actionJoystickIndexButtons;
 	std::vector<Button> configurationButtons;
 	std::vector<Button> coreConfigurationButtons;
@@ -182,6 +185,7 @@ private:
 	std::vector<Button> coreControlSchemeList;
 	std::vector<Button> engineConfigurationButtons;
 	bool actionTurretSchemeSelectionOpen = false;
+	bool actionCoreSchemeSelectionOpen = false;
 	bool actionJoystickIndexSelectionOpen = false;
 
 

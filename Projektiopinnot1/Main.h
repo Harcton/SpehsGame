@@ -96,14 +96,6 @@ struct MyKeys
 	//button sub
 	int joystickButton = 0;
 };
-extern std::map<float, MyKeys> coreKeys;
-extern std::map<float, MyKeys> componentKeys;
-extern bool directionalMovement;
-extern int moveJoystickId;
-extern int verticalMoveAxisPolarity;
-extern int horizontalMoveAxisPolarity;
-extern sf::Joystick::Axis horizontalMoveAxis;
-extern sf::Joystick::Axis verticalMoveAxis;
 extern bool starMap;
 extern float radarRange;
 extern float radarSpeed;

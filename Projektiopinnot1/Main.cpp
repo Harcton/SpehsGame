@@ -10,14 +10,7 @@ int WINDOW_HEIGHT = 720;
 double resFactor = WINDOW_HEIGHT/1080.0;
 double zoomFactor = 1;
 //Global control settings
-bool directionalMovement = false;
-int moveJoystickId = 0;
-int verticalMoveAxisPolarity = 1;
-int horizontalMoveAxisPolarity = 1;
-sf::Joystick::Axis horizontalMoveAxis = sf::Joystick::Axis::X;
-sf::Joystick::Axis verticalMoveAxis = sf::Joystick::Axis::Y;
-std::map<float, MyKeys> coreKeys;
-std::map<float, MyKeys> componentKeys;
+
 
 bool starMap = false;
 float radarRange = 0;

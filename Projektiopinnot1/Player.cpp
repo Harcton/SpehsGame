@@ -24,99 +24,6 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	massCenterX = 0;
 	massCenterY = 0;
 
-
-
-	//Initialise core key bindings
-	MyKeys key;
-	//Keyboard setup
-
-	//Controller setup
-	key.inputType = keyboardInput;
-	key.keyCode = sf::Keyboard::D;
-	coreKeys[key_turnRight] = key;
-
-	key.inputType = keyboardInput;
-	key.keyCode = sf::Keyboard::A;
-	coreKeys[key_turnLeft] = key;
-
-	key.inputType = keyboardInput;
-	key.keyCode = sf::Keyboard::S;
-	coreKeys[key_reverse] = key;
-
-	key.inputType = keyboardInput;
-	key.keyCode = sf::Keyboard::W;
-	coreKeys[key_accelerate] = key;
-
-	key.inputType = keyboardInput;
-	key.keyCode = sf::Keyboard::Period;
-	coreKeys[key_zoomIn] = key;
-
-	key.inputType = keyboardInput;
-	key.keyCode = sf::Keyboard::Comma;
-	coreKeys[key_zoomOut] = key;
-
-
-
-	//Controller setup
-	//key.inputType = joystickInput;
-	//key.axisType = positiveAxis;
-	//key.joystickIndex = 0;
-	//key.joystickAxis = sf::Joystick::X;
-	//Keys[key_turnRight] = key;
-
-	//key.inputType = joystickInput;
-	//key.axisType = negativeAxis;
-	//key.joystickIndex = 0;
-	//key.joystickAxis = sf::Joystick::X;
-	//Keys[key_turnLeft] = key;
-
-	//key.inputType = joystickInput;
-	//key.axisType = positiveAxis;
-	//key.joystickIndex = 0;
-	//key.joystickAxis = sf::Joystick::Z;
-	//Keys[key_reverse] = key;
-
-	//key.inputType = joystickInput;
-	//key.axisType = negativeAxis;
-	//key.joystickIndex = 0;
-	//key.joystickAxis = sf::Joystick::Z;
-	//Keys[key_accelerate] = key;
-
-	//key.inputType = joystickInput;
-	//key.axisType = noAxis;
-	//key.joystickIndex = 0;
-	//key.joystickButton = 7;
-	//Keys[key_zoomIn] = key;
-
-	//key.inputType = joystickInput;
-	//key.axisType = noAxis;
-	//key.joystickIndex = 0;
-	//key.joystickButton = 6;
-	//Keys[key_zoomOut] = key;
-
-	////Handle turrets
-	//int turretCount = 0;
-	//for (unsigned int i = 0; i < components.size(); i++)
-	//	for (unsigned int k = 0; k < components[i]->types.size(); k++)
-	//		if (components[i]->types[k] == turret)
-	//			turretCount++;	
-	//for (int i = 0; i < turretCount; i++)
-	//{//Turret rotation
-	//	key.inputType = joystickInput;
-	//	key.axisType = noAxis;
-	//	key.joystickIndex = 0;
-	//	key.joystickButton = 4;
-	//	Keys[i+1] = key;
-	//	key.joystickButton = 5;
-	//	Keys[-1 * (i + 1)] = key;
-	//	//Turret fire
-	//	key.inputType = joystickInput;
-	//	key.axisType = noAxis;
-	//	key.joystickIndex = 0;
-	//	key.joystickButton = 0;
-	//	Keys[i + 1 + 0.1] = key;
-	//}
-
 }
 
 bool Player::update()
@@ -142,35 +49,35 @@ bool Player::update()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 		editShip();
 
-	if (directionalMovement == false)
+	if (data->directionalMovement == false)
 	{
 		//Accelerate
-		if (testInput(coreKeys[key_accelerate], mGame->mEvent))
-			if (coreKeys[key_accelerate].axisType != noAxis)
-				accelerate(abs(sf::Joystick::getAxisPosition(coreKeys[key_accelerate].joystickIndex, coreKeys[key_accelerate].joystickAxis)));
+		if (testInput(data->coreKeys[key_accelerate], mGame->mEvent))
+			if (data->coreKeys[key_accelerate].axisType != noAxis)
+				accelerate(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_accelerate].joystickIndex, data->coreKeys[key_accelerate].joystickAxis)));
 			else
 				accelerate(100);
 		//Turn right
-		if (testInput(coreKeys[key_turnRight], mGame->mEvent))
-			if (coreKeys[key_turnRight].axisType != noAxis)
-				turnRight(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnRight].joystickIndex, coreKeys[key_turnRight].joystickAxis)));
+		if (testInput(data->coreKeys[key_turnRight], mGame->mEvent))
+			if (data->coreKeys[key_turnRight].axisType != noAxis)
+				turnRight(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_turnRight].joystickIndex, data->coreKeys[key_turnRight].joystickAxis)));
 			else
 				turnRight(100);
 		//Turn left
-		if (testInput(coreKeys[key_turnLeft], mGame->mEvent))
-			if (coreKeys[key_turnLeft].axisType != noAxis)
-				turnLeft(abs(sf::Joystick::getAxisPosition(coreKeys[key_turnLeft].joystickIndex, coreKeys[key_turnLeft].joystickAxis)));
+		if (testInput(data->coreKeys[key_turnLeft], mGame->mEvent))
+			if (data->coreKeys[key_turnLeft].axisType != noAxis)
+				turnLeft(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_turnLeft].joystickIndex, data->coreKeys[key_turnLeft].joystickAxis)));
 			else
 				turnLeft(100);
 	}
-	else if (abs(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)) + abs(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)) > 15)
+	else if (abs(sf::Joystick::getAxisPosition(data->moveJoystickId, data->verticalMoveAxis)) + abs(sf::Joystick::getAxisPosition(data->moveJoystickId, data->horizontalMoveAxis)) > 15)
 	{//Detect directional movement
-		joystickDirection = -1 * atan2(verticalMoveAxisPolarity*sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis), horizontalMoveAxisPolarity*sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis));
+		joystickDirection = -1 * atan2(data->verticalMoveAxisPolarity*sf::Joystick::getAxisPosition(data->moveJoystickId, data->verticalMoveAxis), data->horizontalMoveAxisPolarity*sf::Joystick::getAxisPosition(data->moveJoystickId, data->horizontalMoveAxis));
 		if (joystickDirection < 0)
 			joystickDirection = 2 * PI + joystickDirection;
 
 		//Detect acceleration
-		temp_accelerationPower = 100*(pow(sf::Joystick::getAxisPosition(moveJoystickId, verticalMoveAxis)/100, 2) + pow(sf::Joystick::getAxisPosition(moveJoystickId, horizontalMoveAxis)/100, 2));
+		temp_accelerationPower = 100 * (pow(sf::Joystick::getAxisPosition(data->moveJoystickId, data->verticalMoveAxis) / 100, 2) + pow(sf::Joystick::getAxisPosition(data->moveJoystickId, data->horizontalMoveAxis) / 100, 2));
 		if (temp_accelerationPower > 10)
 		{
 			if (temp_angleVar < PI / 2)
@@ -220,25 +127,25 @@ bool Player::update()
 	}
 
 	//Reverse
-	if (testInput(coreKeys[key_reverse], mGame->mEvent))
-		if (coreKeys[key_reverse].axisType != noAxis)
-			reverse(abs(sf::Joystick::getAxisPosition(coreKeys[key_reverse].joystickIndex, coreKeys[key_reverse].joystickAxis)));
+	if (testInput(data->coreKeys[key_reverse], mGame->mEvent))
+		if (data->coreKeys[key_reverse].axisType != noAxis)
+			reverse(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_reverse].joystickIndex, data->coreKeys[key_reverse].joystickAxis)));
 		else
 			reverse(100);
 
 		//Zoom in
-	if (testInput(coreKeys[key_zoomIn], mGame->mEvent))
+	if (testInput(data->coreKeys[key_zoomIn], mGame->mEvent))
 		{
-		if (coreKeys[key_zoomIn].axisType != noAxis)
-				zoomIn(abs(sf::Joystick::getAxisPosition(coreKeys[key_zoomIn].joystickIndex, coreKeys[key_zoomIn].joystickAxis)));
+		if (data->coreKeys[key_zoomIn].axisType != noAxis)
+			zoomIn(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_zoomIn].joystickIndex, data->coreKeys[key_zoomIn].joystickAxis)));
 			else
 				zoomIn(100);
 		}
 		//Zoom out
-	if (testInput(coreKeys[key_zoomOut], mGame->mEvent))
+	if (testInput(data->coreKeys[key_zoomOut], mGame->mEvent))
 		{
-		if (coreKeys[key_zoomOut].axisType != noAxis)
-			zoomOut(abs(sf::Joystick::getAxisPosition(coreKeys[key_zoomOut].joystickIndex, coreKeys[key_zoomOut].joystickAxis)));
+		if (data->coreKeys[key_zoomOut].axisType != noAxis)
+			zoomOut(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_zoomOut].joystickIndex, data->coreKeys[key_zoomOut].joystickAxis)));
 			else
 				zoomOut(100);
 		}
@@ -252,7 +159,7 @@ bool Player::update()
 				if (components[i]->types[k] == component::turret)
 				{
 					turretCount++;
-					if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire], mGame->mEvent))
+					if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire], mGame->mEvent))
 					{
 						if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->holdToFire == true ||
 							(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->holdToFire == false && components[i]->hasFired == false))
@@ -261,7 +168,7 @@ bool Player::update()
 					else
 						components[i]->hasFired = false;
 				}
-				if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload], mGame->mEvent))
+				if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload], mGame->mEvent))
 					if (components[i]->reloading == false)
 						components[i]->reload(); 				
 				}
@@ -330,7 +237,7 @@ bool Player::update()
 					}
 					else
 					{//Use manual turret rotation (press button)
-						if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left], mGame->mEvent) && components[i]->mouseAim == false)
+						if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left], mGame->mEvent) && components[i]->mouseAim == false)
 						{//Rotate turret i CCW
 							//if (turretMaxAngle > turretMinAngle)
 							//{
@@ -345,7 +252,7 @@ bool Player::update()
 							//		components[i]->angle += components[i]->turningSpeed;
 							//}
 						}
-						if (testInput(componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right], mGame->mEvent) && components[i]->mouseAim == false)
+						if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right], mGame->mEvent) && components[i]->mouseAim == false)
 						{//Rotate turret i CW
 							//if (turretMaxAngle > turretMinAngle)
 							//{
@@ -716,7 +623,7 @@ void Player::notifyComponentDestruction(int id)
 void Player::loadKeybindings()
 {
 	//Erase previous component bindings
-	componentKeys.erase(componentKeys.begin(), componentKeys.end());
+	data->componentKeys.erase(data->componentKeys.begin(), data->componentKeys.end());
 
 	//Dynamic key binding per component
 	for (unsigned int i = 0; i < components.size(); i++)
@@ -726,14 +633,14 @@ void Player::loadKeybindings()
 		{
 			components[i]->mouseAim = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAim;
 			components[i]->mouseAimRelativeToCenter = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAimRelativeToCenter;
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretLeft;
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretReload;
+			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretLeft;
+			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
+			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
+			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretReload;
 		}
 		if (components[i]->types[k] == component::engine)
 		{
-			componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
+			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
 		}
 		}
 }
