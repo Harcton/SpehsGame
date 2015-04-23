@@ -167,7 +167,7 @@ void Object::draw()
 	mWindow.draw(spr);
 }
 
-void Object::checkCollisions(unsigned int selfIndex)
+void Object::checkCollisions(unsigned int selfIndex)//Does this actually do anything?
 {
 	for (unsigned int i = 0; i < mGame->objects.size(); i++)
 		if (i != selfIndex)

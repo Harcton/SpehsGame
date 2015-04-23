@@ -23,7 +23,7 @@ Enemy::Enemy(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& rVec
 	flierMaster = fMaster;
 	typeOfEnemy = tp;
 	dodging = false;
-	snappingAngle = 0.01; //doesn't matter atm what this is...
+	snappingAngle = 0.01;
 	detectionDistance = SPAWN_RANGE;
 	enemyInitialize();
 }
