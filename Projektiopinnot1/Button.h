@@ -20,6 +20,8 @@ enum ButtonId
 	bi_actionScrap,
 	bi_actionSetTurretScheme,
 	bi_actionTurretScheme,
+	bi_actionSetCoreScheme,
+	bi_actionCoreScheme,
 	bi_actionSetJoystickIndex,
 
 	bi_actionSetJoystick0,
