@@ -41,6 +41,7 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 	yOffsetOriginal = yo;
 
 	hp = 100;
+	maxHp = hp;
 	textureRadius = 50;
 
 	drawCollisionCircle = false;
@@ -92,6 +93,15 @@ void Component::update()
 		animatedSprites[i].setRotation(360 - (angle / PI) * 180);
 		animatedSprites[i].setScale(resFactor*zoomFactor, resFactor*zoomFactor);
 	}
+
+	for (unsigned int i = 0; i < types.size(); i++)
+		if (types[i] == component::hull)
+			for (unsigned int s = 0; s < sprites.size(); s++)
+			{
+				int temp_notRed = int(255.0f*(hp / float(maxHp)));
+				sprites[s].setColor(sf::Color(255, temp_notRed, temp_notRed));
+			}
+
 
 	//DEBUG
 	if (drawCollisionCircle == false)

@@ -18,11 +18,11 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 {
 	centerObj = this;
 
-	data = new PlayerData;
-	loadPlayerData();
-	loadKeybindings();
 	massCenterX = 0;
 	massCenterY = 0;
+	data = new PlayerData;
+	loadPlayerData();
+	loadKeybindings(); 
 
 }
 
@@ -453,7 +453,7 @@ void Player::loadPlayerData()
 		}
 
 	calculateCenterOfMass();
-
+	reloadSkeletonSprites();
 }
 
 void Player::calculateCenterOfMass()
@@ -530,13 +530,19 @@ void Player::calculateCenterOfMass()
 void Player::addFromGrid(int gx, int gy)
 {
 	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100, gx, gy));
+	components[components.size() - 1]->types.push_back(component::hull);
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("skeleton.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(1400, 0, 100, 100));
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
 	
-	if (data->grid[gx][gy]->turret == 1)
-	{
+	if (data->grid[gx][gy]->core)
+	{//For the core piece, add the additional sprite
+		components[components.size() - 1]->sprites.push_back(sf::Sprite());
+		components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("core.png"));
+		components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
+	}	
+	else if (data->grid[gx][gy]->turret == 1)
+	{//Add turret
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
@@ -618,6 +624,7 @@ void Player::notifyComponentDestruction(int id)
 	data->grid[gx][gy] = new GridData();
 
 	calculateCenterOfMass();
+	reloadSkeletonSprites();
 }
 
 void Player::loadKeybindings()
@@ -644,3 +651,112 @@ void Player::loadKeybindings()
 		}
 		}
 }
+
+void Player::reloadSkeletonSprites()
+{
+	int temp_state;
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->sprites.size() > 0 )
+			for (unsigned int t = 0; t < components[i]->types.size(); t++)
+				if (components[i]->types[t] == component::hull)
+	{
+		temp_state = 0;
+		
+		data->grid[components[i]->gridLocationX][components[i]->gridLocationY];
+		if (components[i]->gridLocationY > 0)
+			if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY - 1]->armor > 0)
+				temp_state += 8;
+		if (components[i]->gridLocationY < EDITOR_HEIGHT - 1)
+			if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY + 1]->armor > 0)
+				temp_state += 4;
+		if (components[i]->gridLocationX > 0)
+			if (data->grid[components[i]->gridLocationX - 1][components[i]->gridLocationY ]->armor > 0)
+				temp_state += 2;
+		if (components[i]->gridLocationX < EDITOR_WIDTH - 1)
+			if (data->grid[components[i]->gridLocationX + 1][components[i]->gridLocationY]->armor > 0)
+				temp_state += 1;
+		//temp_state += 4;
+		//temp_state += 2;
+
+		//temp_state += 1;
+		
+		std::cout << "\ntemp_state[" << components[i]->gridLocationX << "][" << components[i]->gridLocationY << "]: " << temp_state;
+		//Assuming that sprites[0] is the skeleton sprite...
+		switch (temp_state)
+		{
+		case 4://scs_S:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(0, 0, 100, 100));
+			break;
+		case 1://scs_E:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(100, 0, 100, 100));
+			break;
+		case 2://scs_W:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(200, 0, 100, 100));
+			break;
+		case 8://scs_N:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(300, 0, 100, 100));
+			break;
+		case 5://scs_SE:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(400, 0, 100, 100));
+			break;
+		case 10://scs_NW:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(500, 0, 100, 100));
+			break;
+		case 9://scs_NE:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(600, 0, 100, 100));
+			break;
+		case 6://scs_SW:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(700, 0, 100, 100));
+			break;
+		case 12://scs_NS:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(800, 0, 100, 100));
+			break;
+		case 3://scs_WE:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(900, 0, 100, 100));
+			break;
+		case 11://scs_NWE:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(1000, 0, 100, 100));
+			break;
+		case 14://scs_NSW:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(1100, 0, 100, 100));
+			break;
+		case 13://scs_NSE:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(1200, 0, 100, 100));
+			break;
+		case 7://scs_SWE:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(1300, 0, 100, 100));
+			break;
+		case 15://scs_NSWE:
+			components[i]->sprites[0].setTextureRect(sf::IntRect(1400, 0, 100, 100));
+			break;
+		case 0://scs_none:
+			if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->childUp == false)
+			components[i]->sprites[0].setTextureRect(sf::IntRect(1500, 0, 100, 100));
+			break;
+		}
+	}
+}
+
+//enum SkeletonChildState
+	//{
+	//	// N = 8
+	//	// S = 4
+	//	// E = 2
+	//	// W = 1
+	//	scs_none,
+	//	scs_W,
+	//	scs_E,
+	//	scs_WE,
+	//	scs_S,
+	//	scs_SW,
+	//	scs_SE,
+	//	scs_SWE,
+	//	scs_N,
+	//	scs_NW,
+	//	scs_NE,
+	//	scs_NWE,
+	//	scs_NS,
+	//	scs_NSW,
+	//	scs_NSE,
+	//	scs_NSWE,
+	//};

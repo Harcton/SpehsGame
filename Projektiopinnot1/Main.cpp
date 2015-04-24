@@ -49,6 +49,7 @@ void initializeResourceManager(ResourceManager& rm)
 //TEXTURES
 	//PLAYER
 	rm.loadTexture("Texture/Player/skeleton.png");
+	rm.loadTexture("Texture/Player/core.png");
 	rm.loadTexture("Texture/Player/turret.png");
 
 	//ENEMY

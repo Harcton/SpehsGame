@@ -86,6 +86,7 @@ protected:
 	int id;
 	std::vector<int> childComponents;
 	int hp;
+	int maxHp;
 	int textureRadius;
 
 	int gridLocationX;

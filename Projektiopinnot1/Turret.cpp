@@ -10,7 +10,7 @@ Turret::~Turret()
 Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mstr, cntr, xo, yo)
 {
 	sprites.push_back(sf::Sprite());
-	sprites[sprites.size() - 1].setTexture(RM.getTexture("turret.png"));
+	sprites[sprites.size() - 1].setTexture(RM.getTexture("editorTurret.png"));
 	sprites[sprites.size() - 1].setOrigin(20, 50);
 	maxAngle = PI/3;
 	turningSpeed = PI/40;

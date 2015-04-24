@@ -3,6 +3,8 @@
 
 #include "Sprite.h"
 
+
+
 class Component;
 class PlayerData;
 
@@ -23,6 +25,7 @@ public:
 	void editShip();
 	void loadKeybindings();
 	void calculateCenterOfMass();
+	void reloadSkeletonSprites();
 
 	//Handle input
 	void turnRight(double);
