@@ -1,8 +1,13 @@
+#include "Main.h"
+#include "Game.h"
+#include "Object.h"
 #include "Enemy.h"
 #include "Flier.h"
+#include "Commander.h"
+#include "Component.h"
 
 
-Seeker::Flier(sf::RenderWindow&, Game*, std::vector<Object*>&, int behaviourLevel, Commander* master) : refVector(rVector), Object(windowref, game)
+Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel, Commander* master) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
 	fleetMaster = master;
@@ -14,9 +19,9 @@ Seeker::Flier(sf::RenderWindow&, Game*, std::vector<Object*>&, int behaviourLeve
 	closeRange = 75;
 	maxTurnSpeedLimit = 0.05;
 	maxSpeedLimit = 4;
-	accelerationConstant;//?
-	accelerationConstant;//?
-	closeAngle;//set
+	accelerationConstant = 0.4;
+	turnAccelerationConstant = 0.005;
+	closeAngle = 0.003;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());
@@ -35,14 +40,38 @@ Flier::~Flier()
 bool Flier::update()
 {
 	//Counters
+	laserCounter++;
+
+	rotationCounter += irandom(0, 2);
+	if (rotationCounter <= 20)
+	{
+		rotationDirection = true;
+	}
+	else if (rotationCounter > 20 && rotationCounter < 60)
+	{
+		rotationDirection = false;
+	}
+	else if (rotationCounter > 60 && rotationCounter < 100)
+	{
+		rotationDirection = irandom(0, 1);
+	}
+	else if (rotationCounter > 100)
+	{
+		rotationCounter = 0;
+	}
+
 	repositionCounter++;
-	laserCounter;
-	//Behaviour counter!!
-	//RotationDirection changes...
+	if (repositionCounter < 0)
+	{
+		repositioning = false;
+	}
 
 
 	AIupdate();
-	HPMemory = components[0]->hp;
+	if (components.size()>0)
+	{
+		HPMemory = components[0]->hp;
+	}
 
 	return Enemy::update();
 }
@@ -54,6 +83,7 @@ void Flier::AIupdate()//change behaviour when not fighting
 	{
 		this->initiateAssault = true;
 	}
+	std::cout << initiateAssault << std::endl;
 
 	if (repositioning)
 	{
@@ -62,21 +92,21 @@ void Flier::AIupdate()//change behaviour when not fighting
 	else if (distance < closeRange) //Close state
 	{
 		follow = true;
-		xSpeed = -(cos(2 * PI - angle))*accelerationConstant;
-		ySpeed = -(sin(2 * PI - angle))*accelerationConstant;
+		xSpeed += -(cos(2 * PI - angle))*accelerationConstant;
+		ySpeed += -(sin(2 * PI - angle))*accelerationConstant;
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
 		follow = true;
 		if (rotationDirection == true) //rotation direction to be fixed?
 		{
-			xSpeed += (-sin(angle)) + irandom(-2, 2)*accelerationConstant;
-			ySpeed += (-cos(angle)) + irandom(-2, 2)*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 		else if (rotationDirection == false)
 		{
-			xSpeed += (sin(angle)) + irandom(-2, 2)*accelerationConstant;
-			ySpeed += (cos(angle)) + irandom(-2, 2)*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 
 		if (laserCounter >= 10)
@@ -92,6 +122,7 @@ void Flier::AIupdate()//change behaviour when not fighting
 	{
 		if (initiateAssault == false)
 		{
+			follow = false;
 			//Follow the Commander ship!
 			//Not actually following !!!??!
 			if (angle >= 0 && angle < PI / 2) //1st quarter
@@ -170,31 +201,24 @@ void Flier::AIupdate()//change behaviour when not fighting
 				turnSpeed -= maxTurnSpeed;
 				}*/
 			}
-			xSpeed = cos(2 * PI - angle)*maxSpeed*irandom(0.9, 1.1)*accelerationConstant;
-			ySpeed = sin(2 * PI - angle)*maxSpeed*irandom(0.9, 1.1)*accelerationConstant;
+			xSpeed += cos(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+			ySpeed += sin(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
 			turnSpeed += irandom(-1, 1)*turnAccelerationConstant;
 		}
 		else if (initiateAssault == true)
 		{
 			follow = true;
-			xSpeed = cos(2 * PI - angle)*accelerationConstant;
-			ySpeed = sin(2 * PI - angle)*accelerationConstant;
+			xSpeed += cos(2 * PI - angle)*accelerationConstant;
+			ySpeed += sin(2 * PI - angle)*accelerationConstant;
 		}
 	}
 	else //Passive state
 	{
 		follow = false;
 		initiateAssault = false;
-		xSpeed = xSpeed*0.96;
-		ySpeed = ySpeed*0.96;
-		if (xSpeed > -0.01 && xSpeed < 0.01)
-		{
-			xSpeed = 0;
-		}
-		if (ySpeed > -0.01 && ySpeed < 0.01)
-		{
-			ySpeed = 0;
-		}
+		xSpeed += cos(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		ySpeed += sin(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		turnSpeed += irandom(-1, 1)*turnAccelerationConstant;
 	}
 }
 

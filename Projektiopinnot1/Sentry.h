@@ -4,7 +4,7 @@
 class Sentry : public Enemy
 {
 public:
-	Sentry(sf::RenderWindow&, Game*, std::vector<Object*>&, int);
+	Sentry(sf::RenderWindow&, Game*, int);
 	~Sentry();
 
 	bool update();

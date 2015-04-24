@@ -4,8 +4,10 @@
 class Commander : public Enemy
 {
 public:
-	Commander(sf::RenderWindow&, Game*, std::vector<Object*>&, int);
+	Commander(sf::RenderWindow&, Game*, int);
 	~Commander();
+
+	friend class Flier;
 
 	bool update();
 	void AIupdate();
@@ -19,6 +21,7 @@ private:
 	int rotationCounter;
 	int fliersFollowing;
 	int flierAttackCounter;
+	int releaseFlier;
 };
 
 #endif

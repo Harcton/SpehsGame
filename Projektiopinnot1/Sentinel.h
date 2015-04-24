@@ -4,7 +4,7 @@
 class Sentinel : public Enemy
 {
 public:
-	Sentinel(sf::RenderWindow&, Game*, std::vector<Object*>&, int);
+	Sentinel(sf::RenderWindow&, Game*, int);
 	~Sentinel();
 
 	bool update();

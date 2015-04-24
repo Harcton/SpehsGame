@@ -1,8 +1,12 @@
+#include "Main.h"
+#include "Game.h"
+#include "Object.h"
 #include "Enemy.h"
 #include "Sentinel.h"
+#include "Component.h"
 
 
-Sentinel::Sentinel(sf::RenderWindow&, Game*, std::vector<Object*>&, int behaviourLevel) : refVector(rVector), Object(windowref, game)
+Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
 
@@ -12,11 +16,11 @@ Sentinel::Sentinel(sf::RenderWindow&, Game*, std::vector<Object*>&, int behaviou
 	aggroRange = SPAWN_RANGE;
 	maxActionRange = 600;
 	closeRange = 350;
-	maxTurnSpeedLimit = 0.015;
+	maxTurnSpeedLimit = 0.05;
 	maxSpeedLimit = 9;
-	accelerationConstant;//?
-	accelerationConstant;//?
-	closeAngle;//set
+	accelerationConstant = 0.9;
+	turnAccelerationConstant = 0.005;
+	closeAngle = 0.003;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());
@@ -33,12 +37,37 @@ Sentinel::~Sentinel()
 bool Sentinel::update()
 {
 	//Counters
-	dodgeCounter++;
-	laserCounter++;
-	repositionCounter++;
-		//Behaviour counter!!
-		//RotationDirection changes...
+	dodgeCounter--;
+	if (dodgeCounter < 0)
+	{
+		dodging = false;
+	}
 
+	laserCounter++;
+
+	rotationCounter += irandom(0, 2);
+	if (rotationCounter <= 20)
+	{
+		rotationDirection = true;
+	}
+	else if (rotationCounter > 20 && rotationCounter < 60)
+	{
+		rotationDirection = false;
+	}
+	else if (rotationCounter > 60 && rotationCounter < 100)
+	{
+		rotationDirection = irandom(0,1);
+	}
+	else if (rotationCounter > 100)
+	{
+		rotationCounter = 0;
+	}
+
+	repositionCounter++;
+	if (repositionCounter < 0)
+	{
+		repositioning = false;
+	}
 
 	AIupdate();
 	HPMemory = components[0]->hp;
@@ -64,21 +93,16 @@ void Sentinel::AIupdate()
 	else if (distance < closeRange) //Close state
 	{
 		follow = true;
-		xSpeed = -(cos(2 * PI - angle))*accelerationConstant;
-		ySpeed = -(sin(2 * PI - angle))*accelerationConstant;
+		xSpeed += -(cos(2 * PI - angle))*accelerationConstant;
+		ySpeed += -(sin(2 * PI - angle))*accelerationConstant;
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
 		if (rotationDirection == true)
 		{
-			if (laserBChange == true && follow == true)//dunno mang..
+			if (HPMemory > components[0]->hp && follow == true)
 			{
 				follow = false;
-
-				xSpeed = (-sin(angle))*accelerationConstant;
-				ySpeed = (-cos(angle))*accelerationConstant;
-				laserBChange = false;
-				BCounter = 0;
 				dodging = true;
 				dodgeCounter = 60;
 			}
@@ -86,21 +110,15 @@ void Sentinel::AIupdate()
 			{
 				follow = true;
 
-				xSpeed = (-sin(angle))*accelerationConstant + irandom(7, 13);
-				ySpeed = (-cos(angle))*accelerationConstant + irandom(5, 10);
-				BCounter = 0;
+				xSpeed += (-sin(angle))*accelerationConstant;
+				ySpeed += (-cos(angle))*accelerationConstant;
 			}
 		}
-		else if (rotationDirection == false && BCounter > 80)
+		else if (rotationDirection == false)
 		{
-			if (laserBChange == true && follow == true)
+			if (HPMemory > components[0]->hp && follow == true)
 			{
 				follow = false;
-
-				xSpeed = (sin(angle))*accelerationConstant;
-				ySpeed = (cos(angle))*accelerationConstant;
-				laserBChange = false;
-				BCounter = 0;
 				dodging = true;
 				dodgeCounter = 60;
 			}
@@ -108,9 +126,8 @@ void Sentinel::AIupdate()
 			{
 				follow = true;
 
-				xSpeed = (sin(angle))*accelerationConstant + irandom(7, 13);
-				ySpeed = (cos(angle))*accelerationConstant + irandom(5, 10);
-				BCounter = 0;
+				xSpeed += (sin(angle))*accelerationConstant;
+				ySpeed += (cos(angle))*accelerationConstant;
 			}
 		}
 
@@ -126,8 +143,8 @@ void Sentinel::AIupdate()
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
 		follow = true;
-		xSpeed = cos(2 * PI - angle)*maxSpeed;
-		ySpeed = sin(2 * PI - angle)*maxSpeed;
+		xSpeed += cos(2 * PI - angle)*accelerationConstant;
+		ySpeed += sin(2 * PI - angle)*accelerationConstant;
 	}
 	else //Passive state
 	{
@@ -154,14 +171,14 @@ void Sentinel::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 	}
 	else if (angle >= PI / 2 && angle < PI) //2nd quarter
@@ -169,14 +186,14 @@ void Sentinel::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 	}
 	else if (angle >= PI && angle < PI*1.5)//3rd quarter
@@ -184,14 +201,14 @@ void Sentinel::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 	}
 	else //4th quarter
@@ -199,14 +216,14 @@ void Sentinel::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 	}
 }

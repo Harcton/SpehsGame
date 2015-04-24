@@ -8,6 +8,10 @@
 
 #include "Debris.h"
 #include "Enemy.h"
+#include "Sentinel.h"
+#include "Sentry.h"
+#include "Seeker.h"
+#include "Commander.h"
 #include "Background.h"
 
 
@@ -142,7 +146,7 @@ void Game::updateObjects()
 
 	if (objects.size() < 2)
 	{
-		objects.push_back(new Enemy(mWindow, this, objects, et_commander)); //spawn different enemy types
+		objects.push_back(new Commander(mWindow, this, 1)); //spawn different enemy types
 		objects[objects.size() - 1]->setRandomLocation();
 	}
 
@@ -152,23 +156,28 @@ void Game::updateObjects()
 	if (objects.size() < distanceFromStart/1300)
 	{
 		if (distanceFromStart/1000 > 8)
-			spawnRandomization = irandom(1, 3);
+			spawnRandomization = irandom(1, 4);
 		else
-			spawnRandomization = irandom(1, 2);
+			spawnRandomization = irandom(1, 3);
 
 		if (spawnRandomization == 1)
 		{
-			objects.push_back(new Enemy(mWindow, this, objects, et_standard));
+			objects.push_back(new Sentinel(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
 		}
 		if (spawnRandomization == 2)
 		{
-			objects.push_back(new Enemy(mWindow, this, objects, et_laser));
+			objects.push_back(new Seeker(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
 		}
 		if (spawnRandomization == 3)
 		{
-			objects.push_back(new Enemy(mWindow, this, objects, et_commander));
+			objects.push_back(new Sentry(mWindow, this, 1));
+			objects[objects.size() - 1]->setRandomLocation();
+		}
+		if (spawnRandomization == 4)
+		{
+			objects.push_back(new Commander(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
 		}
 	}*/

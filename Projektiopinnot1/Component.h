@@ -29,6 +29,11 @@ public:
 	Component(Object*, Object*, double, double, int, int);
 	friend class Player;
 	friend class Enemy;
+	friend class Seeker;
+	friend class Sentinel;
+	friend class Sentry;
+	friend class Flier;
+	friend class Commander;
 
 	virtual void update();
 	virtual bool alive();

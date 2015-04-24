@@ -1,8 +1,13 @@
+#include "Main.h"
+#include "Game.h"
+#include "Object.h"
 #include "Enemy.h"
 #include "Sentry.h"
+#include "Component.h"
+#include "Turret.h"
 
 
-Sentry::Sentry(sf::RenderWindow&, Game*, std::vector<Object*>&, int behaviourLevel) : refVector(rVector), Object(windowref, game)
+Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
 
@@ -12,11 +17,11 @@ Sentry::Sentry(sf::RenderWindow&, Game*, std::vector<Object*>&, int behaviourLev
 	aggroRange = SPAWN_RANGE;
 	maxActionRange = 1000;
 	closeRange = 500;
-	maxTurnSpeedLimit = 0.014;
-	maxSpeedLimit = 3;
-	accelerationConstant;//?
-	accelerationConstant;//?
-	closeAngle;//set
+	maxTurnSpeedLimit = 0.01;
+	maxSpeedLimit = 5;
+	accelerationConstant = 0.6;
+	turnAccelerationConstant = 0.0015;
+	closeAngle = 0.003;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());
@@ -35,11 +40,37 @@ Sentry::~Sentry()
 bool Sentry::update()
 {
 	//Counters
-	dodgeCounter++;
+	dodgeCounter--;
+	if (dodgeCounter < 0)
+	{
+		dodging = false;
+	}
+
 	shootingCounter++;
-	repositionCounter++;
-		//Behaviour counter!!
-		//RotationDirection changes...
+
+	rotationCounter += irandom(0, 2);
+	if (rotationCounter <= 40)
+	{
+		rotationDirection = true;
+	}
+	else if (rotationCounter > 40 && rotationCounter < 80)
+	{
+		rotationDirection = false;
+	}
+	else if (rotationCounter > 80 && rotationCounter < 140)
+	{
+		rotationDirection = irandom(0, 1);
+	}
+	else if (rotationCounter > 140)
+	{
+		rotationCounter = 0;
+	}
+
+	repositionCounter--;
+	if (repositionCounter < 0)
+	{
+		repositioning = false;
+	}
 
 
 	AIupdate();
@@ -66,23 +97,41 @@ void Sentry::AIupdate()
 	else if (distance < closeRange) //Close state
 	{
 		follow = true;
-		xSpeed = -(cos(2 * PI - angle))*accelerationConstant;
-		ySpeed = -(sin(2 * PI - angle))*accelerationConstant;
+		xSpeed += -(cos(2 * PI - angle))*accelerationConstant;
+		ySpeed += -(sin(2 * PI - angle))*accelerationConstant;
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
-		if (tempHPMemory > this->components[0]->hp)
+		if (rotationDirection)
 		{
-			follow = false;
-			dodging = true;
+			if (HPMemory > this->components[0]->hp && follow == true)
+			{
+				follow = false;
+				dodging = true;
+			}
+			else
+			{
+				follow = true;
+				xSpeed += (-sin(angle))*accelerationConstant;
+				ySpeed += (-cos(angle))*accelerationConstant;
+			}
 		}
-		else
+		else if (!rotationDirection)
 		{
-			follow = true;
-			xSpeed += (cos(2 * PI - angle))*accelerationConstant;
-			ySpeed += (sin(2 * PI - angle))*accelerationConstant;
+			if (HPMemory > this->components[0]->hp && follow == true)
+			{
+				follow = false;
+				dodging = true;
+			}
+			else
+			{
+				follow = true;
+				xSpeed += (sin(angle))*accelerationConstant;
+				ySpeed += (cos(angle))*accelerationConstant;
+			}
 		}
-		if (shootingCounter >= 10)
+		
+		if (shootingCounter >= 20)
 		{
 			if (angle < playerDirection + closeAngle || angle > -playerDirection - closeRange)
 			{
@@ -99,8 +148,8 @@ void Sentry::AIupdate()
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
 		follow = true;
-		xSpeed = cos(2 * PI - angle)*accelerationConstant;
-		ySpeed = sin(2 * PI - angle)*accelerationConstant;
+		xSpeed += cos(2 * PI - angle)*accelerationConstant;
+		ySpeed += sin(2 * PI - angle)*accelerationConstant;
 	}
 	else //Passive state
 	{
@@ -126,14 +175,14 @@ void Sentry::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 	}
 	else if (angle >= PI / 2 && angle < PI) //2nd quarter
@@ -141,14 +190,14 @@ void Sentry::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 	}
 	else if (angle >= PI && angle < PI*1.5)//3rd quarter
@@ -156,14 +205,14 @@ void Sentry::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (-cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (-cos(angle))*accelerationConstant;
 		}
 	}
 	else //4th quarter
@@ -171,14 +220,14 @@ void Sentry::dodgeMove()
 		if (rotationDirection)
 		{
 			turnSpeed += turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 		else if (!rotationDirection)
 		{
 			turnSpeed -= turnAccelerationConstant;
-			xSpeed = (-sin(angle))*accelerationConstant;
-			ySpeed = (cos(angle))*accelerationConstant;
+			xSpeed += (-sin(angle))*accelerationConstant;
+			ySpeed += (cos(angle))*accelerationConstant;
 		}
 	}
 }

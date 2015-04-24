@@ -71,9 +71,11 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Commander.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Debris.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Flier.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GridData.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -81,6 +83,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Seeker.cpp" />
+    <ClCompile Include="Sentinel.cpp" />
+    <ClCompile Include="Sentry.cpp" />
     <ClCompile Include="ShipEditor.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Turret.cpp" />
@@ -89,9 +94,11 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Commander.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debris.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Flier.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GridData.h" />
     <ClInclude Include="Main.h" />
@@ -99,6 +106,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerData.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Seeker.h" />
+    <ClInclude Include="Sentinel.h" />
+    <ClInclude Include="Sentry.h" />
     <ClInclude Include="ShipEditor.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Turret.h" />

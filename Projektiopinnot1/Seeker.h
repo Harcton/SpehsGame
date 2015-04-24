@@ -1,10 +1,12 @@
 #ifndef SEEKER_H
 #define SEEKER_H
 
+class Component;
+
 class Seeker : public Enemy
 {
 public:
-	Seeker(sf::RenderWindow&, Game*, std::vector<Object*>&, int);
+	Seeker(sf::RenderWindow&, Game*, int);
 	~Seeker();
 
 	bool update();
@@ -13,8 +15,8 @@ public:
 
 private:
 	bool dodging;
+	bool explosionLimiter;
 	int dodgeCounter;
-	int explosionLimiterTimer;
 };
 
 #endif

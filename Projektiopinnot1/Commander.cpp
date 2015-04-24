@@ -1,21 +1,28 @@
+#include "Main.h"
+#include "Game.h"
+#include "Object.h"
 #include "Enemy.h"
 #include "Commander.h"
+#include "Flier.h"
+#include "Component.h"
+#include "Turret.h"
 
 
-Commander::Commander(sf::RenderWindow&, Game*, std::vector<Object*>&, int behaviourLevel) : refVector(rVector), Object(windowref, game)
+
+Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
 
 	fleeing = false;
 	initiateFlierAssault = false;
 	aggroRange = SPAWN_RANGE;
-	maxActionRange = 2000;
+	maxActionRange = 2300;
 	closeRange = 1000;
-	maxTurnSpeedLimit = 0.003;
-	maxSpeedLimit = 2;
-	accelerationConstant;//?
-	accelerationConstant;//?
-	closeAngle;//set
+	maxTurnSpeedLimit = 0.001;
+	maxSpeedLimit = 0.1;
+	accelerationConstant = 0.01;
+	turnAccelerationConstant = 0.0002;
+	closeAngle = 0.001;
 
 	//-9
 	components.push_back(new Component(this, mGame->playerObj, -325, -100)); //Component 3 (REAR)
@@ -107,9 +114,7 @@ bool Commander::update()
 	//Counters
 	shootingCounter++;
 	flierAttackCounter++;
-	//Behaviour counter!!
-	//RotationDirection changes...
-
+	releaseFlier++;
 
 	AIupdate();
 	HPMemory = components[0]->hp;
@@ -120,7 +125,7 @@ bool Commander::update()
 
 void Commander::AIupdate()//maybe not follow true all the time
 {
-	if (flierAttackCounter >= 500)
+	if (flierAttackCounter >= 600)
 	{
 		initiateFlierAssault = true;
 		flierAttackCounter = 0;
@@ -133,13 +138,13 @@ void Commander::AIupdate()//maybe not follow true all the time
 
 	if (fleeing)
 	{
-		flee();
+		//
 	}
 	else if (distance < closeRange) //Close state
 	{
 		follow = true;
-		xSpeed = -(cos(2 * PI - angle))*(distance / 1000)*accelerationConstant;
-		ySpeed = -(sin(2 * PI - angle))*(distance / 1000)*accelerationConstant;
+		xSpeed = -(cos(2 * PI - angle))*accelerationConstant;
+		ySpeed = -(sin(2 * PI - angle))*accelerationConstant;
 		if (shootingCounter >= 8)
 		{
 			if (angle < playerDirection + closeAngle && angle > -playerDirection - closeAngle)
@@ -150,53 +155,41 @@ void Commander::AIupdate()//maybe not follow true all the time
 							components[i]->fire();
 							shootingCounter = irandom(-30, -10);
 						}
+		}
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
-		follow = false;
-		xSpeed = (cos(2 * PI - angle))*accelerationConstant;
-		ySpeed = (sin(2 * PI - angle))*accelerationConstant;
-		if (angle < playerDirection + PI / 2)
-		{
-			turnSpeed += turnAccelerationConstant;
-		}
-		else if (angle > playerDirection - PI / 2)
-		{
-			turnSpeed -= turnAccelerationConstant;
-		}
+		follow = true;
+		xSpeed += (cos(angle))*accelerationConstant;
+		ySpeed += (sin(angle))*accelerationConstant;
 
-		if (flierAttackCounter % 3)
+		if (releaseFlier > 60)
 		{
 			if (fliersFollowing < 6)
 			{
 				launchFliers();
+				releaseFlier = 0;
 			}
 		}
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
 		follow = true;
-		xSpeed = cos(2 * PI - angle)*accelerationConstant;
-		ySpeed = sin(2 * PI - angle)*accelerationConstant;
+		xSpeed += cos(2 * PI - angle)*accelerationConstant;
+		ySpeed += sin(2 * PI - angle)*accelerationConstant;
 	}
 	else //Passive state
 	{
 		follow = false;
-		xSpeed = xSpeed*0.96;
-		ySpeed = ySpeed*0.96;
-		if (xSpeed > -0.01 && xSpeed < 0.01)
-		{
-			xSpeed = 0;
-		}
-		if (ySpeed > -0.01 && ySpeed < 0.01)
-		{
-			ySpeed = 0;
-		}
+		xSpeed += cos(angle)*accelerationConstant;
+		ySpeed += sin(angle)*accelerationConstant;
 	}
 }
 
 
-void Commander::flee()
+void Commander::launchFliers()
 {
-	//TBD
+	mGame->objects.push_back(new Flier(mWindow, mGame, 1, this));
+	mGame->objects[mGame->objects.size() - 1]->setLocation(x, y); //randomize a lil bit
+	fliersFollowing++;
 }

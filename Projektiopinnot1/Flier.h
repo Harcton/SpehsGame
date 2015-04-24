@@ -1,10 +1,12 @@
 #ifndef FLIER_H
 #define FLIER_H
 
+class Commander;
+
 class Flier : public Enemy
 {
 public:
-	Flier(sf::RenderWindow&, Game*, std::vector<Object*>&, int, Commander*);
+	Flier(sf::RenderWindow&, Game*, int, Commander*);
 	~Flier();
 
 	bool update();
@@ -13,6 +15,7 @@ public:
 
 private:
 	bool repositioning;
+	int repositionCounter;
 	int laserCounter;
 	int rotationCounter;
 	bool initiateAssault;
