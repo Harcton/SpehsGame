@@ -28,7 +28,7 @@ Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel, Comman
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("Flier.png"));
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
 	components[components.size() - 1]->textureRadius = 30;
-	components[components.size() - 1]->hp = 30;
+	components[components.size() - 1]->maxHp = 30;
 }
 
 

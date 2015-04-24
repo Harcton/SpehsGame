@@ -43,7 +43,10 @@ bool Seeker::update()
 	}
 
 	AIupdate();
-	HPMemory = components[0]->hp;
+	if (components.size() > 0)
+	{
+		HPMemory = components[0]->hp;
+	}	
 
 	return Enemy::update();
 }
@@ -77,10 +80,13 @@ void Seeker::AIupdate()//maybe not follow true all the time
 		xSpeed += (cos(2 * PI - angle))*accelerationConstant;
 		ySpeed += (sin(2 * PI - angle))*accelerationConstant;
 
-		if (HPMemory > this->components[0]->hp)
+		if (components.size() > 0)
 		{
-			dodging = true;
-		}
+			if (HPMemory > this->components[0]->hp)
+			{
+				dodging = true;
+			}
+		}		
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{

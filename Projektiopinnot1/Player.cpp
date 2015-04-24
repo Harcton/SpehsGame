@@ -22,8 +22,7 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	massCenterY = 0;
 	data = new PlayerData;
 	loadPlayerData();
-	loadKeybindings(); 
-
+	loadKeybindings();
 }
 
 bool Player::update()

@@ -70,7 +70,10 @@ bool Sentinel::update()
 	}
 
 	AIupdate();
-	HPMemory = components[0]->hp;
+	if (components.size() > 0)
+	{
+		HPMemory = components[0]->hp;
+	}
 
 	return Enemy::update();
 }
@@ -100,12 +103,16 @@ void Sentinel::AIupdate()
 	{
 		if (rotationDirection == true)
 		{
-			if (HPMemory > components[0]->hp && follow == true)
+			if (components.size() > 0)
 			{
-				follow = false;
-				dodging = true;
-				dodgeCounter = 60;
+				if (HPMemory > components[0]->hp && follow == true)
+				{
+					follow = false;
+					dodging = true;
+					dodgeCounter = 60;
+				}
 			}
+			
 			else
 			{
 				follow = true;
@@ -116,11 +123,14 @@ void Sentinel::AIupdate()
 		}
 		else if (rotationDirection == false)
 		{
-			if (HPMemory > components[0]->hp && follow == true)
+			if (components.size() > 0)
 			{
-				follow = false;
-				dodging = true;
-				dodgeCounter = 60;
+				if (HPMemory > components[0]->hp && follow == true)
+				{
+					follow = false;
+					dodging = true;
+					dodgeCounter = 60;
+				}
 			}
 			else
 			{

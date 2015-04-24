@@ -74,7 +74,10 @@ bool Sentry::update()
 
 
 	AIupdate();
-	HPMemory = components[0]->hp;
+	if (components.size() > 0)
+	{
+		HPMemory = components[0]->hp;
+	}
 
 	return Enemy::update();
 }
@@ -104,10 +107,13 @@ void Sentry::AIupdate()
 	{
 		if (rotationDirection)
 		{
-			if (HPMemory > this->components[0]->hp && follow == true)
+			if (components.size() > 0)
 			{
-				follow = false;
-				dodging = true;
+				if (HPMemory > this->components[0]->hp && follow == true)
+				{
+					follow = false;
+					dodging = true;
+				}
 			}
 			else
 			{
@@ -118,10 +124,13 @@ void Sentry::AIupdate()
 		}
 		else if (!rotationDirection)
 		{
-			if (HPMemory > this->components[0]->hp && follow == true)
+			if (components.size() > 0)
 			{
-				follow = false;
-				dodging = true;
+				if (HPMemory > this->components[0]->hp && follow == true)
+				{
+					follow = false;
+					dodging = true;
+				}
 			}
 			else
 			{

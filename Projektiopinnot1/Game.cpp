@@ -144,15 +144,17 @@ void Game::updateObjects()
 	//	else
 	//		++obIt;
 
+	/*
 	if (objects.size() < 2)
 	{
 		objects.push_back(new Commander(mWindow, this, 1)); //spawn different enemy types
 		objects[objects.size() - 1]->setRandomLocation();
 	}
+	*/
 
 
 	//TEST GAME 17.4
-	/*distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
+	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
 	if (objects.size() < distanceFromStart/1300)
 	{
 		if (distanceFromStart/1000 > 8)
@@ -180,7 +182,7 @@ void Game::updateObjects()
 			objects.push_back(new Commander(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
 		}
-	}*/
+	}
 	//
 
 

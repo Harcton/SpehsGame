@@ -117,7 +117,10 @@ bool Commander::update()
 	releaseFlier++;
 
 	AIupdate();
-	HPMemory = components[0]->hp;
+	if (components.size() > 0)
+	{
+		HPMemory = components[0]->hp;
+	}	
 
 	return Enemy::update();
 }
