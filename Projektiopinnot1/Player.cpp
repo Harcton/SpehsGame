@@ -34,17 +34,6 @@ bool Player::update()
 
 
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-	{
-		xSpeed = 0;
-		ySpeed = 0;
-		turnSpeed = 0;
-
-		relativeSpeedX = 0;
-		relativeSpeedY = 0;
-	}
-
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 		editShip();
 
@@ -151,13 +140,11 @@ bool Player::update()
 
 		//Fire/reload turrets
 		{// <-need a scope for turretCount...
-			int turretCount = 0;
 			for (unsigned int i = 0; i < components.size(); i++)
-				for (unsigned int k = 0; k < components[i]->types.size(); k++)
-				{
+			for (unsigned int k = 0; k < components[i]->types.size(); k++)
+			{
 				if (components[i]->types[k] == component::turret)
 				{
-					turretCount++;
 					if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire], mGame->mEvent))
 					{
 						if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->holdToFire == true ||
@@ -166,11 +153,25 @@ bool Player::update()
 					}
 					else
 						components[i]->hasFired = false;
-				}
 				if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload], mGame->mEvent))
 					if (components[i]->reloading == false)
-						components[i]->reload(); 				
+						components[i]->reload(); 
 				}
+				else if (components[i]->types[k] == component::engine)
+				{
+					if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust], mGame->mEvent))
+					{//Receiving input
+						if (data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].inputType == joystickInput)
+							if (data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].axisType != noAxis)
+								components[i]->thrust(abs(sf::Joystick::getAxisPosition(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].joystickIndex,
+								data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].joystickAxis)));
+							else
+								components[i]->thrust(100);
+						else
+							components[i]->thrust(100);
+					}
+				}
+			}
 		}//End of fire/reload turrets
 
 
@@ -521,6 +522,40 @@ void Player::calculateCenterOfMass()
 	shipWidth = temp_lastHorizontal - temp_firstHorizontal + 1;
 	shipHeight = temp_lastVertical - temp_firstVertical + 1;
 
+
+	//Update engine forces
+	for (unsigned int c = 0; c < components.size(); c++)
+	for (unsigned int t = 0; t < components[c]->types.size(); t++)
+		if (components[c]->types[t] == component::engine)
+		{//It works but no-one knows why... dont touch this
+		components[c]->coreDistance = getDistance(components[c]->xOffset, components[c]->yOffset, 0, 0);
+		float temp_coreDirection = -1 * atan2(0 - components[c]->yOffset, 0 - components[c]->xOffset);
+		components[c]->coreAngleDifference = abs(temp_coreDirection - components[c]->angle);
+		while (components[c]->coreAngleDifference > PI)
+			components[c]->coreAngleDifference -= PI;
+		if (components[c]->coreAngleDifference > PI / 2)
+			components[c]->coreAngleDifference = PI - components[c]->coreAngleDifference;
+		components[c]->forwardFactor = pow(cos(components[c]->coreAngleDifference), 2);
+		components[c]->rotationFactor = pow(sin(components[c]->coreAngleDifference), 2);
+		
+		if (temp_coreDirection < 0)
+			temp_coreDirection = 2 * PI + temp_coreDirection;
+		if (components[c]->angleModifier <= PI)
+		{
+			if (temp_coreDirection < components[c]->angleModifier || temp_coreDirection > components[c]->angleModifier + PI)
+				components[c]->rotationFactor = components[c]->rotationFactor;
+			else
+				components[c]->rotationFactor = -1 * components[c]->rotationFactor;
+		}
+		else
+		{
+			if (temp_coreDirection < components[c]->angleModifier && temp_coreDirection > components[c]->angleModifier - PI)
+				components[c]->rotationFactor = components[c]->rotationFactor;
+			else
+				components[c]->rotationFactor = -1 * components[c]->rotationFactor;
+		}
+		}
+
 	std::cout << "\nShip width/height: " << shipWidth << " / " << shipHeight;
 	std::cout << "\nShip component mass: " << shipMass;
 }
@@ -551,6 +586,14 @@ void Player::addFromGrid(int gx, int gy)
 			components[components.size() - 1]->sprites[i].setColor(sf::Color(data->grid[gx][gy]->red, data->grid[gx][gy]->green, data->grid[gx][gy]->blue));
 		for (unsigned int i = 0; i < components[components.size() - 1]->animatedSprites.size(); i++)
 			components[components.size() - 1]->animatedSprites[i].setColor(sf::Color(data->grid[gx][gy]->red, data->grid[gx][gy]->green, data->grid[gx][gy]->blue));
+	}
+	else if (data->grid[gx][gy]->engine > 0)
+	{//Add an engine
+		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::engine);
+		components[components.size() - 1]->gridLocationX = gx;
+		components[components.size() - 1]->gridLocationY = gy;
+		components[components.size() - 1]->angleModifier = data->grid[gx][gy]->angleModifier*(PI / 180);
+		components[components.size() - 1]->angle = components[components.size() - 1]->angleModifier + PI;
 	}
 	
 	//Handle children	
@@ -587,6 +630,10 @@ void Player::editShip()
 	editor.run();
 	loadPlayerData();
 	loadKeybindings();
+
+	xSpeed = 0;
+	ySpeed = 0;
+	turnSpeed = 0;
 }
 
 //This method is called from the component destructor. (For Enemy class it has no use)
@@ -674,12 +721,7 @@ void Player::reloadSkeletonSprites()
 		if (components[i]->gridLocationX < EDITOR_WIDTH - 1)
 			if (data->grid[components[i]->gridLocationX + 1][components[i]->gridLocationY]->armor > 0)
 				temp_state += 1;
-		//temp_state += 4;
-		//temp_state += 2;
-
-		//temp_state += 1;
 		
-		std::cout << "\ntemp_state[" << components[i]->gridLocationX << "][" << components[i]->gridLocationY << "]: " << temp_state;
 		//Assuming that sprites[0] is the skeleton sprite...
 		switch (temp_state)
 		{
@@ -735,27 +777,3 @@ void Player::reloadSkeletonSprites()
 		}
 	}
 }
-
-//enum SkeletonChildState
-	//{
-	//	// N = 8
-	//	// S = 4
-	//	// E = 2
-	//	// W = 1
-	//	scs_none,
-	//	scs_W,
-	//	scs_E,
-	//	scs_WE,
-	//	scs_S,
-	//	scs_SW,
-	//	scs_SE,
-	//	scs_SWE,
-	//	scs_N,
-	//	scs_NW,
-	//	scs_NE,
-	//	scs_NWE,
-	//	scs_NS,
-	//	scs_NSW,
-	//	scs_NSE,
-	//	scs_NSWE,
-	//};

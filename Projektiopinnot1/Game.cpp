@@ -104,7 +104,7 @@ void Game::updateBackgrounds()
 		delete temp_objPtr;
 
 		i--;
-		std::cout << "\nGame.cpp: Removing background";
+		//std::cout << "\nGame.cpp: Removing background";
 		}
 	if (backgrounds.size() < 7)
 	{
@@ -129,7 +129,7 @@ void Game::updateObjects()
 		delete temp_objPtr;
 
 		i--;
-		std::cout << "\nGame.cpp: Removing object";
+		//std::cout << "\nGame.cpp: Removing object";
 		}
 
 	//for (obIt = objects.begin(); obIt != objects.end();)

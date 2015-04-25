@@ -42,7 +42,8 @@ public:
 
 	//Virtual functions
 	virtual void fire(){}
-	virtual void reload(){};
+	virtual void reload(){}
+	virtual void thrust(float){}
 	//virtual void fixAngle(){}
 
 
@@ -80,7 +81,7 @@ public:
 	int fireRateInterval;
 
 	//Engine
-	float thrust; //thrust strength
+	float thrustStrength; //thrust strength
 
 protected:
 	std::vector<sf::Sprite> sprites;
@@ -97,9 +98,15 @@ protected:
 	int gridLocationX;
 	int gridLocationY;
 
+	//Turret
 	bool hasFired = false;
 	bool reloading = false;
 
+	//Engine
+	float coreDistance = 0;
+	float coreAngleDifference = 0;
+	float rotationFactor = 0;
+	float forwardFactor = 0;
 
 	//DEBUG
 	bool drawCollisionCircle;

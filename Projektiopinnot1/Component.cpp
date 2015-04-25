@@ -3,6 +3,8 @@
 #include "Object.h"
 #include "Component.h"
 #include "Turret.h"
+#include "Engine.h"
+
 
 Component::~Component()
 {
@@ -141,6 +143,10 @@ void Component::createChild(double ox, double oy, component::Type tp)
 		break;
 	case component::turret: //Turret
 		master->components.push_back(new Turret(master, centerObj, ox, oy));
+		childComponents.push_back(master->components[master->components.size() - 1]->id);
+		break;
+	case component::engine: //Engine
+		master->components.push_back(new Engine(master->mGame->playerObj, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
 		break;
 	}

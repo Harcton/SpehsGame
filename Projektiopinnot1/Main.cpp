@@ -51,6 +51,7 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Player/skeleton.png");
 	rm.loadTexture("Texture/Player/core.png");
 	rm.loadTexture("Texture/Player/turret.png");
+	rm.loadTexture("Texture/Player/engine.png");
 
 	//ENEMY
 	rm.loadTexture("Texture/Enemy/enemy_commander_ship_upgraded.png");
@@ -65,6 +66,8 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Menu/circleSlider.png");
 	rm.loadTexture("Texture/Menu/slider1.png");
 	rm.loadTexture("Texture/Menu/editorTurret.png");
+	rm.loadTexture("Texture/Menu/editorSkeleton.png");
+	rm.loadTexture("Texture/Menu/editorEngine.png");
 	
 	//EFFECTS
 

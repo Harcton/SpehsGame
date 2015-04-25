@@ -75,6 +75,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Debris.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Flier.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GridData.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debris.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="Flier.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GridData.h" />

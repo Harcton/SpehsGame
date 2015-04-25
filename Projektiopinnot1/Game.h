@@ -4,6 +4,7 @@
 class Object;
 class Background;
 class Enemy;
+class Player;
 
 class Debris;
 

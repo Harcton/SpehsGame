@@ -552,21 +552,29 @@ void ShipEditor::updateGridSpriteTextures()
 			if (playerData.grid[x][y]->armor > 0)
 			{
 				gridSprites[x][y].push_back(sf::Sprite());
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("skeleton.png"));
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorSkeleton.png"));
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setTextureRect(sf::IntRect(1400, 0, 100, 100));
 			}
 
-			//Add turret sprite
+			
 			if (playerData.grid[x][y]->turret > 0)
-			{
+			{//Add turret sprite
 				gridSprites[x][y].push_back(sf::Sprite());
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorTurret.png"));
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50); 
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y]->angleModifier);
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y]->red, playerData.grid[x][y]->green, playerData.grid[x][y]->blue));
 			}
-			
+			else if (playerData.grid[x][y]->engine > 0)
+			{//Add engine sprite
+				gridSprites[x][y].push_back(sf::Sprite());
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorEngine.png"));
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50);
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y]->angleModifier);
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y]->red, playerData.grid[x][y]->green, playerData.grid[x][y]->blue));
+			}
+
+
 			//Add engine sprite
 
 			//Add inheritance arrows
@@ -768,18 +776,19 @@ void ShipEditor::mouseLeftPressed()
 			switch (actionButtons[i].checkIfPressed(mousePos))
 			{
 			case bi_actionTurret:
-				if (playerData.grid[selectedX][selectedY]->turret == 0)
+				if (playerData.grid[selectedX][selectedY]->turret == 0 && playerData.grid[selectedX][selectedY]->engine == 0)
 				{
 					playerData.grid[selectedX][selectedY]->turret = 1;
-					playerData.grid[selectedX][selectedY]->mouseAim = true;
-					playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter = false;
-					playerData.grid[selectedX][selectedY]->turretFire.inputType = mouseInput;
-					playerData.grid[selectedX][selectedY]->turretFire.mouseButton = sf::Mouse::Left;
 					updateGridSpriteTextures();
 				}
 				break;
 			case bi_actionEngine:
-				std::cout << "\nSelected Add engine";
+				if (playerData.grid[selectedX][selectedY]->turret == 0 && playerData.grid[selectedX][selectedY]->engine == 0)
+				{
+					playerData.grid[selectedX][selectedY]->engine = 1;
+					playerData.grid[selectedX][selectedY]->angleModifier = 180;
+					updateGridSpriteTextures();
+				}
 				break;
 			case bi_actionRotate:
 				std::cout << "\nSelected Rotate";

@@ -3,6 +3,7 @@
 
 class Object;
 class Bullet;
+class Player;
 
 class Turret : public Component
 {

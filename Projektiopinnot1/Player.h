@@ -13,6 +13,7 @@ class Player : public Object
 public:
 	~Player();
 	Player(sf::RenderWindow&, Game*, int, int);
+	friend class Engine;
 
 	void loadPlayerData();
 
@@ -56,6 +57,7 @@ protected:
 	//Temporal variables to be used in frequent loops
 	float temp_angleVar;
 	float temp_accelerationPower;
+
 };
 
 #endif
