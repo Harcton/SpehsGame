@@ -30,11 +30,8 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 //Power parameter 0-100
 void Engine::thrust(float power)
 {
-
-
 	if (true)//(charge > 0)
-	{		
-
+	{
 		//Handle hold to thrust
 		if (power == -100)
 		{//Automatic thrust using on/off thrust
@@ -75,8 +72,6 @@ void Engine::thrust(float power)
 		{
 			master->turnSpeed += rotationDirection*thrustStrength;
 		}
-
-
 
 
 	}
