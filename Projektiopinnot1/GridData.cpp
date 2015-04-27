@@ -22,10 +22,6 @@ GridData::GridData()
 
 	engineThrust.inputType = keyboardInput;
 	engineThrust.keyCode = sf::Keyboard::Space;
-	//engineThrust.inputType = joystickInput;
-	//engineThrust.joystickIndex = 0;
-	//engineThrust.axisType = negativeAxis;
-	//engineThrust.joystickAxis = sf::Joystick::Z;	
 
 	horizontalAxis = sf::Joystick::Axis::X;
 	verticalAxis = sf::Joystick::Axis::Y;

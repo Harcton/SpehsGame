@@ -10,6 +10,7 @@ public:
 	GridData();
 	friend class PlayerData;
 	friend class Player;
+	friend class Engine;
 	friend class ShipEditor;
 
 private:
@@ -18,6 +19,7 @@ private:
 	int angleModifier = 0; 
 	int turret = 0; //Turret damage
 	float engine = 0; //Acceleration increase
+	int rotationDirection = 0;
 	int repair = 0; //Repair amount
 	int maxAngle = 0;
 	float turnSpeed = 0;

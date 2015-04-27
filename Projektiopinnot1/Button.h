@@ -55,6 +55,10 @@ enum ButtonId
 	bi_confBindTurnTurretRight,
 	bi_confBindTurnTurretLeft,
 
+	bi_confBindThrust,
+	bi_confNodeHoldToThrust,
+	bi_confNodeEngineMode,
+
 	bi_confTurretControlScheme,
 	bi_confSaveTurretScheme,
 	bi_confLoadTurretScheme,
@@ -78,8 +82,6 @@ enum ButtonId
 	bi_confGreenSlider,
 	bi_confBlueSlider,
 
-	bi_confBindThrust,
-	bi_confNodeHoldToThrust,
 };
 
 

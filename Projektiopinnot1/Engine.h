@@ -14,16 +14,8 @@ public:
 	void thrust(float);
 
 private:
-	int charge;
-	int rechargeTimer;
-	//float MaxSpeed in Component.cpp
+	bool thrustButtonReleased = true;
 
-
-
-	//Temps memory
-	float temp_distance;
-	float temp_centerDirection;
-	float temp_angleDifference;
 };
 
 #endif

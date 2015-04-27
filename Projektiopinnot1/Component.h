@@ -103,10 +103,11 @@ protected:
 	bool reloading = false;
 
 	//Engine
-	float coreDistance = 0;
-	float coreAngleDifference = 0;
-	float rotationFactor = 0;
-	float forwardFactor = 0;
+	int charge;
+	int rechargeTimer;
+	int rotationDirection; // negative = CCW (!)
+	bool holdToThrust = true;
+	bool thrusting = false;
 
 	//DEBUG
 	bool drawCollisionCircle;

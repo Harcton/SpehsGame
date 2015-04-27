@@ -39,6 +39,9 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	coreConfY1 = (WINDOW_HEIGHT - 13 * buttonHeight) / 2.0f;
 	coreConfSchemeY = 5;
 
+	engineConfX1 = int((WINDOW_WIDTH) / 2.0f - button1Width*0.5 - button2Width*0.5f - buttonHeight);
+	engineConfY1 = (WINDOW_HEIGHT - 7 * buttonHeight) / 2.0f;
+
 
 	//Misc graphical stuff
 	scaleFactor = resFactor*zoomFactor;
@@ -64,6 +67,17 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	turretConfigurationRect3.setSize(sf::Vector2f(CONF_WIDTH - 2 * buttonBorder, CONF_HEIGHT - 70 * resFactor));
 	turretConfigurationRect3.setPosition(turretConfX1 + buttonBorder, turretConfY1 + 60 * resFactor);
 	turretConfigurationRect3.setFillColor(sf::Color(110, 110, 115));
+	//Engine conf rects
+	engineConfigurationRect1.setSize(sf::Vector2f(2 * buttonBorder + button1Width + button2Width + buttonHeight * 2, 7 * buttonHeight + 2 * buttonBorder));
+	engineConfigurationRect1.setPosition(engineConfX1 - buttonBorder, engineConfY1 - buttonBorder);
+	engineConfigurationRect1.setFillColor(sf::Color(140, 140, 145));
+	engineConfigurationRect2.setSize(sf::Vector2f(button1Width + button2Width + buttonHeight * 2, 7 * buttonHeight));
+	engineConfigurationRect2.setPosition(engineConfX1, engineConfY1);
+	engineConfigurationRect2.setFillColor(sf::Color(100, 100, 105));
+	engineConfigurationRect3.setSize(sf::Vector2f(button1Width + button2Width + buttonHeight * 2 - 2 * buttonBorder, 6 * buttonHeight - 2 * buttonBorder));
+	engineConfigurationRect3.setPosition(engineConfX1 + buttonBorder, engineConfY1 + buttonBorder + buttonHeight);
+	engineConfigurationRect3.setFillColor(sf::Color(110, 110, 115));
+
 
 	//Focus camera on core
 	for (int sx = 0; sx < EDITOR_WIDTH; sx++)
@@ -254,11 +268,25 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	colorPreviewTurret.setScale(resFactor, resFactor);
 	colorPreviewTurret.setPosition(button1X1 + button1Width + int(0.5f*button2Width), turretConfY1 + buttonHeight * 15);
 
-
 	//Exit
 	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + button1Width + button2Width + buttonHeight - buttonBorder, turretConfY1 + buttonHeight * 17 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight + 2 * buttonBorder, "", int(33 * resFactor), font1, sf::Color(80, 80, 95), sf::Color(35, 35, 40)));
 	turretConfigurationButtons.push_back(Button(bi_confExit, button1X1 + button1Width + button2Width + buttonHeight, turretConfY1 + buttonHeight * 17, button1Width, buttonHeight, "                   Return", int(44 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 
+
+	//Engine conf
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1, engineConfY1, int(button1Width + button2Width + buttonHeight * 2), buttonHeight, " Engine[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight - buttonBorder, engineConfY1 + 2 * buttonHeight - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 4 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + 2 * buttonHeight, button1Width, buttonHeight, " Thrust", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confBindThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 2 * buttonHeight, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_thrust]), int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Hold to thrust", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confNodeHoldToThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 3 * buttonHeight, button2Width, buttonHeight, "", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Engine mode", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confNodeEngineMode, engineConfX1 + buttonHeight + button1Width, engineConfY1 + buttonHeight * 4, button2Width, buttonHeight, "", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+
+	engineConfigurationButtons.push_back(Button(bi_confExit, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight*5, button1Width + button2Width, buttonHeight, "                                                            Return", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 
 }
 
@@ -403,6 +431,8 @@ void ShipEditor::run()
 								closeTurretConfigurations();
 							else if (playerData.grid[selectedX][selectedY]->core == true)
 								closeCoreConfigurations();
+							else if (playerData.grid[selectedX][selectedY]->engine != 0)
+								closeEngineConfigurations();
 						}
 						break;
 					case sf::Keyboard::Return:
@@ -829,6 +859,7 @@ void ShipEditor::mouseLeftPressed()
 				temp_dontClose = true;//Prevent focus from reverting to base
 
 				updateTurretConfigurationButtonVisibility();
+				updateEngineConfigurationButtonStrings();
 
 				//Set button strings when entering the conf window
 				for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
@@ -1266,12 +1297,49 @@ void ShipEditor::mouseLeftPressed()
 					turretControlSchemeList[j].selected = false;
 				}
 		}//End of turret conf
-		else if (playerData.grid[selectedX][selectedY]->engine > 0)
+		else if (playerData.grid[selectedX][selectedY]->engine != 0)
+		{
 			for (unsigned int i = 0; i < engineConfigurationButtons.size(); i++)
 				switch (engineConfigurationButtons[i].checkIfPressed(mousePos))
 			{
-
+				case bi_confBindThrust:
+					engineConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
+					drawWindow();
+					playerData.grid[selectedX][selectedY]->engineThrust = detectKey(bi_confBindThrust);
+					engineConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->engineThrust));
+					break;
+				case bi_confNodeHoldToThrust:
+					if (playerData.grid[selectedX][selectedY]->holdToFire == true)
+					{//Set false
+						engineConfigurationButtons[i].text.setString(" False");
+						playerData.grid[selectedX][selectedY]->holdToFire = false;
+					}
+					else
+					{//Set true
+						engineConfigurationButtons[i].text.setString(" True");
+						playerData.grid[selectedX][selectedY]->holdToFire = true;
+					}
+					break;
+				case bi_confNodeEngineMode:
+					switch (playerData.grid[selectedX][selectedY]->rotationDirection)
+					{
+					case -1:
+						playerData.grid[selectedX][selectedY]->rotationDirection++;
+						break;
+					case 0:
+						playerData.grid[selectedX][selectedY]->rotationDirection++;
+						break;
+					case 1:
+						playerData.grid[selectedX][selectedY]->rotationDirection = -1;
+						break;
+					}
+					break;
+				case bi_confExit:
+					closeEngineConfigurations();
+					break;
 			}
+			updateEngineConfigurationButtonStrings();
+		}//End of engine conf
 		break;
 	}
 }
@@ -1720,8 +1788,11 @@ void ShipEditor::drawConfigurations()
 			turretControlSchemeList[i].draw(mWindow, mousePos);
 		mWindow.draw(colorPreviewTurret);
 	}
-	else if (playerData.grid[selectedX][selectedY]->engine > 0)
+	else if (playerData.grid[selectedX][selectedY]->engine != 0)
 	{//Engine configurations
+		mWindow.draw(engineConfigurationRect1);
+		mWindow.draw(engineConfigurationRect2);
+		mWindow.draw(engineConfigurationRect3);
 		for (unsigned int i = 0; i < engineConfigurationButtons.size(); i++)
 			engineConfigurationButtons[i].draw(mWindow, mousePos);
 
@@ -1890,15 +1961,6 @@ void ShipEditor::updateTurretColorPreview()
 	colorPreviewTurret.setColor(sf::Color(playerData.grid[selectedX][selectedY]->red, playerData.grid[selectedX][selectedY]->green, playerData.grid[selectedX][selectedY]->blue));
 }
 
-void ShipEditor::closeTurretConfigurations()
-{
-	std::cout << "\nClosing turret configurations...";
-	focus = editor::base;
-	gettingUserInput = false;
-	for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
-		turretControlSchemeList[i].selected = false;
-	updateGridSpriteTextures();
-}
 void ShipEditor::closeCoreConfigurations()
 {
 	std::cout << "\nClosing core configurations...";
@@ -1908,6 +1970,23 @@ void ShipEditor::closeCoreConfigurations()
 		coreControlSchemeList[i].selected = false;
 	updateGridSpriteTextures();
 }
+void ShipEditor::closeTurretConfigurations()
+{
+	std::cout << "\nClosing turret configurations...";
+	focus = editor::base;
+	gettingUserInput = false;
+	for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
+		turretControlSchemeList[i].selected = false;
+	updateGridSpriteTextures();
+}
+void ShipEditor::closeEngineConfigurations()
+{
+	std::cout << "\nClosing engine configurations...";
+	focus = editor::base;
+	gettingUserInput = false;
+	updateGridSpriteTextures();
+}
+
 
 void ShipEditor::setSelectionJoystickIndex(int index)
 {
@@ -2471,6 +2550,38 @@ void ShipEditor::updateCoreConfigurationButtonStrings()
 }
 
 
+void ShipEditor::updateEngineConfigurationButtonStrings()
+{
+	if (selectedX < 0 || selectedY < 0 || selectedX >= EDITOR_WIDTH || selectedY >= EDITOR_HEIGHT)
+		return;
+
+	for (unsigned int i = 0; i < engineConfigurationButtons.size(); i++)
+		switch (engineConfigurationButtons[i].id)
+	{
+		case bi_confBindThrust:
+			engineConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->engineThrust));
+			break;
+		case bi_confNodeHoldToThrust:
+			engineConfigurationButtons[i].text.setString(" " +getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
+			break;
+		case bi_confNodeEngineMode:
+			switch (playerData.grid[selectedX][selectedY]->rotationDirection)
+			{
+			case -1:
+				engineConfigurationButtons[i].text.setString(" Rotate clockwise");
+				break;
+			case 0:
+				engineConfigurationButtons[i].text.setString(" Forward thrust");
+				break;
+			case 1:
+				engineConfigurationButtons[i].text.setString(" Rotate counterclockwise");
+				break;
+			}
+			break;
+
+
+	}
+}
 
 
 

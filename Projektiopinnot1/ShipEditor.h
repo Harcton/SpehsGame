@@ -50,6 +50,7 @@ public:
 	void updateTurretConfigurationButtonVisibility();
 	void updateTurretConfigurationButtonStrings();
 	void updateCoreConfigurationButtonStrings();
+	void updateEngineConfigurationButtonStrings();
 	void drawWindow();
 	void drawSelectedRect();
 	void drawSelectionShadeHighlight();
@@ -65,8 +66,9 @@ public:
 	void adjustColor();
 	void updateTurretColorPreview();
 
-	void closeTurretConfigurations();
 	void closeCoreConfigurations();
+	void closeTurretConfigurations();
+	void closeEngineConfigurations();
 
 	//Control schemes
 	void extractNamesFromString(std::string&, std::vector<std::string>&);
@@ -136,6 +138,9 @@ private:
 	int coreConfY1;
 	int coreConfSchemeY;
 	int coreConfScrollBarY1;
+	//Engine conf
+	int engineConfX1;
+	int engineConfY1;
 
 	//Misc states
 	bool gettingUserInput = false;
@@ -159,12 +164,15 @@ private:
 	//Editor sprites/shapes
 	sf::RectangleShape selectedRect;
 	sf::RectangleShape shadeRect;
-	sf::RectangleShape turretConfigurationRect1;
-	sf::RectangleShape turretConfigurationRect2;
-	sf::RectangleShape turretConfigurationRect3;
 	sf::RectangleShape coreConfigurationRect1;
 	sf::RectangleShape coreConfigurationRect2;
 	sf::RectangleShape coreConfigurationRect3;
+	sf::RectangleShape turretConfigurationRect1;
+	sf::RectangleShape turretConfigurationRect2;
+	sf::RectangleShape turretConfigurationRect3;
+	sf::RectangleShape engineConfigurationRect1;
+	sf::RectangleShape engineConfigurationRect2;
+	sf::RectangleShape engineConfigurationRect3;
 	sf::Sprite circleSliderSpr;
 	sf::Sprite colorPreviewTurret;
 	std::vector<sf::VertexArray> horizontalLines;

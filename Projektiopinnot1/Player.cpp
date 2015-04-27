@@ -308,11 +308,11 @@ bool Player::update()
 				}
 			}
 		}
+	Object::update();
 	updateComponents();
 	//////////////
 
 
-	Object::update();
 	return true;
 }
 
@@ -522,40 +522,6 @@ void Player::calculateCenterOfMass()
 	shipWidth = temp_lastHorizontal - temp_firstHorizontal + 1;
 	shipHeight = temp_lastVertical - temp_firstVertical + 1;
 
-
-	//Update engine forces
-	for (unsigned int c = 0; c < components.size(); c++)
-	for (unsigned int t = 0; t < components[c]->types.size(); t++)
-		if (components[c]->types[t] == component::engine)
-		{//It works but no-one knows why... dont touch this
-		components[c]->coreDistance = getDistance(components[c]->xOffset, components[c]->yOffset, 0, 0);
-		float temp_coreDirection = -1 * atan2(0 - components[c]->yOffset, 0 - components[c]->xOffset);
-		components[c]->coreAngleDifference = abs(temp_coreDirection - components[c]->angle);
-		while (components[c]->coreAngleDifference > PI)
-			components[c]->coreAngleDifference -= PI;
-		if (components[c]->coreAngleDifference > PI / 2)
-			components[c]->coreAngleDifference = PI - components[c]->coreAngleDifference;
-		components[c]->forwardFactor = pow(cos(components[c]->coreAngleDifference), 2);
-		components[c]->rotationFactor = pow(sin(components[c]->coreAngleDifference), 2);
-		
-		if (temp_coreDirection < 0)
-			temp_coreDirection = 2 * PI + temp_coreDirection;
-		if (components[c]->angleModifier <= PI)
-		{
-			if (temp_coreDirection < components[c]->angleModifier || temp_coreDirection > components[c]->angleModifier + PI)
-				components[c]->rotationFactor = components[c]->rotationFactor;
-			else
-				components[c]->rotationFactor = -1 * components[c]->rotationFactor;
-		}
-		else
-		{
-			if (temp_coreDirection < components[c]->angleModifier && temp_coreDirection > components[c]->angleModifier - PI)
-				components[c]->rotationFactor = components[c]->rotationFactor;
-			else
-				components[c]->rotationFactor = -1 * components[c]->rotationFactor;
-		}
-		}
-
 	std::cout << "\nShip width/height: " << shipWidth << " / " << shipHeight;
 	std::cout << "\nShip component mass: " << shipMass;
 }
@@ -580,7 +546,9 @@ void Player::addFromGrid(int gx, int gy)
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
+		//Set stats
 		components[components.size() - 1]->angleModifier = data->grid[gx][gy]->angleModifier*(PI/180);
+
 		//Color all the sprites
 		for (unsigned int i = 0; i < components[components.size() - 1]->sprites.size(); i++)
 			components[components.size() - 1]->sprites[i].setColor(sf::Color(data->grid[gx][gy]->red, data->grid[gx][gy]->green, data->grid[gx][gy]->blue));
@@ -592,8 +560,11 @@ void Player::addFromGrid(int gx, int gy)
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::engine);
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
+		//Set stats
 		components[components.size() - 1]->angleModifier = data->grid[gx][gy]->angleModifier*(PI / 180);
 		components[components.size() - 1]->angle = components[components.size() - 1]->angleModifier + PI;
+		components[components.size() - 1]->rotationDirection = data->grid[gx][gy]->rotationDirection;
+		components[components.size() - 1]->holdToThrust = data->grid[gx][gy]->holdToFire;
 	}
 	
 	//Handle children	

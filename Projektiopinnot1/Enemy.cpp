@@ -24,8 +24,10 @@ bool Enemy::update()
 	if (components.size() <= 0)
 		return false;
 	
+
 	complexUpdate();
 	updateComponents();
+
 
 	distance = getDistance(this->x, this->y, nearestComponent->x, nearestComponent->y);
 	playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);

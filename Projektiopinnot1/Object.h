@@ -13,6 +13,7 @@ public:
 	Object(sf::RenderWindow&, Game*, int, int);
 	Object(sf::RenderWindow&, Game*);
 	friend class Component;
+	friend class Engine;
 	friend class Enemy;
 
 	virtual bool update();

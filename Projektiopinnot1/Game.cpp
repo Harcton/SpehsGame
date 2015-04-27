@@ -126,6 +126,8 @@ void Game::updateObjects()
 		{
 		Object* temp_objPtr = objects[i];
 		objects.erase(objects.begin() + i);
+		if (temp_objPtr == playerObj)
+			playerObj = nullptr;
 		delete temp_objPtr;
 
 		i--;
