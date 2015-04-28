@@ -33,6 +33,7 @@ namespace sge
 		void setFrameSize(int, int);
 		void setFrameWidth(int);
 		void setFrameHeight(int);
+		void setVisibility(bool);
 
 		//Getters (update when needed)
 		double getRotation();
@@ -41,6 +42,7 @@ namespace sge
 		sf::Sprite sprite;
 		
 		bool autoUpdate;
+		bool visible;
 
 		int currentHorizontalFrame;
 		int currentVerticalFrame;

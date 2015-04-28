@@ -5,6 +5,7 @@
 #include "GridData.h"
 #include "PlayerData.h"
 #include "Game.h"
+#include "Sprite.h"
 
 
 Engine::~Engine()
@@ -16,6 +17,11 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 	sprites.push_back(sf::Sprite());
 	sprites[sprites.size() - 1].setTexture(RM.getTexture("engine.png"));
 	sprites[sprites.size() - 1].setOrigin(70, 50);
+
+	animatedSprites.push_back(sge::Sprite("engine_fire.png"));
+	animatedSprites[0].setOrigin(170, 50);
+	//animatedSprites[0].setTextureRect();
+
 
 	types.push_back(component::engine);
 	textureRadius = 20;
@@ -58,8 +64,8 @@ void Engine::thrust(float power)
 			}
 			return;//Dont advance for user pressed thrust events, handle them in engine::update -> thrust(-100)
 		}
-		
-	
+
+
 		charge--;
 		if (rotationDirection == 0)
 		{
