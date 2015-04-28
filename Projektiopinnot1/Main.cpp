@@ -6,7 +6,7 @@
 #include "ResourceManager.h"
 
 int WINDOW_WIDTH = 1920;
-int WINDOW_HEIGHT = 1080;
+int WINDOW_HEIGHT = 1200;
 double resFactor = WINDOW_HEIGHT/1080.0;
 double zoomFactor = 1;
 //Global control settings
@@ -53,6 +53,7 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Player/turret.png");
 	rm.loadTexture("Texture/Player/engine.png");
 	rm.loadTexture("Texture/Player/engine_fire.png");
+	rm.loadTexture("Texture/Player/engine_fire_animation.png");
 
 	//ENEMY
 	rm.loadTexture("Texture/Enemy/enemy_commander_ship_upgraded.png");

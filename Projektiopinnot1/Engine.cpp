@@ -18,11 +18,12 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 	sprites[sprites.size() - 1].setTexture(RM.getTexture("engine.png"));
 	sprites[sprites.size() - 1].setOrigin(67, 50);
 
-	animatedSprites.push_back(sge::Sprite("engine_fire.png"));
+	animatedSprites.push_back(sge::Sprite("engine_fire_animated.png"));
 	animatedSprites[0].setOrigin(167, 50);
 	animatedSprites[0].setFrameSize(200, 100);
-	animatedSprites[0].setTilesetSize(1, 1);
+	animatedSprites[0].setTilesetSize(2, 3);
 	animatedSprites[0].setVisibility(false);
+	animatedSprites[0].setFrameDuration(5);
 
 
 	//Charge bar
