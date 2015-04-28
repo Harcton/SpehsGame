@@ -3,9 +3,14 @@
 
 namespace sge
 {
+	Sprite::Sprite(std::string path) : Sprite()
+	{
+		setTexture(RM.getTexture(path));
+	}
 	Sprite::Sprite()
 	{
 		autoUpdate = true;
+		visible = true;
 		currentHorizontalFrame = 0;
 		currentVerticalFrame = 0;
 		horizontalFrames = 0;
@@ -42,7 +47,8 @@ namespace sge
 	{
 		if (autoUpdate)
 			animationUpdate();
-		window.draw(sprite);
+		if (visible == true)
+			window.draw(sprite);
 	}
 
 
@@ -133,6 +139,11 @@ namespace sge
 	{
 		sprite.setRotation(rotation);
 	}
+	void Sprite::setVisibility(bool value)
+	{
+		visible = value;
+	}
+
 
 	//Getters
 	double Sprite::getRotation()

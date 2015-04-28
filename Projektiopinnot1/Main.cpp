@@ -52,7 +52,7 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Player/core.png");
 	rm.loadTexture("Texture/Player/turret.png");
 	rm.loadTexture("Texture/Player/engine.png");
-	rm.loadTexture("Texture/Player/active_engine_texture.png");
+	rm.loadTexture("Texture/Player/engine_fire.png");
 
 	//ENEMY
 	rm.loadTexture("Texture/Enemy/enemy_commander_ship_upgraded.png");
