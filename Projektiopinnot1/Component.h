@@ -107,7 +107,7 @@ protected:
 	int rechargeTimer;
 	int rotationDirection; // negative = CCW (!)
 	bool holdToThrust = true;
-	bool thrusting = false;
+	bool autoThrusting = false;
 
 	//DEBUG
 	bool drawCollisionCircle;

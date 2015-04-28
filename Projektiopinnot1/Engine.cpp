@@ -42,16 +42,16 @@ void Engine::thrust(float power)
 			if (thrustButtonReleased == true)//This is the second time (->switch off) the player is pressing the button
 			{//Player wishes to cancel thrusting
 				std::cout << " Press->";
-				if (thrusting)
+				if (autoThrusting)
 				{
 					std::cout << " Disabling... ";
-					thrusting = false;
+					autoThrusting = false;
 					thrustButtonReleased = false;
 				}
 				else
 				{
 					std::cout << " Enabling... ";
-					thrusting = true;
+					autoThrusting = true;
 					thrustButtonReleased = false;
 				}
 				return;
@@ -59,7 +59,7 @@ void Engine::thrust(float power)
 			return;//Dont advance for user pressed thrust events, handle them in engine::update -> thrust(-100)
 		}
 		
-
+	
 		charge--;
 		if (rotationDirection == 0)
 		{
@@ -77,7 +77,7 @@ void Engine::thrust(float power)
 	}
 	else
 	{//Ran out of charge
-		thrusting = false;
+		autoThrusting = false;
 	}
 }
 
@@ -92,7 +92,7 @@ void Engine::update()
 	if (holdToThrust == false)
 		if (testInput(master->data->grid[gridLocationX][gridLocationY]->engineThrust, master->mGame->mEvent) == false)
 			thrustButtonReleased = true;
-	if (thrusting == true)
+	if (autoThrusting == true)
 		thrust(-100);
 
 	if (rechargeTimer <= 0 && charge < capacity)
