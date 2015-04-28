@@ -37,7 +37,7 @@ public:
 
 	virtual void update();
 	virtual bool alive();
-	void draw();
+	virtual void draw();
 	void createChild(double, double, component::Type);
 
 	//Virtual functions
@@ -82,6 +82,7 @@ public:
 
 	//Engine
 	float thrustStrength; //thrust strength
+	int rechargeAmount;
 
 protected:
 	std::vector<sf::Sprite> sprites;
@@ -104,7 +105,6 @@ protected:
 
 	//Engine
 	int charge;
-	int rechargeTimer;
 	int rotationDirection; // negative = CCW (!)
 	bool holdToThrust = true;
 	bool autoThrusting = false;

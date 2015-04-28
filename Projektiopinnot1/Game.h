@@ -22,8 +22,8 @@ public:
 	void updateObjects();
 	sf::Event mEvent;
 
-protected:
 	sf::RenderWindow& mWindow;
+protected:
 	std::vector<Background*> backgrounds;
 
 	//Iterators

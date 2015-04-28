@@ -12,9 +12,13 @@ public:
 	bool alive();
 	void update();
 	void thrust(float);
+	void draw();
 
 private:
 	bool thrustButtonReleased = true;
+	bool thrusting = false;
+	sf::RectangleShape chargeBar;
+	sf::RectangleShape chargeBarCenter;
 
 };
 
