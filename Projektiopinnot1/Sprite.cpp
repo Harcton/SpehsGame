@@ -139,9 +139,9 @@ namespace sge
 	{
 		sprite.setRotation(rotation);
 	}
-	void Sprite::setVisibility(bool value)
+	void Sprite::setVisibility(bool setting)
 	{
-		visible = value;
+		visible = setting;
 	}
 
 

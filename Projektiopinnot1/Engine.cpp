@@ -20,7 +20,10 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 
 	animatedSprites.push_back(sge::Sprite("engine_fire.png"));
 	animatedSprites[0].setOrigin(170, 50);
+	animatedSprites[0].setFrameSize(200, 100);
+	animatedSprites[0].setTilesetSize(1, 1);
 	//animatedSprites[0].setTextureRect();
+	animatedSprites[0].setVisibility(false);
 
 
 	types.push_back(component::engine);
@@ -53,12 +56,14 @@ void Engine::thrust(float power)
 					std::cout << " Disabling... ";
 					autoThrusting = false;
 					thrustButtonReleased = false;
+					animatedSprites[0].setVisibility(false);
 				}
 				else
 				{
 					std::cout << " Enabling... ";
 					autoThrusting = true;
 					thrustButtonReleased = false;
+					animatedSprites[0].setVisibility(true);
 				}
 				return;
 			}
@@ -67,6 +72,9 @@ void Engine::thrust(float power)
 
 
 		charge--;
+		animatedSprites[0].setVisibility(true);
+		std::cout << "visible ";
+
 		if (rotationDirection == 0)
 		{
 			master->xSpeed += power*(cos(2 * PI - angle)*thrustStrength);
