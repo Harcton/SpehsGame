@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Enemy">
       <UniqueIdentifier>{cb391848-a809-44cc-997a-57bde3f83be0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Main Menu">
+      <UniqueIdentifier>{8120985b-9376-4600-adff-d611ff325a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Main Menu">
+      <UniqueIdentifier>{28cd3ffd-f19a-4b06-81ed-2de6ef46e78a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -105,6 +111,9 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files\Main Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -172,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files\Main Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

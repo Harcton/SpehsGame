@@ -38,7 +38,7 @@ public:
 	~ShipEditor();
 	ShipEditor(sf::RenderWindow&, PlayerData&);
 
-	void run();
+	int run();
 	void updateLines();
 	void updateGridSpriteTextures();
 	void updateGridSpriteLocations();

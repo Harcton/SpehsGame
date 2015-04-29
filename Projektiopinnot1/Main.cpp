@@ -1,4 +1,5 @@
 #include "Main.h"
+#include "MainMenu.h"
 #include "Game.h"
 #include "Object.h"
 #include "Player.h"
@@ -37,9 +38,10 @@ void main()
 	mWindow.setFramerateLimit(60);
 	mWindow.setMouseCursorVisible(true);
 
+	MainMenu mainMenu(mWindow);
+	mainMenu.run();	
 
-	Game game(mWindow);
-	game.run();
+
 }
 
 
@@ -70,6 +72,9 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Menu/editorTurret.png");
 	rm.loadTexture("Texture/Menu/editorSkeleton.png");
 	rm.loadTexture("Texture/Menu/editorEngine.png");
+	rm.loadTexture("Texture/Menu/menuPlanet.png");
+	rm.loadTexture("Texture/Menu/menuSpace1.png");
+	rm.loadTexture("Texture/Menu/menuLogo.png");
 	
 	//EFFECTS
 
@@ -82,8 +87,8 @@ void initializeResourceManager(ResourceManager& rm)
 
 
 
-//SOUND BUFFERS
-	//coming soon
+	//SOUND BUFFERS
+	
 
 
 

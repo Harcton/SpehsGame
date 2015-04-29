@@ -13,14 +13,13 @@ Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::st
 	text.setCharacterSize(txtsize);
 	text.setString(str);
 	text.setColor(textColor);
-	text.setPosition(x_pos, y_pos);
 	red = color.r;
 	green = color.g;
 	blue = color.b;
 	buttonRectangle.setFillColor(sf::Color(red, green, blue));
 	buttonRectangle.setSize(sf::Vector2f(wth, hht));
 	buttonRectangle.setOutlineColor(sf::Color(sf::Color::Black));
-	buttonRectangle.setPosition(x_pos, y_pos);
+	setPosition(x_pos, y_pos);
 }
 Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float scale, sf::Font& fnt) : font(fnt)
 {//Sprite button constructor
@@ -85,12 +84,19 @@ void Button::draw(sf::RenderWindow& window, sf::Vector2i& mousePos)
 	//Set color
 	if (type == bt_text)
 	{
-		if (selected == true)
-			buttonRectangle.setFillColor(sf::Color(red - 35, green - 35, blue - 35));		
+		if (selected == true && shadow < 36)
+			shadow += 2;
 		else if (mouseOverlap(mousePos) && id != bi_false)
-			buttonRectangle.setFillColor(sf::Color(red-20, green-20, blue-20));
-		else
-			buttonRectangle.setFillColor(sf::Color(red, green, blue));
+		{
+			if (shadow < 20)
+				shadow += 2;
+			else if (shadow > 20)
+				shadow -= 2;
+		}
+		else if (shadow > 0)
+			shadow -= 2;
+
+		buttonRectangle.setFillColor(sf::Color(red - shadow, green - shadow, blue - shadow));
 
 		window.draw(buttonRectangle);
 		window.draw(text);
@@ -106,9 +112,31 @@ void Button::draw(sf::RenderWindow& window, sf::Vector2i& mousePos)
 
 }
 
+void Button::setTextAlign(TextAlign ta)
+{
+	textAlign = ta;
+
+	float temp_textX = text.getPosition().x;
+	float temp_textY = text.getPosition().y;
+	float temp_buttonWidth = buttonRectangle.getLocalBounds().width;
+	float temp_textWidth = text.getLocalBounds().width;
+	switch (textAlign)
+	{
+	case ta_left:
+		text.setPosition(int(temp_textX), int(temp_textY));
+		break;
+	case ta_center:
+		text.setPosition(int(temp_textX + 0.5f * temp_buttonWidth - 0.5f * temp_textWidth), int(temp_textY));
+		break;
+	case ta_right:
+		text.setPosition(int(temp_textX + temp_buttonWidth - temp_textWidth), int(temp_textY));
+		break;
+	}
+}
 void Button::setPosition(float x_pos, float y_pos)
 {
 	buttonRectangle.setPosition(x_pos, y_pos);
-	text.setPosition(x_pos, y_pos);
 	spr.setPosition(x_pos, y_pos);
+	text.setPosition(x_pos, y_pos);
+	setTextAlign(textAlign);
 }

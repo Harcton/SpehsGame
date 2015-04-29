@@ -12,6 +12,7 @@ enum ButtonId
 {
 	bi_false,
 	bi_true,
+	//Actions popup
 	bi_actionUpgradeArmor,
 	bi_actionTurret,
 	bi_actionEngine,
@@ -23,7 +24,6 @@ enum ButtonId
 	bi_actionSetCoreScheme,
 	bi_actionCoreScheme,
 	bi_actionSetJoystickIndex,
-
 	bi_actionSetJoystick0,
 	bi_actionSetJoystick1,
 	bi_actionSetJoystick2,
@@ -33,6 +33,16 @@ enum ButtonId
 	bi_actionSetJoystick6,
 	bi_actionSetJoystick7,
 
+
+
+	//Main menu buttons
+	bi_mmNewGame,
+	bi_mmLoadGame,
+	bi_mmSettings,
+	bi_mmQuit,
+
+
+	//Configuration screen buttons
 	bi_confExit,
 	bi_confNodeDirectionalMovement,
 	bi_confBindVerticalMoveAxis,
@@ -84,7 +94,10 @@ enum ButtonId
 
 };
 
-
+enum TextAlign
+{
+	ta_left, ta_center, ta_right
+};
 
 class Button
 {
@@ -112,17 +125,20 @@ font reference... (not in use)
 	ButtonId checkIfPressed(sf::Vector2i& mousePos);
 	void draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos);
 	void setPosition(float, float);
+	void setTextAlign(TextAlign);
 
 private:
 	ButtonType type;
 	ButtonId id;
 	sf::RectangleShape buttonRectangle;
 	sf::Text text;
+	TextAlign textAlign = ta_left;
 	sf::Font& font;
 	sf::Sprite spr;
 	bool visible = true;
 	bool selected = false;
 
+	int shadow = 0;
 	//Rectangle original colors
 	int red;
 	int green;

@@ -53,7 +53,13 @@ void ResourceManager::loadTexture(std::string path)
 sf::Texture& ResourceManager::getTexture(std::string path)
 {
 	std::string fileName = getFileName(path);
-	return textureMap[hashPath(fileName)];
+	if (textureMap.find(hashPath(fileName)) != textureMap.end())
+		return textureMap[hashPath(fileName)];
+	else
+	{
+		std::cout << "\nResourceManager: No texture found [" << fileName << "] ";
+		return textureMap[hashPath(fileName)];
+	}
 }
 void ResourceManager::removeTexture(std::string path)
 {

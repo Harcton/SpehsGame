@@ -291,7 +291,7 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 }
 
 
-void ShipEditor::run()
+int ShipEditor::run()
 {
 	bool keepRunning = true;
 
@@ -511,7 +511,7 @@ void ShipEditor::run()
 
 	}
 
-
+	return 0;
 }
 
 void ShipEditor::drawWindow()
