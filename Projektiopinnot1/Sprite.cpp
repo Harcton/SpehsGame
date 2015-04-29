@@ -13,10 +13,10 @@ namespace sge
 		visible = true;
 		currentHorizontalFrame = 0;
 		currentVerticalFrame = 0;
-		horizontalFrames = 0;
-		verticalFrames = 0;
+		horizontalFrames = 1;
+		verticalFrames = 1;
 		animationTimer = 0;
-		frameDuration = 0;
+		frameDuration = 1;
 		frameWidth = 0;
 		frameHeight = 0;
 	}
