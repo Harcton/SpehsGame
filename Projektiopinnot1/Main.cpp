@@ -56,6 +56,7 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Player/engine.png");
 	rm.loadTexture("Texture/Player/engine_fire.png");
 	rm.loadTexture("Texture/Player/engine_fire_animation.png");
+	rm.loadTexture("Texture/Player/engine_fire_animation_testversion.png");
 
 	//ENEMY
 	rm.loadTexture("Texture/Enemy/enemy_commander_ship_upgraded.png");
