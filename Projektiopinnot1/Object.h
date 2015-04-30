@@ -69,7 +69,7 @@ public:
 protected:
 	Object* centerObj;
 	std::vector<Component*> components;
-	PlayerData* data;//Only for player objects
+	PlayerData* dataPtr;
 	int opacity = 0;
 	double collisionCheckAngle;
 	double checkCollisionDistance;

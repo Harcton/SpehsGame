@@ -34,7 +34,11 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 
 
 	//Intro music
+<<<<<<< HEAD
 	//introMusic.openFromFile("Audio/Music/giantFollis.wav");
+=======
+	introMusic.openFromFile("Audio/Music/giantFollis.wav");
+>>>>>>> origin/master
 	//introMusic.play();
 
 
@@ -155,10 +159,11 @@ void MainMenu::mouseLeftPressed()
 	switch (buttons[i].checkIfPressed(mousePos))
 	{
 		case bi_mmNewGame:
+			playerName = "";
 			launchGame();
 			break;
 		case bi_mmLoadGame:
-
+			loadGame();
 			break;
 		case bi_mmSettings:
 			launchSettings();
@@ -179,6 +184,12 @@ void MainMenu::launchGame()
 {
 	Game game(mWindow);
 	game.run();
+}
+
+void MainMenu::loadGame()
+{
+	playerName = "player1";
+	launchGame();
 }
 
 void MainMenu::launchSettings()

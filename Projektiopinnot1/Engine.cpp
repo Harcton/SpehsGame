@@ -1,9 +1,9 @@
 #include "Main.h"
 #include "Object.h"
-#include "Player.h"
-#include "Engine.h"
 #include "GridData.h"
 #include "PlayerData.h"
+#include "Player.h"
+#include "Engine.h"
 #include "Game.h"
 #include "Sprite.h"
 
@@ -124,7 +124,7 @@ bool Engine::alive()
 void Engine::update()
 {
 	
-	if (testInput(master->data->grid[gridLocationX][gridLocationY]->engineThrust, master->mGame->mEvent) == false)
+	if (testInput(master->dataPtr->grid[gridLocationX][gridLocationY].engineThrust, master->mGame->mEvent) == false)
 		if (holdToThrust == false)
 			thrustButtonReleased = true;
 		else

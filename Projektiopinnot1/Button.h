@@ -42,6 +42,14 @@ enum ButtonId
 	bi_mmQuit,
 
 
+
+
+	//SHIP EDITOR
+	bi_escReturn,
+	bi_escUndock,
+	bi_escSave,
+	bi_escSettings,
+	bi_escQuit,
 	//Configuration screen buttons
 	bi_confExit,
 	bi_confNodeDirectionalMovement,

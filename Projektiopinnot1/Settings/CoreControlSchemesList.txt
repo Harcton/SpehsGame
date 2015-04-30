@@ -1,1 +1,1 @@
-analog#notAnalog#Inverse####
+analog#notAnalog#Inverse####ArrowKeys#

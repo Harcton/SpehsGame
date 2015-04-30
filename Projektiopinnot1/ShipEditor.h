@@ -10,7 +10,8 @@ namespace editor
 		component,
 		actions,
 		rotate,
-		configuration
+		configuration,
+		esc,
 	};
 
 	enum Action
@@ -39,6 +40,9 @@ public:
 	ShipEditor(sf::RenderWindow&, PlayerData&);
 
 	int run();
+	void savePlayerData();
+	void runSettings();
+
 	void updateLines();
 	void updateGridSpriteTextures();
 	void updateGridSpriteLocations();
@@ -56,6 +60,7 @@ public:
 	void drawSelectionShadeHighlight();
 	void drawInheritanceSprites();
 	void drawActions();
+	void drawEscButtons();
 	void reloadActions();
 	void closeActions(editor::Focus);
 	void drawCircleSlider();
@@ -103,6 +108,7 @@ private:
 	sf::RenderWindow& mWindow;
 
 	//Misc
+	int keepRunning = 1;
 	float scaleFactor;
 	float glowAngle = 0; //What it does is... spin around in the game loop. Can be used to apply glowing effects
 	float glowAmount = 0; // 0.0 - 1.0
@@ -181,7 +187,7 @@ private:
 	std::vector<sf::Sprite> inheritanceSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
 
 	//Buttons
-	std::vector<Button> editorBaseButtons;
+	std::vector<Button> escButtons;
 	std::vector<Button> actionButtons;
 	std::vector<Button> actionTurretSchemeButtons;
 	std::vector<Button> actionCoreSchemeButtons;

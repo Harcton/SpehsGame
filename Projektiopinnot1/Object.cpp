@@ -18,7 +18,6 @@ Object::~Object()
 		delete components.back();
 		components.pop_back();
 	}
-	delete data;
 }
 Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 {

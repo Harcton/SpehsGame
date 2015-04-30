@@ -19,6 +19,7 @@ public:
 
 	//Actions
 	void launchGame();
+	void loadGame();
 	void launchSettings();
 
 private:

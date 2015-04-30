@@ -23,6 +23,7 @@ public:
 	sf::Event mEvent;
 
 	sf::RenderWindow& mWindow;
+	bool keepRunning = true;
 protected:
 	std::vector<Background*> backgrounds;
 
