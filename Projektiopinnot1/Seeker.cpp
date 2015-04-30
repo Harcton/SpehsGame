@@ -6,6 +6,7 @@
 #include "Component.h"
 
 
+//Explosion Bugged!
 Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
@@ -23,8 +24,15 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_base.png"));
+	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("Seeker.png"));
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
+
+	components[components.size() - 1]->animatedSprites.push_back(sge::Sprite("seeker_active_animation.png"));
+	components[components.size() - 1]->animatedSprites[0].setVisibility(false);
+	components[components.size() - 1]->animatedSprites[0].setOrigin(50, 50);
+	components[components.size() - 1]->animatedSprites[0].setFrameSize(100, 100);
+	components[components.size() - 1]->animatedSprites[0].setTilesetSize(4, 2);
+	components[components.size() - 1]->animatedSprites[0].setFrameDuration(1);
 }
 
 
@@ -86,7 +94,8 @@ void Seeker::AIupdate()//maybe not follow true all the time
 			{
 				dodging = true;
 			}
-		}		
+		}
+		components[components.size() - 1]->animatedSprites[0].setVisibility(true);
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
