@@ -146,7 +146,7 @@ void Component::createChild(double ox, double oy, component::Type tp)
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
 		break;
 	case component::engine: //Engine
-		master->components.push_back(new Engine(master->mGame->playerObj, ox, oy));
+		master->components.push_back(new Engine(master, ox, oy));
 		childComponents.push_back(master->components[master->components.size() - 1]->id);
 		break;
 	}

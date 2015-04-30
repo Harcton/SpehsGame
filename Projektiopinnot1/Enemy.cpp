@@ -257,6 +257,8 @@ void Enemy::complexUpdate()
 
 void Enemy::explosion(int dmg, float explosionRadius)
 {
+	if (components.size() < 1)
+		return;//Prevents fatal vector out of range error happening inside the for loop
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
 		if (getDistance(this->components[0]->x, this->components[0]->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) 

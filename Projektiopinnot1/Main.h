@@ -37,12 +37,20 @@
 #define KEYB_horizontal 0.0005
 #define KEYB_right 0.0006
 #define KEYB_left 0.0007
+#define kgrid_fire 0
+#define kgrid_thrust 1
+#define kgrid_reload 2
+#define kgrid_vertical 3
+#define kgrid_horizontal 4
+#define kgrid_right 5
+#define kgrid_left 6
 
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 extern double resFactor;
 extern double zoomFactor;
+extern std::string playerName;
 
 extern ResourceManager RM;
 
@@ -96,6 +104,8 @@ struct MyKeys
 	//button sub
 	int joystickButton = 0;
 };
+//extern std::map<float, MyKeys> coreKeys;
+//extern std::map<float, MyKeys> componentKeys;
 extern bool starMap;
 extern float radarRange;
 extern float radarSpeed;

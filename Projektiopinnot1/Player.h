@@ -16,6 +16,7 @@ public:
 	friend class Engine;
 
 	void loadPlayerData();
+	void applyPlayerData();
 
 	bool update();
 	void updateComponents();
@@ -40,6 +41,7 @@ protected:
 	sf::Event mEvent;
 	std::vector<Component*>::iterator componentIt;
 	float joystickDirection = 0;
+	PlayerData data;//Only for player objects
 
 
 	bool controller;

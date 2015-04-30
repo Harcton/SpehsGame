@@ -4,6 +4,8 @@
 #include "Component.h"
 #include "Turret.h"
 #include "Bullet.h"
+#include "GridData.h"
+#include "PlayerData.h"
 #include "Player.h"
 
 #include "Debris.h"
@@ -57,7 +59,6 @@ void Game::run()
 
 
 
-	bool keepRunning = true;
 	while (keepRunning)
 	{
 		//Events

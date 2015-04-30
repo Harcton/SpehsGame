@@ -82,7 +82,7 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	//Focus camera on core
 	for (int sx = 0; sx < EDITOR_WIDTH; sx++)
 	for (int sy = 0; sy < EDITOR_HEIGHT; sy++)
-	if (playerData.grid[sx][sy]->core == true)
+	if (playerData.grid[sx][sy].core == true)
 	{
 		int temp_screenWidth = 0.5*(WINDOW_WIDTH/scaleFactor);
 		cameraX = 100 * sx - temp_screenWidth + 50;
@@ -139,22 +139,22 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	coreConfigurationButtons.push_back(Button(bi_confBindHorizontalMoveAxis, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 5, button2Width, buttonHeight, " Joystick " + std::to_string(playerData.moveJoystickId) + "::" + getAxisAsString(playerData.horizontalMoveAxis) + " (" + getPolarityAsString(playerData.horizontalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Turn right & binding key
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 6, button1Width, buttonHeight, " Turn right", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 6, button2Width, buttonHeight, getInputAsString(playerData.coreKeys[key_turnRight]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 6, button2Width, buttonHeight, getInputAsString(playerData.keyTurnRight), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Turn left & binding key
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 7, button1Width, buttonHeight, " Turn left", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 7, button2Width, buttonHeight, getInputAsString(playerData.coreKeys[key_turnLeft]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 7, button2Width, buttonHeight, getInputAsString(playerData.keyTurnLeft), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Acceleration & binding key
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 8, button1Width, buttonHeight, " Accelerate", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 8, button2Width, buttonHeight, getInputAsString(playerData.coreKeys[key_accelerate]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 8, button2Width, buttonHeight, getInputAsString(playerData.keyAccelerate), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Reverse & binding key
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 9, button1Width, buttonHeight, " Reverse", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindReverse, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.coreKeys[key_reverse]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindReverse, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.keyReverse), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Zoom in & bindong key
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 10, button1Width, buttonHeight, " Zoom in", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.coreKeys[key_zoomIn]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.keyZoomIn), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Zoom out & binding key
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 11, button1Width, buttonHeight, " Zoom out", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.coreKeys[key_zoomOut]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.keyZoomOut), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Control schemes
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2 - buttonBorder, coreConfY1 + buttonHeight * 2 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * (coreConfSchemeY + 3)+2 * buttonBorder, "", int(34 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 2, button1Width, buttonHeight*(coreConfSchemeY + 3), "", int(34 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
@@ -188,13 +188,13 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	
 	//Fire
 		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Fire", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindFire, button2X1, turretConfY1 + buttonHeight * 3, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_fire]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindFire, button2X1, turretConfY1 + buttonHeight * 3, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_fire]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Enable hold to fire
 		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Enable hold to fire", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 		turretConfigurationButtons.push_back(Button(bi_confNodeHoldToFire, button2X1, turretConfY1 + buttonHeight * 4, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Reload
 		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 5, button1Width, buttonHeight, " Reload", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindReload, button2X1, turretConfY1 + buttonHeight * 5, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_reload]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindReload, button2X1, turretConfY1 + buttonHeight * 5, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_reload]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Mouse aim (1)
 		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 6, button1Width, buttonHeight, " Enable mouse aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAim, button2X1, turretConfY1 + buttonHeight * 6, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
@@ -207,17 +207,17 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 		turretConfigurationButtons.push_back(Button(bi_confNodeDirectionalAim, button2X1, turretConfY1 + buttonHeight * 8, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 			//Vertical axis
 		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 9, button1Width, buttonHeight, " Vertical axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindVerticalAimAxis, button2X1, turretConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_vertical]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindVerticalAimAxis, button2X1, turretConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_vertical]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 			//Horizontal axis
 			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 10, button1Width, buttonHeight, " Horizontal axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindHorizontalAimAxis, button2X1, turretConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_horizontal]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindHorizontalAimAxis, button2X1, turretConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_horizontal]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 		//Manual turret movement (3)
 		//Rotate right & binding key
 			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 11, button1Width, buttonHeight, " Rotate right", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, button2X1, turretConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_right]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, button2X1, turretConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_right]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 		//Rotate left & binding key
 			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 12, button1Width, buttonHeight, " Rotate left", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, button2X1, turretConfY1 + buttonHeight * 12, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_left]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, button2X1, turretConfY1 + buttonHeight * 12, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_left]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 
 
 	//Control schemes background
@@ -278,7 +278,7 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight - buttonBorder, engineConfY1 + 2 * buttonHeight - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 4 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 
 	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + 2 * buttonHeight, button1Width, buttonHeight, " Thrust", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	engineConfigurationButtons.push_back(Button(bi_confBindThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 2 * buttonHeight, button2Width, buttonHeight, getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_thrust]), int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confBindThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 2 * buttonHeight, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_thrust]), int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	
 	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Hold to thrust", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	engineConfigurationButtons.push_back(Button(bi_confNodeHoldToThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 3 * buttonHeight, button2Width, buttonHeight, "", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
@@ -288,12 +288,24 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 	engineConfigurationButtons.push_back(Button(bi_confExit, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight*5, button1Width + button2Width, buttonHeight, "                                                            Return", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 
+
+	//Base buttons
+	int temp_buttonHeight = buttonHeight*1.5f;
+	escButtons.push_back(Button(bi_false, int((WINDOW_WIDTH - button1Width) / 2.0f) - buttonBorder, int((WINDOW_HEIGHT - 5 * temp_buttonHeight) / 2.0f) - buttonBorder, button1Width + 2 * buttonBorder, temp_buttonHeight*5 + 2 * buttonBorder, "", int(50 * resFactor), font1, sf::Color(70, 70, 90), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escReturn, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 5*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Return", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escUndock, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 3*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Return to Spehs", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escSave, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 1*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Save game", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escSettings, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT + 1*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Settings", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escQuit, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT + 3*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Quit to menu", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	for (unsigned int i = 0; i < escButtons.size(); i++)
+		escButtons[i].setTextAlign(ta_center);
+
+
 }
 
 
 int ShipEditor::run()
 {
-	bool keepRunning = true;
 
 	//Initialize editor visual lines
 	for (unsigned int i = 0; i < EDITOR_WIDTH + 1; i++)
@@ -313,11 +325,11 @@ int ShipEditor::run()
 	//Initialize sprites
 	updateGridSpriteTextures();
 
-	while (keepRunning)
+	while (keepRunning == 1)
 	{
-		//Return/quit
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gettingUserInput == false)
-			keepRunning = false;
+		////Return/quit
+		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gettingUserInput == false)
+		//	keepRunning = false;
 
 		clickTimer++;
 
@@ -368,9 +380,9 @@ int ShipEditor::run()
 				else
 				{
 					scrollDelta -= scrollDelta + mEvent.mouseWheel.delta;
-					if (playerData.grid[selectedX][selectedY]->turret > 0)
+					if (playerData.grid[selectedX][selectedY].turret > 0)
 						updateTurretControlSchemeList();
-					else if (playerData.grid[selectedX][selectedY]->core == true)
+					else if (playerData.grid[selectedX][selectedY].core == true)
 						updateCoreControlSchemeList();
 				}
 				mEvent.mouseWheel.delta = 0;
@@ -400,14 +412,14 @@ int ShipEditor::run()
 						}
 						else if (focus == editor::configuration)
 						{
-							if (playerData.grid[selectedX][selectedY]->turret > 0)
+							if (playerData.grid[selectedX][selectedY].turret > 0)
 							{
 							for (unsigned int i = 0; i < turretControlSchemeList.size(); i++)
 								if (turretControlSchemeList[i].selected == true)	
 									workingFileName = turretControlSchemeNameList[i];
 								deleteControlScheme("Settings/TurretControlSchemesList.txt", "Settings/TurretControlSchemes/");
 							}
-							else if (playerData.grid[selectedX][selectedY]->core == true)
+							else if (playerData.grid[selectedX][selectedY].core == true)
 							{
 								for (unsigned int i = 0; i < coreControlSchemeList.size(); i++)
 									if (coreControlSchemeList[i].selected == true)
@@ -418,20 +430,25 @@ int ShipEditor::run()
 						}
 						break;
 					case sf::Keyboard::Escape:
-						if (focus == editor::component || focus == editor::base)
+						if (focus == editor::component)
 						{
+							focus = editor::base;
 							selectedX = -1;
 							selectedY = -1;
 						}
+						else if (focus == editor::base)
+							focus = editor::esc;
+						else if (focus == editor::esc)
+							focus = editor::base;
 						else if (focus == editor::rotate)
 							applyRotation();
 						else if (focus == editor::configuration)
 						{
-							if (playerData.grid[selectedX][selectedY]->turret > 0)
+							if (playerData.grid[selectedX][selectedY].turret > 0)
 								closeTurretConfigurations();
-							else if (playerData.grid[selectedX][selectedY]->core == true)
+							else if (playerData.grid[selectedX][selectedY].core == true)
 								closeCoreConfigurations();
-							else if (playerData.grid[selectedX][selectedY]->engine != 0)
+							else if (playerData.grid[selectedX][selectedY].engine != 0)
 								closeEngineConfigurations();
 						}
 						break;
@@ -469,9 +486,9 @@ int ShipEditor::run()
 							break;
 						case '>'://Enter
 							workingFileName = saveControlSchemeInput;
-							if (playerData.grid[selectedX][selectedY]->turret > 0)
+							if (playerData.grid[selectedX][selectedY].turret > 0)
 								saveTurretControlScheme();
-							else if (playerData.grid[selectedX][selectedY]->core == true)
+							else if (playerData.grid[selectedX][selectedY].core == true)
 								saveCoreControlScheme();
 							gettingUserInput = false;
 							break;
@@ -511,7 +528,7 @@ int ShipEditor::run()
 
 	}
 
-	return 0;
+	return keepRunning;
 }
 
 void ShipEditor::drawWindow()
@@ -549,6 +566,8 @@ void ShipEditor::drawWindow()
 		drawConfigurations();
 	else if (focus == editor::rotate)
 		drawCircleSlider();
+	else if (focus == editor::esc)
+		drawEscButtons();
 
 	mWindow.display();
 }
@@ -579,7 +598,7 @@ void ShipEditor::updateGridSpriteTextures()
 				inheritanceSprites[x][y].pop_back();
 
 			//Add skeleton sprite
-			if (playerData.grid[x][y]->armor > 0)
+			if (playerData.grid[x][y].armor > 0)
 			{
 				gridSprites[x][y].push_back(sf::Sprite());
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorSkeleton.png"));
@@ -587,48 +606,48 @@ void ShipEditor::updateGridSpriteTextures()
 			}
 
 			
-			if (playerData.grid[x][y]->turret > 0)
+			if (playerData.grid[x][y].turret > 0)
 			{//Add turret sprite
 				gridSprites[x][y].push_back(sf::Sprite());
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorTurret.png"));
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50); 
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y]->angleModifier);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y]->red, playerData.grid[x][y]->green, playerData.grid[x][y]->blue));
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y].angleModifier);
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
 			}
-			else if (playerData.grid[x][y]->engine > 0)
+			else if (playerData.grid[x][y].engine > 0)
 			{//Add engine sprite
 				gridSprites[x][y].push_back(sf::Sprite());
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorEngine.png"));
 				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y]->angleModifier);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y]->red, playerData.grid[x][y]->green, playerData.grid[x][y]->blue));
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y].angleModifier);
+				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
 			}
 
 
 			//Add engine sprite
 
 			//Add inheritance arrows
-			if (playerData.grid[x][y]->childUp == true)
+			if (playerData.grid[x][y].childUp == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setOrigin(-46, 50);
 			}
-			if (playerData.grid[x][y]->childDown == true)
+			if (playerData.grid[x][y].childDown == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setOrigin(59, 150);
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setRotation(180);
 			}
-			if (playerData.grid[x][y]->childLeft == true)
+			if (playerData.grid[x][y].childLeft == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setOrigin(57, 50);
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setRotation(270);
 			}
-			if (playerData.grid[x][y]->childRight == true)
+			if (playerData.grid[x][y].childRight == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
 				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
@@ -646,7 +665,7 @@ void ShipEditor::updateGridSpriteLocations()
 		{//Grid sprites
 			gridSprites[x][y][i].setPosition((x * 100 - cameraX)*scaleFactor + 50 * scaleFactor, (y * 100 - cameraY)*scaleFactor + 50 * scaleFactor);
 			gridSprites[x][y][i].setScale(scaleFactor, scaleFactor);
-			if (playerData.grid[x][y]->core == true)
+			if (playerData.grid[x][y].core == true)
 				gridSprites[x][y][i].setColor(sf::Color(240, 40, 180));
 
 		}
@@ -700,6 +719,30 @@ void ShipEditor::mouseLeftPressed()
 	checkY = -1;
 	switch (focus)
 	{
+	case editor::esc:
+		for (unsigned int i = 0; i < escButtons.size(); i++)
+			switch (escButtons[i].checkIfPressed(mousePos))
+		{
+			default:
+				break;
+			case bi_escReturn:
+				focus = editor::base;
+				break;
+			case bi_escUndock:
+				keepRunning = 0;
+				break;
+			case bi_escSave:
+				savePlayerData();
+				break;
+			case bi_escSettings:
+				runSettings();
+				break;
+			case bi_escQuit:
+				keepRunning = 2;
+				break;
+
+
+		}
 	case editor::base:
 		if (((cameraX + mousePos.x / scaleFactor) / 100.0 > 0) 
 			&& ((cameraX + mousePos.x / scaleFactor) / 100.0 < EDITOR_WIDTH)
@@ -718,7 +761,7 @@ void ShipEditor::mouseLeftPressed()
 			break;
 		}
 
-		if (playerData.grid[selectedX][selectedY]->armor > 0)
+		if (playerData.grid[selectedX][selectedY].armor > 0)
 		{
 			std::cout << "\nFocus returned to base";
 			focus = editor::component;
@@ -738,37 +781,37 @@ void ShipEditor::mouseLeftPressed()
 			checkY = (cameraY + mousePos.y / scaleFactor) / (100.0);
 		
 		//Up
-		if (checkX == selectedX && checkY == selectedY - 1 && checkY >= 0 && playerData.grid[checkX][checkY]->armor == 0)
+		if (checkX == selectedX && checkY == selectedY - 1 && checkY >= 0 && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY]->childUp = true;
-			playerData.grid[checkX][checkY]->armor = 1;
+			playerData.grid[selectedX][selectedY].childUp = true;
+			playerData.grid[checkX][checkY].armor = 1;
 			selectedX = checkX;
 			selectedY = checkY;
 			updateGridSpriteTextures();
 		}
 		//Down
-		else if (checkX == selectedX && checkY == selectedY + 1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY]->armor == 0)
+		else if (checkX == selectedX && checkY == selectedY + 1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY]->childDown = true;
-			playerData.grid[checkX][checkY]->armor = 1;
+			playerData.grid[selectedX][selectedY].childDown = true;
+			playerData.grid[checkX][checkY].armor = 1;
 			selectedX = checkX;
 			selectedY = checkY;
 			updateGridSpriteTextures();
 		}
 		//Left
-		else if (checkX == selectedX - 1 && checkY == selectedY && checkX >= 0 && playerData.grid[checkX][checkY]->armor == 0)
+		else if (checkX == selectedX - 1 && checkY == selectedY && checkX >= 0 && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY]->childLeft = true;
-			playerData.grid[checkX][checkY]->armor = 1;
+			playerData.grid[selectedX][selectedY].childLeft = true;
+			playerData.grid[checkX][checkY].armor = 1;
 			selectedX = checkX;
 			selectedY = checkY;
 			updateGridSpriteTextures();
 		}
 		//Right
-		else if (checkX == selectedX + 1 && checkY == selectedY && checkX < EDITOR_WIDTH && playerData.grid[checkX][checkY]->armor == 0)
+		else if (checkX == selectedX + 1 && checkY == selectedY && checkX < EDITOR_WIDTH && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY]->childRight = true;
-			playerData.grid[checkX][checkY]->armor = 1;
+			playerData.grid[selectedX][selectedY].childRight = true;
+			playerData.grid[checkX][checkY].armor = 1;
 			selectedX = checkX;
 			selectedY = checkY;
 			updateGridSpriteTextures();
@@ -786,7 +829,7 @@ void ShipEditor::mouseLeftPressed()
 
 			selectedX = checkX;
 			selectedY = checkY;
-			if (playerData.grid[selectedX][selectedY]->armor < 1)
+			if (playerData.grid[selectedX][selectedY].armor < 1)
 			{
 				focus = editor::base;
 				std::cout << "\nFocus returned to base";
@@ -806,17 +849,17 @@ void ShipEditor::mouseLeftPressed()
 			switch (actionButtons[i].checkIfPressed(mousePos))
 			{
 			case bi_actionTurret:
-				if (playerData.grid[selectedX][selectedY]->turret == 0 && playerData.grid[selectedX][selectedY]->engine == 0)
+				if (playerData.grid[selectedX][selectedY].turret == 0 && playerData.grid[selectedX][selectedY].engine == 0)
 				{
-					playerData.grid[selectedX][selectedY]->turret = 1;
+					playerData.grid[selectedX][selectedY].turret = 1;
 					updateGridSpriteTextures();
 				}
 				break;
 			case bi_actionEngine:
-				if (playerData.grid[selectedX][selectedY]->turret == 0 && playerData.grid[selectedX][selectedY]->engine == 0)
+				if (playerData.grid[selectedX][selectedY].turret == 0 && playerData.grid[selectedX][selectedY].engine == 0)
 				{
-					playerData.grid[selectedX][selectedY]->engine = 1;
-					playerData.grid[selectedX][selectedY]->angleModifier = 180;
+					playerData.grid[selectedX][selectedY].engine = 1;
+					playerData.grid[selectedX][selectedY].angleModifier = 180;
 					updateGridSpriteTextures();
 				}
 				break;
@@ -866,36 +909,36 @@ void ShipEditor::mouseLeftPressed()
 					switch (turretConfigurationButtons[i].id)
 				{
 					case bi_confBindFire:
-						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretFire));
+						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretFire));
 						break;
 					case bi_confBindReload:
-						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretReload));
+						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretReload));
 						break;
 					case bi_confBindTurnTurretRight:
-						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretRight));
+						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretRight));
 						break;
 					case bi_confBindTurnTurretLeft:
-						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretLeft));
+						turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretLeft));
 						break;
 					case bi_confBindVerticalAimAxis:
-						turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->verticalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->verticalAxisPolarity) + ")");
+						turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY].directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY].verticalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY].verticalAxisPolarity) + ")");
 						break;
 					case bi_confBindHorizontalAimAxis:
-						turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->horizontalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->horizontalAxisPolarity) + ")");
+						turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY].directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY].horizontalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY].horizontalAxisPolarity) + ")");
 						break;
 						
 					//Nodes
 					case bi_confNodeHoldToFire:
-						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
+						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].holdToFire));
 						break;
 					case bi_confNodeDirectionalAim:
-						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->directionalAim));
+						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].directionalAim));
 						break;
 					case bi_confNodeMouseAim:
-						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAim));
+						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].mouseAim));
 						break;
 					case bi_confNodeMouseAimRelative:
-						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter));
+						turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].mouseAimRelativeToCenter));
 						break;
 				}
 
@@ -905,13 +948,13 @@ void ShipEditor::mouseLeftPressed()
 					switch (turretConfigurationButtons[i].id)
 				{
 					case bi_confRedSlider:
-						turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->red / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+						turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY].red / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
 						break;
 					case bi_confGreenSlider:
-						turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->green / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+						turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY].green / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
 						break;
 					case bi_confBlueSlider:
-						turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->blue / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+						turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY].blue / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
 						break;
 				}
 
@@ -979,7 +1022,7 @@ void ShipEditor::mouseLeftPressed()
 
 	case editor::configuration:
 		//Core configuration specific:
-		if (playerData.grid[selectedX][selectedY]->core == true)
+		if (playerData.grid[selectedX][selectedY].core == true)
 		{
 			for (unsigned int i = 0; i < coreConfigurationButtons.size(); i++)
 				switch (coreConfigurationButtons[i].checkIfPressed(mousePos))
@@ -1019,38 +1062,38 @@ void ShipEditor::mouseLeftPressed()
 				case bi_confBindAccelerate:
 					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.coreKeys[key_accelerate] = detectKey(bi_confBindAccelerate);
-					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_accelerate]));
+					playerData.keyAccelerate = detectKey(bi_confBindAccelerate);
+					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyAccelerate));
 					break;
 				case bi_confBindTurnRight:
 					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.coreKeys[key_turnRight] = detectKey(bi_confBindTurnRight);
-					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_turnRight]));
+					playerData.keyTurnRight = detectKey(bi_confBindTurnRight);
+					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyTurnRight));
 					break;
 				case bi_confBindTurnLeft:
 					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.coreKeys[key_turnLeft] = detectKey(bi_confBindTurnLeft);
-					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_turnLeft]));
+					playerData.keyTurnLeft = detectKey(bi_confBindTurnLeft);
+					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyTurnLeft));
 					break;
 				case bi_confBindReverse:
 					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.coreKeys[key_reverse] = detectKey(bi_confBindReverse);
-					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_reverse]));
+					playerData.keyReverse = detectKey(bi_confBindReverse);
+					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyReverse));
 					break;
 				case bi_confBindZoomIn:
 					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.coreKeys[key_zoomIn] = detectKey(bi_confBindZoomIn);
-					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_zoomIn]));
+					playerData.keyZoomIn = detectKey(bi_confBindZoomIn);
+					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyZoomIn));
 					break;
 				case bi_confBindZoomOut:
 					coreConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.coreKeys[key_zoomOut] = detectKey(bi_confBindZoomOut);
-					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_zoomOut]));
+					playerData.keyZoomOut = detectKey(bi_confBindZoomOut);
+					coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyZoomOut));
 					break;
 				case bi_confSaveCoreScheme:
 					if (gettingUserInput == false)
@@ -1076,12 +1119,12 @@ void ShipEditor::mouseLeftPressed()
 					break;
 				case bi_confScrollUp:
 					scrollDelta = -1;
-					if (playerData.grid[selectedX][selectedY]->core == true)
+					if (playerData.grid[selectedX][selectedY].core == true)
 						updateCoreControlSchemeList();
 					break;
 				case bi_confScrollDown:
 					scrollDelta = 1;
-					if (playerData.grid[selectedX][selectedY]->core == true)
+					if (playerData.grid[selectedX][selectedY].core == true)
 						updateCoreControlSchemeList();
 					break;
 				case bi_confScrollBar:
@@ -1110,7 +1153,7 @@ void ShipEditor::mouseLeftPressed()
 					coreControlSchemeList[j].selected = false;
 				}
 		}//End of coreConf leftClick
-		else if (playerData.grid[selectedX][selectedY]->turret > 0)
+		else if (playerData.grid[selectedX][selectedY].turret > 0)
 		{
 			for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 				switch (turretConfigurationButtons[i].checkIfPressed(mousePos))
@@ -1121,98 +1164,98 @@ void ShipEditor::mouseLeftPressed()
 				case bi_confBindFire:
 					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_fire] = detectKey(bi_confBindFire);
-					playerData.grid[selectedX][selectedY]->turretFire = playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_fire];
-					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_fire]));
+					playerData.keyGrid[selectedX][selectedY][kgrid_fire] = detectKey(bi_confBindFire);
+					playerData.grid[selectedX][selectedY].turretFire = playerData.keyGrid[selectedX][selectedY][kgrid_fire];
+					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_fire]));
 					break;
 				case bi_confBindReload:
 					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_reload] = detectKey(bi_confBindReload);
-					playerData.grid[selectedX][selectedY]->turretReload = playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_reload];
-					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_reload]));
+					playerData.keyGrid[selectedX][selectedY][kgrid_reload] = detectKey(bi_confBindReload);
+					playerData.grid[selectedX][selectedY].turretReload = playerData.keyGrid[selectedX][selectedY][kgrid_reload];
+					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_reload]));
 					break;
 				case bi_confBindTurnTurretRight:
 					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_right] = detectKey(bi_confBindTurnTurretRight);
-					playerData.grid[selectedX][selectedY]->turretRight = playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_right];
-					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_right]));
+					playerData.keyGrid[selectedX][selectedY][kgrid_right] = detectKey(bi_confBindTurnTurretRight);
+					playerData.grid[selectedX][selectedY].turretRight = playerData.keyGrid[selectedX][selectedY][kgrid_right];
+					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_right]));
 					break;
 				case bi_confBindTurnTurretLeft:
 					turretConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_left] = detectKey(bi_confBindTurnTurretLeft);
-					playerData.grid[selectedX][selectedY]->turretLeft = playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_left];
-					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.componentKeys[selectedX + selectedY*0.001 + KEYB_left]));
+					playerData.keyGrid[selectedX][selectedY][kgrid_left] = detectKey(bi_confBindTurnTurretLeft);
+					playerData.grid[selectedX][selectedY].turretLeft = playerData.keyGrid[selectedX][selectedY][kgrid_left];
+					turretConfigurationButtons[i].text.setString(getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_left]));
 					break;
 				case bi_confBindVerticalAimAxis:
 					turretConfigurationButtons[i].text.setString(">Move an analog stick down<");
 					drawWindow();
 					temp_idAxisPair = detectAxis();
-					playerData.grid[selectedX][selectedY]->verticalAxisPolarity = abs(temp_idAxisPair.first) / temp_idAxisPair.first;
-					playerData.grid[selectedX][selectedY]->directionalJoystickId = abs(temp_idAxisPair.first) - 1;
-					playerData.grid[selectedX][selectedY]->verticalAxis = temp_idAxisPair.second; // componentKeys[selectedX + selectedY*0.001 + KEYB_vertical].second;
-					turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(temp_idAxisPair.second) + " (" + getPolarityAsString(temp_idAxisPair.first) + ")");
+					playerData.grid[selectedX][selectedY].verticalAxisPolarity = abs(temp_idAxisPair.first) / temp_idAxisPair.first;
+					playerData.grid[selectedX][selectedY].directionalJoystickId = abs(temp_idAxisPair.first) - 1;
+					playerData.grid[selectedX][selectedY].verticalAxis = temp_idAxisPair.second; // componentKeys[selectedX + selectedY*0.001 + KEYB_vertical].second;
+					turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY].directionalJoystickId) + "::" + getAxisAsString(temp_idAxisPair.second) + " (" + getPolarityAsString(temp_idAxisPair.first) + ")");
 					break;
 				case bi_confBindHorizontalAimAxis:
 					turretConfigurationButtons[i].text.setString(">Move an analog stick right<");
 					drawWindow();
 					temp_idAxisPair = detectAxis();
-					playerData.grid[selectedX][selectedY]->horizontalAxisPolarity = abs(temp_idAxisPair.first) / temp_idAxisPair.first;
-					playerData.grid[selectedX][selectedY]->directionalJoystickId = abs(temp_idAxisPair.first) - 1;
-					playerData.grid[selectedX][selectedY]->horizontalAxis = temp_idAxisPair.second; // componentKeys[selectedX + selectedY*0.001 + KEYB_vertical].second;
-					turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(temp_idAxisPair.second) + " (" + getPolarityAsString(temp_idAxisPair.first) + ")");
+					playerData.grid[selectedX][selectedY].horizontalAxisPolarity = abs(temp_idAxisPair.first) / temp_idAxisPair.first;
+					playerData.grid[selectedX][selectedY].directionalJoystickId = abs(temp_idAxisPair.first) - 1;
+					playerData.grid[selectedX][selectedY].horizontalAxis = temp_idAxisPair.second; // componentKeys[selectedX + selectedY*0.001 + KEYB_vertical].second;
+					turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY].directionalJoystickId) + "::" + getAxisAsString(temp_idAxisPair.second) + " (" + getPolarityAsString(temp_idAxisPair.first) + ")");
 					break;
 
 					//Nodes
 				case bi_confNodeHoldToFire:
-					if (playerData.grid[selectedX][selectedY]->holdToFire == true)
+					if (playerData.grid[selectedX][selectedY].holdToFire == true)
 					{//Set false
 						turretConfigurationButtons[i].text.setString(" False");
-						playerData.grid[selectedX][selectedY]->holdToFire = false;
+						playerData.grid[selectedX][selectedY].holdToFire = false;
 					}
 					else
 					{//Set true
 						turretConfigurationButtons[i].text.setString(" True");
-						playerData.grid[selectedX][selectedY]->holdToFire = true;
+						playerData.grid[selectedX][selectedY].holdToFire = true;
 					}
 					break;
 				case bi_confNodeMouseAim:
-					if (playerData.grid[selectedX][selectedY]->mouseAim == true)
+					if (playerData.grid[selectedX][selectedY].mouseAim == true)
 					{//Set false
 						turretConfigurationButtons[i].text.setString(" False");
-						playerData.grid[selectedX][selectedY]->mouseAim = false;
+						playerData.grid[selectedX][selectedY].mouseAim = false;
 					}
 					else
 					{//Set true
 						turretConfigurationButtons[i].text.setString(" True");
-						playerData.grid[selectedX][selectedY]->mouseAim = true;
+						playerData.grid[selectedX][selectedY].mouseAim = true;
 					}
 					updateTurretConfigurationButtonVisibility();
 					break;
 				case bi_confNodeMouseAimRelative:
-					if (playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter == true)
+					if (playerData.grid[selectedX][selectedY].mouseAimRelativeToCenter == true)
 					{//Set false
 						turretConfigurationButtons[i].text.setString(" False");
-						playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter = false;
+						playerData.grid[selectedX][selectedY].mouseAimRelativeToCenter = false;
 					}
 					else
 					{//Set true
 						turretConfigurationButtons[i].text.setString(" True");
-						playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter = true;
+						playerData.grid[selectedX][selectedY].mouseAimRelativeToCenter = true;
 					}
 					break;
 				case bi_confNodeDirectionalAim:
-					if (playerData.grid[selectedX][selectedY]->directionalAim == true)
+					if (playerData.grid[selectedX][selectedY].directionalAim == true)
 					{//Set false
 						turretConfigurationButtons[i].text.setString(" False");
-						playerData.grid[selectedX][selectedY]->directionalAim = false;
+						playerData.grid[selectedX][selectedY].directionalAim = false;
 					}
 					else
 					{//Set true
 						turretConfigurationButtons[i].text.setString(" True");
-						playerData.grid[selectedX][selectedY]->directionalAim = true;
+						playerData.grid[selectedX][selectedY].directionalAim = true;
 					}
 					updateTurretConfigurationButtonVisibility();
 					break;
@@ -1241,12 +1284,12 @@ void ShipEditor::mouseLeftPressed()
 					break;
 				case bi_confScrollUp:
 					scrollDelta = -1;
-					if (playerData.grid[selectedX][selectedY]->turret > 0)
+					if (playerData.grid[selectedX][selectedY].turret > 0)
 						updateTurretControlSchemeList();
 					break;
 				case bi_confScrollDown:
 					scrollDelta = 1;
-					if (playerData.grid[selectedX][selectedY]->turret > 0)
+					if (playerData.grid[selectedX][selectedY].turret > 0)
 						updateTurretControlSchemeList();
 					break;
 				case bi_confScrollBar:
@@ -1297,7 +1340,7 @@ void ShipEditor::mouseLeftPressed()
 					turretControlSchemeList[j].selected = false;
 				}
 		}//End of turret conf
-		else if (playerData.grid[selectedX][selectedY]->engine != 0)
+		else if (playerData.grid[selectedX][selectedY].engine != 0)
 		{
 			for (unsigned int i = 0; i < engineConfigurationButtons.size(); i++)
 				switch (engineConfigurationButtons[i].checkIfPressed(mousePos))
@@ -1305,32 +1348,32 @@ void ShipEditor::mouseLeftPressed()
 				case bi_confBindThrust:
 					engineConfigurationButtons[i].text.setString(">Press a key or move a joystick<");
 					drawWindow();
-					playerData.grid[selectedX][selectedY]->engineThrust = detectKey(bi_confBindThrust);
-					engineConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->engineThrust));
+					playerData.grid[selectedX][selectedY].engineThrust = detectKey(bi_confBindThrust);
+					engineConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].engineThrust));
 					break;
 				case bi_confNodeHoldToThrust:
-					if (playerData.grid[selectedX][selectedY]->holdToFire == true)
+					if (playerData.grid[selectedX][selectedY].holdToFire == true)
 					{//Set false
 						engineConfigurationButtons[i].text.setString(" False");
-						playerData.grid[selectedX][selectedY]->holdToFire = false;
+						playerData.grid[selectedX][selectedY].holdToFire = false;
 					}
 					else
 					{//Set true
 						engineConfigurationButtons[i].text.setString(" True");
-						playerData.grid[selectedX][selectedY]->holdToFire = true;
+						playerData.grid[selectedX][selectedY].holdToFire = true;
 					}
 					break;
 				case bi_confNodeEngineMode:
-					switch (playerData.grid[selectedX][selectedY]->rotationDirection)
+					switch (playerData.grid[selectedX][selectedY].rotationDirection)
 					{
 					case -1:
-						playerData.grid[selectedX][selectedY]->rotationDirection++;
+						playerData.grid[selectedX][selectedY].rotationDirection++;
 						break;
 					case 0:
-						playerData.grid[selectedX][selectedY]->rotationDirection++;
+						playerData.grid[selectedX][selectedY].rotationDirection++;
 						break;
 					case 1:
-						playerData.grid[selectedX][selectedY]->rotationDirection = -1;
+						playerData.grid[selectedX][selectedY].rotationDirection = -1;
 						break;
 					}
 					break;
@@ -1358,7 +1401,7 @@ void ShipEditor::mouseRightPressed()
 			checkY = (cameraY + mousePos.y / scaleFactor) / (100.0);
 
 		//Select component and open component actions
-		if (checkX > -1 && checkX < EDITOR_WIDTH && checkY > -1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY]->armor > 0)
+		if (checkX > -1 && checkX < EDITOR_WIDTH && checkY > -1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY].armor > 0)
 		{//Selection is valid
 			selectedX = checkX;
 			selectedY = checkY;
@@ -1380,7 +1423,7 @@ void ShipEditor::reloadActions()
 	int temp_yOffset = 0;
 	int temp_joystickIndexSelectionY = 0;
 	int temp_schemeSelectionY = 0;
-	if (playerData.grid[selectedX][selectedY]->core == false)
+	if (playerData.grid[selectedX][selectedY].core == false)
 	{//Non core actions
 		actionButtons[0].text.setString("Component [" + std::to_string(selectedX) + "][" + std::to_string(selectedY) + "]");
 		for (unsigned int i = 0; i < actionButtons.size(); i++)
@@ -1398,7 +1441,7 @@ void ShipEditor::reloadActions()
 				break;
 			case bi_actionTurret:
 			case bi_actionEngine:
-				if (playerData.grid[selectedX][selectedY]->turret < 1 && playerData.grid[selectedX][selectedY]->engine < 1)
+				if (playerData.grid[selectedX][selectedY].turret < 1 && playerData.grid[selectedX][selectedY].engine < 1)
 				{
 					actionButtons[i].buttonRectangle.setPosition(mousePos.x, mousePos.y + actionButtonHeight*(i + temp_yOffset));
 					actionButtons[i].text.setPosition(mousePos.x + buttonBorder, mousePos.y + actionButtonHeight*(i + temp_yOffset));
@@ -1420,7 +1463,7 @@ void ShipEditor::reloadActions()
 				if (actionButtons[i].id == bi_actionSetTurretScheme)
 					temp_schemeSelectionY = i + temp_yOffset;
 
-				if (playerData.grid[selectedX][selectedY]->turret < 1 && playerData.grid[selectedX][selectedY]->engine < 1)
+				if (playerData.grid[selectedX][selectedY].turret < 1 && playerData.grid[selectedX][selectedY].engine < 1)
 				{
 					temp_yOffset--;
 					actionButtons[i].visible = false;
@@ -1436,16 +1479,16 @@ void ShipEditor::reloadActions()
 
 		//Joystick index quick selection
 		bool temp_isUnified = true;
-		int temp_checkUnifiedIndex = playerData.grid[selectedX][selectedY]->directionalJoystickId;
-		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretFire.joystickIndex)
+		int temp_checkUnifiedIndex = playerData.grid[selectedX][selectedY].directionalJoystickId;
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY].turretFire.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretReload.joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY].turretReload.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretLeft.joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY].turretLeft.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->turretRight.joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY].turretRight.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY]->engineThrust.joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.grid[selectedX][selectedY].engineThrust.joystickIndex)
 			temp_isUnified = false;
 		for (unsigned int i = 0; i < actionJoystickIndexButtons.size(); i++)
 		{
@@ -1534,17 +1577,17 @@ void ShipEditor::reloadActions()
 		//Joystick index quick selection
 		bool temp_isUnified = true;
 		int temp_checkUnifiedIndex = playerData.moveJoystickId;
-		if (temp_checkUnifiedIndex != playerData.coreKeys[key_turnRight].joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.keyTurnRight.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.coreKeys[key_turnLeft].joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.keyTurnLeft.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.coreKeys[key_accelerate].joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.keyAccelerate.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.coreKeys[key_reverse].joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.keyReverse.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.coreKeys[key_zoomIn].joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.keyZoomIn.joystickIndex)
 			temp_isUnified = false;
-		if (temp_checkUnifiedIndex != playerData.coreKeys[key_zoomOut].joystickIndex)
+		if (temp_checkUnifiedIndex != playerData.keyZoomOut.joystickIndex)
 			temp_isUnified = false;
 
 		for (unsigned int i = 0; i < actionJoystickIndexButtons.size(); i++)
@@ -1641,47 +1684,45 @@ void ShipEditor::scrapComponent(int x, int y)
 
 	//Notify parent component
 	if (x > 0)
-		playerData.grid[x + 1][y]->childLeft = false;
+		playerData.grid[x + 1][y].childLeft = false;
 	if (x < EDITOR_WIDTH - 1)
-		playerData.grid[x - 1][y]->childRight = false;
+		playerData.grid[x - 1][y].childRight = false;
 	if (y > 0)
-		playerData.grid[x][y - 1]->childDown = false;
+		playerData.grid[x][y - 1].childDown = false;
 	if (y < EDITOR_HEIGHT - 1)
-		playerData.grid[x][y + 1]->childUp = false;
+		playerData.grid[x][y + 1].childUp = false;
 
 
 
 
-	if (playerData.grid[x][y]->childUp == false
-		&& playerData.grid[x][y]->childDown == false
-		&& playerData.grid[x][y]->childLeft == false
-		&& playerData.grid[x][y]->childRight == false)
+	if (playerData.grid[x][y].childUp == false
+		&& playerData.grid[x][y].childDown == false
+		&& playerData.grid[x][y].childLeft == false
+		&& playerData.grid[x][y].childRight == false)
 	{//No child components-> scrap and return
-		std::cout << "\n" << x << ", " << y << " Deleted - no child componenets found";
-		delete playerData.grid[x][y];
-		playerData.grid[x][y] = new GridData;
+		std::cout << "\n" << x << ", " << y << " Removed - no child componenets found";
+		playerData.grid[x][y] = GridData();
 		return;
 	}
 
 	//The component has child components-> scrap children first
-	if (playerData.grid[x][y]->childUp == true)
+	if (playerData.grid[x][y].childUp == true)
 		scrapComponent(x, y - 1);
-	if (playerData.grid[x][y]->childDown == true)
+	if (playerData.grid[x][y].childDown == true)
 		scrapComponent(x, y + 1);
-	if (playerData.grid[x][y]->childLeft == true)
+	if (playerData.grid[x][y].childLeft == true)
 		scrapComponent(x - 1, y);
-	if (playerData.grid[x][y]->childRight == true)
+	if (playerData.grid[x][y].childRight == true)
 		scrapComponent(x + 1, y);
 
-	delete playerData.grid[x][y];
-	playerData.grid[x][y] = new GridData;
+	playerData.grid[x][y] = GridData();
 	std::cout << "\n" << x << ", " << y << " Deleted";
 }
 
 void ShipEditor::applyRotation()
 {
-	playerData.grid[selectedX][selectedY]->angleModifier = int(360 - circleSliderSpr.getRotation());
-	std::cout << "\nrotation " << playerData.grid[selectedX][selectedY]->angleModifier;
+	playerData.grid[selectedX][selectedY].angleModifier = int(360 - circleSliderSpr.getRotation());
+	std::cout << "\nrotation " << playerData.grid[selectedX][selectedY].angleModifier;
 	updateGridSpriteTextures();
 }
 
@@ -1697,10 +1738,11 @@ void ShipEditor::drawInheritanceSprites()
 }
 void ShipEditor::drawSelectionShadeHighlight()
 {
-	if (focus != editor::component && focus != editor::rotate)
+	if (focus != editor::component && focus != editor::rotate && focus != editor::esc)
 		return;
 
 	mWindow.draw(shadeRect);
+	if (selectedX != -1 && selectedY != -1)
 	for (unsigned int i = 0; i < gridSprites[selectedX][selectedY].size(); i++)
 		mWindow.draw(gridSprites[selectedX][selectedY][i]);
 
@@ -1724,7 +1766,7 @@ void ShipEditor::drawConfigurations()
 		configurationButtons[i].draw(mWindow, mousePos);
 	
 
-	if (playerData.grid[selectedX][selectedY]->core == true)
+	if (playerData.grid[selectedX][selectedY].core == true)
 	{//Core configurations
 		mWindow.draw(coreConfigurationRect1);
 		mWindow.draw(coreConfigurationRect2);
@@ -1756,7 +1798,7 @@ void ShipEditor::drawConfigurations()
 			coreControlSchemeList[i].draw(mWindow, mousePos);
 
 	}
-	else if (playerData.grid[selectedX][selectedY]->turret > 0)
+	else if (playerData.grid[selectedX][selectedY].turret > 0)
 	{//Turret configurations
 		mWindow.draw(turretConfigurationRect1);
 		mWindow.draw(turretConfigurationRect2);
@@ -1788,7 +1830,7 @@ void ShipEditor::drawConfigurations()
 			turretControlSchemeList[i].draw(mWindow, mousePos);
 		mWindow.draw(colorPreviewTurret);
 	}
-	else if (playerData.grid[selectedX][selectedY]->engine != 0)
+	else if (playerData.grid[selectedX][selectedY].engine != 0)
 	{//Engine configurations
 		mWindow.draw(engineConfigurationRect1);
 		mWindow.draw(engineConfigurationRect2);
@@ -1809,7 +1851,7 @@ void ShipEditor::drawCircleSlider()
 void ShipEditor::updateTurretConfigurationButtonVisibility()
 {
 	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
-		if (playerData.grid[selectedX][selectedY]->mouseAim == true)
+		if (playerData.grid[selectedX][selectedY].mouseAim == true)
 		{//Mouse aim enabled
 		switch (turretConfigurationButtons[i].id)
 		{
@@ -1840,7 +1882,7 @@ void ShipEditor::updateTurretConfigurationButtonVisibility()
 			break;
 		}
 		}
-		else if (playerData.grid[selectedX][selectedY]->directionalAim == true)
+		else if (playerData.grid[selectedX][selectedY].directionalAim == true)
 		{//Mouse aim disabled, analog aim enabled
 			switch (turretConfigurationButtons[i].id)
 			{
@@ -1920,7 +1962,7 @@ void ShipEditor::adjustColor()
 			temp_int = 0;
 		else if (temp_int > 255)
 			temp_int = 255;
-		playerData.grid[selectedX][selectedY]->red = temp_int;
+		playerData.grid[selectedX][selectedY].red = temp_int;
 		break;
 	case 2: //Turret green
 		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight) / float(button1Width - buttonHeight);
@@ -1929,7 +1971,7 @@ void ShipEditor::adjustColor()
 			temp_int = 0;
 		else if (temp_int > 255)
 			temp_int = 255;
-		playerData.grid[selectedX][selectedY]->green = temp_int;
+		playerData.grid[selectedX][selectedY].green = temp_int;
 		break;
 	case 3: //Turret blue
 		temp_float = (mousePos.x - button1X1 - 0.5*buttonHeight) / float(button1Width - buttonHeight);
@@ -1938,7 +1980,7 @@ void ShipEditor::adjustColor()
 			temp_int = 0;
 		else if (temp_int > 255)
 			temp_int = 255;
-		playerData.grid[selectedX][selectedY]->blue = temp_int;
+		playerData.grid[selectedX][selectedY].blue = temp_int;
 		break;
 	}
 	updateTurretColorPreview();
@@ -1948,17 +1990,17 @@ void ShipEditor::updateTurretColorPreview()
 {
 	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 		if (turretConfigurationButtons[i].id == bi_confRedSlider)
-			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->red / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY].red / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
 
 	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 		if (turretConfigurationButtons[i].id == bi_confGreenSlider)
-			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->green / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY].green / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
 
 	for (unsigned int i = 0; i < turretConfigurationButtons.size(); i++)
 		if (turretConfigurationButtons[i].id == bi_confBlueSlider)
-			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY]->blue / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
+			turretConfigurationButtons[i].setPosition(button1X1 + int(buttonHeight*0.5) + int((button1Width - buttonHeight*1.5)*(playerData.grid[selectedX][selectedY].blue / 255.0)), turretConfigurationButtons[i].spr.getPosition().y);
 
-	colorPreviewTurret.setColor(sf::Color(playerData.grid[selectedX][selectedY]->red, playerData.grid[selectedX][selectedY]->green, playerData.grid[selectedX][selectedY]->blue));
+	colorPreviewTurret.setColor(sf::Color(playerData.grid[selectedX][selectedY].red, playerData.grid[selectedX][selectedY].green, playerData.grid[selectedX][selectedY].blue));
 }
 
 void ShipEditor::closeCoreConfigurations()
@@ -1992,25 +2034,25 @@ void ShipEditor::setSelectionJoystickIndex(int index)
 {
 	if (index < 0 || index > 7)
 		return;//invalid index
-	if (playerData.grid[selectedX][selectedY]->turret > 0)
+	if (playerData.grid[selectedX][selectedY].turret > 0)
 	{//Turret
-		playerData.grid[selectedX][selectedY]->directionalJoystickId = index;
-		playerData.grid[selectedX][selectedY]->turretFire.joystickIndex = index;
-		playerData.grid[selectedX][selectedY]->turretReload.joystickIndex = index;
-		playerData.grid[selectedX][selectedY]->turretLeft.joystickIndex = index;
-		playerData.grid[selectedX][selectedY]->turretRight.joystickIndex = index;
-		playerData.grid[selectedX][selectedY]->engineThrust.joystickIndex = index;
+		playerData.grid[selectedX][selectedY].directionalJoystickId = index;
+		playerData.grid[selectedX][selectedY].turretFire.joystickIndex = index;
+		playerData.grid[selectedX][selectedY].turretReload.joystickIndex = index;
+		playerData.grid[selectedX][selectedY].turretLeft.joystickIndex = index;
+		playerData.grid[selectedX][selectedY].turretRight.joystickIndex = index;
+		playerData.grid[selectedX][selectedY].engineThrust.joystickIndex = index;
 		updateTurretConfigurationButtonStrings();
 	}
-	else if (playerData.grid[selectedX][selectedY]->core == true)
+	else if (playerData.grid[selectedX][selectedY].core == true)
 	{//Core
 		playerData.moveJoystickId = index;
-		playerData.coreKeys[key_turnRight].joystickIndex = index;
-		playerData.coreKeys[key_turnLeft].joystickIndex = index;
-		playerData.coreKeys[key_accelerate].joystickIndex = index;
-		playerData.coreKeys[key_reverse].joystickIndex = index;
-		playerData.coreKeys[key_zoomIn].joystickIndex = index;
-		playerData.coreKeys[key_zoomOut].joystickIndex = index;
+		playerData.keyTurnRight.joystickIndex = index;
+		playerData.keyTurnLeft.joystickIndex = index;
+		playerData.keyAccelerate.joystickIndex = index;
+		playerData.keyReverse.joystickIndex = index;
+		playerData.keyZoomIn.joystickIndex = index;
+		playerData.keyZoomOut.joystickIndex = index;
 		updateCoreConfigurationButtonStrings();
 	}
 }
@@ -2179,22 +2221,22 @@ void ShipEditor::saveTurretControlScheme()
 	mFileStream.open("Settings/TurretControlSchemes/" + workingFileName + ".dat", std::ofstream::binary | std::ios::out);
 	if (mFileStream)
 	{
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->directionalJoystickId, sizeof(int));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->verticalAxisPolarity, sizeof(float));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->horizontalAxisPolarity, sizeof(float));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->red, sizeof(int));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->green, sizeof(int));
-		mFileStream.write((char*)&playerData.grid[selectedX][selectedY]->blue, sizeof(int));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].turretFire, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].holdToFire, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].turretReload, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].mouseAim, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].mouseAimRelativeToCenter, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].directionalAim, sizeof(bool));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].directionalJoystickId, sizeof(int));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].verticalAxisPolarity, sizeof(float));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].horizontalAxisPolarity, sizeof(float));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].verticalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].horizontalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].turretRight, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].turretLeft, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].red, sizeof(int));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].green, sizeof(int));
+		mFileStream.write((char*)&playerData.grid[selectedX][selectedY].blue, sizeof(int));
 		mFileStream.close();
 
 		mFileStream.open("Settings/TurretControlSchemesList.txt");
@@ -2239,22 +2281,22 @@ void ShipEditor::loadTurretControlScheme()
 	mFileStream.open("Settings/TurretControlSchemes/" + workingFileName + ".dat", std::ios::binary | std::ios::in);
 	if (mFileStream)
 	{
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretFire, sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->holdToFire, sizeof(bool));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretReload, sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->mouseAim, sizeof(bool));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter, sizeof(bool));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->directionalAim, sizeof(bool));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->directionalJoystickId, sizeof(int));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->verticalAxisPolarity, sizeof(float));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->horizontalAxisPolarity, sizeof(float));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->verticalAxis, sizeof(sf::Joystick::Axis));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->horizontalAxis, sizeof(sf::Joystick::Axis));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretRight, sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->turretLeft, sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->red, sizeof(int));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->green, sizeof(int));
-		mFileStream.read((char*)&playerData.grid[selectedX][selectedY]->blue, sizeof(int));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].turretFire, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].holdToFire, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].turretReload, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].mouseAim, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].mouseAimRelativeToCenter, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].directionalAim, sizeof(bool));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].directionalJoystickId, sizeof(int));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].verticalAxisPolarity, sizeof(float));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].horizontalAxisPolarity, sizeof(float));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].verticalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].horizontalAxis, sizeof(sf::Joystick::Axis));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].turretRight, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].turretLeft, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].red, sizeof(int));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].green, sizeof(int));
+		mFileStream.read((char*)&playerData.grid[selectedX][selectedY].blue, sizeof(int));
 		mFileStream.close();
 		updateTurretConfigurationButtonStrings();
 		updateTurretConfigurationButtonVisibility();
@@ -2336,12 +2378,12 @@ void ShipEditor::saveCoreControlScheme()
 	mFileStream.open("Settings/CoreControlSchemes/" + workingFileName + ".dat", std::ofstream::binary | std::ios::out);
 	if (mFileStream)
 	{
-		mFileStream.write((char*)&playerData.coreKeys[key_turnRight], sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.coreKeys[key_turnLeft], sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.coreKeys[key_accelerate], sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.coreKeys[key_reverse], sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.coreKeys[key_zoomIn], sizeof(MyKeys));
-		mFileStream.write((char*)&playerData.coreKeys[key_zoomOut], sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.keyTurnRight, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.keyTurnLeft, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.keyAccelerate, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.keyReverse, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.keyZoomIn, sizeof(MyKeys));
+		mFileStream.write((char*)&playerData.keyZoomOut, sizeof(MyKeys));
 		mFileStream.write((char*)&playerData.directionalMovement, sizeof(bool));
 		mFileStream.write((char*)&playerData.moveJoystickId, sizeof(int));
 		mFileStream.write((char*)&playerData.verticalMoveAxisPolarity, sizeof(int));
@@ -2391,12 +2433,12 @@ void ShipEditor::loadCoreControlScheme()
 	mFileStream.open("Settings/CoreControlSchemes/" + workingFileName + ".dat", std::ios::binary | std::ios::in);
 	if (mFileStream)
 	{
-		mFileStream.read((char*)&playerData.coreKeys[key_turnRight], sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.coreKeys[key_turnLeft], sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.coreKeys[key_accelerate], sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.coreKeys[key_reverse], sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.coreKeys[key_zoomIn], sizeof(MyKeys));
-		mFileStream.read((char*)&playerData.coreKeys[key_zoomOut], sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.keyTurnRight, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.keyTurnLeft, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.keyAccelerate, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.keyReverse, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.keyZoomIn, sizeof(MyKeys));
+		mFileStream.read((char*)&playerData.keyZoomOut, sizeof(MyKeys));
 		mFileStream.read((char*)&playerData.directionalMovement, sizeof(bool));
 		mFileStream.read((char*)&playerData.moveJoystickId, sizeof(int));
 		mFileStream.read((char*)&playerData.verticalMoveAxisPolarity, sizeof(int));
@@ -2478,34 +2520,34 @@ void ShipEditor::updateTurretConfigurationButtonStrings()
 		switch (turretConfigurationButtons[i].id)
 	{
 		case bi_confBindFire:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretFire));
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretFire));
 			break;
 		case bi_confNodeHoldToFire:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].holdToFire));
 			break;
 		case bi_confBindReload:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretReload));
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretReload));
 			break;
 		case bi_confNodeMouseAim:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAim));
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].mouseAim));
 			break;
 		case bi_confNodeMouseAimRelative:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->mouseAimRelativeToCenter));
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].mouseAimRelativeToCenter));
 			break;
 		case bi_confNodeDirectionalAim:
-			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY]->directionalAim));
+			turretConfigurationButtons[i].text.setString(" " + getBoolAsString(playerData.grid[selectedX][selectedY].directionalAim));
 			break;
 		case bi_confBindVerticalAimAxis:
-			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->verticalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->verticalAxisPolarity) + ")");
+			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY].directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY].verticalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY].verticalAxisPolarity) + ")");
 			break;
 		case bi_confBindHorizontalAimAxis:
-			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY]->directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY]->horizontalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY]->horizontalAxisPolarity) + ")");
+			turretConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.grid[selectedX][selectedY].directionalJoystickId) + "::" + getAxisAsString(playerData.grid[selectedX][selectedY].horizontalAxis) + " (" + getPolarityAsString(playerData.grid[selectedX][selectedY].horizontalAxisPolarity) + ")");
 			break;
 		case bi_confBindTurnTurretRight:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretRight));
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretRight));
 			break;
 		case bi_confBindTurnTurretLeft:
-			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->turretLeft));
+			turretConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].turretLeft));
 			break;
 		case bi_confSaveTurretScheme:
 			turretConfigurationButtons[i].text.setString(" Save control scheme...");
@@ -2529,22 +2571,22 @@ void ShipEditor::updateCoreConfigurationButtonStrings()
 			coreConfigurationButtons[i].text.setString(" Joystick " + std::to_string(playerData.moveJoystickId) + "::" + getAxisAsString(playerData.horizontalMoveAxis) + " (" + getPolarityAsString(playerData.horizontalMoveAxisPolarity) + ")");
 			break;
 		case bi_confBindAccelerate:
-			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_accelerate]));
+			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyAccelerate));
 			break;
 		case bi_confBindTurnRight:
-			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_turnRight]));
+			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyTurnRight));
 			break;
 		case bi_confBindTurnLeft:
-			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_turnLeft]));
+			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyTurnLeft));
 			break;
 		case bi_confBindReverse:
-			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_reverse]));
+			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyReverse));
 			break;
 		case bi_confBindZoomIn:
-			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_zoomIn]));
+			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyZoomIn));
 			break;
 		case bi_confBindZoomOut:
-			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.coreKeys[key_zoomOut]));
+			coreConfigurationButtons[i].text.setString(getInputAsString(playerData.keyZoomOut));
 			break;
 	}
 }
@@ -2559,13 +2601,13 @@ void ShipEditor::updateEngineConfigurationButtonStrings()
 		switch (engineConfigurationButtons[i].id)
 	{
 		case bi_confBindThrust:
-			engineConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY]->engineThrust));
+			engineConfigurationButtons[i].text.setString(getInputAsString(playerData.grid[selectedX][selectedY].engineThrust));
 			break;
 		case bi_confNodeHoldToThrust:
-			engineConfigurationButtons[i].text.setString(" " +getBoolAsString(playerData.grid[selectedX][selectedY]->holdToFire));
+			engineConfigurationButtons[i].text.setString(" " +getBoolAsString(playerData.grid[selectedX][selectedY].holdToFire));
 			break;
 		case bi_confNodeEngineMode:
-			switch (playerData.grid[selectedX][selectedY]->rotationDirection)
+			switch (playerData.grid[selectedX][selectedY].rotationDirection)
 			{
 			case -1:
 				engineConfigurationButtons[i].text.setString(" Rotate clockwise");
@@ -2583,8 +2625,32 @@ void ShipEditor::updateEngineConfigurationButtonStrings()
 	}
 }
 
+void ShipEditor::drawEscButtons()
+{
+	for (unsigned int i = 0; i < escButtons.size(); i++)
+	{
+		escButtons[i].draw(mWindow, mousePos);
+	}
+}
 
+void ShipEditor::savePlayerData()
+{
+	if (playerName.size() < 2)
+		return;
 
+	std::cout << "\nSaving player data [" << playerName << ".dat]";
+
+	mFileStream.open("Settings/PlayerSaves/" + playerName + ".dat", std::ofstream::binary | std::ios::out);
+	if (mFileStream)
+	{
+		mFileStream.write((char*)&playerData, sizeof(PlayerData));
+	}
+}
+
+void ShipEditor::runSettings()
+{
+
+}
 
 
 

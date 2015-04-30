@@ -1,12 +1,12 @@
 #include "Main.h"
 #include "Game.h"
 #include "Object.h"
+#include "GridData.h"
+#include "PlayerData.h"
 #include "Player.h"
 #include "Component.h"
 #include "Bullet.h"
 #include "Turret.h"
-#include "GridData.h"
-#include "PlayerData.h"
 #include "ShipEditor.h"
 
 
@@ -20,8 +20,10 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 
 	massCenterX = 0;
 	massCenterY = 0;
-	data = new PlayerData;
+	data = PlayerData();
+	dataPtr = &data;
 	loadPlayerData();
+	applyPlayerData();
 	loadKeybindings();
 }
 
@@ -37,35 +39,35 @@ bool Player::update()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 		editShip();
 
-	if (data->directionalMovement == false)
+	if (data.directionalMovement == false)
 	{
 		//Accelerate
-		if (testInput(data->coreKeys[key_accelerate], mGame->mEvent))
-			if (data->coreKeys[key_accelerate].axisType != noAxis)
-				accelerate(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_accelerate].joystickIndex, data->coreKeys[key_accelerate].joystickAxis)));
+		if (testInput(data.keyAccelerate, mGame->mEvent))
+			if (data.keyAccelerate.axisType != noAxis)
+				accelerate(abs(sf::Joystick::getAxisPosition(data.keyAccelerate.joystickIndex, data.keyAccelerate.joystickAxis)));
 			else
 				accelerate(100);
 		//Turn right
-		if (testInput(data->coreKeys[key_turnRight], mGame->mEvent))
-			if (data->coreKeys[key_turnRight].axisType != noAxis)
-				turnRight(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_turnRight].joystickIndex, data->coreKeys[key_turnRight].joystickAxis)));
+		if (testInput(data.keyTurnRight, mGame->mEvent))
+			if (data.keyTurnRight.axisType != noAxis)
+				turnRight(abs(sf::Joystick::getAxisPosition(data.keyTurnRight.joystickIndex, data.keyTurnRight.joystickAxis)));
 			else
 				turnRight(100);
 		//Turn left
-		if (testInput(data->coreKeys[key_turnLeft], mGame->mEvent))
-			if (data->coreKeys[key_turnLeft].axisType != noAxis)
-				turnLeft(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_turnLeft].joystickIndex, data->coreKeys[key_turnLeft].joystickAxis)));
+		if (testInput(data.keyTurnLeft, mGame->mEvent))
+			if (data.keyTurnLeft.axisType != noAxis)
+				turnLeft(abs(sf::Joystick::getAxisPosition(data.keyTurnLeft.joystickIndex, data.keyTurnLeft.joystickAxis)));
 			else
 				turnLeft(100);
 	}
-	else if (abs(sf::Joystick::getAxisPosition(data->moveJoystickId, data->verticalMoveAxis)) + abs(sf::Joystick::getAxisPosition(data->moveJoystickId, data->horizontalMoveAxis)) > 15)
+	else if (abs(sf::Joystick::getAxisPosition(data.moveJoystickId, data.verticalMoveAxis)) + abs(sf::Joystick::getAxisPosition(data.moveJoystickId, data.horizontalMoveAxis)) > 15)
 	{//Detect directional movement
-		joystickDirection = -1 * atan2(data->verticalMoveAxisPolarity*sf::Joystick::getAxisPosition(data->moveJoystickId, data->verticalMoveAxis), data->horizontalMoveAxisPolarity*sf::Joystick::getAxisPosition(data->moveJoystickId, data->horizontalMoveAxis));
+		joystickDirection = -1 * atan2(data.verticalMoveAxisPolarity*sf::Joystick::getAxisPosition(data.moveJoystickId, data.verticalMoveAxis), data.horizontalMoveAxisPolarity*sf::Joystick::getAxisPosition(data.moveJoystickId, data.horizontalMoveAxis));
 		if (joystickDirection < 0)
 			joystickDirection = 2 * PI + joystickDirection;
 
 		//Detect acceleration
-		temp_accelerationPower = 100 * (pow(sf::Joystick::getAxisPosition(data->moveJoystickId, data->verticalMoveAxis) / 100, 2) + pow(sf::Joystick::getAxisPosition(data->moveJoystickId, data->horizontalMoveAxis) / 100, 2));
+		temp_accelerationPower = 100 * (pow(sf::Joystick::getAxisPosition(data.moveJoystickId, data.verticalMoveAxis) / 100, 2) + pow(sf::Joystick::getAxisPosition(data.moveJoystickId, data.horizontalMoveAxis) / 100, 2));
 		if (temp_accelerationPower > 10)
 		{
 			if (temp_angleVar < PI / 2)
@@ -115,25 +117,25 @@ bool Player::update()
 	}
 
 	//Reverse
-	if (testInput(data->coreKeys[key_reverse], mGame->mEvent))
-		if (data->coreKeys[key_reverse].axisType != noAxis)
-			reverse(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_reverse].joystickIndex, data->coreKeys[key_reverse].joystickAxis)));
+	if (testInput(data.keyReverse, mGame->mEvent))
+		if (data.keyReverse.axisType != noAxis)
+			reverse(abs(sf::Joystick::getAxisPosition(data.keyReverse.joystickIndex, data.keyReverse.joystickAxis)));
 		else
 			reverse(100);
 
 		//Zoom in
-	if (testInput(data->coreKeys[key_zoomIn], mGame->mEvent))
+	if (testInput(data.keyZoomIn, mGame->mEvent))
 		{
-		if (data->coreKeys[key_zoomIn].axisType != noAxis)
-			zoomIn(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_zoomIn].joystickIndex, data->coreKeys[key_zoomIn].joystickAxis)));
+		if (data.keyZoomIn.axisType != noAxis)
+			zoomIn(abs(sf::Joystick::getAxisPosition(data.keyZoomIn.joystickIndex, data.keyZoomIn.joystickAxis)));
 			else
 				zoomIn(100);
 		}
 		//Zoom out
-	if (testInput(data->coreKeys[key_zoomOut], mGame->mEvent))
+	if (testInput(data.keyZoomOut, mGame->mEvent))
 		{
-		if (data->coreKeys[key_zoomOut].axisType != noAxis)
-			zoomOut(abs(sf::Joystick::getAxisPosition(data->coreKeys[key_zoomOut].joystickIndex, data->coreKeys[key_zoomOut].joystickAxis)));
+		if (data.keyZoomOut.axisType != noAxis)
+			zoomOut(abs(sf::Joystick::getAxisPosition(data.keyZoomOut.joystickIndex, data.keyZoomOut.joystickAxis)));
 			else
 				zoomOut(100);
 		}
@@ -145,26 +147,26 @@ bool Player::update()
 			{
 				if (components[i]->types[k] == component::turret)
 				{
-					if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire], mGame->mEvent))
+					if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_fire], mGame->mEvent))
 					{
-						if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->holdToFire == true ||
-							(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->holdToFire == false && components[i]->hasFired == false))
+						if (data.grid[components[i]->gridLocationX][components[i]->gridLocationY].holdToFire == true ||
+							(data.grid[components[i]->gridLocationX][components[i]->gridLocationY].holdToFire == false && components[i]->hasFired == false))
 							components[i]->fire();
 					}
 					else
 						components[i]->hasFired = false;
-				if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload], mGame->mEvent))
+					if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_reload], mGame->mEvent))
 					if (components[i]->reloading == false)
 						components[i]->reload(); 
 				}
 				else if (components[i]->types[k] == component::engine)
 				{
-					if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust], mGame->mEvent))
+					if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust], mGame->mEvent))
 					{//Receiving input
-						if (data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].inputType == joystickInput)
-							if (data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].axisType != noAxis)
-								components[i]->thrust(abs(sf::Joystick::getAxisPosition(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].joystickIndex,
-								data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust].joystickAxis)));
+						if (data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust].inputType == joystickInput)
+							if (data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust].axisType != noAxis)
+								components[i]->thrust(abs(sf::Joystick::getAxisPosition(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust].joystickIndex,
+								data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust].joystickAxis)));
 							else
 								components[i]->thrust(100);
 						else
@@ -195,14 +197,14 @@ bool Player::update()
 					//if (turretMaxAngle > 2 * PI)
 					//	turretMaxAngle -= 2 * PI;
 
-					if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalAim == true)
+					if (data.grid[components[i]->gridLocationX][components[i]->gridLocationY].directionalAim == true)
 					{//Use directional aiming
 						//-------------------
-						if (abs(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxis)) + 
-							abs(sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxis)) > 15)
+						if (abs(sf::Joystick::getAxisPosition(data.grid[components[i]->gridLocationX][components[i]->gridLocationY].directionalJoystickId, data.grid[components[i]->gridLocationX][components[i]->gridLocationY].verticalAxis)) + 
+							abs(sf::Joystick::getAxisPosition(data.grid[components[i]->gridLocationX][components[i]->gridLocationY].directionalJoystickId, data.grid[components[i]->gridLocationX][components[i]->gridLocationY].horizontalAxis)) > 15)
 						{//Detect directional movement
-							joystickDirection = -1 * atan2(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxisPolarity * sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->verticalAxis),
-								data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxisPolarity * sf::Joystick::getAxisPosition(data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->directionalJoystickId, data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->horizontalAxis));
+							joystickDirection = -1 * atan2(data.grid[components[i]->gridLocationX][components[i]->gridLocationY].verticalAxisPolarity * sf::Joystick::getAxisPosition(data.grid[components[i]->gridLocationX][components[i]->gridLocationY].directionalJoystickId, data.grid[components[i]->gridLocationX][components[i]->gridLocationY].verticalAxis),
+								data.grid[components[i]->gridLocationX][components[i]->gridLocationY].horizontalAxisPolarity * sf::Joystick::getAxisPosition(data.grid[components[i]->gridLocationX][components[i]->gridLocationY].directionalJoystickId, data.grid[components[i]->gridLocationX][components[i]->gridLocationY].horizontalAxis));
 							
 							if (joystickDirection < 0)
 								joystickDirection = 2 * PI + joystickDirection;
@@ -237,7 +239,7 @@ bool Player::update()
 					}
 					else
 					{//Use manual turret rotation (press button)
-						if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left], mGame->mEvent) && components[i]->mouseAim == false)
+						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_left], mGame->mEvent) && components[i]->mouseAim == false)
 						{//Rotate turret i CCW
 							//if (turretMaxAngle > turretMinAngle)
 							//{
@@ -252,7 +254,7 @@ bool Player::update()
 							//		components[i]->angle += components[i]->turningSpeed;
 							//}
 						}
-						if (testInput(data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right], mGame->mEvent) && components[i]->mouseAim == false)
+						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_right], mGame->mEvent) && components[i]->mouseAim == false)
 						{//Rotate turret i CW
 							//if (turretMaxAngle > turretMinAngle)
 							//{
@@ -423,8 +425,8 @@ void Player::removeComponent(int cid)
 		//int tX = components[i]->gridLocationX;
 		//int tY = components[i]->gridLocationY;
 		////Delete the component save data
-		//delete data->grid[tX][tY];
-		//data->grid[tX][tY] = new GridData;
+		//delete data.grid[tX][tY];
+		//data.grid[tX][tY] = new GridData;
 		////Delete the actual component
 		//delete components[i];
 		//components.erase(components.begin() + i);
@@ -432,6 +434,22 @@ void Player::removeComponent(int cid)
 }
 
 void Player::loadPlayerData()
+{
+	if (playerName.size() < 2)
+		return;
+	std::cout << "\nLoading player data [" << playerName << ".dat]";
+
+	std::fstream mFile;
+	mFile.open("Settings/PlayerSaves/" + playerName + ".dat", std::ofstream::binary | std::ios::in);
+	if (mFile)
+	{
+		mFile.read((char*)&data, sizeof(PlayerData));
+	}
+
+	dataPtr = &data;
+}
+
+void Player::applyPlayerData()
 {
 	angle = 0;
 	while (!components.empty())
@@ -444,7 +462,7 @@ void Player::loadPlayerData()
 	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
 		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
 		{
-		if (data->grid[ex][ey]->core == true)
+		if (data.grid[ex][ey].core == true)
 			{
 			coreX = ex;
 			coreY = ey;
@@ -466,7 +484,7 @@ void Player::calculateCenterOfMass()
 	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
 		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
 		{
-		if (data->grid[ex][ey]->armor > 0)
+		if (data.grid[ex][ey].armor > 0)
 		{
 			temp_componentCount++;
 			temp_pillarWeight[ex] += 1;
@@ -506,17 +524,17 @@ void Player::calculateCenterOfMass()
 	for (int ex = 0; ex < EDITOR_WIDTH; ex++)
 		for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
 		{
-		if (data->grid[ex][ey]->armor > 0 && temp_firstHorizontal == -1)
+		if (data.grid[ex][ey].armor > 0 && temp_firstHorizontal == -1)
 			temp_firstHorizontal = ex;
-		if (data->grid[ex][ey]->armor > 0)
+		if (data.grid[ex][ey].armor > 0)
 			temp_lastHorizontal = ex;
 		}
 	for (int ey = 0; ey < EDITOR_HEIGHT; ey++)
 		for (int ex = 0; ex < EDITOR_WIDTH; ex++)
 		{
-		if (data->grid[ex][ey]->armor > 0 && temp_firstVertical == -1)
+		if (data.grid[ex][ey].armor > 0 && temp_firstVertical == -1)
 			temp_firstVertical = ey;
-		if (data->grid[ex][ey]->armor > 0)
+		if (data.grid[ex][ey].armor > 0)
 			temp_lastVertical = ey;
 		}
 	shipWidth = temp_lastHorizontal - temp_firstHorizontal + 1;
@@ -535,59 +553,59 @@ void Player::addFromGrid(int gx, int gy)
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("skeleton.png"));
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
 	
-	if (data->grid[gx][gy]->core)
+	if (data.grid[gx][gy].core)
 	{//For the core piece, add the additional sprite
 		components[components.size() - 1]->sprites.push_back(sf::Sprite());
 		components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("core.png"));
 		components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
 	}	
-	else if (data->grid[gx][gy]->turret == 1)
+	else if (data.grid[gx][gy].turret > 0)
 	{//Add turret
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
 		//Set stats
-		components[components.size() - 1]->angleModifier = data->grid[gx][gy]->angleModifier*(PI/180);
+		components[components.size() - 1]->angleModifier = data.grid[gx][gy].angleModifier*(PI/180);
 
 		//Color all the sprites
 		for (unsigned int i = 0; i < components[components.size() - 1]->sprites.size(); i++)
-			components[components.size() - 1]->sprites[i].setColor(sf::Color(data->grid[gx][gy]->red, data->grid[gx][gy]->green, data->grid[gx][gy]->blue));
+			components[components.size() - 1]->sprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
 		for (unsigned int i = 0; i < components[components.size() - 1]->animatedSprites.size(); i++)
-			components[components.size() - 1]->animatedSprites[i].setColor(sf::Color(data->grid[gx][gy]->red, data->grid[gx][gy]->green, data->grid[gx][gy]->blue));
+			components[components.size() - 1]->animatedSprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
 	}
-	else if (data->grid[gx][gy]->engine > 0)
+	else if (data.grid[gx][gy].engine > 0)
 	{//Add an engine
 		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::engine);
 		components[components.size() - 1]->gridLocationX = gx;
 		components[components.size() - 1]->gridLocationY = gy;
 		//Set stats
-		components[components.size() - 1]->angleModifier = data->grid[gx][gy]->angleModifier*(PI / 180);
+		components[components.size() - 1]->angleModifier = data.grid[gx][gy].angleModifier*(PI / 180);
 		components[components.size() - 1]->angle = components[components.size() - 1]->angleModifier + PI;
-		components[components.size() - 1]->rotationDirection = data->grid[gx][gy]->rotationDirection;
-		components[components.size() - 1]->holdToThrust = data->grid[gx][gy]->holdToFire;
+		components[components.size() - 1]->rotationDirection = data.grid[gx][gy].rotationDirection;
+		components[components.size() - 1]->holdToThrust = data.grid[gx][gy].holdToFire;
 	}
 	
 	//Handle children	
 	int selfIndex = components.size() - 1;
-	if (data->grid[gx][gy]->childUp == true)
+	if (data.grid[gx][gy].childUp == true)
 	{
 		int tempIndex = components.size();
 		addFromGrid(gx, gy - 1);
 		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
-	if (data->grid[gx][gy]->childDown == true)
+	if (data.grid[gx][gy].childDown == true)
 	{
 		int tempIndex = components.size();
 		addFromGrid(gx, gy + 1);
 		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
-	if (data->grid[gx][gy]->childRight == true)
+	if (data.grid[gx][gy].childRight == true)
 	{
 		int tempIndex = components.size();
 		addFromGrid(gx + 1, gy);
 		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
-	if (data->grid[gx][gy]->childLeft == true)
+	if (data.grid[gx][gy].childLeft == true)
 	{
 		int tempIndex = components.size();
 		addFromGrid(gx - 1, gy);
@@ -597,10 +615,21 @@ void Player::addFromGrid(int gx, int gy)
 
 void Player::editShip()
 {
-	ShipEditor editor(mWindow, *data);
-	editor.run();
-	loadPlayerData();
-	loadKeybindings();
+	ShipEditor editor(mWindow, data);
+	switch (editor.run())
+	{
+	case 0:
+		//Player exits with return to spehs
+		applyPlayerData();
+		loadKeybindings();
+		break;
+	case 2:
+		//Player wishes to quit to menu
+		mGame->keepRunning = false;
+		break;
+	}
+
+
 
 	xSpeed = 0;
 	ySpeed = 0;
@@ -628,17 +657,16 @@ void Player::notifyComponentDestruction(int id)
 	
 	//Notify parent component
 	if (gx < EDITOR_WIDTH - 1)
-		data->grid[gx + 1][gy]->childLeft = false;
+		data.grid[gx + 1][gy].childLeft = false;
 	if (gx > 0)
-		data->grid[gx - 1][gy]->childRight = false;
+		data.grid[gx - 1][gy].childRight = false;
 	if (gy < EDITOR_HEIGHT - 1)
-		data->grid[gx][gy + 1]->childUp = false;
+		data.grid[gx][gy + 1].childUp = false;
 	if (gy > 0)
-		data->grid[gx][gy - 1]->childDown = false;
+		data.grid[gx][gy - 1].childDown = false;
 
 	//Remove actual data
-	delete data->grid[gx][gy];
-	data->grid[gx][gy] = new GridData();
+	data.grid[gx][gy] = GridData();
 
 	calculateCenterOfMass();
 	reloadSkeletonSprites();
@@ -647,7 +675,10 @@ void Player::notifyComponentDestruction(int id)
 void Player::loadKeybindings()
 {
 	//Erase previous component bindings
-	data->componentKeys.erase(data->componentKeys.begin(), data->componentKeys.end());
+	for (int x = 0; x < EDITOR_WIDTH; x++)
+		for (int y = 0; y < EDITOR_HEIGHT; y++)
+			for (int k = 0; k < 7; k++)
+				data.keyGrid[x][y][k] = MyKeys();
 
 	//Dynamic key binding per component
 	for (unsigned int i = 0; i < components.size(); i++)
@@ -655,16 +686,16 @@ void Player::loadKeybindings()
 		{
 		if (components[i]->types[k] == component::turret)
 		{
-			components[i]->mouseAim = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAim;
-			components[i]->mouseAimRelativeToCenter = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->mouseAimRelativeToCenter;
-			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_left] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretLeft;
-			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_right] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretRight;
-			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_fire] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretFire;
-			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_reload] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->turretReload;
+			components[i]->mouseAim = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].mouseAim;
+			components[i]->mouseAimRelativeToCenter = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].mouseAimRelativeToCenter;
+			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_left] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].turretLeft;
+			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_right] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].turretRight;
+			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_fire] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].turretFire;
+			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_reload] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].turretReload;
 		}
 		if (components[i]->types[k] == component::engine)
 		{
-			data->componentKeys[components[i]->gridLocationX + components[i]->gridLocationY*0.001 + KEYB_thrust] = data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->engineThrust;
+			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].engineThrust;
 		}
 		}
 }
@@ -679,18 +710,18 @@ void Player::reloadSkeletonSprites()
 	{
 		temp_state = 0;
 		
-		data->grid[components[i]->gridLocationX][components[i]->gridLocationY];
+		data.grid[components[i]->gridLocationX][components[i]->gridLocationY];
 		if (components[i]->gridLocationY > 0)
-			if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY - 1]->armor > 0)
+			if (data.grid[components[i]->gridLocationX][components[i]->gridLocationY - 1].armor > 0)
 				temp_state += 8;
 		if (components[i]->gridLocationY < EDITOR_HEIGHT - 1)
-			if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY + 1]->armor > 0)
+			if (data.grid[components[i]->gridLocationX][components[i]->gridLocationY + 1].armor > 0)
 				temp_state += 4;
 		if (components[i]->gridLocationX > 0)
-			if (data->grid[components[i]->gridLocationX - 1][components[i]->gridLocationY ]->armor > 0)
+			if (data.grid[components[i]->gridLocationX - 1][components[i]->gridLocationY ].armor > 0)
 				temp_state += 2;
 		if (components[i]->gridLocationX < EDITOR_WIDTH - 1)
-			if (data->grid[components[i]->gridLocationX + 1][components[i]->gridLocationY]->armor > 0)
+			if (data.grid[components[i]->gridLocationX + 1][components[i]->gridLocationY].armor > 0)
 				temp_state += 1;
 		
 		//Assuming that sprites[0] is the skeleton sprite...
@@ -742,7 +773,7 @@ void Player::reloadSkeletonSprites()
 			components[i]->sprites[0].setTextureRect(sf::IntRect(1400, 0, 100, 100));
 			break;
 		case 0://scs_none:
-			if (data->grid[components[i]->gridLocationX][components[i]->gridLocationY]->childUp == false)
+			if (data.grid[components[i]->gridLocationX][components[i]->gridLocationY].childUp == false)
 			components[i]->sprites[0].setTextureRect(sf::IntRect(1500, 0, 100, 100));
 			break;
 		}
