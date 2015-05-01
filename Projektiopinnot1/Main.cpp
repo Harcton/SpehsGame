@@ -8,8 +8,8 @@
 #include "GridData.h"
 #include "ResourceManager.h"
 
-int WINDOW_WIDTH = 1280;
-int WINDOW_HEIGHT = 720;
+int WINDOW_WIDTH = 1600;
+int WINDOW_HEIGHT = 900;
 double resFactor = WINDOW_HEIGHT/1080.0;
 double zoomFactor = 1;
 std::string playerName = "";

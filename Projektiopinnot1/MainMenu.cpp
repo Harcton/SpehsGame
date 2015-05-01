@@ -34,11 +34,7 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 
 
 	//Intro music
-<<<<<<< HEAD
 	//introMusic.openFromFile("Audio/Music/giantFollis.wav");
-=======
-	introMusic.openFromFile("Audio/Music/giantFollis.wav");
->>>>>>> origin/master
 	//introMusic.play();
 
 

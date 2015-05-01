@@ -83,7 +83,6 @@ void Flier::AIupdate()//change behaviour when not fighting
 	{
 		this->initiateAssault = true;
 	}
-	std::cout << initiateAssault << std::endl;
 
 	if (repositioning)
 	{

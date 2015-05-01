@@ -20,6 +20,7 @@ public:
 	std::vector<Object*> objects;
 	void updateBackgrounds();
 	void updateObjects();
+	void demo();
 	sf::Event mEvent;
 
 	sf::RenderWindow& mWindow;

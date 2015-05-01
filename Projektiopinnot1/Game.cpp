@@ -148,19 +148,35 @@ void Game::updateObjects()
 	//		++obIt;
 
 	
-	if (objects.size() < 2)
+	//THE DEMO VERSION = 0
+	//UNIT TESTING = 1
+	////////////////////////////////////
+	bool tempDevelopmentSelection = 1;//
+	////////////////////////////////////
+	if (tempDevelopmentSelection)
 	{
-		objects.push_back(new Seeker(mWindow, this, 1)); //spawn different enemy types
-		objects[objects.size() - 1]->setRandomLocation();
+		if (objects.size() < 2)
+		{
+			objects.push_back(new Seeker(mWindow, this, 1)); //spawn different enemy types
+			objects[objects.size() - 1]->setRandomLocation();
+		}
 	}
+	else
+		demo();
 	
 
 
-	//TEST GAME 17.4
-	/*distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
-	if (objects.size() < distanceFromStart/1300)
+	for (unsigned int i = 0; i < objects.size(); i++)
+		objects[i]->draw();
+}
+
+
+void Game::demo()
+{
+	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
+	if (objects.size() < distanceFromStart / 1300)
 	{
-		if (distanceFromStart/1000 > 8)
+		if (distanceFromStart / 1000 > 8)
 			spawnRandomization = irandom(1, 4);
 		else
 			spawnRandomization = irandom(1, 3);
@@ -185,10 +201,5 @@ void Game::updateObjects()
 			objects.push_back(new Commander(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
 		}
-	}*/
-	//
-
-
-	for (unsigned int i = 0; i < objects.size(); i++)
-		objects[i]->draw();
+	}
 }

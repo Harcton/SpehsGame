@@ -20,7 +20,7 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	maxSpeedLimit = 6;
 	accelerationConstant = 0.25;
 	turnAccelerationConstant = 0.003;
-	closeAngle = 0.01;
+	closeAngle = 0.5;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());
@@ -76,7 +76,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 		{
 			if (distance < this->textureRadius + nearestComponent->textureRadius && explosionLimiter == false) //Contact
 				{
-					explosion(50, 2);
+					explosion(50, 1.5);
 					this->hp = 0;
 					explosionLimiter = true;
 				}
@@ -95,13 +95,13 @@ void Seeker::AIupdate()//maybe not follow true all the time
 				dodging = true;
 			}
 		}
-		components[components.size() - 1]->animatedSprites[0].setVisibility(true);
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
 		follow = true;
 		xSpeed += cos(2 * PI - angle)*accelerationConstant;
 		ySpeed += sin(2 * PI - angle)*accelerationConstant;
+		components[components.size() - 1]->animatedSprites[0].setVisibility(true);
 	}
 	else //Passive state
 	{
