@@ -60,9 +60,21 @@ bool flipCoin();
 bool rollDie(unsigned int sides);
 float limitZoom();
 std::string getBoolAsString(bool b);
+//File handling
+void extractNamesFromString(std::string&, std::vector<std::string>&);
+void writeVectorIntoFile(std::vector<std::string>&, std::string);
+char getUserInput(sf::Event& eventRef);
 
-
-
+template <typename T>
+T limitWithin(T min, T value, T max)
+{
+	if (value < min)
+		return min;
+	else if (value > max)
+		return max;
+	else
+		return value;
+}
 
 
 

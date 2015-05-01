@@ -67,7 +67,6 @@ public:
 
 	void drawConfigurations();
 
-	char getUserInput(sf::Event&);
 	void adjustColor();
 	void updateTurretColorPreview();
 
@@ -76,10 +75,9 @@ public:
 	void closeEngineConfigurations();
 
 	//Control schemes
-	void extractNamesFromString(std::string&, std::vector<std::string>&);
 	void setSelectionJoystickIndex(int);
+	//void extractNamesFromString(std::string&, std::vector<std::string>&);
 	void deleteControlScheme(std::string, std::string);
-	void writeControlSchemes(std::string, std::vector<std::string>&);
 	//Turret
 	void saveTurretControlScheme();
 	void loadTurretControlScheme();

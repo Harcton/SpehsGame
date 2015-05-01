@@ -16,9 +16,10 @@ Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::st
 	red = color.r;
 	green = color.g;
 	blue = color.b;
-	buttonRectangle.setFillColor(sf::Color(red, green, blue));
+	opacity = color.a;
+	buttonRectangle.setFillColor(sf::Color(red, green, blue, opacity));
 	buttonRectangle.setSize(sf::Vector2f(wth, hht));
-	buttonRectangle.setOutlineColor(sf::Color(sf::Color::Black));
+	//buttonRectangle.setOutlineColor(sf::Color(sf::Color::Black));
 	setPosition(x_pos, y_pos);
 }
 Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float scale, sf::Font& fnt) : font(fnt)
@@ -29,8 +30,6 @@ Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float s
 	//spr.setTextureRect(sf::IntRect(0, 0, 25, 25));
 	spr.setPosition(x_pos, y_pos);
 	spr.setScale(scale*resFactor, scale*resFactor);
-
-
 }
 
 bool Button::mouseOverlap(sf::Vector2i& mousePos)
@@ -84,8 +83,8 @@ void Button::draw(sf::RenderWindow& window, sf::Vector2i& mousePos)
 	//Set color
 	if (type == bt_text)
 	{
-		if (selected == true && shadow < 36)
-			shadow += 2;
+		if (selected == true && shadow > -20)
+			shadow -= 2;
 		else if (mouseOverlap(mousePos) && id != bi_false)
 		{
 			if (shadow < 20)
@@ -95,8 +94,10 @@ void Button::draw(sf::RenderWindow& window, sf::Vector2i& mousePos)
 		}
 		else if (shadow > 0)
 			shadow -= 2;
-
-		buttonRectangle.setFillColor(sf::Color(red - shadow, green - shadow, blue - shadow));
+		else if (shadow < 0)
+			shadow += 2;
+		
+		buttonRectangle.setFillColor(sf::Color(limitWithin(20, red - shadow, 255), limitWithin(20, green - shadow, 255), limitWithin(20, blue - shadow, 255), opacity));
 
 		window.draw(buttonRectangle);
 		window.draw(text);
@@ -116,8 +117,8 @@ void Button::setTextAlign(TextAlign ta)
 {
 	textAlign = ta;
 
-	float temp_textX = text.getPosition().x;
-	float temp_textY = text.getPosition().y;
+	float temp_textX = buttonRectangle.getPosition().x;
+	float temp_textY = buttonRectangle.getPosition().y; 
 	float temp_buttonWidth = buttonRectangle.getLocalBounds().width;
 	float temp_textWidth = text.getLocalBounds().width;
 	switch (textAlign)

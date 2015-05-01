@@ -40,6 +40,8 @@ enum ButtonId
 	bi_mmLoadGame,
 	bi_mmSettings,
 	bi_mmQuit,
+	bi_mmLoadSave,
+	bi_mmSaveListElement,
 
 
 
@@ -128,6 +130,7 @@ font reference... (not in use)
 	Button(ButtonId, float, float, int, int, std::string, int, sf::Font&, sf::Color, sf::Color);
 	Button(ButtonId, float, float, sf::Texture&, float, sf::Font&);
 	friend class ShipEditor;
+	friend class MainMenu;
 
 	bool mouseOverlap(sf::Vector2i& mousePos);
 	ButtonId checkIfPressed(sf::Vector2i& mousePos);
@@ -151,6 +154,7 @@ private:
 	int red;
 	int green;
 	int blue;
+	int opacity;
 
 };
 

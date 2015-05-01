@@ -2108,53 +2108,8 @@ void ShipEditor::updateCoreConfigurationButtonVisibility()
 	}
 }
 
-void ShipEditor::extractNamesFromString(std::string& string, std::vector<std::string>& vector)
-{
-	if (string.size() > 0)
-	{
-		int temp_scheme_index = 0;
-		vector.push_back("");
-		for (unsigned int i = 0; i < string.size(); i++)
-		{
-			if (string[i] != '#')
-				vector[temp_scheme_index] += string[i];
-			else if (i < string.size() - 1)
-			{
-				vector.push_back("");
-				temp_scheme_index++;
-			}
-		}
-	}
 
 
-	//Remove unwanted names
-	for (unsigned int i = 0; i < vector.size(); i++)
-		if (vector[i].size() < 2)
-	{
-		vector.erase(vector.begin() + i);
-		i--;
-	}	
-}
-
-
-//Writes elements from vector seperated by '#' into .txt, path given in the first paramaeter
-void ShipEditor::writeControlSchemes(std::string path, std::vector<std::string>& vector)
-{
-	mFileStream.open(path, std::ios::out);
-	if (!mFileStream.fail())
-	{
-		mFileStream.clear();
-		mFileStream.seekg(0, std::ios::beg);
-		for (unsigned int i = 0; i < vector.size(); i++)
-		{
-			mFileStream << vector[i] << "#";
-		}
-		//Use the null terminator to purge all the unholy lines
-		mFileStream << "###\0";
-	}
-
-	mFileStream.close();
-}
 
 //Deletes using workingFileName, first parameter list.txt, second parameter directory path
 void ShipEditor::deleteControlScheme(std::string listPath, std::string directoryPath)
@@ -2180,7 +2135,7 @@ void ShipEditor::deleteControlScheme(std::string listPath, std::string directory
 		}
 	}
 
-	writeControlSchemes(listPath, temp_schemes);
+	writeVectorIntoFile(temp_schemes, listPath);
 
 	//Remove the scheme's .dat file...
 	char temp_charPtr[100];
@@ -2688,172 +2643,6 @@ void ShipEditor::runSettings()
 
 
 
-char ShipEditor::getUserInput(sf::Event& eventRef)
-{
-	switch (eventRef.key.code)
-	{
-	default:
-		return '#';
-	case sf::Keyboard::Q:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'Q';
-		else
-			return 'q';
-	case sf::Keyboard::W:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'W';
-		else
-			return 'w';
-	case sf::Keyboard::E:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'E';
-		else
-			return 'e';
-	case sf::Keyboard::R:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'R';
-		else
-			return 'r';
-	case sf::Keyboard::T:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'T';
-		else
-			return 't';
-	case sf::Keyboard::Y:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'Y';
-		else
-			return 'y';
-	case sf::Keyboard::U:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'U';
-		else
-			return 'u';
-	case sf::Keyboard::I:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'I';
-		else
-			return 'i';
-	case sf::Keyboard::O:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'O';
-		else
-			return 'o';
-	case sf::Keyboard::P:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'P';
-		else
-			return 'p';
-	case sf::Keyboard::A:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'A';
-		else
-			return 'a';
-	case sf::Keyboard::S:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'S';
-		else
-			return 's';
-	case sf::Keyboard::D:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'D';
-		else
-			return 'd';
-	case sf::Keyboard::F:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'F';
-		else
-			return 'f';
-	case sf::Keyboard::G:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'G';
-		else
-			return 'g';
-	case sf::Keyboard::H:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'H';
-		else
-			return 'h';
-	case sf::Keyboard::J:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'J';
-		else
-			return 'j';
-	case sf::Keyboard::K:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'K';
-		else
-			return 'k';
-	case sf::Keyboard::L:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'L';
-		else
-			return 'l';
-	case sf::Keyboard::Z:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'Z';
-		else
-			return 'z';
-	case sf::Keyboard::X:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'X';
-		else
-			return 'x';
-	case sf::Keyboard::C:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'C';
-		else
-			return 'c';
-	case sf::Keyboard::V:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'V';
-		else
-			return 'v';
-	case sf::Keyboard::B:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'B';
-		else
-			return 'b';
-	case sf::Keyboard::N:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'N';
-		else
-			return 'n';
-	case sf::Keyboard::M:
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
-			return 'M';
-		else
-			return 'm';
-	case sf::Keyboard::Num1:
-		return '1';
-	case sf::Keyboard::Num2:
-		return '2';
-	case sf::Keyboard::Num3:
-		return '3';
-	case sf::Keyboard::Num4:
-		return '4';
-	case sf::Keyboard::Num5:
-		return '5';
-	case sf::Keyboard::Num6:
-		return '6';
-	case sf::Keyboard::Num7:
-		return '7';
-	case sf::Keyboard::Num8:
-		return '8';
-	case sf::Keyboard::Num9:
-		return '9';
-	case sf::Keyboard::Num0:
-		return '0';
-	case sf::Keyboard::BackSpace:
-		return '-';
-	//case sf::Keyboard::Space:
-	//	return '+';
-	case sf::Keyboard::Return:
-		return '>';
-	case sf::Keyboard::Escape:
-		return '<';
-	}
-}
 
 MyKeys ShipEditor::detectKey(ButtonId targetButton)
 {
@@ -3332,3 +3121,5 @@ std::string ShipEditor::getPolarityAsString(float polarity)
 	else
 		return "polarity error. (polarity == 0 || polarity == N/A)";
 }
+
+
