@@ -10,29 +10,38 @@
 Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
+	state = state_spawned;
 
 	explosionLimiter = false;
 	dodging = false;
 	aggroRange = SPAWN_RANGE;
-	maxActionRange = 600;
-	closeRange = 300;
+	maxActionRange = 700;
+	closeRange = 150;
 	maxTurnSpeedLimit = 0.03;
 	maxSpeedLimit = 6;
 	accelerationConstant = 0.25;
 	turnAccelerationConstant = 0.003;
-	closeAngle = 0.5;
+	closeAngle = 0.01;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("Seeker.png"));
 	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
 
-	components[components.size() - 1]->animatedSprites.push_back(sge::Sprite("seeker_active_animation.png"));
-	components[components.size() - 1]->animatedSprites[0].setVisibility(false);
-	components[components.size() - 1]->animatedSprites[0].setOrigin(50, 50);
-	components[components.size() - 1]->animatedSprites[0].setFrameSize(100, 100);
-	components[components.size() - 1]->animatedSprites[0].setTilesetSize(4, 2);
-	components[components.size() - 1]->animatedSprites[0].setFrameDuration(1);
+	//Initialize Animations
+	components[0]->animatedSprites.push_back(sge::Sprite("seeker_active_animation.png"));
+	components[0]->animatedSprites[components.size() - 1].setVisibility(false);
+	components[0]->animatedSprites[components.size() - 1].setOrigin(50, 50);
+	components[0]->animatedSprites[components.size() - 1].setFrameSize(100, 100);
+	components[0]->animatedSprites[components.size() - 1].setTilesetSize(4, 2);
+	components[0]->animatedSprites[components.size() - 1].setFrameDuration(1);
+
+	components[0]->animatedSprites.push_back(sge::Sprite("seeker_passive_animation.png"));
+	components[0]->animatedSprites[components.size() - 1].setVisibility(false);
+	components[0]->animatedSprites[components.size() - 1].setOrigin(50, 50);
+	components[0]->animatedSprites[components.size() - 1].setFrameSize(100, 100);
+	components[0]->animatedSprites[components.size() - 1].setTilesetSize(4, 2);
+	components[0]->animatedSprites[components.size() - 1].setFrameDuration(1);
 }
 
 
@@ -49,12 +58,14 @@ bool Seeker::update()
 	{
 		dodging = false;
 	}
-
+	activationCounter--;
+	
 	AIupdate();
 	if (components.size() > 0)
 	{
 		HPMemory = components[0]->hp;
 	}	
+	memoryState = state;
 
 	return Enemy::update();
 }
@@ -64,10 +75,22 @@ void Seeker::AIupdate()//maybe not follow true all the time
 {
 	if (dodging)
 	{
-		dodgeMove();
+		state = state_dodging;
+		if (state != memoryState)
+		{
+			//dodging animation
+		}
+
+		dodgeMove(xSpeed, ySpeed);
 	}
 	else if (distance < closeRange) //Close state
 	{
+		state = state_closeRange;
+		if (state != memoryState)
+		{
+			animationHandler(anim_active);
+		}
+
 		follow = true;
 		xSpeed += (cos(2 * PI - angle))*accelerationConstant;
 		ySpeed += (sin(2 * PI - angle))*accelerationConstant;
@@ -76,6 +99,13 @@ void Seeker::AIupdate()//maybe not follow true all the time
 		{
 			if (distance < this->textureRadius + nearestComponent->textureRadius && explosionLimiter == false) //Contact
 				{
+					state = state_contact;
+					if (state != memoryState)
+					{
+						//explosion animation
+						//wait animation before destruction
+					}
+
 					explosion(50, 1.5);
 					this->hp = 0;
 					explosionLimiter = true;
@@ -84,6 +114,12 @@ void Seeker::AIupdate()//maybe not follow true all the time
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
+		state = state_active;
+		if (state != memoryState)
+		{
+			animationHandler(anim_active);
+		}
+
 		follow = true;
 		xSpeed += (cos(2 * PI - angle))*accelerationConstant;
 		ySpeed += (sin(2 * PI - angle))*accelerationConstant;
@@ -93,18 +129,46 @@ void Seeker::AIupdate()//maybe not follow true all the time
 			if (HPMemory > this->components[0]->hp)
 			{
 				dodging = true;
+				dodgeCounter = 50;
 			}
 		}
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		if (activationCounter < 0)
+			state = state_detected;
+		if (state != memoryState)
+		{	
+			animationHandler(anim_active);	
+			if (memoryState == state_passive)
+			{
+				state = state_activated;
+				activationCounter = 40;//change accordingly!
+				//activation animation
+			}		
+		}
+
 		follow = true;
 		xSpeed += cos(2 * PI - angle)*accelerationConstant;
 		ySpeed += sin(2 * PI - angle)*accelerationConstant;
-		components[components.size() - 1]->animatedSprites[0].setVisibility(true);
+		if (components.size() > 0)
+		{
+			if (HPMemory > this->components[0]->hp)
+			{
+				dodging = true;
+				dodgeCounter = 35;
+			}
+		}
 	}
 	else //Passive state
 	{
+		state = state_passive;
+		if (state != memoryState)
+		{
+			animationHandler(anim_passive);
+			//deactivation(dodge) animation?
+		}
+
 		follow = false;
 		xSpeed = xSpeed*0.96;
 		ySpeed = ySpeed*0.96;
@@ -120,67 +184,51 @@ void Seeker::AIupdate()//maybe not follow true all the time
 }
 
 
-void Seeker::dodgeMove()
-{//work very much in progress over here
-	//set speed almost opposite of what it was(sidestep) and start acceleration back as normal
-	if (angle >= 0 && angle < PI / 2) //1st quarter
+void Seeker::dodgeMove(const double tempXSpeed, const double tempYSpeed)
+{
+	follow = false;
+
+	if (xSpeed != -tempXSpeed)
 	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
+		if (tempXSpeed > 0)
+			xSpeed -= accelerationConstant * 2.5*enemyBehaviourLevel;
+		else if (tempXSpeed < 0)
+			xSpeed += accelerationConstant * 2.5*enemyBehaviourLevel;
 	}
-	else if (angle >= PI / 2 && angle < PI) //2nd quarter
+	if (ySpeed != -tempYSpeed)
 	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
+		if (tempYSpeed > 0)
+			ySpeed -= accelerationConstant * 2.5*enemyBehaviourLevel;
+		else if (tempYSpeed < 0)
+			ySpeed += accelerationConstant * 2.5*enemyBehaviourLevel;
 	}
-	else if (angle >= PI && angle < PI*1.5)//3rd quarter
+	turnSpeed += turnAccelerationConstant * enemyBehaviourLevel;
+}
+
+
+void Seeker::animationHandler(AnimationID ID)
+{
+	if (!components.size() > 0)
+		return;
+
+	for (unsigned int i = 0; i < components[0]->animatedSprites.size(); i++)
 	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
+		components[0]->animatedSprites[i].setVisibility(false);
 	}
-	else //4th quarter
+
+	switch (ID)
 	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
+	case anim_active:
+	{
+		components[0]->animatedSprites[0].setVisibility(true);
+		break;
+	}
+	case anim_passive:
+	{
+		components[0]->animatedSprites[1].setVisibility(true);//no workerino??
+		break;
+	}
+	default:
+		break;
 	}
 }

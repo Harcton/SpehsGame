@@ -51,7 +51,7 @@ protected:
 	//AI
 	bool follow;
 	int HPMemory;
-	int enemyBehaviourLevel; //1-10, 1=defensive 10=aggressive
+	int enemyBehaviourLevel; //1: defensive 2: passive 3: aggressive
 	double distance;
 	double playerDirection;
 	Component* nearestComponent;

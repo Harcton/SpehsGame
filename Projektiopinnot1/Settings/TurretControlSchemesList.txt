@@ -1,1 +1,1 @@
-blue#green#red####yellow#center#
+blue#green#red####yellow#center#std#

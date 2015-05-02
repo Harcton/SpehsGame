@@ -21,12 +21,15 @@ public:
 	void updateBackgrounds();
 	void updateObjects();
 	void demo();
+	std::string intToString(int);
 	sf::Event mEvent;
 
 	sf::RenderWindow& mWindow;
 	bool keepRunning = true;
 protected:
 	std::vector<Background*> backgrounds;
+
+	std::vector<sf::Sprite> elements;
 
 	//Iterators
 	std::vector<Object*>::iterator obIt;
@@ -35,6 +38,8 @@ protected:
 	//FOR TEST GAME
 	int distanceFromStart;
 	int spawnRandomization;
+	sf::Font font;
+	sf::Text distanceText;
 };
 
 #endif

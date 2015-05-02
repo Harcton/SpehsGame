@@ -70,6 +70,7 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Enemy/enemy_base.png");
 	rm.loadTexture("Texture/Enemy/Seeker.png");
 	rm.loadTexture("Texture/Enemy/seeker_active_animation.png");
+	rm.loadTexture("Texture/Enemy/seeker_passive_animation.png");
 
 	//MENU
 	rm.loadTexture("Texture/Menu/inheritanceArrow.png");
@@ -91,6 +92,8 @@ void initializeResourceManager(ResourceManager& rm)
 	//MISC
 	rm.loadTexture("Texture/Misc/bullet1.png");
 	rm.loadTexture("Texture/Misc/debris1.png");
+	rm.loadTexture("Texture/Misc/ball.png");
+	rm.loadTexture("Texture/Misc/pointer_arrow.png");
 
 
 

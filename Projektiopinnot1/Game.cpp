@@ -16,9 +16,17 @@
 #include "Commander.h"
 #include "Background.h"
 
+#include <sstream>
+
 
 Game::Game(sf::RenderWindow& w) : mWindow(w)
 {
+	elements.push_back(sf::Sprite());
+	elements[0].setTexture(RM.getTexture("ball.png"));
+	elements[0].setOrigin(10, 10);
+	elements.push_back(sf::Sprite());
+	elements[1].setTexture(RM.getTexture("pointer_arrow.png"));
+	elements[1].setOrigin(10, 10);
 }
 
 
@@ -43,6 +51,7 @@ void Game::run()
 	//Filling objects vector with something
 	objects.push_back(new Player(mWindow, this, 0, 0));
 	playerObj = objects[0];
+
 
 	/*
 	for (unsigned int i = 0; i < 20; i++)
@@ -151,7 +160,7 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 1;//
+	bool tempDevelopmentSelection = 0;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
@@ -174,6 +183,7 @@ void Game::updateObjects()
 void Game::demo()
 {
 	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
+
 	if (objects.size() < distanceFromStart / 1300)
 	{
 		if (distanceFromStart / 1000 > 8)
@@ -202,4 +212,26 @@ void Game::demo()
 			objects[objects.size() - 1]->setRandomLocation();
 		}
 	}
+
+	font.loadFromFile("Font/ORANGEKI.ttf");
+	distanceText.setFont(font);
+	distanceText.setString(intToString(distanceFromStart));
+	distanceText.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25 + 30);
+	elements[0].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
+	elements[1].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25); //playerObj->screenX, playerObj->screenY
+	elements[1].setRotation((((atan(playerObj->y/playerObj->x))/PI)*180));
+
+	for (unsigned int i = 0; i < elements.size(); i++)
+	{
+		mWindow.draw(elements[i]);
+	}
+	mWindow.draw(distanceText);
+}
+
+
+std::string Game::intToString(int a)
+{
+	std::stringstream returnString;
+	returnString << a;
+	return returnString.str();
 }
