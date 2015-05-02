@@ -42,6 +42,10 @@ enum ButtonId
 	bi_mmQuit,
 	bi_mmLoadSave,
 	bi_mmSaveListElement,
+	bi_mmReturn,
+	bi_mmDeleteSave,
+	bi_setMusicSlider,
+	bi_setSoundEffectSlider,
 
 
 
@@ -113,38 +117,38 @@ class Button
 {
 public:
 	~Button();
+	Button(){}
 /*
 The 1st constructor parameters are:
 button id (use bi_true if not using id system)
 x, y
 width, height
-string, string size, font&
+string, string size, font*
 box color, text color
 ----
 The 2nd constructor parameters are:
 button id (use bi_true if not using id system)
 x, y
 texture path, texture scale
-font reference... (not in use)
 */
-	Button(ButtonId, float, float, int, int, std::string, int, sf::Font&, sf::Color, sf::Color);
-	Button(ButtonId, float, float, sf::Texture&, float, sf::Font&);
+	Button(ButtonId, float, float, int, int, std::string, int, sf::Font*, sf::Color, sf::Color);
+	Button(ButtonId, float, float, sf::Texture&, float);
 	friend class ShipEditor;
 	friend class MainMenu;
 
 	bool mouseOverlap(sf::Vector2i& mousePos);
 	ButtonId checkIfPressed(sf::Vector2i& mousePos);
-	void draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos);
+	virtual void draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos);
 	void setPosition(float, float);
 	void setTextAlign(TextAlign);
 
-private:
+protected:
 	ButtonType type;
 	ButtonId id;
 	sf::RectangleShape buttonRectangle;
 	sf::Text text;
 	TextAlign textAlign = ta_left;
-	sf::Font& font;
+	sf::Font* font;
 	sf::Sprite spr;
 	bool visible = true;
 	bool selected = false;

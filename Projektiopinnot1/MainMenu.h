@@ -3,11 +3,13 @@
 #include <fstream>
 
 class Button;
+class SliderButton;
 
 enum MainMenuFocus
 {
 	mmf_base,
 	mmf_load,
+	mmf_settings,
 };
 
 
@@ -53,6 +55,7 @@ private:
 	bool keepRunning = true;
 	sf::Music introMusic;
 	MainMenuFocus focus = mmf_base;
+	int doubleClickTimer = 0;
 
 	//Background
 	sf::Sprite planetSpr;
@@ -65,6 +68,8 @@ private:
 	std::vector<Button> buttons;
 	std::vector<Button> playerSaveButtons;
 	std::vector<Button> loadSaveButtons;
+	std::vector<Button> settingsButtons;
+	std::vector<SliderButton> settingsSliderButtons;
 	//Button* loadSaveButton;
 	//Button* loadSaveBackground;
 
@@ -79,6 +84,7 @@ private:
 	int buttonX1;
 	int buttonY1;
 	int buttonBorder;
+	int settingsButtonY1;
 
 };
 

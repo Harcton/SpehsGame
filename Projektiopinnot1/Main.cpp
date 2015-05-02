@@ -11,6 +11,8 @@
 
 int WINDOW_WIDTH = 1600;
 int WINDOW_HEIGHT = 900;
+extern int MUSIC_VOLUME = 100;
+extern int SFX_VOLUME = 100;
 double resFactor = WINDOW_HEIGHT/1080.0;
 double zoomFactor = 1;
 std::string playerName = "";

@@ -5,11 +5,12 @@
 Button::~Button()
 {
 }
-Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::string str, int txtsize, sf::Font& fnt, sf::Color color, sf::Color textColor) : font(fnt)
+Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::string str, int txtsize, sf::Font* fnt, sf::Color color, sf::Color textColor)
 {//Text button constructor
 	type = bt_text;
 	id = bid;
-	text.setFont(font);
+	font = fnt;
+	text.setFont(*font);
 	text.setCharacterSize(txtsize);
 	text.setString(str);
 	text.setColor(textColor);
@@ -22,7 +23,7 @@ Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::st
 	//buttonRectangle.setOutlineColor(sf::Color(sf::Color::Black));
 	setPosition(x_pos, y_pos);
 }
-Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float scale, sf::Font& fnt) : font(fnt)
+Button::Button(ButtonId bid, float x_pos, float y_pos, sf::Texture& tex, float scale)
 {//Sprite button constructor
 	type = bt_sprite;
 	id = bid;

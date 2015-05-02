@@ -1,5 +1,6 @@
 #include "Main.h"
 #include "Button.h"
+#include "SliderButton.h"
 #include "MainMenu.h"
 #include "Game.h"
 #include "GridData.h"
@@ -18,30 +19,44 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	buttonY1 = int((WINDOW_HEIGHT - button1Height * 4)*0.5f);
 	buttonBorder = button1Height*0.25f;
 	visibleSaveButtonCount = floor((WINDOW_HEIGHT - buttonY1 - button1Height - 2 * buttonBorder) / float(button1Height));
+	settingsButtonY1 = int((WINDOW_HEIGHT - button1Height * 3)*0.5f);
 
 	buttonColorBG = sf::Color(20, 45, 55, 160);
 	buttonColorText = sf::Color(200, 210, 250, 220);
 	
-	buttons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - buttonBorder, button1Width + buttonBorder * 2, button1Height*4 + buttonBorder*2, "", int(50 * resFactor), font1, sf::Color(15, 20, 25, 220), buttonColorText));
-	buttons.push_back(Button(bi_mmNewGame, buttonX1, buttonY1, button1Width, button1Height, "New Game", int(50 * resFactor), font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - buttonBorder, button1Width + buttonBorder * 2, button1Height*4 + buttonBorder*2, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
+	buttons.push_back(Button(bi_mmNewGame, buttonX1, buttonY1, button1Width, button1Height, "New Game", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
-	buttons.push_back(Button(bi_mmLoadGame, buttonX1, buttonY1 + button1Height, button1Width, button1Height, "Load Game", int(50 * resFactor), font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_mmLoadGame, buttonX1, buttonY1 + button1Height, button1Width, button1Height, "Load Game", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
-	buttons.push_back(Button(bi_mmSettings, buttonX1, buttonY1 + button1Height * 2, button1Width, button1Height, "Settings", int(50 * resFactor), font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_mmSettings, buttonX1, buttonY1 + button1Height * 2, button1Width, button1Height, "Settings", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
-	buttons.push_back(Button(bi_mmQuit, buttonX1, buttonY1 + button1Height * 3, button1Width, button1Height, "Quit", int(50 * resFactor), font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_mmQuit, buttonX1, buttonY1 + button1Height * 3, button1Width, button1Height, "Quit", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
 
-	loadSaveButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height, "", int(50 * resFactor), font1, sf::Color(15, 20, 25, 220), buttonColorText));
+	loadSaveButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - 2*button1Height - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
 	loadSaveButtons.back().setTextAlign(ta_center);
-	loadSaveButtons.push_back(Button(bi_mmLoadSave, buttonX1, buttonY1, button1Width, button1Height, "Load save", int(50 * resFactor), font1, buttonColorBG, buttonColorText));
+	loadSaveButtons.push_back(Button(bi_mmReturn, buttonX1, buttonY1 - 2*button1Height, button1Width, button1Height, "Back to main menu", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
 	loadSaveButtons.back().setTextAlign(ta_center);
-	loadSaveButtons.push_back(Button(bi_false, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height*visibleSaveButtonCount, "", int(50 * resFactor), font1, buttonColorBG, buttonColorText));
-	loadSaveButtons.push_back(Button(bi_confScrollUp, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height, "/\\", int(50 * resFactor), font1, sf::Color(10, 45, 55, 140), buttonColorText));
-	loadSaveButtons.push_back(Button(bi_confScrollDown, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + buttonBorder + button1Height*(visibleSaveButtonCount), int(0.5f*button1Height), button1Height, "\\/", int(50 * resFactor), font1, sf::Color(10, 45, 55, 140), buttonColorText));
-	loadSaveButtons.push_back(Button(bi_confScrollBar, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height*2 + buttonBorder, int(button1Height*0.5f), button1Height, "", int(50 * resFactor), font1, sf::Color(40, 100, 150, 140), buttonColorText));
-
+	loadSaveButtons.push_back(Button(bi_mmLoadSave, buttonX1, buttonY1 - button1Height, button1Width, button1Height, "Load save", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	loadSaveButtons.back().setTextAlign(ta_center);
+	loadSaveButtons.push_back(Button(bi_mmDeleteSave, buttonX1, buttonY1, button1Width, button1Height, "Delete save", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	loadSaveButtons.back().setTextAlign(ta_center);
+	loadSaveButtons.push_back(Button(bi_false, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height*visibleSaveButtonCount, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	loadSaveButtons.push_back(Button(bi_confScrollUp, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height, "/\\", int(50 * resFactor), &font1, sf::Color(10, 45, 55, 140), buttonColorText));
+	loadSaveButtons.push_back(Button(bi_confScrollDown, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + buttonBorder + button1Height*(visibleSaveButtonCount), int(0.5f*button1Height), button1Height, "\\/", int(50 * resFactor), &font1, sf::Color(10, 45, 55, 140), buttonColorText));
+	loadSaveButtons.push_back(Button(bi_confScrollBar, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height*2 + buttonBorder, int(button1Height*0.5f), button1Height, "", int(50 * resFactor), &font1, sf::Color(40, 100, 150, 140), buttonColorText));
 	reloadPlayerSaves();
+
+	settingsButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, settingsButtonY1 - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height * 5, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
+	settingsButtons.push_back(Button(bi_mmReturn, buttonX1, settingsButtonY1, button1Width, button1Height, "Back to main menu", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.back().setTextAlign(ta_center);
+	settingsSliderButtons.push_back(SliderButton(bi_setMusicSlider, buttonX1, settingsButtonY1 + button1Height, button1Width, button1Height, "Music", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &MUSIC_VOLUME));
+	settingsSliderButtons.back().setTextAlign(ta_center);
+	settingsSliderButtons.push_back(SliderButton(bi_setSoundEffectSlider, buttonX1, settingsButtonY1 + button1Height*2, button1Width, button1Height, "Sound effects", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &SFX_VOLUME));
+	settingsSliderButtons.back().setTextAlign(ta_center);
+
+	
 
 	//Intro music
 	//introMusic.openFromFile("Audio/Music/giantFollis.wav");
@@ -101,6 +116,7 @@ void MainMenu::run()
 
 void MainMenu::pollEvents()
 {
+	doubleClickTimer++;
 	while (mWindow.pollEvent(mEvent))
 		switch (mEvent.type)
 	{
@@ -132,7 +148,7 @@ void MainMenu::pollEvents()
 				case sf::Keyboard::Escape:
 					if (focus == mmf_base)
 						keepRunning = false;
-					else if (focus == mmf_load)
+					else if (focus == mmf_load || focus == mmf_settings)
 						focus = mmf_base;
 					break;
 				case sf::Keyboard::Return:
@@ -268,6 +284,13 @@ void MainMenu::draw()
 		for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
 			playerSaveButtons[i].draw(mWindow, mousePos);
 	}
+	else if (focus == mmf_settings)
+	{
+		for (unsigned int i = 0; i < settingsButtons.size(); i++)
+			settingsButtons[i].draw(mWindow, mousePos);
+		for (unsigned int i = 0; i < settingsSliderButtons.size(); i++)
+			settingsSliderButtons[i].draw(mWindow, mousePos);
+	}
 
 }
 
@@ -296,6 +319,7 @@ void MainMenu::mouseLeftPressed()
 				}
 				break;
 			case bi_mmSettings:
+				focus = mmf_settings;
 				launchSettings();
 				break;
 			case bi_mmQuit:
@@ -308,6 +332,9 @@ void MainMenu::mouseLeftPressed()
 		for (unsigned int i = 0; i < loadSaveButtons.size(); i++)
 			switch (loadSaveButtons[i].checkIfPressed(mousePos))
 			{
+			case bi_mmReturn:
+				focus = mmf_base;
+				break;
 			case bi_mmLoadSave:
 				std::cout << "trying..";
 				for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
@@ -317,6 +344,11 @@ void MainMenu::mouseLeftPressed()
 					launchGame();
 					break;
 				}
+				break;
+			case bi_mmDeleteSave:
+				for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
+					if (playerSaveButtons[i].selected == true)
+						deleteSave(playerSavesList[i]);
 				break;
 			case bi_confScrollUp:
 				if (scrollState > 0)
@@ -331,17 +363,6 @@ void MainMenu::mouseLeftPressed()
 				mouseGrabYdiff = mousePos.y - loadSaveButtons[i].buttonRectangle.getPosition().y;
 				break;
 			}
-		if (loadSaveButtons[1].checkIfPressed(mousePos) == bi_mmLoadSave)
-		{
-			std::cout << "trying..";
-			for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
-			if (playerSaveButtons[i].selected == true)
-			{
-				playerName = playerSavesList[i];
-				launchGame();
-				break;
-			}
-		}
 
 		//Check save list buttons
 		{
@@ -354,15 +375,51 @@ void MainMenu::mouseLeftPressed()
 						playerSaveButtons[i].selected = true;
 					}
 					else
-						playerSaveButtons[i].selected = false;
+					{
+						if (doubleClickTimer > 20)
+							playerSaveButtons[i].selected = false;
+						else
+						{//Double click == load
+							playerName = playerSavesList[i];
+							launchGame();
+						}
+					}
 			
 		}
 	}
+	else if (focus == mmf_settings)
+	{
+		for (unsigned int i = 0; i < settingsButtons.size(); i++)
+			switch (settingsButtons[i].checkIfPressed(mousePos))
+		{
+			case bi_mmReturn:
+				focus = mmf_base;
+				break;
+		}
+	}
 
+	doubleClickTimer = 0;
 }
 void MainMenu::mouseRightPressed()
 {
-
+	if (focus == mmf_settings)
+	{
+		for (unsigned int i = 0; i < settingsSliderButtons.size(); i++)
+			switch (settingsSliderButtons[i].checkIfPressed(mousePos))
+		{
+			case bi_setSoundEffectSlider:
+			case bi_setMusicSlider:
+				if (settingsSliderButtons[i].sliderState == 0)
+					settingsSliderButtons[i].sliderState = 100;
+				else if (settingsSliderButtons[i].sliderState == 100)
+					settingsSliderButtons[i].sliderState = 0;
+				else if (settingsSliderButtons[i].sliderState < 50)
+					settingsSliderButtons[i].sliderState = 0;
+				else
+					settingsSliderButtons[i].sliderState = 100;
+				break;
+		}
+	}
 }
 
 bool MainMenu::tryCreateSaveFile()
@@ -506,9 +563,9 @@ void MainMenu::reloadPlayerSaves()
 		{
 			std::cout << "\n[" << playerSavesList[i] << "]";
 			if (playerSavesList.size() > visibleSaveButtonCount)
-				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width - int(button1Height*0.5f), button1Height, playerSavesList[i], int(50 * resFactor), font1, sf::Color(50, 90, 100, 180), buttonColorText));
+				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width - int(button1Height*0.5f), button1Height, playerSavesList[i], int(50 * resFactor), &font1, sf::Color(50, 90, 100, 180), buttonColorText));
 			else
-				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width, button1Height, playerSavesList[i], int(50 * resFactor), font1, sf::Color(50, 90, 100, 180), buttonColorText));
+				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width, button1Height, playerSavesList[i], int(50 * resFactor), &font1, sf::Color(50, 90, 100, 180), buttonColorText));
 			playerSaveButtons.back().setTextAlign(ta_center);
 		}
 
@@ -520,9 +577,9 @@ void MainMenu::reloadPlayerSaves()
 	if (playerSavesList.size() > 0)
 	{
 		if (playerSavesList.size() < visibleSaveButtonCount)
-			loadSaveButtons[0].buttonRectangle.setSize(sf::Vector2f(button1Width + 2*buttonBorder, buttonBorder*3 + (1 + playerSavesList.size())*button1Height));
+			loadSaveButtons[0].buttonRectangle.setSize(sf::Vector2f(button1Width + 2*buttonBorder, buttonBorder*3 + (3 + playerSavesList.size())*button1Height));
 		else
-			loadSaveButtons[0].buttonRectangle.setSize(sf::Vector2f(button1Width + 2 * buttonBorder, buttonBorder * 3 + (1 + visibleSaveButtonCount)*button1Height));
+			loadSaveButtons[0].buttonRectangle.setSize(sf::Vector2f(button1Width + 2 * buttonBorder, buttonBorder * 3 + (3 + visibleSaveButtonCount)*button1Height));
 
 
 		for (unsigned int i = 0; i < buttons.size(); i++)
@@ -577,15 +634,6 @@ void MainMenu::dragScrollBar()
 		usingScrollBar = false;
 	else
 	{
-		//int temp_diff = mousePos.y - mouseGrabYdiff;
-		//float temp_state = (temp_diff / float((visibleSaveButtonCount - 3)*button1Height))*(playerSavesList.size() - visibleSaveButtonCount);
-
-		//if (temp_state < 0)
-		//	scrollState = 0;
-		//else if (temp_state > playerSavesList.size() - visibleSaveButtonCount)
-		//	scrollState = playerSavesList.size() - visibleSaveButtonCount;
-		//else
-		//	scrollState = temp_state;
 		int temp_y1 = 0;
 		for (unsigned int i = 0; i < loadSaveButtons.size(); i++)
 			if (loadSaveButtons[i].id == bi_confScrollUp)

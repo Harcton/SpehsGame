@@ -48,6 +48,8 @@
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
+extern int MUSIC_VOLUME;
+extern int SFX_VOLUME;
 extern double resFactor;
 extern double zoomFactor;
 extern std::string playerName;

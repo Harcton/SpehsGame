@@ -96,81 +96,81 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 	//Action buttons
 	font1.loadFromFile("Font/ORANGEKI.ttf");
-	actionButtons.push_back(Button(bi_false, 0, 0, actionButtonWidth, actionButtonHeight, "Component name", int(26 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	actionButtons.push_back(Button(bi_actionUpgradeArmor, 0, 0, actionButtonWidth, actionButtonHeight, "Upgrades...", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionTurret, 0, 0, actionButtonWidth, actionButtonHeight, "Add turret", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionEngine, 0, 0, actionButtonWidth, actionButtonHeight, "Add engine", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionScrap, 0, 0, actionButtonWidth, actionButtonHeight, "Delete", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionRotate, 0, 0, actionButtonWidth, actionButtonHeight, "Rotate", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionSetTurretScheme, 0, 0, actionButtonWidth, actionButtonHeight, "Set control scheme", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionSetCoreScheme, 0, 0, actionButtonWidth, actionButtonHeight, "Set control scheme", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionSetJoystickIndex, 0, 0, actionButtonWidth, actionButtonHeight, "Set joystick index", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
-	actionButtons.push_back(Button(bi_actionConfiguration, 0, 0, actionButtonWidth, actionButtonHeight, "Configure...", int(26 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_false, 0, 0, actionButtonWidth, actionButtonHeight, "Component name", int(26 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	actionButtons.push_back(Button(bi_actionUpgradeArmor, 0, 0, actionButtonWidth, actionButtonHeight, "Upgrades...", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionTurret, 0, 0, actionButtonWidth, actionButtonHeight, "Add turret", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionEngine, 0, 0, actionButtonWidth, actionButtonHeight, "Add engine", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionScrap, 0, 0, actionButtonWidth, actionButtonHeight, "Delete", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionRotate, 0, 0, actionButtonWidth, actionButtonHeight, "Rotate", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionSetTurretScheme, 0, 0, actionButtonWidth, actionButtonHeight, "Set control scheme", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionSetCoreScheme, 0, 0, actionButtonWidth, actionButtonHeight, "Set control scheme", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionSetJoystickIndex, 0, 0, actionButtonWidth, actionButtonHeight, "Set joystick index", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
+	actionButtons.push_back(Button(bi_actionConfiguration, 0, 0, actionButtonWidth, actionButtonHeight, "Configure...", int(26 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(20, 20, 20)));
 	//Joystick index action buttons
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick0, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 0", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick1, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 1", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick2, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 2", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick3, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 3", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick4, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 4", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick5, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 5", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick6, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 6", int(25 * resFactor), font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
-	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick7, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 7", int(25 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick0, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 0", int(25 * resFactor), &font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick1, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 1", int(25 * resFactor), &font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick2, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 2", int(25 * resFactor), &font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick3, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 3", int(25 * resFactor), &font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick4, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 4", int(25 * resFactor), &font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick5, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 5", int(25 * resFactor), &font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick6, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 6", int(25 * resFactor), &font1, sf::Color(95, 95, 100), sf::Color(20, 20, 20)));
+	actionJoystickIndexButtons.push_back(Button(bi_actionSetJoystick7, 0, 0, int(actionButtonWidth*0.5), actionButtonHeight, "Joystick 7", int(25 * resFactor), &font1, sf::Color(100, 100, 105), sf::Color(20, 20, 20)));
 
 
 	//Configuration buttons
-	//configurationButtons.push_back(Button(bi_confExit, WINDOW_WIDTH/resFactor - 150, 75, RM.getTexture("xButton.png"), 2, font1));
+	//configurationButtons.push_back(Button(bi_confExit, WINDOW_WIDTH/resFactor - 150, 75, RM.getTexture("xButton.png"), 2, &font1));
 
 
 	//Core configuration buttons
 	//Main header
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1, coreConfY1, 2*button1Width + button2Width + buttonHeight*3, buttonHeight, " Ship core configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1, coreConfY1, 2*button1Width + button2Width + buttonHeight*3, buttonHeight, " Ship core configurations", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	//Ship controlls background
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 - buttonBorder + buttonHeight, coreConfY1 + buttonHeight * 2 - buttonBorder, button1Width + button2Width + 2 * buttonBorder, buttonHeight * 10 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 - buttonBorder + buttonHeight, coreConfY1 + buttonHeight * 2 - buttonBorder, button1Width + button2Width + 2 * buttonBorder, buttonHeight * 10 + 2 * buttonBorder, " ", int(33 * resFactor), &font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	//Ship controls header
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 2, button1Width + button2Width, buttonHeight, " Ship controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 2, button1Width + button2Width, buttonHeight, " Ship controls", int(33 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	//Directional movement & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Use analog stick movement", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confNodeDirectionalMovement, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 3, button2Width, buttonHeight, " " + getBoolAsString(playerData.directionalMovement), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Use analog stick movement", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confNodeDirectionalMovement, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 3, button2Width, buttonHeight, " " + getBoolAsString(playerData.directionalMovement), int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//VerticalAxis
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Vertical Axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindVerticalMoveAxis, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 4, button2Width, buttonHeight, " Joystick " + std::to_string(playerData.moveJoystickId) + "::" + getAxisAsString(playerData.verticalMoveAxis) + " (" + getPolarityAsString(playerData.verticalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Vertical Axis", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindVerticalMoveAxis, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 4, button2Width, buttonHeight, " Joystick " + std::to_string(playerData.moveJoystickId) + "::" + getAxisAsString(playerData.verticalMoveAxis) + " (" + getPolarityAsString(playerData.verticalMoveAxisPolarity) + ")", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//HorizontalAxis
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 5, button1Width, buttonHeight, " Horizontal Axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindHorizontalMoveAxis, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 5, button2Width, buttonHeight, " Joystick " + std::to_string(playerData.moveJoystickId) + "::" + getAxisAsString(playerData.horizontalMoveAxis) + " (" + getPolarityAsString(playerData.horizontalMoveAxisPolarity) + ")", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 5, button1Width, buttonHeight, " Horizontal Axis", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindHorizontalMoveAxis, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 5, button2Width, buttonHeight, " Joystick " + std::to_string(playerData.moveJoystickId) + "::" + getAxisAsString(playerData.horizontalMoveAxis) + " (" + getPolarityAsString(playerData.horizontalMoveAxisPolarity) + ")", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Turn right & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 6, button1Width, buttonHeight, " Turn right", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 6, button2Width, buttonHeight, getInputAsString(playerData.keyTurnRight), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 6, button1Width, buttonHeight, " Turn right", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnRight, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 6, button2Width, buttonHeight, getInputAsString(playerData.keyTurnRight), int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Turn left & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 7, button1Width, buttonHeight, " Turn left", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 7, button2Width, buttonHeight, getInputAsString(playerData.keyTurnLeft), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 7, button1Width, buttonHeight, " Turn left", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindTurnLeft, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 7, button2Width, buttonHeight, getInputAsString(playerData.keyTurnLeft), int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Acceleration & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 8, button1Width, buttonHeight, " Accelerate", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 8, button2Width, buttonHeight, getInputAsString(playerData.keyAccelerate), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 8, button1Width, buttonHeight, " Accelerate", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindAccelerate, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 8, button2Width, buttonHeight, getInputAsString(playerData.keyAccelerate), int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Reverse & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 9, button1Width, buttonHeight, " Reverse", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindReverse, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.keyReverse), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 9, button1Width, buttonHeight, " Reverse", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindReverse, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.keyReverse), int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Zoom in & bindong key
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 10, button1Width, buttonHeight, " Zoom in", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.keyZoomIn), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 10, button1Width, buttonHeight, " Zoom in", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomIn, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.keyZoomIn), int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Zoom out & binding key
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 11, button1Width, buttonHeight, " Zoom out", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.keyZoomOut), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + buttonHeight, coreConfY1 + buttonHeight * 11, button1Width, buttonHeight, " Zoom out", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confBindZoomOut, coreConfX1 + button1Width + buttonHeight, coreConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.keyZoomOut), int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Control schemes
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2 - buttonBorder, coreConfY1 + buttonHeight * 2 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * (coreConfSchemeY + 3)+2 * buttonBorder, "", int(34 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 2, button1Width, buttonHeight*(coreConfSchemeY + 3), "", int(34 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(34 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confSaveCoreScheme, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Save control scheme...", int(34 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confLoadCoreScheme, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Load control scheme...", int(34 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2 - buttonBorder, coreConfY1 + buttonHeight * 2 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * (coreConfSchemeY + 3)+2 * buttonBorder, "", int(34 * resFactor), &font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 2, button1Width, buttonHeight*(coreConfSchemeY + 3), "", int(34 * resFactor), &font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(34 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confSaveCoreScheme, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Save control scheme...", int(34 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confLoadCoreScheme, coreConfX1 + button1Width + button2Width + buttonHeight * 2, coreConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Load control scheme...", int(34 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	reloadCoreControlSchemeList();
 	//Scrolling
 	coreConfScrollBarY1 = coreConfY1 + buttonHeight * 6; 
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + 2 * buttonHeight, coreConfY1 + buttonHeight * 6, buttonHeight*0.5, buttonHeight * 3, "", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confScrollUp, coreConfX1 + button1Width + button2Width + 2 * buttonHeight, coreConfY1 + buttonHeight * 5, buttonHeight*0.5, buttonHeight, "/\\", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
-	coreConfigurationButtons.push_back(Button(bi_confScrollDown, coreConfX1 + button1Width + button2Width + 2*buttonHeight, turretConfY1 + buttonHeight * 12, buttonHeight*0.5, buttonHeight, "\\/", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
-	coreConfigurationButtons.push_back(Button(bi_confScrollBar, coreConfX1 + button1Width + button2Width + 2*buttonHeight, coreConfScrollBarY1, buttonHeight*0.5, buttonHeight * 2, "", int(33 * resFactor), font1, sf::Color(80, 85, 100), sf::Color(55, 55, 55)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + 2 * buttonHeight, coreConfY1 + buttonHeight * 6, buttonHeight*0.5, buttonHeight * 3, "", int(33 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confScrollUp, coreConfX1 + button1Width + button2Width + 2 * buttonHeight, coreConfY1 + buttonHeight * 5, buttonHeight*0.5, buttonHeight, "/\\", int(33 * resFactor), &font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
+	coreConfigurationButtons.push_back(Button(bi_confScrollDown, coreConfX1 + button1Width + button2Width + 2*buttonHeight, turretConfY1 + buttonHeight * 12, buttonHeight*0.5, buttonHeight, "\\/", int(33 * resFactor), &font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
+	coreConfigurationButtons.push_back(Button(bi_confScrollBar, coreConfX1 + button1Width + button2Width + 2*buttonHeight, coreConfScrollBarY1, buttonHeight*0.5, buttonHeight * 2, "", int(33 * resFactor), &font1, sf::Color(80, 85, 100), sf::Color(55, 55, 55)));
 	//Exit
-	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + 2 * buttonHeight - buttonBorder, coreConfY1 + buttonHeight * 11 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight + 2 * buttonBorder, "", int(33 * resFactor), font1, sf::Color(80, 80, 95), sf::Color(35, 35, 40)));
-	coreConfigurationButtons.push_back(Button(bi_confExit, coreConfX1 + button1Width + button2Width + 2 * buttonHeight, coreConfY1 + buttonHeight * 11, button1Width, buttonHeight, "                   Return", int(44 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_false, coreConfX1 + button1Width + button2Width + 2 * buttonHeight - buttonBorder, coreConfY1 + buttonHeight * 11 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight + 2 * buttonBorder, "", int(33 * resFactor), &font1, sf::Color(80, 80, 95), sf::Color(35, 35, 40)));
+	coreConfigurationButtons.push_back(Button(bi_confExit, coreConfX1 + button1Width + button2Width + 2 * buttonHeight, coreConfY1 + buttonHeight * 11, button1Width, buttonHeight, "                   Return", int(44 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 
 	
 	updateCoreConfigurationButtonVisibility();
@@ -179,124 +179,124 @@ ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), m
 
 	//Turret configuration buttons
 	//Main header
-		turretConfigurationButtons.push_back(Button(bi_false, turretConfX1, turretConfY1, int(2 * button1Width + button2Width + buttonHeight * 3), buttonHeight, " Turret[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, turretConfX1, turretConfY1, int(2 * button1Width + button2Width + buttonHeight * 3), buttonHeight, " Turret[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	//Ship controls background
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1 - buttonBorder, turretConfY1 + buttonHeight * 2 - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 11 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1 - buttonBorder, turretConfY1 + buttonHeight * 2 - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 11 + 2 * buttonBorder, " ", int(33 * resFactor), &font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 	//Turret controls header
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 2, button2X1 + button2Width - button1X1, buttonHeight, " Turret controls", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 2, button2X1 + button2Width - button1X1, buttonHeight, " Turret controls", int(33 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	
 	
 	//Fire
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Fire", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindFire, button2X1, turretConfY1 + buttonHeight * 3, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_fire]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Fire", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindFire, button2X1, turretConfY1 + buttonHeight * 3, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_fire]), int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Enable hold to fire
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Enable hold to fire", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confNodeHoldToFire, button2X1, turretConfY1 + buttonHeight * 4, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Enable hold to fire", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeHoldToFire, button2X1, turretConfY1 + buttonHeight * 4, button2Width, buttonHeight, " N/A", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 	//Reload
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 5, button1Width, buttonHeight, " Reload", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindReload, button2X1, turretConfY1 + buttonHeight * 5, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_reload]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 5, button1Width, buttonHeight, " Reload", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindReload, button2X1, turretConfY1 + buttonHeight * 5, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_reload]), int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	//Mouse aim (1)
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 6, button1Width, buttonHeight, " Enable mouse aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAim, button2X1, turretConfY1 + buttonHeight * 6, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 6, button1Width, buttonHeight, " Enable mouse aim", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAim, button2X1, turretConfY1 + buttonHeight * 6, button2Width, buttonHeight, " N/A", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 		//Mouse aim relative to center & node
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 7, button1Width, buttonHeight, " Enable mouse aim relative to center", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAimRelative, button2X1, turretConfY1 + buttonHeight * 7, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 7, button1Width, buttonHeight, " Enable mouse aim relative to center", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeMouseAimRelative, button2X1, turretConfY1 + buttonHeight * 7, button2Width, buttonHeight, " N/A", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	
 		//Directional aim & node (2)
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 8, button1Width, buttonHeight, " Enable analog stick aim", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confNodeDirectionalAim, button2X1, turretConfY1 + buttonHeight * 8, button2Width, buttonHeight, " N/A", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 8, button1Width, buttonHeight, " Enable analog stick aim", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confNodeDirectionalAim, button2X1, turretConfY1 + buttonHeight * 8, button2Width, buttonHeight, " N/A", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 			//Vertical axis
-		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 9, button1Width, buttonHeight, " Vertical axis", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-		turretConfigurationButtons.push_back(Button(bi_confBindVerticalAimAxis, button2X1, turretConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_vertical]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 9, button1Width, buttonHeight, " Vertical axis", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+		turretConfigurationButtons.push_back(Button(bi_confBindVerticalAimAxis, button2X1, turretConfY1 + buttonHeight * 9, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_vertical]), int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 			//Horizontal axis
-			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 10, button1Width, buttonHeight, " Horizontal axis", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindHorizontalAimAxis, button2X1, turretConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_horizontal]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 10, button1Width, buttonHeight, " Horizontal axis", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindHorizontalAimAxis, button2X1, turretConfY1 + buttonHeight * 10, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_horizontal]), int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 		//Manual turret movement (3)
 		//Rotate right & binding key
-			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 11, button1Width, buttonHeight, " Rotate right", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, button2X1, turretConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_right]), int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 11, button1Width, buttonHeight, " Rotate right", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretRight, button2X1, turretConfY1 + buttonHeight * 11, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_right]), int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 		//Rotate left & binding key
-			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 12, button1Width, buttonHeight, " Rotate left", int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
-			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, button2X1, turretConfY1 + buttonHeight * 12, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_left]), int(33 * resFactor), font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 12, button1Width, buttonHeight, " Rotate left", int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
+			turretConfigurationButtons.push_back(Button(bi_confBindTurnTurretLeft, button2X1, turretConfY1 + buttonHeight * 12, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_left]), int(33 * resFactor), &font1, sf::Color(105, 105, 110), sf::Color(35, 35, 40)));
 
 
 	//Control schemes background
-	turretConfigurationButtons.push_back(Button(bi_false, button3X1 - buttonBorder, turretConfY1 + buttonHeight * 2 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * 11 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, button1Width, buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, buttonHeight*0.5, buttonHeight * 11, " ", int(33 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button3X1 - buttonBorder, turretConfY1 + buttonHeight * 2 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * 11 + 2 * buttonBorder, " ", int(33 * resFactor), &font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, button1Width, buttonHeight * 11, " ", int(33 * resFactor), &font1, sf::Color(100, 100, 105), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, buttonHeight*0.5, buttonHeight * 11, " ", int(33 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	//Scrolling
 	turretConfScrollBarY1 = turretConfY1 + buttonHeight * 6;
-	turretConfigurationButtons.push_back(Button(bi_confScrollUp, button3X1, turretConfY1 + buttonHeight * 5, buttonHeight*0.5, buttonHeight, "/\\", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
-	turretConfigurationButtons.push_back(Button(bi_confScrollDown, button3X1, turretConfY1 + buttonHeight * 12, buttonHeight*0.5, buttonHeight, "\\/", int(33 * resFactor), font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
-	turretConfigurationButtons.push_back(Button(bi_confScrollBar, button3X1, turretConfScrollBarY1, buttonHeight*0.5, buttonHeight * 2, "", int(33 * resFactor), font1, sf::Color(80, 85, 100), sf::Color(55, 55, 55)));
+	turretConfigurationButtons.push_back(Button(bi_confScrollUp, button3X1, turretConfY1 + buttonHeight * 5, buttonHeight*0.5, buttonHeight, "/\\", int(33 * resFactor), &font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
+	turretConfigurationButtons.push_back(Button(bi_confScrollDown, button3X1, turretConfY1 + buttonHeight * 12, buttonHeight*0.5, buttonHeight, "\\/", int(33 * resFactor), &font1, sf::Color(150, 150, 160), sf::Color(55, 55, 55)));
+	turretConfigurationButtons.push_back(Button(bi_confScrollBar, button3X1, turretConfScrollBarY1, buttonHeight*0.5, buttonHeight * 2, "", int(33 * resFactor), &font1, sf::Color(80, 85, 100), sf::Color(55, 55, 55)));
 	//Control schemes header
-	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 2, button1Width, buttonHeight, " Control schemes", int(33 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	//Save control scheme...
-	turretConfigurationButtons.push_back(Button(bi_confSaveTurretScheme, button3X1, turretConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Save control scheme...", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confLoadTurretScheme, button3X1, turretConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Load control scheme...", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confSaveTurretScheme, button3X1, turretConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Save control scheme...", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confLoadTurretScheme, button3X1, turretConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Load control scheme...", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	reloadTurretControlSchemeList();
 
 	//Quickset joystick
-	turretConfigurationButtons.push_back(Button(bi_false, button3X1 - buttonBorder, turretConfY1 + buttonHeight * 14 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * 2 + 2 * buttonBorder, "", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 14, button1Width, buttonHeight, "  Change joystick index", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 15, button1Width, buttonHeight, "", int(33 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo0, button3X1 + buttonHeight * 0, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  0", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo1, button3X1 + buttonHeight * 1, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  1", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo2, button3X1 + buttonHeight * 2, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  2", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo3, button3X1 + buttonHeight * 3, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  3", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo4, button3X1 + buttonHeight * 4, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  4", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo5, button3X1 + buttonHeight * 5, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  5", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo6, button3X1 + buttonHeight * 6, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  6", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo7, button3X1 + buttonHeight * 7, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  7", int(38 * resFactor), font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button3X1 - buttonBorder, turretConfY1 + buttonHeight * 14 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight * 2 + 2 * buttonBorder, "", int(33 * resFactor), &font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 14, button1Width, buttonHeight, "  Change joystick index", int(33 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button3X1, turretConfY1 + buttonHeight * 15, button1Width, buttonHeight, "", int(33 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo0, button3X1 + buttonHeight * 0, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  0", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo1, button3X1 + buttonHeight * 1, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  1", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo2, button3X1 + buttonHeight * 2, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  2", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo3, button3X1 + buttonHeight * 3, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  3", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo4, button3X1 + buttonHeight * 4, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  4", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo5, button3X1 + buttonHeight * 5, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  5", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo6, button3X1 + buttonHeight * 6, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  6", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confChangeJoystickIndexTo7, button3X1 + buttonHeight * 7, turretConfY1 + buttonHeight * 15, buttonHeight, buttonHeight, "  7", int(38 * resFactor), &font1, sf::Color(110, 110, 115), sf::Color(35, 35, 40)));
 	
 
 	//Color sliders
-	turretConfigurationButtons.push_back(Button(bi_false, button1X1 - buttonBorder, turretConfY1 + buttonHeight * 14 - buttonBorder, button1Width + button2Width + 2 * buttonBorder, buttonHeight * 4 + 2 * buttonBorder, "", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 14, button1Width + button2Width, buttonHeight * 4, "", int(33 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1 - buttonBorder, turretConfY1 + buttonHeight * 14 - buttonBorder, button1Width + button2Width + 2 * buttonBorder, buttonHeight * 4 + 2 * buttonBorder, "", int(33 * resFactor), &font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1, turretConfY1 + buttonHeight * 14, button1Width + button2Width, buttonHeight * 4, "", int(33 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 	//Slider backlines
-	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 14.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), font1, sf::Color(200, 100, 100), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 15.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), font1, sf::Color(100, 200, 100), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 16.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), font1, sf::Color(100, 100, 200), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 14.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), &font1, sf::Color(200, 100, 100), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 15.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), &font1, sf::Color(100, 200, 100), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 16.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), &font1, sf::Color(100, 100, 200), sf::Color(35, 35, 40)));
 	//Sliders
-	turretConfigurationButtons.push_back(Button(bi_confRedSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 14.5), RM.getTexture("slider1.png"), 1, font1));
-	turretConfigurationButtons.push_back(Button(bi_confGreenSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 15.5), RM.getTexture("slider1.png"), 1, font1));
-	turretConfigurationButtons.push_back(Button(bi_confBlueSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 16.5), RM.getTexture("slider1.png"), 1, font1));
+	turretConfigurationButtons.push_back(Button(bi_confRedSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 14.5), RM.getTexture("slider1.png"), 1));
+	turretConfigurationButtons.push_back(Button(bi_confGreenSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 15.5), RM.getTexture("slider1.png"), 1));
+	turretConfigurationButtons.push_back(Button(bi_confBlueSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 16.5), RM.getTexture("slider1.png"), 1));
 	//Preview
-	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + button1Width, turretConfY1 + int(buttonHeight * 14.5), button2Width - int(0.5f*buttonHeight), buttonHeight * 3, " Color adjustment preview", int(33 * resFactor), font1, sf::Color(80, 80, 95), sf::Color(180, 180, 200)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + button1Width, turretConfY1 + int(buttonHeight * 14.5), button2Width - int(0.5f*buttonHeight), buttonHeight * 3, " Color adjustment preview", int(33 * resFactor), &font1, sf::Color(80, 80, 95), sf::Color(180, 180, 200)));
 	colorPreviewTurret.setTexture(RM.getTexture("editorTurret.png"));
 	colorPreviewTurret.setOrigin(50, 0);
 	colorPreviewTurret.setScale(resFactor, resFactor);
 	colorPreviewTurret.setPosition(button1X1 + button1Width + int(0.5f*button2Width), turretConfY1 + buttonHeight * 15);
 
 	//Exit
-	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + button1Width + button2Width + buttonHeight - buttonBorder, turretConfY1 + buttonHeight * 17 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight + 2 * buttonBorder, "", int(33 * resFactor), font1, sf::Color(80, 80, 95), sf::Color(35, 35, 40)));
-	turretConfigurationButtons.push_back(Button(bi_confExit, button1X1 + button1Width + button2Width + buttonHeight, turretConfY1 + buttonHeight * 17, button1Width, buttonHeight, "                   Return", int(44 * resFactor), font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + button1Width + button2Width + buttonHeight - buttonBorder, turretConfY1 + buttonHeight * 17 - buttonBorder, button1Width + 2 * buttonBorder, buttonHeight + 2 * buttonBorder, "", int(33 * resFactor), &font1, sf::Color(80, 80, 95), sf::Color(35, 35, 40)));
+	turretConfigurationButtons.push_back(Button(bi_confExit, button1X1 + button1Width + button2Width + buttonHeight, turretConfY1 + buttonHeight * 17, button1Width, buttonHeight, "                   Return", int(44 * resFactor), &font1, sf::Color(130, 130, 135), sf::Color(35, 35, 40)));
 
 
 	//Engine conf
-	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1, engineConfY1, int(button1Width + button2Width + buttonHeight * 2), buttonHeight, " Engine[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight - buttonBorder, engineConfY1 + 2 * buttonHeight - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 4 + 2 * buttonBorder, " ", int(33 * resFactor), font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1, engineConfY1, int(button1Width + button2Width + buttonHeight * 2), buttonHeight, " Engine[" + std::to_string(selectedX) + "," + std::to_string(selectedY) + "] configurations", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight - buttonBorder, engineConfY1 + 2 * buttonHeight - buttonBorder, button2X1 + button2Width - button1X1 + 2 * buttonBorder, buttonHeight * 4 + 2 * buttonBorder, " ", int(33 * resFactor), &font1, sf::Color(80, 80, 90), sf::Color(35, 35, 40)));
 
-	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + 2 * buttonHeight, button1Width, buttonHeight, " Thrust", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	engineConfigurationButtons.push_back(Button(bi_confBindThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 2 * buttonHeight, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_thrust]), int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + 2 * buttonHeight, button1Width, buttonHeight, " Thrust", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confBindThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 2 * buttonHeight, button2Width, buttonHeight, getInputAsString(playerData.keyGrid[selectedX][selectedY][kgrid_thrust]), int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	
-	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Hold to thrust", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	engineConfigurationButtons.push_back(Button(bi_confNodeHoldToThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 3 * buttonHeight, button2Width, buttonHeight, "", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight * 3, button1Width, buttonHeight, " Hold to thrust", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confNodeHoldToThrust, engineConfX1 + buttonHeight + button1Width, engineConfY1 + 3 * buttonHeight, button2Width, buttonHeight, "", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	
-	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Engine mode", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	engineConfigurationButtons.push_back(Button(bi_confNodeEngineMode, engineConfX1 + buttonHeight + button1Width, engineConfY1 + buttonHeight * 4, button2Width, buttonHeight, "", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_false, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight * 4, button1Width, buttonHeight, " Engine mode", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confNodeEngineMode, engineConfX1 + buttonHeight + button1Width, engineConfY1 + buttonHeight * 4, button2Width, buttonHeight, "", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 
-	engineConfigurationButtons.push_back(Button(bi_confExit, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight*5, button1Width + button2Width, buttonHeight, "                                                            Return", int(34 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	engineConfigurationButtons.push_back(Button(bi_confExit, engineConfX1 + buttonHeight, engineConfY1 + buttonHeight*5, button1Width + button2Width, buttonHeight, "                                                            Return", int(34 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 
 
 	//Base buttons
 	int temp_buttonHeight = buttonHeight*1.5f;
-	escButtons.push_back(Button(bi_false, int((WINDOW_WIDTH - button1Width) / 2.0f) - buttonBorder, int((WINDOW_HEIGHT - 5 * temp_buttonHeight) / 2.0f) - buttonBorder, button1Width + 2 * buttonBorder, temp_buttonHeight*5 + 2 * buttonBorder, "", int(50 * resFactor), font1, sf::Color(70, 70, 90), sf::Color(35, 35, 40)));
-	escButtons.push_back(Button(bi_escReturn, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 5*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Return", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	escButtons.push_back(Button(bi_escUndock, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 3*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Return to Spehs", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	escButtons.push_back(Button(bi_escSave, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 1*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Save game", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	escButtons.push_back(Button(bi_escSettings, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT + 1*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Settings", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
-	escButtons.push_back(Button(bi_escQuit, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT + 3*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Quit to menu", int(50 * resFactor), font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_false, int((WINDOW_WIDTH - button1Width) / 2.0f) - buttonBorder, int((WINDOW_HEIGHT - 5 * temp_buttonHeight) / 2.0f) - buttonBorder, button1Width + 2 * buttonBorder, temp_buttonHeight*5 + 2 * buttonBorder, "", int(50 * resFactor), &font1, sf::Color(70, 70, 90), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escReturn, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 5*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Return", int(50 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escUndock, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 3*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Return to Spehs", int(50 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escSave, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT - 1*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Save game", int(50 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escSettings, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT + 1*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Settings", int(50 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
+	escButtons.push_back(Button(bi_escQuit, int((WINDOW_WIDTH - button1Width) / 2.0f), int((WINDOW_HEIGHT + 3*temp_buttonHeight) / 2.0f), button1Width, temp_buttonHeight*1, "Quit to menu", int(50 * resFactor), &font1, sf::Color(120, 120, 125), sf::Color(35, 35, 40)));
 	for (unsigned int i = 0; i < escButtons.size(); i++)
 		escButtons[i].setTextAlign(ta_center);
 
@@ -1534,7 +1534,7 @@ void ShipEditor::reloadActions()
 					temp_schemeSelectionY -= temp_schemeListHeight;
 				}
 
-				actionTurretSchemeButtons.push_back(Button(bi_actionTurretScheme, mousePos.x + (actionButtonWidth * (temp_turretSchemeSelectionX + 1)), mousePos.y + (i + temp_schemeSelectionY)*actionButtonHeight, actionButtonWidth, actionButtonHeight, " " + temp_schemes[i], int(26 * resFactor), font1,
+				actionTurretSchemeButtons.push_back(Button(bi_actionTurretScheme, mousePos.x + (actionButtonWidth * (temp_turretSchemeSelectionX + 1)), mousePos.y + (i + temp_schemeSelectionY)*actionButtonHeight, actionButtonWidth, actionButtonHeight, " " + temp_schemes[i], int(26 * resFactor), &font1,
 					sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
 					sf::Color(35, 35, 40)));
 				turretControlSchemeNameList.push_back(temp_schemes[i]);
@@ -1634,7 +1634,7 @@ void ShipEditor::reloadActions()
 					temp_schemeSelectionY -= temp_schemeListHeight;
 				}
 
-				actionCoreSchemeButtons.push_back(Button(bi_actionTurretScheme, mousePos.x + (actionButtonWidth * (temp_turretSchemeSelectionX + 1)), mousePos.y + (i + temp_schemeSelectionY)*actionButtonHeight, actionButtonWidth, actionButtonHeight, " " + temp_schemes[i], int(26 * resFactor), font1,
+				actionCoreSchemeButtons.push_back(Button(bi_actionTurretScheme, mousePos.x + (actionButtonWidth * (temp_turretSchemeSelectionX + 1)), mousePos.y + (i + temp_schemeSelectionY)*actionButtonHeight, actionButtonWidth, actionButtonHeight, " " + temp_schemes[i], int(26 * resFactor), &font1,
 					sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
 					sf::Color(35, 35, 40)));
 				coreControlSchemeNameList.push_back(temp_schemes[i]);
@@ -2281,7 +2281,7 @@ void ShipEditor::reloadTurretControlSchemeList()
 	if (temp_schemes.size() > 0)
 		for (unsigned int i = 0; i < temp_schemes.size(); i++)
 		{
-		turretControlSchemeList.push_back(Button(bi_confTurretControlScheme, button3X1 + buttonHeight*0.5, turretConfY1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), font1,
+		turretControlSchemeList.push_back(Button(bi_confTurretControlScheme, button3X1 + buttonHeight*0.5, turretConfY1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), &font1,
 		sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
 		sf::Color(35, 35, 40)));
 		turretControlSchemeNameList.push_back(temp_schemes[i]);
@@ -2427,7 +2427,7 @@ void ShipEditor::reloadCoreControlSchemeList()
 	if (temp_schemes.size() > 0)
 		for (unsigned int i = 0; i < temp_schemes.size(); i++)
 		{
-		coreControlSchemeList.push_back(Button(bi_confCoreControlScheme, coreConfX1 + button1Width + button2Width + 2.5*buttonHeight, coreConfY1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), font1,
+		coreControlSchemeList.push_back(Button(bi_confCoreControlScheme, coreConfX1 + button1Width + button2Width + 2.5*buttonHeight, coreConfY1 + buttonHeight * 5 + buttonHeight*i, button1Width - buttonHeight*0.5, buttonHeight, temp_schemes[i], int(33 * resFactor), &font1,
 			sf::Color(95 + round(i % 2) * 5, 95 + round(i % 2) * 5, 100 + round(i % 2) * 5),
 			sf::Color(35, 35, 40)));
 		coreControlSchemeNameList.push_back(temp_schemes[i]);

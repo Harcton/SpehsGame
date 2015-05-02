@@ -114,6 +114,9 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Source Files\Main Menu</Filter>
     </ClCompile>
+    <ClCompile Include="SliderButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Header Files\Main Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderButton.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
