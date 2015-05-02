@@ -219,7 +219,12 @@ void Game::demo()
 	distanceText.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25 + 30);
 	elements[0].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
 	elements[1].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25); //playerObj->screenX, playerObj->screenY
-	elements[1].setRotation((((atan(playerObj->y/playerObj->x))/PI)*180));
+	double temp_angle = atan2(playerObj->y, playerObj->x);
+	if (temp_angle < 0)
+		temp_angle = abs(temp_angle);
+	else
+		temp_angle = PI * 2 - temp_angle;
+	elements[1].setRotation(180 - (180 / PI)*temp_angle);
 
 	for (unsigned int i = 0; i < elements.size(); i++)
 	{
