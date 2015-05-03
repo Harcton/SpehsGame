@@ -152,14 +152,20 @@ void MainMenu::pollEvents()
 						focus = mmf_base;
 					break;
 				case sf::Keyboard::Return:
-					//DEBUG SHORTCUT!
-					launchGame();
+					if (focus == mmf_load)
+						for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
+							if (playerSaveButtons[i].selected == true)
+						{
+						playerName = playerSavesList[i];
+						launchGame();
+						}
 					break;
 				case sf::Keyboard::Delete:
 					if (focus == mmf_load)
 						for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
 							if (playerSaveButtons[i].selected == true)
 								deleteSave(playerSavesList[i]);
+							
 					break;
 			}
 			else
@@ -274,7 +280,7 @@ void MainMenu::draw()
 		if (playerSavesList.size() < visibleSaveButtonCount)
 		{
 			for (unsigned int i = 0; i < loadSaveButtons.size(); i++)
-				if (loadSaveButtons[i].id == bi_false || loadSaveButtons[i].id == bi_mmLoadSave)
+				if ( i== 0/*bg rect*/ || loadSaveButtons[i].id == bi_mmLoadSave || loadSaveButtons[i].id == bi_mmReturn || loadSaveButtons[i].id == bi_mmDeleteSave)
 					loadSaveButtons[i].draw(mWindow, mousePos);
 		}
 		else
@@ -336,7 +342,6 @@ void MainMenu::mouseLeftPressed()
 				focus = mmf_base;
 				break;
 			case bi_mmLoadSave:
-				std::cout << "trying..";
 				for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
 				if (playerSaveButtons[i].selected == true)
 				{
@@ -349,6 +354,7 @@ void MainMenu::mouseLeftPressed()
 				for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
 					if (playerSaveButtons[i].selected == true)
 						deleteSave(playerSavesList[i]);
+				
 				break;
 			case bi_confScrollUp:
 				if (scrollState > 0)
@@ -521,6 +527,10 @@ void MainMenu::deleteSave(std::string name)
 		std::cout << "\nFailed to open PlayerSavesList.txt";
 	
 	reloadPlayerSaves();
+
+	if (scrollState > playerSaveButtons.size() - visibleSaveButtonCount)
+		scrollState--;
+	scrollSaves(0);
 }
 
 
