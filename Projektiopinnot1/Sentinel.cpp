@@ -17,10 +17,10 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	maxActionRange = 600;
 	closeRange = 350;
 	maxTurnSpeedLimit = 0.05;
-	maxSpeedLimit = 9;
-	accelerationConstant = 0.9;
+	maxSpeedLimit = 6;
+	accelerationConstant = 0.8;
 	turnAccelerationConstant = 0.005;
-	closeAngle = 0.003;
+	closeAngle = 0.002;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components[components.size() - 1]->sprites.push_back(sf::Sprite());

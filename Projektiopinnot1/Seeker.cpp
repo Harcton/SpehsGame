@@ -6,7 +6,6 @@
 #include "Component.h"
 
 
-//Explosion Bugged!
 Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
@@ -18,7 +17,7 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	maxActionRange = 700;
 	closeRange = 150;
 	maxTurnSpeedLimit = 0.03;
-	maxSpeedLimit = 6;
+	maxSpeedLimit = 5;
 	accelerationConstant = 0.25;
 	turnAccelerationConstant = 0.003;
 	closeAngle = 0.01;
