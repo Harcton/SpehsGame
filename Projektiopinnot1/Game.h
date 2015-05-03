@@ -1,7 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 #include "Button.h"
+#include "SliderButton.h"
 
+class SliderButton;
 class Object;
 class Background;
 class Enemy;
@@ -25,6 +27,7 @@ public:
 	void pollEvents();
 	void mouseLeftPressed();
 	void drawEscMenu();
+	void reloadEscMenuButtonStrings();
 
 	Object* playerObj;
 	std::vector<Object*> objects;
@@ -48,6 +51,7 @@ protected:
 	//Esc menu
 	sf::RectangleShape escMenuShade;
 	std::vector<Button> escMenuButtons;
+	std::vector<SliderButton> escMenuSliders;
 
 	//Iterators
 	std::vector<Object*>::iterator obIt;

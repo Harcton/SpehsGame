@@ -37,10 +37,14 @@ void SliderButton::draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos)
 
 	Button::draw(window, mouse_pos);
 	slider.setSize(sf::Vector2f(int(float(sliderWidth)*(sliderState / 100.0f)), slider.getLocalBounds().height));
-	text.setString(originalButtonString + " " + std::to_string(sliderState) + "%");
+	updateString();
 	setTextAlign(textAlign);
 
 	window.draw(slider);
+}
+void SliderButton::updateString()
+{
+	text.setString(originalButtonString + " " + std::to_string(sliderState) + "%");
 }
 
 ButtonId SliderButton::checkIfPressed(sf::Vector2i& mousePos)

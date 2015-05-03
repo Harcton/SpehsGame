@@ -500,7 +500,7 @@ void MainMenu::mouseLeftPressed()
 		//Sliders
 		for (unsigned int i = 0; i < settingsSliderButtons.size(); i++)
 			switch (settingsSliderButtons[i].checkIfPressed(mousePos))
-		{
+		{//The function of these sliders is mostly automated using this function (checkIfPresssd).
 			case bi_setMusicSlider:
 				break;
 			case bi_setSoundEffectSlider:
@@ -646,6 +646,12 @@ void MainMenu::launchGame()
 	textInput = "";
 	receivingTextInput = tit_none;
 	reloadPlayerSaves();
+	for (unsigned int i = 0; i < settingsSliderButtons.size(); i++)
+	{
+		settingsSliderButtons[i].sliderState = *settingsSliderButtons[i].targetVariable;
+		settingsSliderButtons[i].updateString();
+	}
+	
 }
 
 

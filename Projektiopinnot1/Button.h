@@ -55,6 +55,12 @@ enum ButtonId
 	bi_setWindowHeight,
 
 
+	//Ingame settings
+	bi_gsetReturn,
+	bi_gsetMusicVolume,
+	bi_gsetSoundVolume,
+	bi_gsetQuit,
+
 
 	//SHIP EDITOR
 	bi_escReturn,
@@ -141,6 +147,7 @@ texture path, texture scale
 	Button(ButtonId, float, float, sf::Texture&, float);
 	friend class ShipEditor;
 	friend class MainMenu;
+	friend class Game;
 
 	bool mouseOverlap(sf::Vector2i& mousePos);
 	virtual ButtonId checkIfPressed(sf::Vector2i& mousePos);
