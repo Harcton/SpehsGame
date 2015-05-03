@@ -19,6 +19,7 @@ public:
 	void applyPlayerData();
 
 	bool update();
+	void draw();
 	void updateComponents();
 	void checkBulletCollision(Bullet*);
 	void removeComponent(int);

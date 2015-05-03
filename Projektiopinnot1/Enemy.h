@@ -23,6 +23,7 @@ public:
 	Enemy(sf::RenderWindow&, Game*);
 	~Enemy();
 
+	void draw();
 	virtual bool update();
 	virtual void updateComponents();
 	virtual void checkBulletCollision(Bullet*);

@@ -21,7 +21,7 @@ public:
 	virtual void checkBulletCollision(Bullet*);
 	virtual void removeComponent(int){};
 	virtual void notifyComponentDestruction(int){};
-	void draw();
+	virtual void draw();
 	void setRandomLocation();
 	void setLocation(double, double);
 

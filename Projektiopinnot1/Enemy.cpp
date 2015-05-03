@@ -160,10 +160,14 @@ void Enemy::updateComponents()
 
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->update();
+}
+
+void Enemy::draw()
+{
+	Object::draw();
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->draw();
 }
-
 
 void Enemy::notifyComponentDestruction(int cid)
 {

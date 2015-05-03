@@ -318,6 +318,12 @@ bool Player::update()
 	return true;
 }
 
+void Player::draw()
+{
+	for (unsigned int i = 0; i < components.size(); i++)
+		components[i]->draw();
+}
+
 void Player::turnRight(double factor)
 {
 	turnSpeed -= factor*rotationSpeed*(10.0 / (10 + shipMass));
@@ -378,8 +384,6 @@ void Player::updateComponents()
 
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->update();
-	for (unsigned int i = 0; i < components.size(); i++)
-		components[i]->draw();
 }
 
 void Player::checkBulletCollision(Bullet* b)

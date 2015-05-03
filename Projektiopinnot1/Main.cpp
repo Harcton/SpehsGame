@@ -50,7 +50,7 @@ void main()
 	if (FULLSCREEN)
 		mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Fullscreen);
 	else
-		mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game");
+		mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Close);
 
 	mWindow.setFramerateLimit(60);
 	mWindow.setMouseCursorVisible(true);

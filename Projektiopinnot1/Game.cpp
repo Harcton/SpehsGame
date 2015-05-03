@@ -27,6 +27,15 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	elements.push_back(sf::Sprite());
 	elements[1].setTexture(RM.getTexture("pointer_arrow.png"));
 	elements[1].setOrigin(10, 10);
+
+	font.loadFromFile("Font/ORANGEKI.ttf");
+	distanceText.setFont(font);
+	distanceText.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25 + 30);
+	elements[0].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
+	elements[1].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25); //playerObj->screenX, playerObj->screenY
+
+	escMenuShade.setSize(sf::Vector2f(mWindow.getSize().x, mWindow.getSize().y));
+	escMenuShade.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 
@@ -70,36 +79,101 @@ void Game::run()
 
 	while (keepRunning)
 	{
-		//Events
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		//DEBUG
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 			keepRunning = false;
-		while (mWindow.pollEvent(mEvent))
-		{
-			if (mEvent.type == sf::Event::Closed)
-				keepRunning = false;
-		}
-		/////////
 
-
+		pollEvents();
 
 		//DRAWING
 		mWindow.clear(sf::Color(0, 0, 0, 100));
-		updateBackgrounds();
-		updateObjects();
+
+		//If the game "has focus", update and run the game normally
+		if (focus == gf_game)
+		{
+			updateBackgrounds();
+			updateObjects();
+		}
+
 
 		for (unsigned int i = 0; i < objects.size(); i++)
 			if (objects[i]->hasCollisionChecks == true)
 				objects[i]->checkCollisions(i);
 
-		for (unsigned int i = 0; i < objects.size(); i++)
-		{
-			objects[i]->draw();
-		}
 
+		//Draw all graphical entities regardless of game focus
+		//Game objects
+		for (unsigned int i = 0; i < backgrounds.size(); i++)
+			backgrounds[i]->draw();
+		for (unsigned int i = 0; i < objects.size(); i++)
+			objects[i]->draw();
+		//GUI / buttons
+		for (unsigned int i = 0; i < elements.size(); i++)
+			mWindow.draw(elements[i]);
+		mWindow.draw(distanceText);
+		if (focus == gf_escMenu)
+			drawEscMenu();
+		
+
+
+
+		//Display the window
 		mWindow.display();
-		/////////////
+		//////////////////
 
 	}
+}
+
+void Game::pollEvents()
+{
+	while (mWindow.pollEvent(mEvent))
+		switch (mEvent.type)
+	{
+		default:
+			break;
+		case sf::Event::Closed:
+			keepRunning = false;
+			break;
+		case sf::Event::MouseButtonPressed:
+			if (focus == gf_escMenu)
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					mouseLeftPressed();
+			break;
+		case sf::Event::KeyPressed:
+			switch (mEvent.key.code)
+			{
+			case sf::Keyboard::Escape:
+				if (focus == gf_game)
+					focus = gf_escMenu;
+				else if (focus == gf_escMenu)
+				{
+					escMenuShade.setFillColor(sf::Color(0, 0, 0, 0));
+					focus = gf_game;
+				}
+				break;
+
+			}
+			break;
+	}
+}
+
+void Game::drawEscMenu()
+{
+	//update mouse position
+	mousePos = sf::Mouse::getPosition(mWindow);
+
+	//Update & draw shade
+	if (escMenuShade.getFillColor().a < 160)
+		escMenuShade.setFillColor(sf::Color(0, 0, 0, escMenuShade.getFillColor().a + 5));
+	mWindow.draw(escMenuShade);
+
+	//Draw buttons
+	for (unsigned int i = 0; i < escMenuButtons.size(); i++)
+		escMenuButtons[i].draw(mWindow, mousePos);
+}
+void Game::mouseLeftPressed()
+{
+
 }
 
 
@@ -109,22 +183,16 @@ void Game::updateBackgrounds()
 	for (int i = 0; i < backgrounds.size(); i++)
 		if (backgrounds[i]->update() == false)
 		{
-		Object* temp_objPtr = backgrounds[i];
-		backgrounds.erase(backgrounds.begin() + i);
-		delete temp_objPtr;
-
-		i--;
-		//std::cout << "\nGame.cpp: Removing background";
+			Object* temp_objPtr = backgrounds[i];
+			backgrounds.erase(backgrounds.begin() + i);
+			delete temp_objPtr;
+			i--;
 		}
 	if (backgrounds.size() < 7)
 	{
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 		backgrounds[backgrounds.size() - 1]->update();
 	}
-
-	for (unsigned int i = 0; i < backgrounds.size(); i++)
-		backgrounds[i]->draw();
-
 }
 
 
@@ -134,29 +202,17 @@ void Game::updateObjects()
 	for (int i = 0; i < objects.size(); i++)
 		if (objects[i]->update() == false)
 		{
-		Object* temp_objPtr = objects[i];
-		objects.erase(objects.begin() + i);
-		if (temp_objPtr == playerObj)
-			playerObj = nullptr;
-		delete temp_objPtr;
-
-		i--;
-		//std::cout << "\nGame.cpp: Removing object";
+			Object* temp_objPtr = objects[i];
+			objects.erase(objects.begin() + i);
+			if (temp_objPtr == playerObj)
+				playerObj = nullptr;
+			delete temp_objPtr;
+			i--;
 		}
 
-	//for (obIt = objects.begin(); obIt != objects.end();)
-	//	if ((*obIt)->update() == false)
-	//	{
-	//	Object* temp_objPtr = *obIt;
-	//	obIt = objects.erase(obIt);
-	//	delete temp_objPtr;
 
-	//	std::cout << "\nGame.cpp: Removing object";
-	//	}
-	//	else
-	//		++obIt;
 
-	
+
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
@@ -173,10 +229,6 @@ void Game::updateObjects()
 	else
 		demo();
 	
-
-
-	for (unsigned int i = 0; i < objects.size(); i++)
-		objects[i]->draw();
 }
 
 
@@ -213,12 +265,7 @@ void Game::demo()
 		}
 	}
 
-	font.loadFromFile("Font/ORANGEKI.ttf");
-	distanceText.setFont(font);
 	distanceText.setString(intToString(distanceFromStart));
-	distanceText.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25 + 30);
-	elements[0].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
-	elements[1].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25); //playerObj->screenX, playerObj->screenY
 	double temp_angle = atan2(playerObj->y, playerObj->x);
 	if (temp_angle < 0)
 		temp_angle = abs(temp_angle);
@@ -226,11 +273,7 @@ void Game::demo()
 		temp_angle = PI * 2 - temp_angle;
 	elements[1].setRotation(180 - (180 / PI)*temp_angle);
 
-	for (unsigned int i = 0; i < elements.size(); i++)
-	{
-		mWindow.draw(elements[i]);
-	}
-	mWindow.draw(distanceText);
+
 }
 
 
