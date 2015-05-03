@@ -9,10 +9,14 @@
 #include "GridData.h"
 #include "ResourceManager.h"
 
+//DEFAULT SETTINGS FOR NEW USERS
+bool FULLSCREEN = false;
 int WINDOW_WIDTH = 1600;
 int WINDOW_HEIGHT = 900;
 extern int MUSIC_VOLUME = 100;
 extern int SFX_VOLUME = 100;
+
+
 double resFactor = WINDOW_HEIGHT/1080.0;
 double zoomFactor = 1;
 std::string playerName = "";
@@ -33,14 +37,21 @@ void initializeResourceManager(ResourceManager&);
 void main()
 {
 	initializeResourceManager(RM);
-	
+
+	//Load game settings. If no settings file exists, create one
+	if (loadSettings() == false)
+		saveSettings();
 
 	//Randomize randomization...
 	time_t t;
 	srand((unsigned)time(&t));
 
+	sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game" };
+	if (FULLSCREEN)
+		mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Fullscreen);
+	else
+		mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game");
 
-	sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game" }; //, sf::Style::Fullscreen
 	mWindow.setFramerateLimit(60);
 	mWindow.setMouseCursorVisible(true);
 
@@ -208,6 +219,66 @@ std::string getBoolAsString(bool b)
 	else
 		return "False";
 }
+
+void flipBool(bool& b)
+{
+	if (b == true)
+		b = false;
+	else
+		b = true;
+}
+
+bool loadSettings()
+{
+	std::cout << "\nLoading settings...";
+	std::ifstream load("Settings/Settings.txt");
+	if (!load.fail())
+	{
+		std::string temp_str;
+		load >> temp_str;
+		if (temp_str == "fullscreen")
+			FULLSCREEN = true;
+		else
+			FULLSCREEN = false;
+
+		load >> WINDOW_WIDTH;
+		load >> WINDOW_HEIGHT;
+		load >> MUSIC_VOLUME;
+		load >> SFX_VOLUME;
+		load.close();
+		std::cout << " Success";
+		resFactor = WINDOW_HEIGHT / 1080.0;
+		return true;
+	}
+	else
+		std::cout << " Failed to load settings.txt";
+	return false;
+}
+void saveSettings()
+{
+	std::cout << "\nSaving settings...";
+	std::ofstream save("Settings/Settings.txt");
+	if (!save.fail())
+	{
+		if (FULLSCREEN == true)
+			save << "fullscreen" << "\n";
+		else
+			save << "window" << "\n";
+
+		save << WINDOW_WIDTH << "\n";
+		save << WINDOW_HEIGHT << "\n";
+		save << MUSIC_VOLUME << "\n";
+		save << SFX_VOLUME;
+		save.close();
+
+		std::cout << " Success";
+		resFactor = WINDOW_HEIGHT / 1080.0;
+	}
+	else
+		std::cout << " Failed to save settings.txt";
+}
+
+
 
 
 

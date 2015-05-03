@@ -12,6 +12,14 @@ enum MainMenuFocus
 	mmf_settings,
 };
 
+enum TextInputType
+{
+	tit_none,
+	tit_saveName,
+	tit_windowWidth,
+	tit_windowHeight,
+};
+
 
 class MainMenu
 {
@@ -23,14 +31,12 @@ public:
 	void pollEvents();
 	void draw();
 
+	void launchGame();
 	void mouseLeftPressed();
 	void mouseRightPressed();
 	void scrollSaves(int);
 	void dragScrollBar();
-
-	//Actions
-	void launchGame();
-	void launchSettings();
+	void reloadSettingsButtonStrings();
 
 
 	//Filestream
@@ -39,6 +45,7 @@ public:
 	void reloadPlayerSaves();
 	void deleteSave(std::string);
 
+
 private:
 	sf::RenderWindow& mWindow;
 	sf::Event mEvent;
@@ -46,7 +53,7 @@ private:
 
 	//Player saves
 	std::fstream mFileStream;
-	bool receivingTextInput = false;
+	TextInputType receivingTextInput = tit_none;
 	std::string textInput = "";
 	std::vector<std::string> playerSavesList;
 

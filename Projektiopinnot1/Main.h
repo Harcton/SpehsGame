@@ -45,7 +45,7 @@
 #define kgrid_right 5
 #define kgrid_left 6
 
-
+extern bool FULLSCREEN;
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 extern int MUSIC_VOLUME;
@@ -61,11 +61,14 @@ int irandom(int min, int max);
 bool flipCoin();
 bool rollDie(unsigned int sides);
 float limitZoom();
+void flipBool(bool&);
 std::string getBoolAsString(bool b);
 //File handling
 void extractNamesFromString(std::string&, std::vector<std::string>&);
 void writeVectorIntoFile(std::vector<std::string>&, std::string);
 char getUserInput(sf::Event& eventRef);
+bool loadSettings();
+void saveSettings();
 
 template <typename T>
 T limitWithin(T min, T value, T max)
@@ -77,7 +80,6 @@ T limitWithin(T min, T value, T max)
 	else
 		return value;
 }
-
 
 
 

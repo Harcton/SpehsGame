@@ -115,7 +115,7 @@
       <Filter>Source Files\Main Menu</Filter>
     </ClCompile>
     <ClCompile Include="SliderButton.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Spehs Game engine type</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,7 +189,7 @@
       <Filter>Header Files\Main Menu</Filter>
     </ClInclude>
     <ClInclude Include="SliderButton.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Spehs Game engine type</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

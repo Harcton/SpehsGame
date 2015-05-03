@@ -36,17 +36,23 @@ enum ButtonId
 
 
 	//Main menu buttons
+	//Common
+	bi_mmReturn,
+	//Title screen
 	bi_mmNewGame,
 	bi_mmLoadGame,
 	bi_mmSettings,
 	bi_mmQuit,
+	//Load screen
 	bi_mmLoadSave,
 	bi_mmSaveListElement,
-	bi_mmReturn,
 	bi_mmDeleteSave,
+	//Settings screen
 	bi_setMusicSlider,
 	bi_setSoundEffectSlider,
-
+	bi_setFullscreenNode,
+	bi_setWindowWidth,
+	bi_setWindowHeight,
 
 
 
@@ -137,7 +143,7 @@ texture path, texture scale
 	friend class MainMenu;
 
 	bool mouseOverlap(sf::Vector2i& mousePos);
-	ButtonId checkIfPressed(sf::Vector2i& mousePos);
+	virtual ButtonId checkIfPressed(sf::Vector2i& mousePos);
 	virtual void draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos);
 	void setPosition(float, float);
 	void setTextAlign(TextAlign);

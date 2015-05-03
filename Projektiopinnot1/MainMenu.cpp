@@ -48,12 +48,23 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	loadSaveButtons.push_back(Button(bi_confScrollBar, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height*2 + buttonBorder, int(button1Height*0.5f), button1Height, "", int(50 * resFactor), &font1, sf::Color(40, 100, 150, 140), buttonColorText));
 	reloadPlayerSaves();
 
-	settingsButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, settingsButtonY1 - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height * 5, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
+	//SETTINGS buttons
+	settingsButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, settingsButtonY1 - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height * 6, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
 	settingsButtons.push_back(Button(bi_mmReturn, buttonX1, settingsButtonY1, button1Width, button1Height, "Back to main menu", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
 	settingsButtons.back().setTextAlign(ta_center);
-	settingsSliderButtons.push_back(SliderButton(bi_setMusicSlider, buttonX1, settingsButtonY1 + button1Height, button1Width, button1Height, "Music", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &MUSIC_VOLUME));
+	settingsButtons.push_back(Button(bi_setFullscreenNode, buttonX1, settingsButtonY1 + button1Height, button1Width, button1Height, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.back().setTextAlign(ta_center);
+	settingsButtons.push_back(Button(bi_setWindowWidth, buttonX1, settingsButtonY1 + button1Height*2, button1Width, button1Height, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.back().setTextAlign(ta_center);
+	settingsButtons.push_back(Button(bi_setWindowHeight, buttonX1, settingsButtonY1 + button1Height*3, button1Width, button1Height, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.back().setTextAlign(ta_center);
+	reloadSettingsButtonStrings();
+	//Sliders
+	settingsSliderButtons.push_back(SliderButton(bi_setMusicSlider, buttonX1, settingsButtonY1 + button1Height*4, button1Width, button1Height, "Music", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &MUSIC_VOLUME));
+	settingsSliderButtons.back().sliderState = MUSIC_VOLUME;
 	settingsSliderButtons.back().setTextAlign(ta_center);
-	settingsSliderButtons.push_back(SliderButton(bi_setSoundEffectSlider, buttonX1, settingsButtonY1 + button1Height*2, button1Width, button1Height, "Sound effects", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &SFX_VOLUME));
+	settingsSliderButtons.push_back(SliderButton(bi_setSoundEffectSlider, buttonX1, settingsButtonY1 + button1Height*5, button1Width, button1Height, "Sound effects", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &SFX_VOLUME));
+	settingsSliderButtons.back().sliderState = SFX_VOLUME;
 	settingsSliderButtons.back().setTextAlign(ta_center);
 
 	
@@ -140,7 +151,7 @@ void MainMenu::pollEvents()
 				mouseRightPressed();
 			break;
 		case sf::Event::KeyPressed:
-			if (receivingTextInput == false)
+			if (receivingTextInput == tit_none)
 				switch (mEvent.key.code)
 			{
 				default:
@@ -148,8 +159,13 @@ void MainMenu::pollEvents()
 				case sf::Keyboard::Escape:
 					if (focus == mmf_base)
 						keepRunning = false;
-					else if (focus == mmf_load || focus == mmf_settings)
+					else if (focus == mmf_load)
 						focus = mmf_base;
+					else if (focus == mmf_settings)
+					{
+						saveSettings();
+						focus = mmf_base;
+					}
 					break;
 				case sf::Keyboard::Return:
 					if (focus == mmf_load)
@@ -168,7 +184,7 @@ void MainMenu::pollEvents()
 							
 					break;
 			}
-			else
+			else if (receivingTextInput == tit_saveName)
 			{
 				char input = getUserInput(mEvent);
 				switch (input)
@@ -202,8 +218,57 @@ void MainMenu::pollEvents()
 					for (unsigned int i = 0; i < buttons.size(); i++)
 						if (buttons[i].id == bi_mmNewGame)
 							buttons[i].text.setString("New Game");
-					receivingTextInput = false;
+					receivingTextInput = tit_none;
 					textInput = "";
+					break;
+				}
+
+			}
+			else if (receivingTextInput == tit_windowWidth || receivingTextInput == tit_windowHeight)
+			{
+				char input = getUserInput(mEvent);
+				switch (input)
+				{
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+					if (textInput.size() < 4)
+						textInput += input;
+					break;
+				case '-'://Backspace
+				{
+					if (textInput.size() <= 0)
+						break;
+					//Delete last char
+					std::string temp_str;
+					for (unsigned int i = 0; i < textInput.size() - 1; i++)
+						temp_str += textInput[i];
+					textInput = temp_str;
+					break;
+				}
+				case '>'://Enter
+					if (textInput.size() > 1)
+					{
+						if (receivingTextInput == tit_windowWidth)
+							WINDOW_WIDTH = std::stoi(textInput);
+						else//window height
+							WINDOW_HEIGHT = std::stoi(textInput);
+						receivingTextInput = tit_none;
+						textInput = "";
+						reloadSettingsButtonStrings();
+					}
+					break;
+				case '<'://Escape
+					receivingTextInput = tit_none;
+					textInput = "";
+					reloadSettingsButtonStrings();
 					break;
 				}
 
@@ -250,7 +315,7 @@ void MainMenu::draw()
 	{
 		if (buttons[i].id == bi_mmNewGame)
 		{
-			if (receivingTextInput == true)
+			if (receivingTextInput == tit_saveName)
 			{
 				if (textInput == "")
 				{
@@ -292,6 +357,9 @@ void MainMenu::draw()
 	}
 	else if (focus == mmf_settings)
 	{
+		if (receivingTextInput == tit_windowWidth || receivingTextInput == tit_windowHeight)
+			reloadSettingsButtonStrings();
+
 		for (unsigned int i = 0; i < settingsButtons.size(); i++)
 			settingsButtons[i].draw(mWindow, mousePos);
 		for (unsigned int i = 0; i < settingsSliderButtons.size(); i++)
@@ -309,13 +377,13 @@ void MainMenu::mouseLeftPressed()
 			switch (buttons[i].checkIfPressed(mousePos))
 		{
 			case bi_mmNewGame:
-				if (receivingTextInput && textInput.size() > 1)
+				if (receivingTextInput == tit_saveName && textInput.size() > 1)
 				{
 					if (tryCreateSaveFile() == true)
 						launchGame();
 				}
 				else
-					receivingTextInput = true;
+					receivingTextInput = tit_saveName;
 				break;
 			case bi_mmLoadGame:
 				if (playerSavesList.size() > 0)
@@ -326,7 +394,8 @@ void MainMenu::mouseLeftPressed()
 				break;
 			case bi_mmSettings:
 				focus = mmf_settings;
-				launchSettings();
+				textInput = "";
+				reloadSettingsButtonStrings();
 				break;
 			case bi_mmQuit:
 				keepRunning = false;
@@ -395,11 +464,46 @@ void MainMenu::mouseLeftPressed()
 	}
 	else if (focus == mmf_settings)
 	{
+		//Standard buttons
 		for (unsigned int i = 0; i < settingsButtons.size(); i++)
 			switch (settingsButtons[i].checkIfPressed(mousePos))
 		{
 			case bi_mmReturn:
+				saveSettings();
 				focus = mmf_base;
+				break;
+			case bi_setFullscreenNode:
+				flipBool(FULLSCREEN);
+				reloadSettingsButtonStrings();
+				break;
+			case bi_setWindowWidth:
+				if (receivingTextInput != tit_windowWidth)
+					receivingTextInput = tit_windowWidth;
+				else
+				{
+					receivingTextInput = tit_none;
+					WINDOW_WIDTH = std::stoi(textInput);
+					reloadSettingsButtonStrings();
+				}
+				break;
+			case bi_setWindowHeight:
+				if (receivingTextInput != tit_windowHeight)
+					receivingTextInput = tit_windowHeight;
+				else
+				{
+					receivingTextInput = tit_none;
+					WINDOW_HEIGHT = std::stoi(textInput);
+					reloadSettingsButtonStrings();
+				}
+				break;
+		}
+		//Sliders
+		for (unsigned int i = 0; i < settingsSliderButtons.size(); i++)
+			switch (settingsSliderButtons[i].checkIfPressed(mousePos))
+		{
+			case bi_setMusicSlider:
+				break;
+			case bi_setSoundEffectSlider:
 				break;
 		}
 	}
@@ -540,15 +644,10 @@ void MainMenu::launchGame()
 	game.run();
 	focus = mmf_base;
 	textInput = "";
-	receivingTextInput = false;
+	receivingTextInput = tit_none;
 	reloadPlayerSaves();
 }
 
-
-void MainMenu::launchSettings()
-{
-
-}
 
 void MainMenu::reloadPlayerSaves()
 {
@@ -663,3 +762,32 @@ void MainMenu::dragScrollBar()
 		scrollSaves(0);
 	}
 }
+
+void MainMenu::reloadSettingsButtonStrings()
+{
+	for (unsigned int i = 0; i < settingsButtons.size(); i++)
+		switch (settingsButtons[i].id)
+	{
+		case bi_setFullscreenNode:
+			if (FULLSCREEN == true)
+				settingsButtons[i].text.setString("Window mode: Fullscreen");
+			else
+				settingsButtons[i].text.setString("Window mode: Windowed");
+			settingsButtons[i].setTextAlign(ta_center);
+			break;
+		case bi_setWindowWidth:
+			if (receivingTextInput != tit_windowWidth)
+				settingsButtons[i].text.setString("Window width: " + std::to_string(WINDOW_WIDTH));
+			else
+				settingsButtons[i].text.setString("Window width: [ " + textInput + " ]");
+			settingsButtons[i].setTextAlign(ta_center);
+			break;
+		case bi_setWindowHeight:
+			if (receivingTextInput != tit_windowHeight)
+				settingsButtons[i].text.setString("Window height: " + std::to_string(WINDOW_HEIGHT));
+			else
+				settingsButtons[i].text.setString("Window height: [ " + textInput + " ]");
+			settingsButtons[i].setTextAlign(ta_center);
+	}
+}
+

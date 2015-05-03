@@ -22,13 +22,18 @@ SliderButton::SliderButton(ButtonId bid, float x_pos, float y_pos, int wth, int 
 void SliderButton::draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		if (mouseOverlap(mouse_pos) == true)
 	{
-		sliderState = (mouse_pos.x - slider.getPosition().x) / float(sliderWidth)*100;
-		sliderState = limitWithin(0, sliderState, 100);
-		*targetVariable = sliderState;
+		if (mouseOverlap(mouse_pos) == true && hasFocus == true)
+		{
+			sliderState = (mouse_pos.x - slider.getPosition().x) / float(sliderWidth) * 100;
+			sliderState = limitWithin(0, sliderState, 100);
+			*targetVariable = sliderState;
+		}
+		else if (hasFocus == true)
+			hasFocus = false;
 	}
-
+	else
+		hasFocus = false;
 
 	Button::draw(window, mouse_pos);
 	slider.setSize(sf::Vector2f(int(float(sliderWidth)*(sliderState / 100.0f)), slider.getLocalBounds().height));
@@ -36,6 +41,14 @@ void SliderButton::draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos)
 	setTextAlign(textAlign);
 
 	window.draw(slider);
+}
 
-
+ButtonId SliderButton::checkIfPressed(sf::Vector2i& mousePos)
+{
+	ButtonId returnValue = Button::checkIfPressed(mousePos);
+	if (returnValue != bi_false)
+		hasFocus = true;
+	else
+		hasFocus = false;
+	return returnValue;
 }
