@@ -1,9 +1,12 @@
 #ifndef TURRET_H
 #define TURRET_H
-
+//Forward declared dependencies
 class Object;
 class Bullet;
-class Player;
+//Included dependencies
+#include "Component.h"
+
+
 
 class Turret : public Component
 {

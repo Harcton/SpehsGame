@@ -1,12 +1,18 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-
+//Forward declared dependencies
+class Game;
+class Component;
+class Bullet;
+//Included dependencies
+#include <vector>
+#include <SFML/Window/Event.hpp>
+#include <SFML/System/Vector2.hpp>
+#include "Object.h"
+#include "PlayerData.h"
 #include "Sprite.h"
 
 
-
-class Component;
-class PlayerData;
 
 class Player : public Object
 {

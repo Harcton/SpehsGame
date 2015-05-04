@@ -1,10 +1,7 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
-#include "Component.h"
-#include "Turret.h"
-#include "Engine.h"
-
+#include "Turret.h" //includes component.h
+#include "Engine.h" //includes component.h
+#include "Bullet.h" //includes object.h
 
 Component::~Component()
 {

@@ -1,10 +1,8 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
-#include "Enemy.h"
 #include "Sentry.h"
-#include "Component.h"
+#include "Game.h"
 #include "Turret.h"
+
 
 
 Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)

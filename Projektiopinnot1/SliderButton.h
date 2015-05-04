@@ -1,6 +1,7 @@
 #ifndef SLIDERBUTTON_H
 #define SLIDERBUTTON_H
-
+//Included dependencies
+#include "Button.h"
 
 
 class SliderButton : public Button

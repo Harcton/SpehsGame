@@ -1,13 +1,10 @@
+#include <time.h>
+#include <fstream>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include "Main.h"
-#include "Button.h"
 #include "MainMenu.h"
-#include "Game.h"
-#include "Object.h"
-#include "GridData.h"
-#include "PlayerData.h"
-#include "Player.h"
-#include "GridData.h"
-#include "ResourceManager.h"
+
+
 
 //DEFAULT SETTINGS FOR NEW USERS
 bool FULLSCREEN = false;

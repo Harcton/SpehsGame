@@ -1,7 +1,9 @@
 #ifndef FLIER_H
 #define FLIER_H
+//Included dependencies
+#include "Commander.h"
 
-class Commander;
+
 
 class Flier : public Enemy
 {

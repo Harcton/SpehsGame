@@ -1,5 +1,8 @@
 #ifndef PLAYERDATA_H
 #define PLAYERDATA_H
+//Included dependencies
+#include "GridData.h" //includes "MyKeys.h"
+
 
 
 class PlayerData

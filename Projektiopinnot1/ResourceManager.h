@@ -1,9 +1,14 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
+//Included dependencies
+#include <string>
 #include <cassert>
 #include <map>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+#include <functional>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+
+
 
 class ResourceManager
 {

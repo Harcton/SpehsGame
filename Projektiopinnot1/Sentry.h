@@ -1,5 +1,9 @@
 #ifndef SENTRY_H
 #define SENTRY_H
+//Included dependencies
+#include "Enemy.h"
+
+
 
 class Sentry : public Enemy
 {

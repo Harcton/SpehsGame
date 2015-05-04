@@ -1,5 +1,9 @@
 #ifndef COMMANDER_H
 #define COMMANDER_H
+//Included dependencies
+#include "Enemy.h"
+
+
 
 class Commander : public Enemy
 {

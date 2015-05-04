@@ -1,6 +1,12 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
+//Forward declared dependencies
+class Object;
+class Bullet;
+//Included dependencies
 #include "Sprite.h"
+#include <SFML/Graphics/CircleShape.hpp>
+
 
 namespace component
 {
@@ -16,8 +22,6 @@ namespace component
 }
 
 
-class Object;
-class Bullet;
 static int currentId = 0;
 
 

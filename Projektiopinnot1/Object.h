@@ -1,10 +1,16 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-
-
+//Forward declared dependencies
 class Game;
-class Bullet;
+class Component;
 class PlayerData;
+class Bullet;
+//Included dependencies
+#include <math.h>
+#include <vector>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+
 
 class Object
 {

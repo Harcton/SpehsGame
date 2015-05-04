@@ -1,13 +1,6 @@
 #include "Main.h"
+#include "Bullet.h"//for bullet collision checking, also includes object.h
 #include "Game.h"
-
-#include "GridData.h"
-#include "PlayerData.h"
-
-#include "Object.h"
-#include "Bullet.h"
-
-#include <math.h>
 
 Object::~Object()
 {

@@ -1,11 +1,8 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
-#include "Enemy.h"
 #include "Commander.h"
-#include "Flier.h"
-#include "Component.h"
+#include "Game.h"
 #include "Turret.h"
+#include "Flier.h"
 
 
 

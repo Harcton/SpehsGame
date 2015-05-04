@@ -1,9 +1,9 @@
 #ifndef BULLET_H
 #define BULLET_H
+//Included dependencies
+#include "Object.h"
 
 
-class Game;
-class Component;
 
 class Bullet : public Object
 {

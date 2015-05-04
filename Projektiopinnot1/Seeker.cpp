@@ -1,9 +1,7 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
-#include "Enemy.h"
 #include "Seeker.h"
-#include "Component.h"
+#include "Game.h"
+
 
 
 Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)

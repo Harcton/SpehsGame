@@ -1,8 +1,8 @@
 #include "Main.h"
-#include "Object.h"
-#include "Component.h"
 #include "Turret.h"
 #include "Bullet.h"
+
+
 
 Turret::~Turret()
 {//Cannot be called, see player/enemy destructor

@@ -1,10 +1,7 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
-#include "Enemy.h"
 #include "Flier.h"
-#include "Commander.h"
-#include "Component.h"
+#include "Game.h"
+
 
 
 Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel, Commander* master) : Enemy(windowref, game)

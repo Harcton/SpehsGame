@@ -1,9 +1,18 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
+//Forward declared dependencies
+//Included dependencies
 #include <fstream>
+#include <string>
+#include <vector>
+#include <SFML/Window/Event.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Audio/Music.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include "SliderButton.h"//includes "Button.h"
 
-class Button;
-class SliderButton;
+
 
 enum MainMenuFocus
 {

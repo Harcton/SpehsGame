@@ -1,8 +1,8 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
-#include "Component.h"
 #include "Bullet.h"
+#include "Component.h"
+#include "Game.h"
+
 
 
 Bullet::~Bullet()

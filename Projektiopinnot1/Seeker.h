@@ -1,7 +1,10 @@
 #ifndef SEEKER_H
 #define SEEKER_H
+//Included dependencies
+#include "Enemy.h"
 
-class Component;
+
+
 
 enum AnimationID
 {

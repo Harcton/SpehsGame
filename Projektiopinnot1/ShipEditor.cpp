@@ -1,9 +1,6 @@
 #include "Main.h"
-#include "Button.h"
-#include "GridData.h"
-#include "PlayerData.h"
 #include "ShipEditor.h"
-#include <stdio.h>
+#include "PlayerData.h"
 
 
 #define CONF_X1 int(100 * resFactor)

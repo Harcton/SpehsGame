@@ -1,5 +1,9 @@
 #ifndef SENTINEL_H
 #define SENTINEL_H
+//Included dependencies
+#include "Enemy.h"
+
+
 
 class Sentinel : public Enemy
 {

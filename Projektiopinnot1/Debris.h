@@ -1,7 +1,7 @@
 #ifndef DEBRIS_H
 #define DEBRIS_H
-
-class Object;
+//Included dependencies
+#include "Object.h"
 
 class Debris : public Object
 {

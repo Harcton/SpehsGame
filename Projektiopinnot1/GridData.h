@@ -1,7 +1,9 @@
 #ifndef GRIDDATA_H
 #define GRIDDATA_H
+//Included dependencies
+#include "MyKeys.h" //includes <SFML/Window/Joystick.hpp>
 
-struct MyKeys;
+
 
 class GridData
 {

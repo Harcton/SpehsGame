@@ -1,10 +1,8 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
 #include "Enemy.h"
-#include "Component.h"
 #include "Bullet.h"
-#include "Turret.h"
+#include "Game.h"
+
 
 
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game) : Object(windowref, game)

@@ -1,5 +1,7 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
+//Included dependencies
+#include "Object.h"
 
 
 

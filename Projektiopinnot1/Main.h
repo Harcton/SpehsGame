@@ -1,17 +1,22 @@
 #ifndef MAIN_H
 #define MAIN_H
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-
-#include <vector>
+//Included dependencies
 #include <iostream>
-#include <math.h>
-#include <cmath>
-#include <time.h>
-#include <map>
 #include "ResourceManager.h"
+#include "MyKeys.h"
+#include <SFML/Window/Event.hpp>
+
+
+//#include <SFML/System.hpp>
+//#include <SFML/Graphics.hpp>
+//#include <SFML/Window.hpp>
+//#include <SFML/Audio.hpp>
+//
+//#include <vector>
+//#include <math.h>
+//#include <cmath>
+//#include <time.h>
+//#include <map>
 
 
 
@@ -86,40 +91,6 @@ T limitWithin(T min, T value, T max)
 
 
 
-//Global controll settings
-enum InputType
-{
-	keyboardInput,
-	mouseInput,
-	joystickInput
-};
-enum AxisType
-{
-	negativeAxis,
-	noAxis,
-	positiveAxis
-};
-struct MyKeys
-{
-	//Define type, common for all keys
-	InputType inputType;
-
-	//Mouse
-	sf::Mouse::Button mouseButton;
-	AxisType wheelInput = noAxis;
-
-	//Keyboard
-	sf::Keyboard::Key keyCode;
-	
-	//Joystick common
-	AxisType axisType = noAxis;
-	int joystickIndex = 0;
-	//axis sub
-	sf::Joystick::Axis joystickAxis;
-	float threshold = 20;
-	//button sub
-	int joystickButton = 0;
-};
 //extern std::map<float, MyKeys> coreKeys;
 //extern std::map<float, MyKeys> componentKeys;
 extern bool starMap;

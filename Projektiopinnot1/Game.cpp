@@ -1,22 +1,12 @@
 #include "Main.h"
 #include "Game.h"
-#include "Object.h"
-#include "Component.h"
-#include "Turret.h"
-#include "Bullet.h"
-#include "GridData.h"
-#include "PlayerData.h"
 #include "Player.h"
-
-#include "Debris.h"
-#include "Enemy.h"
+#include "Background.h"
 #include "Sentinel.h"
-#include "Sentry.h"
 #include "Seeker.h"
 #include "Commander.h"
-#include "Background.h"
+#include "Sentry.h"
 
-#include <sstream>
 
 
 Game::Game(sf::RenderWindow& w) : mWindow(w)
@@ -258,7 +248,7 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 1;//
+	bool tempDevelopmentSelection = 0;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
@@ -289,21 +279,25 @@ void Game::demo()
 		{
 			objects.push_back(new Sentinel(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->update();
 		}
 		if (spawnRandomization == 2)
 		{
 			objects.push_back(new Seeker(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->update();
 		}
 		if (spawnRandomization == 3)
 		{
 			objects.push_back(new Sentry(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->update();
 		}
 		if (spawnRandomization == 4)
 		{
 			objects.push_back(new Commander(mWindow, this, 1));
 			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->update();
 		}
 	}
 

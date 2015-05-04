@@ -1,14 +1,17 @@
 #ifndef GAME_H
 #define GAME_H
-#include "Button.h"
-#include "SliderButton.h"
-
-class SliderButton;
+//Forward declared dependencies
 class Object;
 class Background;
-class Enemy;
-class Player;
-class Debris;
+//Included dependencies
+#include <vector>
+#include <sstream>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Window/Event.hpp>
+#include "SliderButton.h"
+
+
 
 enum GameFocus
 {

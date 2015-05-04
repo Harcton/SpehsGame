@@ -1,5 +1,11 @@
 #ifndef ENEMY_H
 #define ENEMY_H
+//Forward declared dependencies
+class Game;
+//Included dependencies
+#include "Object.h"
+#include "Component.h"
+
 
 //ENEMY STATES
 //-Passive
@@ -14,8 +20,6 @@
 //-Fled
 //-Contact
 
-class Object;
-class Component;
 
 class Enemy : public Object
 {

@@ -1,6 +1,11 @@
 #ifndef ENGINE_H
 #define ENGINE_H
+//Forward declared dependencies
+class Object;
+//Included dependencies
 #include "Component.h"
+#include <SFML/Graphics/RectangleShape.hpp>
+
 
 class Engine : public Component
 {

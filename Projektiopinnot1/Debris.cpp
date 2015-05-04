@@ -1,6 +1,4 @@
 #include "Main.h"
-#include "Game.h"
-#include "Object.h"
 #include "Debris.h"
 
 Debris::~Debris()

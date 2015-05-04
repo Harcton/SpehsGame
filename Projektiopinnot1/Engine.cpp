@@ -1,11 +1,9 @@
 #include "Main.h"
 #include "Object.h"
-#include "GridData.h"
-#include "PlayerData.h"
-#include "Player.h"
 #include "Engine.h"
 #include "Game.h"
-#include "Sprite.h"
+#include "PlayerData.h"
+
 
 
 Engine::~Engine()

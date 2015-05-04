@@ -1,5 +1,14 @@
 #ifndef SPRITE_H
 #define SPRITE_H
+//Forward declared dependencies
+//Included dependencies
+#include <string>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+
+
 
 namespace sge
 {

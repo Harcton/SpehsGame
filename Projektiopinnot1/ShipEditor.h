@@ -1,6 +1,17 @@
 #ifndef SHIPEDITOR_H
 #define SHIPEDITOR_H
+//Forward declared dependencies
+class PlayerData;
+class Button;
+enum ButtonId;
+//Included dependencies
 #include <fstream>
+#include <stdio.h>//?
+#include <vector>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
+#include "Button.h"
+
 
 namespace editor
 {
@@ -30,8 +41,6 @@ namespace editor
 }
 
 
-class Button;
-enum ButtonId;
 
 class ShipEditor
 {

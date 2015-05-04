@@ -1,10 +1,9 @@
 #include "Main.h"
-#include "Button.h"
-#include "SliderButton.h"
 #include "MainMenu.h"
-#include "Game.h"
-#include "GridData.h"
 #include "PlayerData.h"
+#include "Game.h"
+
+
 
 MainMenu::~MainMenu()
 {

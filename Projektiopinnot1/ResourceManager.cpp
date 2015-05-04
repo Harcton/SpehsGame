@@ -1,6 +1,5 @@
-#include <functional>
+#include "Main.h"
 #include "ResourceManager.h"
-#include <iostream>
 
 ResourceManager::~ResourceManager() {}
 ResourceManager::ResourceManager()
