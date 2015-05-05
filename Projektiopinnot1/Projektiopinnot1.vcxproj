@@ -69,7 +69,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Commander.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -95,7 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Commander.h" />
     <ClInclude Include="Component.h" />

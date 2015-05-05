@@ -4,7 +4,6 @@
 class Game;
 class Component;
 class PlayerData;
-class Bullet;
 //Included dependencies
 #include <math.h>
 #include <vector>
@@ -18,15 +17,18 @@ public:
 	~Object();
 	Object(sf::RenderWindow&, Game*, int, int);
 	Object(sf::RenderWindow&, Game*);
+	Object(Game* game, Object* master, int x, int y, float angle, float speed, int damage);//Bullet constructor
 	Object(const Object& other);
 	Object& operator=(Object);
 	friend class Component;
 	friend class Engine;
 	friend class Enemy;
+	friend class Player;
 
 	virtual bool update();
+	bool isBulletUpdate();
 	void checkCollisions(unsigned int);
-	virtual void checkBulletCollision(Bullet*);
+	virtual void checkBulletCollision(Object*);
 	virtual void removeComponent(int){};
 	virtual void notifyComponentDestruction(int){};
 	virtual void draw();
@@ -83,6 +85,8 @@ protected:
 	double checkCollisionDistance;
 	double checkCollisionRange;
 	int hp = 100;
+	int isBullet = 0; //0 = is not a bullet, 0 != is bullet, value equals damage upon impact
+	Object* master;
 };
 
 #endif

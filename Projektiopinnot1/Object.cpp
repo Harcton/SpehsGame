@@ -1,5 +1,5 @@
 #include "Main.h"
-#include "Bullet.h"//for bullet collision checking, also includes object.h
+#include "Object.h"//for bullet collision checking, also includes object.h
 #include "Game.h"
 
 Object::~Object()
@@ -28,6 +28,18 @@ Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindo
 	centerObj = mGame->playerObj;
 	x = cx;
 	y = cy;
+}
+Object::Object(Game* game, Object* mstr, int mx, int my, float angl, float spd, int dmg) : mWindow(game->mWindow), mGame(game)
+{//Bullet constructor
+	scale = 1;
+	centerObj = game->playerObj;
+	isBullet = dmg;
+	master = mstr;
+	x = mx;
+	y = my;
+	xSpeed = cos(angl)*spd;
+	ySpeed = sin(angl)*spd;
+	spr.setTexture(RM.getTexture("bullet1.png"));
 }
 Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame), centerObj(other.centerObj), dataPtr(other.dataPtr)
 {//Copy constructor
@@ -131,6 +143,13 @@ bool Object::update()
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE || hp <= 0)
 		return false;
 
+	//Bullet update
+	if (isBullet != 0)
+		isBulletUpdate();
+
+
+
+
 	//update opacity
 	if (opacity < 255)
 	{
@@ -231,6 +250,20 @@ bool Object::update()
 	return true;
 }
 
+bool Object::isBulletUpdate()
+{
+	for (unsigned int i = 0; i < mGame->objects.size(); i++)
+		if (mGame->objects[i] != master)
+		{
+		mGame->objects[i]->checkBulletCollision(this);
+		}
+
+	if (getDistance(0, 0, xSpeed, ySpeed) < 0.1)
+		return false;
+	return true;
+}
+
+
 void Object::draw()
 {
 	mWindow.draw(spr);
@@ -271,7 +304,7 @@ void Object::checkCollisions(unsigned int selfIndex)//Does this actually do anyt
 }
 
 
-void Object::checkBulletCollision(Bullet* b)
+void Object::checkBulletCollision(Object* b)
 {
 	b->collisionCheckAngle = -1 * atan2(y - b->y, x - b->x);
 	if (b->collisionCheckAngle < 0)
@@ -283,18 +316,19 @@ void Object::checkBulletCollision(Bullet* b)
 
 	if (b->checkCollisionDistance < b->checkCollisionRange)
 	{
-		if (b->canDamage == true)
+		if (b->isBullet != 0)
 		{
-			hp -= b->damage;
-			b->canDamage = false;
+			hp -= b->isBullet;
+			b->isBullet = 0;
 			x += 6 * cos(angle);
 			y += -6 * sin(angle);
 		}
 
-		b->speed = b->speed*0.75;
+		b->xSpeed = b->xSpeed*0.75;
+		b->ySpeed = b->ySpeed*0.75;
 
 		b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
-		b->xSpeed = cos(2 * PI - b->angle) * b->speed;
-		b->ySpeed = sin(2 * PI - b->angle) * b->speed;
+		b->xSpeed = cos(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
+		b->ySpeed = sin(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
 	}
 }

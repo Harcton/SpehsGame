@@ -33,9 +33,12 @@ public:
 	void mouseLeftPressed();
 	void drawEscMenu();
 	void reloadEscMenuButtonStrings();
+	void updateBullets();
 
 	Object* playerObj;
 	std::vector<Object*> objects;
+	std::vector<Object*> bullets;
+	std::vector<Object*>::iterator bulletIt;
 	void updateBackgrounds();
 	void updateObjects();
 	void demo();

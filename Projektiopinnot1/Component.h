@@ -2,7 +2,6 @@
 #define COMPONENT_H
 //Forward declared dependencies
 class Object;
-class Bullet;
 //Included dependencies
 #include "Sprite.h"
 #include <SFML/Graphics/CircleShape.hpp>
@@ -72,7 +71,6 @@ public:
 	double screenY;
 
 	std::vector<component::Type> types;
-	std::vector<Bullet*> bullets;
 	double angle;
 	double angleModifier = 0;
 	double turningSpeed;

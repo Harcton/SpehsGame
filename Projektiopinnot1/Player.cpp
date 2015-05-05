@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Game.h"
 #include "Component.h"
-#include "Bullet.h"
+#include "Object.h"
 #include "ShipEditor.h"
 
 
@@ -384,7 +384,7 @@ void Player::updateComponents()
 		components[i]->update();
 }
 
-void Player::checkBulletCollision(Bullet* b)
+void Player::checkBulletCollision(Object* b)
 {
 	float temp_coordinateModifier = resFactor*zoomFactor*textureRadius;
 	for (unsigned int i = 0; i < components.size(); i++)
@@ -399,19 +399,20 @@ void Player::checkBulletCollision(Bullet* b)
 
 		if (b->checkCollisionDistance < b->checkCollisionRange)
 		{
-			if (b->canDamage == true)
+			if (b->isBullet != 0)
 			{
-				components[i]->hp -= b->damage;
-				b->canDamage = false;
+				components[i]->hp -= b->isBullet;
+				b->isBullet = 0;
 				x += 6 * cos(angle);
 				y += -6 * sin(angle);
 			}
 
 			//Bounce
-			b->speed = b->speed*0.75;
+			b->xSpeed = b->xSpeed*0.75;
+			b->ySpeed = b->ySpeed*0.75;
 			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
-			b->xSpeed = cos(2 * PI - b->angle) * b->speed;
-			b->ySpeed = sin(2 * PI - b->angle) * b->speed;
+			b->xSpeed = cos(2 * PI - b->angle) * getDistance(0,0,b->xSpeed, b->ySpeed);
+			b->ySpeed = sin(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
 		}
 	}
 

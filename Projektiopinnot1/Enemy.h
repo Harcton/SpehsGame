@@ -30,7 +30,7 @@ public:
 	void draw();
 	virtual bool update();
 	virtual void updateComponents();
-	virtual void checkBulletCollision(Bullet*);
+	virtual void checkBulletCollision(Object*);
 	virtual void removeComponent(int);
 	virtual void notifyComponentDestruction(int);
 	virtual void complexUpdate();

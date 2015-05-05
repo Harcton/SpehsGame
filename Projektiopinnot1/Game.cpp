@@ -102,6 +102,7 @@ void Game::run()
 		{
 			updateBackgrounds();
 			updateObjects();
+			updateBullets();
 		}
 
 
@@ -263,6 +264,24 @@ void Game::updateObjects()
 	
 }
 
+void Game::updateBullets()
+{
+	//Bullet update
+	for (bulletIt = bullets.begin(); bulletIt != bullets.end();)
+		if ((*bulletIt)->update() == false)
+		{
+		delete (*bulletIt);
+		bulletIt = bullets.erase(bulletIt);
+		}
+		else
+		{
+			++bulletIt;
+		}
+
+	//Draw bullets
+	for (unsigned int i = 0; i < bullets.size(); i++)
+		bullets[i]->draw();
+}
 
 void Game::demo()
 {

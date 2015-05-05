@@ -1,7 +1,7 @@
 #include "Main.h"
 #include "Turret.h"
-#include "Bullet.h"
-
+#include "Object.h"
+#include "Game.h"
 
 
 Turret::~Turret()
@@ -36,7 +36,6 @@ bool Turret::alive()
 }
 void Turret::update()
 {
-	updateBullets();
 
 	canFireTimer--;	
 	if (reloading == true && canFireTimer < 1)
@@ -112,25 +111,6 @@ void Turret::update()
 
 
 
-void Turret::updateBullets()
-{
-	//Bullet update
-	for (bulletIt = bullets.begin(); bulletIt != bullets.end();)
-		if ((*bulletIt)->update() == false)
-		{
-		delete (*bulletIt);
-		bulletIt = bullets.erase(bulletIt);
-		}
-		else
-		{
-			++bulletIt;
-		}
-
-	//Draw bullets
-	for (unsigned int i = 0; i < bullets.size(); i++)
-		bullets[i]->draw();
-}
-
 void Turret::fire()
 {
 	if (canFireTimer > 0)
@@ -147,8 +127,7 @@ void Turret::fire()
 	
 	magazine--;
 	canFireTimer = fireRateInterval;
-	bullets.push_back(new Bullet(this, this->master->mWindow, this->master->mGame, this->x, this->y, this->angle, maxSpeed));
-	bullets[bullets.size() - 1]->damage = damage;
+	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2*PI - angle, 15.0f, damage));
 	hasFired = true;
 }
 void Turret::reload()

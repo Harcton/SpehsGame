@@ -3,7 +3,6 @@
 //Forward declared dependencies
 class Game;
 class Component;
-class Bullet;
 //Included dependencies
 #include <vector>
 #include <SFML/Window/Event.hpp>
@@ -27,7 +26,7 @@ public:
 	bool update();
 	void draw();
 	void updateComponents();
-	void checkBulletCollision(Bullet*);
+	void checkBulletCollision(Object*);
 	void removeComponent(int);
 	void notifyComponentDestruction(int);
 	void addFromGrid(int, int);

@@ -2,7 +2,6 @@
 #define TURRET_H
 //Forward declared dependencies
 class Object;
-class Bullet;
 //Included dependencies
 #include "Component.h"
 
@@ -19,13 +18,11 @@ public:
 	void reload();
 	void update();
 	bool alive();
-	void updateBullets();
 	//void fixAngle();
 
 
 
 private:
-	std::vector<Bullet*>::iterator bulletIt;
 	int canFireTimer;
 	int magazine;
 

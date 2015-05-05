@@ -1,7 +1,7 @@
 #include "Main.h"
 #include "Turret.h" //includes component.h
 #include "Engine.h" //includes component.h
-#include "Bullet.h" //includes object.h
+#include "Object.h" //includes object.h
 #include "Game.h"
 
 
@@ -14,13 +14,6 @@ Component::~Component()
 	for (unsigned int i = 0; i < childComponents.size(); i++)
 	{
 		master->removeComponent(childComponents[i]);
-	}
-
-	//Remove bullets
-	while (!bullets.empty())
-	{
-		delete bullets.back();
-		bullets.pop_back();
 	}
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy) : Component::Component(mstr, cntr, xo, yo)
