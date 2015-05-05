@@ -9,6 +9,15 @@
 
 
 
+Game::~Game()
+{
+	for (unsigned int i = 0; i < objects.size(); i++)
+		delete objects[i];
+	for (unsigned int i = 0; i < bullets.size(); i++)
+		delete bullets[i];
+	for (unsigned int i = 0; i < backgrounds.size(); i++)
+		delete backgrounds[i];
+}
 Game::Game(sf::RenderWindow& w) : mWindow(w)
 {
 	elements.push_back(sf::Sprite());
@@ -45,20 +54,6 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	escMenuSliders.back().setTextAlign(ta_center);
 	escMenuButtons.push_back(Button(bi_gsetQuit, buttonX1, buttonY1 + 3 * buttonHeight, buttonWidth, buttonHeight, "Quit to menu", int(50 * resFactor), &font, buttonColorBG, buttonColorText));
 	escMenuButtons.back().setTextAlign(ta_center);
-}
-
-
-Game::~Game()
-{
-	while (!objects.empty())
-	{
-		delete objects.back(); objects.pop_back();
-	}
-
-	while (!backgrounds.empty())
-	{
-		delete backgrounds.back(); backgrounds.pop_back();
-	}
 }
 
 
@@ -237,8 +232,6 @@ void Game::updateObjects()
 		{
 			Object* temp_objPtr = objects[i];
 			objects.erase(objects.begin() + i);
-			if (temp_objPtr == playerObj)
-				playerObj = nullptr;
 			delete temp_objPtr;
 			i--;
 		}

@@ -33,6 +33,7 @@ public:
 	Component(const Component& other);
 	Component& operator=(Component);
 
+	friend class Object;
 	friend class Player;
 	friend class Enemy;
 	friend class Seeker;

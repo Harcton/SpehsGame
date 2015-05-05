@@ -27,12 +27,9 @@ public:
 	Enemy(sf::RenderWindow&, Game*);
 	~Enemy();
 
-	void draw();
 	virtual bool update();
-	virtual void updateComponents();
-	virtual void checkBulletCollision(Object*);
 	virtual void removeComponent(int);
-	virtual void notifyComponentDestruction(int);
+	virtual void notifyComponentDestruction(Component*);
 	virtual void complexUpdate();
 
 	virtual void explosion(int, float);

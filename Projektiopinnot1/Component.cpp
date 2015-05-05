@@ -7,15 +7,7 @@
 
 
 Component::~Component()
-{
-	//std::cout << "  componentDECONSTRUCTOR";
-
-	//Remove child components
-	for (unsigned int i = 0; i < childComponents.size(); i++)
-	{
-		master->removeComponent(childComponents[i]);
-	}
-}
+{}
 Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy) : Component::Component(mstr, cntr, xo, yo)
 {
 	gridLocationX = gx;
@@ -141,13 +133,10 @@ Component& Component::operator=(Component other)
 }
 
 
-
 bool Component::alive()
 {
 	if (hp <= 0)
 	{
-		std::cout << "\nComponent destroyed! [" << gridLocationX << ", " << gridLocationY << "]";
-		master->notifyComponentDestruction(id);
 		return false;
 	}
 

@@ -316,11 +316,6 @@ bool Player::update()
 	return true;
 }
 
-void Player::draw()
-{
-	for (unsigned int i = 0; i < components.size(); i++)
-		components[i]->draw();
-}
 
 void Player::turnRight(double factor)
 {
@@ -363,77 +358,14 @@ void Player::zoomOut(double f)
 }
 
 
-void Player::updateComponents()
-{
-	componentIt = components.begin();
-	while (componentIt != components.end())
-	{
-		if ((*componentIt)->alive() == false)
-		{
-			Component* temp_componentPointer = (*componentIt);
-			components.erase(componentIt);
-			delete temp_componentPointer;
-			componentIt = components.begin();
-		}
-		else
-			componentIt++;
-	}
 
-
-	for (unsigned int i = 0; i < components.size(); i++)
-		components[i]->update();
-}
-
-void Player::checkBulletCollision(Object* b)
-{
-	float temp_coordinateModifier = resFactor*zoomFactor*textureRadius;
-	for (unsigned int i = 0; i < components.size(); i++)
-	{
-		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y - temp_coordinateModifier, components[i]->x - b->x - temp_coordinateModifier);
-		if (b->collisionCheckAngle < 0)
-			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
-
-
-		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x - temp_coordinateModifier, components[i]->y - temp_coordinateModifier);
-		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
-
-		if (b->checkCollisionDistance < b->checkCollisionRange)
-		{
-			if (b->isBullet != 0)
-			{
-				components[i]->hp -= b->isBullet;
-				b->isBullet = 0;
-				x += 6 * cos(angle);
-				y += -6 * sin(angle);
-			}
-
-			//Bounce
-			b->xSpeed = b->xSpeed*0.75;
-			b->ySpeed = b->ySpeed*0.75;
-			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
-			b->xSpeed = cos(2 * PI - b->angle) * getDistance(0,0,b->xSpeed, b->ySpeed);
-			b->ySpeed = sin(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
-		}
-	}
-
-}
 
 
 void Player::removeComponent(int cid)
 {
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->id == cid)
-		{
 		components[i]->hp = -999;
-		//int tX = components[i]->gridLocationX;
-		//int tY = components[i]->gridLocationY;
-		////Delete the component save data
-		//delete data.grid[tX][tY];
-		//data.grid[tX][tY] = new GridData;
-		////Delete the actual component
-		//delete components[i];
-		//components.erase(components.begin() + i);
-		}
 }
 
 void Player::loadPlayerData()
@@ -639,24 +571,35 @@ void Player::editShip()
 	turnSpeed = 0;
 }
 
-//This method is called from the component destructor. (For Enemy class it has no use)
-void Player::notifyComponentDestruction(int id)
+
+
+void Player::notifyComponentDestruction(Component* component)
 {
-	int gx = -1;
-	int gy = -1;
 
-	for (unsigned int i = 0; i < components.size(); i++)
-		if (components[i]->id == id)
-		{
-		gx = components[i]->gridLocationX;
-		gy = components[i]->gridLocationY;
-		}
-
-	
+	//int gx = -1;
+	//int gy = -1;
+	//for (unsigned int i = 0; i < components.size(); i++)
+	//	if (components[i]->id == id)
+	//	{
+	//	gx = components[i]->gridLocationX;
+	//	gy = components[i]->gridLocationY;
+	//	}
+	int gx = component->gridLocationX;
+	int gy = component->gridLocationY;
 	if (gx < 0 || gy < 0)
-	{
 		return;
-	}
+
+
+
+	//Destroy component's children
+	std::vector<int> childIds;
+	for (unsigned int i = 0; i < component->childComponents.size(); i++)
+		childIds.push_back(component->childComponents[i]);
+	for (unsigned int cn = 0; cn < childIds.size(); cn++)
+		for (unsigned int i = 0; i < components.size(); i++)
+			if (components[i]->id == childIds[cn])
+				components[i]->hp = -999;
+
 	
 	//Notify parent component
 	if (gx < EDITOR_WIDTH - 1)

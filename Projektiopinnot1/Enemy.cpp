@@ -139,81 +139,28 @@ bool Enemy::update()
 }
 
 
-void Enemy::updateComponents()
+void Enemy::notifyComponentDestruction(Component* component)
 {
-	componentIt = components.begin();
-	while (componentIt != components.end())
-	{
-		if ((*componentIt)->alive() == false)
-		{
-			Component* temp_componentPointer = (*componentIt);
-			components.erase(componentIt);
-			delete temp_componentPointer;
-			componentIt = components.begin();
-		}
-		else
-			componentIt++;
-	}
+	//Delete component's children
+	std::vector<int> childIds;
+	for (unsigned int i = 0; i < component->childComponents.size(); i++)
+		childIds.push_back(component->childComponents[i]);
+	for (unsigned int cn = 0; cn < childIds.size(); cn++)
+		for (unsigned int i = 0; i < components.size(); i++)
+			if (components[i]->id == childIds[cn])
+				components[i]->hp = -999;
 
+	//Erase cid from it's parents' memory (tragic event)
 	for (unsigned int i = 0; i < components.size(); i++)
-		components[i]->update();
-}
-
-void Enemy::draw()
-{
-	Object::draw();
-	for (unsigned int i = 0; i < components.size(); i++)
-		components[i]->draw();
-}
-
-void Enemy::notifyComponentDestruction(int cid)
-{
-	for (unsigned int i = 0; i < components.size(); i++)
-	{
 		for (unsigned int c = 0; c < components[i]->childComponents.size(); c++)
-		{
-			if (components[i]->childComponents[c] == cid)
+			if (components[i]->childComponents[c] == component->id)
 			{
 				components[i]->childComponents.erase(components[i]->childComponents.begin() + c);
 			}
-		}
-
-	}
 }
 
 
-void Enemy::checkBulletCollision(Object* b)
-{
-	float temp_coordinateModifier = resFactor*zoomFactor*textureRadius;
-	for (unsigned int i = 0; i < components.size(); i++)
-	{
-		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y - temp_coordinateModifier, components[i]->x - b->x - temp_coordinateModifier);
-		if (b->collisionCheckAngle < 0)
-			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
 
-
-		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x - temp_coordinateModifier, components[i]->y - temp_coordinateModifier);
-		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
-
-		if (b->checkCollisionDistance < b->checkCollisionRange)
-		{
-			if (b->isBullet != 0)
-			{
-				components[i]->hp -= b->isBullet;
-				b->isBullet = 0;
-				x += 6 * cos(angle);
-				y += -6 * sin(angle);
-			}
-
-			//Bounce
-			b->xSpeed = b->xSpeed*0.75;
-			b->ySpeed = b->ySpeed*0.75;
-			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
-			b->xSpeed = cos(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
-			b->ySpeed = sin(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
-		}
-	}
-}
 
 
 void Enemy::removeComponent(int cid)
@@ -252,7 +199,10 @@ void Enemy::complexUpdate()
 	}
 	else
 	{
-		nearestComponent = components[0];
+		if (components.size() > 0)
+			nearestComponent = components[0];
+		else
+			nearestComponent = nullptr;
 	}
 }
 
@@ -260,7 +210,7 @@ void Enemy::complexUpdate()
 void Enemy::explosion(int dmg, float explosionRadius)
 {
 	if (components.size() < 1)
-		return;//Prevents fatal vector out of range error happening inside the for loop
+		return;//Prevents fatal vector out of range error happening (components[0])
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
 		if (getDistance(this->components[0]->x, this->components[0]->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) 

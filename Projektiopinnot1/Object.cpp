@@ -1,16 +1,12 @@
 #include "Main.h"
-#include "Object.h"//for bullet collision checking, also includes object.h
+#include "Object.h"
 #include "Game.h"
+#include "Component.h"
 
 Object::~Object()
 {
-	while (!components.empty())
-	{
-		//std::cout << "\n~Object: components: " << components.size();
-		//std::cout << "\n~Object: Removing component";
-		delete components.back();
-		components.pop_back();
-	}
+	for (unsigned int i = 0; i < components.size(); i++)
+		delete components[i];
 }
 Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 {
@@ -141,7 +137,9 @@ void Object::setRandomLocation()
 bool Object::update()
 {
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE || hp <= 0)
+	{
 		return false;
+	}
 
 	//Bullet update
 	if (isBullet != 0)
@@ -150,12 +148,12 @@ bool Object::update()
 
 
 
-	//update opacity
-	if (opacity < 255)
-	{
-		opacity += 17;
-		spr.setColor(sf::Color(255, 255, 255, opacity));
-	}
+	////update opacity
+	//if (opacity < 255)
+	//{
+	//	opacity += 17;
+	//	spr.setColor(sf::Color(255, 255, 255, opacity));
+	//}
 
 	//Update variable values
 	angle += turnSpeed;	
@@ -250,6 +248,22 @@ bool Object::update()
 	return true;
 }
 
+void Object::updateComponents()
+{
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->alive() == false)
+		{
+		Component* temp_componentPointer = components[i];
+		components.erase(components.begin() + i);
+		notifyComponentDestruction(temp_componentPointer);
+		delete temp_componentPointer;
+		i = 0;
+		}
+
+	for (unsigned int i = 0; i < components.size(); i++)
+		components[i]->update();
+}
+
 bool Object::isBulletUpdate()
 {
 	for (unsigned int i = 0; i < mGame->objects.size(); i++)
@@ -267,6 +281,8 @@ bool Object::isBulletUpdate()
 void Object::draw()
 {
 	mWindow.draw(spr);
+	for (unsigned int i = 0; i < components.size(); i++)
+		components[i]->draw();
 }
 
 void Object::checkCollisions(unsigned int selfIndex)//Does this actually do anything?
@@ -306,29 +322,33 @@ void Object::checkCollisions(unsigned int selfIndex)//Does this actually do anyt
 
 void Object::checkBulletCollision(Object* b)
 {
-	b->collisionCheckAngle = -1 * atan2(y - b->y, x - b->x);
-	if (b->collisionCheckAngle < 0)
-		b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
-
-
-	b->checkCollisionDistance = getDistance(b->x, b->y, x, y);
-	b->checkCollisionRange = b->textureRadius + textureRadius;
-
-	if (b->checkCollisionDistance < b->checkCollisionRange)
+	float temp_coordinateModifier = resFactor*zoomFactor*textureRadius;
+	for (unsigned int i = 0; i < components.size(); i++)
 	{
-		if (b->isBullet != 0)
+		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y - temp_coordinateModifier, components[i]->x - b->x - temp_coordinateModifier);
+		if (b->collisionCheckAngle < 0)
+			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
+
+
+		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x - temp_coordinateModifier, components[i]->y - temp_coordinateModifier);
+		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
+
+		if (b->checkCollisionDistance < b->checkCollisionRange)
 		{
-			hp -= b->isBullet;
-			b->isBullet = 0;
-			x += 6 * cos(angle);
-			y += -6 * sin(angle);
+			if (b->isBullet != 0)
+			{
+				components[i]->hp -= b->isBullet;
+				b->isBullet = 0;
+				x += 6 * cos(angle);
+				y += -6 * sin(angle);
+			}
+
+			//Bounce
+			b->xSpeed = b->xSpeed*0.75;
+			b->ySpeed = b->ySpeed*0.75;
+			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
+			b->xSpeed = cos(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
+			b->ySpeed = sin(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
 		}
-
-		b->xSpeed = b->xSpeed*0.75;
-		b->ySpeed = b->ySpeed*0.75;
-
-		b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
-		b->xSpeed = cos(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
-		b->ySpeed = sin(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
 	}
 }

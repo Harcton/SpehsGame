@@ -24,11 +24,8 @@ public:
 	void applyPlayerData();
 
 	bool update();
-	void draw();
-	void updateComponents();
-	void checkBulletCollision(Object*);
 	void removeComponent(int);
-	void notifyComponentDestruction(int);
+	void notifyComponentDestruction(Component*);
 	void addFromGrid(int, int);
 	void editShip();
 	void loadKeybindings();
@@ -45,7 +42,6 @@ public:
 
 protected:
 	sf::Event mEvent;
-	std::vector<Component*>::iterator componentIt;
 	float joystickDirection = 0;
 	PlayerData data;//Only for player objects
 

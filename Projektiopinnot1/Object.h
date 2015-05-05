@@ -26,11 +26,12 @@ public:
 	friend class Player;
 
 	virtual bool update();
+	void updateComponents();
 	bool isBulletUpdate();
 	void checkCollisions(unsigned int);
-	virtual void checkBulletCollision(Object*);
+	void checkBulletCollision(Object*);
 	virtual void removeComponent(int){};
-	virtual void notifyComponentDestruction(int){};
+	virtual void notifyComponentDestruction(Component*){}
 	virtual void draw();
 	void setRandomLocation();
 	void setLocation(double, double);
