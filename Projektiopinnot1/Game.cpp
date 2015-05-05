@@ -242,13 +242,13 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 0;//
+	bool tempDevelopmentSelection = 1;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
 		if (objects.size() < 2)
 		{
-			objects.push_back(new Sentinel(mWindow, this, 1)); //spawn different enemy types
+			objects.push_back(new Seeker(mWindow, this, 2)); //spawn different enemy types
 			objects[objects.size() - 1]->setRandomLocation();
 		}
 	}

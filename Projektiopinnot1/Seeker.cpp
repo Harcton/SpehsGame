@@ -39,6 +39,13 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	components[0]->animatedSprites[components.size() - 1].setFrameSize(100, 100);
 	components[0]->animatedSprites[components.size() - 1].setTilesetSize(4, 2);
 	components[0]->animatedSprites[components.size() - 1].setFrameDuration(1);
+
+	components[0]->animatedSprites.push_back(sge::Sprite("seeker_dodge_animation.png"));
+	components[0]->animatedSprites[components.size() - 1].setVisibility(false);
+	components[0]->animatedSprites[components.size() - 1].setOrigin(50, 50);
+	components[0]->animatedSprites[components.size() - 1].setFrameSize(100, 100);
+	components[0]->animatedSprites[components.size() - 1].setTilesetSize(5, 3);
+	components[0]->animatedSprites[components.size() - 1].setFrameDuration(1);
 }
 
 
@@ -75,7 +82,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 		state = state_dodging;
 		if (state != memoryState)
 		{
-			//dodging animation
+			animationHandler(anim_dodge);
 		}
 
 		dodgeMove(xSpeed, ySpeed);
@@ -100,7 +107,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 					if (state != memoryState)
 					{
 						//explosion animation
-						//wait animation before destruction
+						//wait for animation before destruction
 					}
 
 					explosion(50, 1.5);
@@ -188,16 +195,16 @@ void Seeker::dodgeMove(const double tempXSpeed, const double tempYSpeed)
 	if (xSpeed != -tempXSpeed)
 	{
 		if (tempXSpeed > 0)
-			xSpeed -= accelerationConstant * 2.5*enemyBehaviourLevel;
+			xSpeed -= accelerationConstant * 4*enemyBehaviourLevel;
 		else if (tempXSpeed < 0)
-			xSpeed += accelerationConstant * 2.5*enemyBehaviourLevel;
+			xSpeed += accelerationConstant * 4*enemyBehaviourLevel;
 	}
 	if (ySpeed != -tempYSpeed)
 	{
 		if (tempYSpeed > 0)
-			ySpeed -= accelerationConstant * 2.5*enemyBehaviourLevel;
+			ySpeed -= accelerationConstant * 4*enemyBehaviourLevel;
 		else if (tempYSpeed < 0)
-			ySpeed += accelerationConstant * 2.5*enemyBehaviourLevel;
+			ySpeed += accelerationConstant * 4*enemyBehaviourLevel;
 	}
 	turnSpeed += turnAccelerationConstant * enemyBehaviourLevel;
 }
@@ -223,6 +230,11 @@ void Seeker::animationHandler(AnimationID ID)
 	case anim_passive:
 	{
 		components[0]->animatedSprites[1].setVisibility(true);//no workerino??
+		break;
+	}
+	case anim_dodge:
+	{
+		components[0]->animatedSprites[2].setVisibility(true);
 		break;
 	}
 	default:

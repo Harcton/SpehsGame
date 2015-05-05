@@ -82,6 +82,7 @@ void initializeResourceManager(ResourceManager& rm)
 	rm.loadTexture("Texture/Enemy/Seeker.png");
 	rm.loadTexture("Texture/Enemy/seeker_active_animation.png");
 	rm.loadTexture("Texture/Enemy/seeker_passive_animation.png");
+	rm.loadTexture("Texture/Enemy/seeker_dodge_animation.png");
 		//Sentinel
 	rm.loadTexture("Texture/Enemy/Sentinel.png");
 

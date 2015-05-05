@@ -9,7 +9,8 @@
 enum AnimationID
 {
 	anim_active,
-	anim_passive
+	anim_passive,
+	anim_dodge
 };
 
 enum enemyState
