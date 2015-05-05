@@ -2,6 +2,9 @@
 #include "Turret.h" //includes component.h
 #include "Engine.h" //includes component.h
 #include "Bullet.h" //includes object.h
+#include "Game.h"
+
+
 
 Component::~Component()
 {
@@ -46,6 +49,105 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 	drawCollisionCircle = false;
 
 }
+Component::Component(const Component& other) : master(other.master), centerObj(other.master->mGame->playerObj)
+{//Copy constructor
+	std::cout << "\n  Component copy constructor";
+	for (unsigned int i = 0; i < other.types.size(); i++)
+		types.push_back(other.types[i]);
+	for (unsigned int i = 0; i < other.sprites.size(); i++)
+		sprites.push_back(other.sprites[i]);
+	for (unsigned int i = 0; i < other.animatedSprites.size(); i++)
+		animatedSprites.push_back(other.animatedSprites[i]);
+	for (unsigned int i = 0; i < other.childComponents.size(); i++)
+		childComponents.push_back(other.childComponents[i]);
+	currentId++;
+	id = currentId;
+	masterComponent = other.masterComponent;
+	xOffset = other.xOffset;
+	yOffset = other.yOffset;
+	xOffsetOriginal = other.xOffsetOriginal;
+	yOffsetOriginal = other.yOffsetOriginal;
+	x = other.x;
+	y = other.y;
+	screenX = other.screenX;
+	screenY = other.screenY;
+	angle = other.angle;
+	angleModifier = other.angleModifier;
+	maxAngle = other.maxAngle;
+	capacity = other.capacity;
+	rechargeInterval = other.rechargeInterval;
+	maxSpeed = other.maxSpeed;
+	damage = other.damage;
+	fireRateInterval = other.fireRateInterval;
+	thrustStrength = other.thrustStrength;
+	rechargeAmount = other.rechargeAmount;
+	mouseAim = other.mouseAim;
+	mouseAimRelativeToCenter = other.mouseAimRelativeToCenter;
+	hp = other.hp;
+	maxHp = other.maxHp;
+	textureRadius = other.textureRadius;
+	gridLocationX = other.gridLocationX;
+	gridLocationY = other.gridLocationY;
+	hasFired = other.hasFired;
+	reloading = other.reloading;
+	charge = other.charge;
+	rotationDirection = other.rotationDirection;
+	holdToThrust = other.holdToThrust;
+	autoThrusting = other.autoThrusting;
+}
+Component& Component::operator=(Component other)
+{//Assignment operator
+	std::cout << "\n  Component assignemnt operator called";
+	types.clear();
+	sprites.clear();
+	animatedSprites.clear();
+	childComponents.clear();
+	for (unsigned int i = 0; i < other.types.size(); i++)
+		types.push_back(other.types[i]);
+	for (unsigned int i = 0; i < other.sprites.size(); i++)
+		sprites.push_back(other.sprites[i]);
+	for (unsigned int i = 0; i < other.animatedSprites.size(); i++)
+		animatedSprites.push_back(other.animatedSprites[i]);
+	for (unsigned int i = 0; i < other.childComponents.size(); i++)
+		childComponents.push_back(other.childComponents[i]);
+	currentId++;
+	id = currentId;
+	masterComponent = other.masterComponent;
+	xOffset = other.xOffset;
+	yOffset = other.yOffset;
+	xOffsetOriginal = other.xOffsetOriginal;
+	yOffsetOriginal = other.yOffsetOriginal;
+	x = other.x;
+	y = other.y;
+	screenX = other.screenX;
+	screenY = other.screenY;
+	angle = other.angle;
+	angleModifier = other.angleModifier;
+	maxAngle = other.maxAngle;
+	capacity = other.capacity;
+	rechargeInterval = other.rechargeInterval;
+	maxSpeed = other.maxSpeed;
+	damage = other.damage;
+	fireRateInterval = other.fireRateInterval;
+	thrustStrength = other.thrustStrength;
+	rechargeAmount = other.rechargeAmount;
+	mouseAim = other.mouseAim;
+	mouseAimRelativeToCenter = other.mouseAimRelativeToCenter;
+	hp = other.hp;
+	maxHp = other.maxHp;
+	textureRadius = other.textureRadius;
+	gridLocationX = other.gridLocationX;
+	gridLocationY = other.gridLocationY;
+	hasFired = other.hasFired;
+	reloading = other.reloading;
+	charge = other.charge;
+	rotationDirection = other.rotationDirection;
+	holdToThrust = other.holdToThrust;
+	autoThrusting = other.autoThrusting;
+	return *this;
+}
+
+
 
 bool Component::alive()
 {

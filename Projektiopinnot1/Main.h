@@ -7,10 +7,10 @@
 #include <SFML/Window/Event.hpp>
 
 
-//#include <SFML/System.hpp>
-//#include <SFML/Graphics.hpp>
-//#include <SFML/Window.hpp>
-//#include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 //
 //#include <vector>
 //#include <math.h>

@@ -7,7 +7,9 @@ class Background;
 #include <vector>
 #include <sstream>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Window/Window.hpp>
 #include <SFML/Window/Event.hpp>
 #include "SliderButton.h"
 

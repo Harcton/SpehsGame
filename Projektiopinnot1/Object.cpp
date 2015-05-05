@@ -29,6 +29,83 @@ Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindo
 	x = cx;
 	y = cy;
 }
+Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame), centerObj(other.centerObj), dataPtr(other.dataPtr)
+{//Copy constructor
+	std::cout << "\n  Component copy constructor";
+	for (unsigned int i = 0; i < other.components.size(); i++)
+		components.push_back(other.components[i]);
+	spr = other.spr;
+	textureRadius = other.textureRadius;
+	scale = other.scale;
+	x = other.x;
+	y = other.y;
+	massCenterX = other.massCenterX;
+	massCenterY = other.massCenterY;
+	screenX = other.screenY;
+	screenY = other.screenX;
+	angle = other.angle;
+	xSpeed = other.xSpeed;
+	ySpeed = other.ySpeed;
+	turnSpeed = other.turnSpeed;
+	accTimer = other.accTimer;
+	xAcc = other.xAcc;
+	yAcc = other.yAcc;
+	xSpeed0 = other.xSpeed0;
+	ySpeed0 = other.ySpeed0;
+	scrSpeedX = other.scrSpeedX;
+	scrSpeedY = other.scrSpeedY;
+	relativeSpeedX = other.relativeSpeedX;
+	relativeSpeedY = other.relativeSpeedY;
+	xScreenDistance = other.xScreenDistance;
+	yScreenDistance = other.yScreenDistance;
+	hasCollisionChecks = other.hasCollisionChecks;
+	opacity = other.opacity;
+	collisionCheckAngle = other.collisionCheckAngle;
+	checkCollisionDistance = other.checkCollisionDistance;
+	checkCollisionRange = other.checkCollisionRange;
+	hp = other.hp;
+}
+Object& Object::operator=(Object other)
+{//Assignment operator
+	while (!components.empty())
+	{
+		delete components.back();
+		components.pop_back();
+	}
+	for (unsigned int i = 0; i < other.components.size(); i++)
+		components.push_back(other.components[i]);
+	spr = other.spr;
+	textureRadius = other.textureRadius;
+	scale = other.scale;
+	x = other.x;
+	y = other.y;
+	massCenterX = other.massCenterX;
+	massCenterY = other.massCenterY;
+	screenX = other.screenY;
+	screenY = other.screenX;
+	angle = other.angle;
+	xSpeed = other.xSpeed;
+	ySpeed = other.ySpeed;
+	turnSpeed = other.turnSpeed;
+	accTimer = other.accTimer;
+	xAcc = other.xAcc;
+	yAcc = other.yAcc;
+	xSpeed0 = other.xSpeed0;
+	ySpeed0 = other.ySpeed0;
+	scrSpeedX = other.scrSpeedX;
+	scrSpeedY = other.scrSpeedY;
+	relativeSpeedX = other.relativeSpeedX;
+	relativeSpeedY = other.relativeSpeedY;
+	xScreenDistance = other.xScreenDistance;
+	yScreenDistance = other.yScreenDistance;
+	hasCollisionChecks = other.hasCollisionChecks;
+	opacity = other.opacity;
+	collisionCheckAngle = other.collisionCheckAngle;
+	checkCollisionDistance = other.checkCollisionDistance;
+	checkCollisionRange = other.checkCollisionRange;
+	hp = other.hp;
+	return *this;
+}
 
 
 void Object::setLocation(double mx, double my)

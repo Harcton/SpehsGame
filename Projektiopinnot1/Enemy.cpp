@@ -274,6 +274,8 @@ void Enemy::explosion(int dmg, float explosionRadius)
 
 void Enemy::shootLaser(int dmg)
 {
+	if (components.size() < 1)
+		return;
 	sf::VertexArray line(sf::Lines, 2);
 	line[0].position = sf::Vector2f(this->screenX + components[0]->xOffset*resFactor*zoomFactor, this->screenY + components[0]->yOffset*resFactor*zoomFactor);
 	line[1].position = sf::Vector2f(nearestComponent->screenX + (irandom(-15, 15))*resFactor*zoomFactor, nearestComponent->screenY + (irandom(-15, 15))*resFactor*zoomFactor);

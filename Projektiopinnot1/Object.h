@@ -18,6 +18,8 @@ public:
 	~Object();
 	Object(sf::RenderWindow&, Game*, int, int);
 	Object(sf::RenderWindow&, Game*);
+	Object(const Object& other);
+	Object& operator=(Object);
 	friend class Component;
 	friend class Engine;
 	friend class Enemy;
