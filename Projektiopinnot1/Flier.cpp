@@ -4,10 +4,10 @@
 
 
 
-Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel, Commander* master) : Enemy(windowref, game)
+Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel/*, Commander* master*/) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
-	fleetMaster = master;
+	//fleetMaster = master;
 
 	repositioning = false;
 	initiateAssault = false;
@@ -76,10 +76,10 @@ bool Flier::update()
 
 void Flier::AIupdate()//change behaviour when not fighting
 {
-	if (fleetMaster->initiateFlierAssault == true)
-	{
-		this->initiateAssault = true;
-	}
+	//if (fleetMaster->initiateFlierAssault == true)
+	//{
+	//	this->initiateAssault = true;
+	//}
 
 	if (repositioning)
 	{

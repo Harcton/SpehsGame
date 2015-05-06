@@ -8,7 +8,7 @@
 class Flier : public Enemy
 {
 public:
-	Flier(sf::RenderWindow&, Game*, int, Commander*);
+	Flier(sf::RenderWindow&, Game*, int/*, Commander* */);
 	~Flier();
 
 	bool update();
@@ -21,7 +21,7 @@ private:
 	int laserCounter;
 	int rotationCounter;
 	bool initiateAssault;
-	Commander* fleetMaster;
+	//Commander* fleetMaster;
 };
 
 #endif

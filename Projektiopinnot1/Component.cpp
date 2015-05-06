@@ -1,7 +1,7 @@
 #include "Main.h"
-#include "Turret.h" //includes component.h
-#include "Engine.h" //includes component.h
-#include "Object.h" //includes object.h
+#include "Turret.h"//includes component.h
+#include "Engine.h"//includes component.h
+#include "Object.h"
 #include "Game.h"
 
 

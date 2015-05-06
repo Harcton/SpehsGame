@@ -189,7 +189,7 @@ void Commander::AIupdate()//maybe not follow true all the time
 
 void Commander::launchFliers()
 {
-	mGame->objects.push_back(new Flier(mWindow, mGame, 1, this));
+	mGame->objects.push_back(new Flier(mWindow, mGame, 1/*, this*/));
 	mGame->objects.back()->setLocation(x, y); //randomize a lil bit
 	fliersFollowing++;
 }
