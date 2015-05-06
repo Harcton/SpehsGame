@@ -21,31 +21,31 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	closeAngle = 0.01;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("Seeker.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("Seeker.png"));
+	components.back()->sprites.back().setOrigin(50, 50);
 
 	//Initialize Animations
 	components[0]->animatedSprites.push_back(sge::Sprite("seeker_active_animation.png"));
-	components[0]->animatedSprites[components.size() - 1].setVisibility(false);
-	components[0]->animatedSprites[components.size() - 1].setOrigin(50, 50);
-	components[0]->animatedSprites[components.size() - 1].setFrameSize(100, 100);
-	components[0]->animatedSprites[components.size() - 1].setTilesetSize(4, 2);
-	components[0]->animatedSprites[components.size() - 1].setFrameDuration(1);
+	components[0]->animatedSprites.back().setVisibility(false);
+	components[0]->animatedSprites.back().setOrigin(50, 50);
+	components[0]->animatedSprites.back().setFrameSize(100, 100);
+	components[0]->animatedSprites.back().setTilesetSize(4, 2);
+	components[0]->animatedSprites.back().setFrameDuration(1);
 
 	components[0]->animatedSprites.push_back(sge::Sprite("seeker_passive_animation.png"));
-	components[0]->animatedSprites[components.size() - 1].setVisibility(false);
-	components[0]->animatedSprites[components.size() - 1].setOrigin(50, 50);
-	components[0]->animatedSprites[components.size() - 1].setFrameSize(100, 100);
-	components[0]->animatedSprites[components.size() - 1].setTilesetSize(4, 2);
-	components[0]->animatedSprites[components.size() - 1].setFrameDuration(1);
+	components[0]->animatedSprites.back().setVisibility(false);
+	components[0]->animatedSprites.back().setOrigin(50, 50);
+	components[0]->animatedSprites.back().setFrameSize(100, 100);
+	components[0]->animatedSprites.back().setTilesetSize(4, 2);
+	components[0]->animatedSprites.back().setFrameDuration(1);
 
 	components[0]->animatedSprites.push_back(sge::Sprite("seeker_dodge_animation.png"));
-	components[0]->animatedSprites[components.size() - 1].setVisibility(false);
-	components[0]->animatedSprites[components.size() - 1].setOrigin(50, 50);
-	components[0]->animatedSprites[components.size() - 1].setFrameSize(100, 100);
-	components[0]->animatedSprites[components.size() - 1].setTilesetSize(5, 3);
-	components[0]->animatedSprites[components.size() - 1].setFrameDuration(1);
+	components[0]->animatedSprites.back().setVisibility(false);
+	components[0]->animatedSprites.back().setOrigin(50, 50);
+	components[0]->animatedSprites.back().setFrameSize(100, 100);
+	components[0]->animatedSprites.back().setTilesetSize(5, 3);
+	components[0]->animatedSprites.back().setFrameDuration(1);
 }
 
 

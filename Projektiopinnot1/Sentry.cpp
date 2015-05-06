@@ -22,11 +22,11 @@ Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	closeAngle = 0.003;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_base_green.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_base_green.png"));
+	components.back()->sprites.back().setOrigin(50, 50);
 	components.push_back(new Turret(this, centerObj, 0, 0));
-	components[components.size() - 2]->childComponents.push_back(components[components.size() - 1]->id);
+	components[components.size() - 2]->childComponents.push_back(components.back()->id);
 }
 
 

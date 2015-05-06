@@ -21,9 +21,9 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	closeAngle = 0.002;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("Sentinel.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(130, 75);
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("Sentinel.png"));
+	components.back()->sprites.back().setOrigin(130, 75);
 }
 
 

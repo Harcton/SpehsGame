@@ -12,8 +12,8 @@ Engine::~Engine()
 Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, yo)
 {
 	sprites.push_back(sf::Sprite());
-	sprites[sprites.size() - 1].setTexture(RM.getTexture("engine.png"));
-	sprites[sprites.size() - 1].setOrigin(67, 50);
+	sprites.back().setTexture(RM.getTexture("engine.png"));
+	sprites.back().setOrigin(67, 50);
 
 	animatedSprites.push_back(sge::Sprite("engine_fire_animation_testversion.png"));
 	animatedSprites[0].setVisibility(false);

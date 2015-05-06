@@ -21,11 +21,11 @@ Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel, Comman
 	closeAngle = 0.003;
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("Flier.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
-	components[components.size() - 1]->textureRadius = 30;
-	components[components.size() - 1]->maxHp = 30;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("Flier.png"));
+	components.back()->sprites.back().setOrigin(50, 50);
+	components.back()->textureRadius = 30;
+	components.back()->maxHp = 30;
 }
 
 

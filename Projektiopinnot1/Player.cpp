@@ -312,7 +312,7 @@ bool Player::update()
 	updateComponents();
 	//////////////
 
-
+	std::cout << "\nScreen x/y: " << screenX << ", " << screenY;
 	return true;
 }
 
@@ -483,41 +483,41 @@ void Player::calculateCenterOfMass()
 void Player::addFromGrid(int gx, int gy)
 {
 	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100, gx, gy));
-	components[components.size() - 1]->types.push_back(component::hull);
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("skeleton.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
+	components.back()->types.push_back(component::hull);
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("skeleton.png"));
+	components.back()->sprites.back().setOrigin(50, 50);
 	
 	if (data.grid[gx][gy].core)
 	{//For the core piece, add the additional sprite
-		components[components.size() - 1]->sprites.push_back(sf::Sprite());
-		components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("core.png"));
-		components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(50, 50);
+		components.back()->sprites.push_back(sf::Sprite());
+		components.back()->sprites.back().setTexture(RM.getTexture("core.png"));
+		components.back()->sprites.back().setOrigin(50, 50);
 	}	
 	else if (data.grid[gx][gy].turret > 0)
 	{//Add turret
-		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
-		components[components.size() - 1]->gridLocationX = gx;
-		components[components.size() - 1]->gridLocationY = gy;
+		components.back()->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
+		components.back()->gridLocationX = gx;
+		components.back()->gridLocationY = gy;
 		//Set stats
-		components[components.size() - 1]->angleModifier = data.grid[gx][gy].angleModifier*(PI/180);
+		components.back()->angleModifier = data.grid[gx][gy].angleModifier*(PI/180);
 
 		//Color all the sprites
-		for (unsigned int i = 0; i < components[components.size() - 1]->sprites.size(); i++)
-			components[components.size() - 1]->sprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
-		for (unsigned int i = 0; i < components[components.size() - 1]->animatedSprites.size(); i++)
-			components[components.size() - 1]->animatedSprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
+		for (unsigned int i = 0; i < components.back()->sprites.size(); i++)
+			components.back()->sprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
+		for (unsigned int i = 0; i < components.back()->animatedSprites.size(); i++)
+			components.back()->animatedSprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
 	}
 	else if (data.grid[gx][gy].engine > 0)
 	{//Add an engine
-		components[components.size() - 1]->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::engine);
-		components[components.size() - 1]->gridLocationX = gx;
-		components[components.size() - 1]->gridLocationY = gy;
+		components.back()->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::engine);
+		components.back()->gridLocationX = gx;
+		components.back()->gridLocationY = gy;
 		//Set stats
-		components[components.size() - 1]->angleModifier = data.grid[gx][gy].angleModifier*(PI / 180);
-		components[components.size() - 1]->angle = components[components.size() - 1]->angleModifier + PI;
-		components[components.size() - 1]->rotationDirection = data.grid[gx][gy].rotationDirection;
-		components[components.size() - 1]->holdToThrust = data.grid[gx][gy].holdToFire;
+		components.back()->angleModifier = data.grid[gx][gy].angleModifier*(PI / 180);
+		components.back()->angle = components.back()->angleModifier + PI;
+		components.back()->rotationDirection = data.grid[gx][gy].rotationDirection;
+		components.back()->holdToThrust = data.grid[gx][gy].holdToFire;
 	}
 	
 	//Handle children	
@@ -569,6 +569,8 @@ void Player::editShip()
 	xSpeed = 0;
 	ySpeed = 0;
 	turnSpeed = 0;
+	screenX = WINDOW_WIDTH / 2;
+	screenY = WINDOW_HEIGHT / 2;
 }
 
 

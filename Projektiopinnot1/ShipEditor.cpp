@@ -598,26 +598,26 @@ void ShipEditor::updateGridSpriteTextures()
 			if (playerData.grid[x][y].armor > 0)
 			{
 				gridSprites[x][y].push_back(sf::Sprite());
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorSkeleton.png"));
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50);
+				gridSprites[x][y].back().setTexture(RM.getTexture("editorSkeleton.png"));
+				gridSprites[x][y].back().setOrigin(50, 50);
 			}
 
 			
 			if (playerData.grid[x][y].turret > 0)
 			{//Add turret sprite
 				gridSprites[x][y].push_back(sf::Sprite());
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorTurret.png"));
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50); 
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y].angleModifier);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
+				gridSprites[x][y].back().setTexture(RM.getTexture("editorTurret.png"));
+				gridSprites[x][y].back().setOrigin(50, 50);
+				gridSprites[x][y].back().setRotation(360 - playerData.grid[x][y].angleModifier);
+				gridSprites[x][y].back().setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
 			}
 			else if (playerData.grid[x][y].engine > 0)
 			{//Add engine sprite
 				gridSprites[x][y].push_back(sf::Sprite());
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setTexture(RM.getTexture("editorEngine.png"));
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setOrigin(50, 50);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setRotation(360 - playerData.grid[x][y].angleModifier);
-				gridSprites[x][y][gridSprites[x][y].size() - 1].setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
+				gridSprites[x][y].back().setTexture(RM.getTexture("editorEngine.png"));
+				gridSprites[x][y].back().setOrigin(50, 50);
+				gridSprites[x][y].back().setRotation(360 - playerData.grid[x][y].angleModifier);
+				gridSprites[x][y].back().setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
 			}
 
 
@@ -627,29 +627,29 @@ void ShipEditor::updateGridSpriteTextures()
 			if (playerData.grid[x][y].childUp == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setOrigin(-46, 50);
+				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setOrigin(-46, 50);
 			}
 			if (playerData.grid[x][y].childDown == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setOrigin(59, 150);
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setRotation(180);
+				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setOrigin(59, 150);
+				inheritanceSprites[x][y].back().setRotation(180);
 			}
 			if (playerData.grid[x][y].childLeft == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setOrigin(57, 50);
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setRotation(270);
+				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setOrigin(57, 50);
+				inheritanceSprites[x][y].back().setRotation(270);
 			}
 			if (playerData.grid[x][y].childRight == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setTexture(RM.getTexture("inheritanceArrow.png"));
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setOrigin(-44, 150);
-				inheritanceSprites[x][y][inheritanceSprites[x][y].size() - 1].setRotation(90);
+				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setOrigin(-44, 150);
+				inheritanceSprites[x][y].back().setRotation(90);
 			}
 		}
 }

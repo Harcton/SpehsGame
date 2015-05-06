@@ -217,18 +217,18 @@ void Component::createChild(double ox, double oy, component::Type tp)
 	{
 	case component::hull:
 		master->components.push_back(new Component(master, centerObj, ox, oy));
-		childComponents.push_back(master->components[master->components.size() - 1]->id);
-		master->components[master->components.size() - 1]->sprites.push_back(sf::Sprite());
-		master->components[master->components.size() - 1]->sprites[master->components[master->components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("skeleton.png"));
-		master->components[master->components.size() - 1]->sprites[master->components[master->components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(1400, 0, 100, 100));
+		childComponents.push_back(master->components.back()->id);
+		master->components.back()->sprites.push_back(sf::Sprite());
+		master->components.back()->sprites.back().setTexture(RM.getTexture("skeleton.png"));
+		master->components.back()->sprites.back().setTextureRect(sf::IntRect(1400, 0, 100, 100));
 		break;
 	case component::turret: //Turret
 		master->components.push_back(new Turret(master, centerObj, ox, oy));
-		childComponents.push_back(master->components[master->components.size() - 1]->id);
+		childComponents.push_back(master->components.back()->id);
 		break;
 	case component::engine: //Engine
 		master->components.push_back(new Engine(master, ox, oy));
-		childComponents.push_back(master->components[master->components.size() - 1]->id);
+		childComponents.push_back(master->components.back()->id);
 		break;
 	}
 

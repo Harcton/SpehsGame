@@ -75,7 +75,10 @@ void Game::run()
 
 	//Creating background objects
 	for (int i = 0; i < 10; i++)
+	{
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
+		backgrounds.back()->update();
+	}
 
 	
 
@@ -219,7 +222,7 @@ void Game::updateBackgrounds()
 	if (backgrounds.size() < 7)
 	{
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
-		backgrounds[backgrounds.size() - 1]->update();
+		backgrounds.back()->update();
 	}
 }
 
@@ -242,14 +245,15 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 1;//
+	bool tempDevelopmentSelection = 0;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
 		if (objects.size() < 2)
 		{
 			objects.push_back(new Seeker(mWindow, this, 2)); //spawn different enemy types
-			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->setRandomLocation();
+			objects.back()->update();
 		}
 	}
 	else
@@ -290,25 +294,25 @@ void Game::demo()
 		if (spawnRandomization == 1)
 		{
 			objects.push_back(new Sentinel(mWindow, this, 1));
-			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
 		if (spawnRandomization == 2)
 		{
 			objects.push_back(new Seeker(mWindow, this, 1));
-			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
 		if (spawnRandomization == 3)
 		{
 			objects.push_back(new Sentry(mWindow, this, 1));
-			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
 		if (spawnRandomization == 4)
 		{
 			objects.push_back(new Commander(mWindow, this, 1));
-			objects[objects.size() - 1]->setRandomLocation();
+			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
 	}

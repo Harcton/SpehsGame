@@ -23,81 +23,81 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 
 	//-9
 	components.push_back(new Component(this, mGame->playerObj, -325, -100)); //Component 3 (REAR)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(0, 300, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(0, 300, 200, 200));
+	components.back()->textureRadius = 100;
 	//-8
 	components.push_back(new Component(this, mGame->playerObj, -300, -50)); //Component 5 (R-REAR WING)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(400, 300, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(400, 300, 200, 200));
+	components.back()->textureRadius = 100;
 	//-7
 	components.push_back(new Component(this, mGame->playerObj, -300, -150)); //Component 4 (L-REAR WING)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(200, 300, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(200, 300, 200, 200));
+	components.back()->textureRadius = 100;
 	//-6
 	components.push_back(new Component(this, mGame->playerObj, -200, -50)); //Component 7 (R-CORE WING)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(700, 0, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(700, 0, 200, 200));
+	components.back()->textureRadius = 100;
 	//-5
 	components.push_back(new Component(this, mGame->playerObj, -200, -150)); //Component 6 (L-CORE WING)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(500, 0, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(500, 0, 200, 200));
+	components.back()->textureRadius = 100;
 	//-4
 	components.push_back(new Component(this, mGame->playerObj, -50, -50)); //Component 9 (R-FRONT WING)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(800, 300, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(800, 300, 200, 200));
+	components.back()->textureRadius = 100;
 	//-3
 	components.push_back(new Component(this, mGame->playerObj, -50, -150)); //Component 8 (L-FRONT WING)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(600, 300, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(600, 300, 200, 200));
+	components.back()->textureRadius = 100;
 	//-2
 	components.push_back(new Component(this, mGame->playerObj, -250, -100)); //Component 2 (CORE) //set correct coordinates for everyone...
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(100, 100);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(300, 0, 200, 200));
-	components[components.size() - 1]->textureRadius = 100;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(300, 0, 200, 200));
+	components.back()->textureRadius = 100;
 	//-1
 	components.push_back(new Component(this, mGame->playerObj, -100, -100)); //Component 1 (TANK) //(0,0)
-	components[components.size() - 1]->sprites.push_back(sf::Sprite());
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setOrigin(150, 150);
-	components[components.size() - 1]->sprites[components[components.size() - 1]->sprites.size() - 1].setTextureRect(sf::IntRect(0, 0, 300, 300));
-	components[components.size() - 1]->textureRadius = 150;
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.getTexture("enemy_commander_ship_upgraded.png"));
+	components.back()->sprites.back().setOrigin(150, 150);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(0, 0, 300, 300));
+	components.back()->textureRadius = 150;
 
-	components[components.size() - 2]->childComponents.push_back(components[components.size() - 1]->id); //TANK TO CORE
+	components[components.size() - 2]->childComponents.push_back(components.back()->id); //TANK TO CORE
 	components[components.size() - 2]->childComponents.push_back(components[components.size() - 6]->id); //R-CORE WING TO CORE
 	components[components.size() - 2]->childComponents.push_back(components[components.size() - 5]->id); //L-CORE WING TO CORE
 	components[components.size() - 2]->childComponents.push_back(components[components.size() - 9]->id); //REAR TO CORE
-	components[components.size() - 1]->childComponents.push_back(components[components.size() - 4]->id); //R-FRONT WING TO TANK
-	components[components.size() - 1]->childComponents.push_back(components[components.size() - 3]->id); //L-FRONT WING TO TANK
+	components.back()->childComponents.push_back(components[components.size() - 4]->id); //R-FRONT WING TO TANK
+	components.back()->childComponents.push_back(components[components.size() - 3]->id); //L-FRONT WING TO TANK
 	components[components.size() - 5]->childComponents.push_back(components[components.size() - 7]->id); //L-REAR WING TO L-CORE WING
 	components[components.size() - 6]->childComponents.push_back(components[components.size() - 8]->id); //R-REAR WING TO R-CORE WING
 
 	components.push_back(new Turret(this, centerObj, -200, -150));
-	components[components.size() - 5]->childComponents.push_back(components[components.size() - 1]->id);
+	components[components.size() - 5]->childComponents.push_back(components.back()->id);
 	components.push_back(new Turret(this, centerObj, -200, -50));
-	components[components.size() - 6]->childComponents.push_back(components[components.size() - 1]->id);
+	components[components.size() - 6]->childComponents.push_back(components.back()->id);
 }
 
 
@@ -190,6 +190,6 @@ void Commander::AIupdate()//maybe not follow true all the time
 void Commander::launchFliers()
 {
 	mGame->objects.push_back(new Flier(mWindow, mGame, 1, this));
-	mGame->objects[mGame->objects.size() - 1]->setLocation(x, y); //randomize a lil bit
+	mGame->objects.back()->setLocation(x, y); //randomize a lil bit
 	fliersFollowing++;
 }
