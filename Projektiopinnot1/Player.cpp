@@ -312,7 +312,6 @@ bool Player::update()
 	updateComponents();
 	//////////////
 
-	std::cout << "\nScreen x/y: " << screenX << ", " << screenY;
 	return true;
 }
 

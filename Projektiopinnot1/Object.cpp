@@ -33,8 +33,8 @@ Object::Object(Game* game, Object* mstr, int mx, int my, float angl, float spd, 
 	master = mstr;
 	x = mx;
 	y = my;
-	xSpeed = cos(angl)*spd;
-	ySpeed = sin(angl)*spd;
+	xSpeed = cos(angl)*spd + master->xSpeed;
+	ySpeed = sin(angl)*spd + master->ySpeed;
 	spr.setTexture(RM.getTexture("bullet1.png"));
 }
 Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame), centerObj(other.centerObj), dataPtr(other.dataPtr)
@@ -75,6 +75,7 @@ Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame)
 }
 Object& Object::operator=(Object other)
 {//Assignment operator
+	std::cout << "\n  Object assignemnt operator called";
 	while (!components.empty())
 	{
 		delete components.back();

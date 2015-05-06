@@ -317,7 +317,25 @@ void Game::demo()
 		}
 	}
 
-	distanceText.setString(intToString(distanceFromStart));
+
+
+	//Distance meter TO DO: rounded 2-4 decimal part
+	char distanceSuffix = ' ';
+	int convertedDistance = distanceFromStart;
+	if (distanceFromStart > 1000000000000)
+	{	convertedDistance = distanceFromStart / 1000000000000.0f;
+		distanceSuffix = 'T';	}
+	else if (distanceFromStart > 1000000000)
+	{	convertedDistance = distanceFromStart / 1000000000.0f;
+		distanceSuffix = 'G';	}
+	else if (distanceFromStart > 1000000)
+	{	convertedDistance = distanceFromStart / 1000000.0f;
+		distanceSuffix = 'M';	}
+	else if (distanceFromStart > 1000)
+	{	convertedDistance = distanceFromStart / 1000.0f;
+		distanceSuffix = 'k';	}
+	distanceText.setString(std::to_string(convertedDistance) + " " + distanceSuffix + "m");
+	//distanceText.setString(intToString(distanceFromStart));
 	double temp_angle = atan2(playerObj->y, playerObj->x);
 	if (temp_angle < 0)
 		temp_angle = abs(temp_angle);

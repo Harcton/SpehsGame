@@ -200,10 +200,12 @@ void Component::update()
 
 void Component::draw()
 {
-	for (unsigned int i = 0; i < sprites.size(); i++)
-		master->mWindow.draw(sprites[i]);
-	for (unsigned int i = 0; i < animatedSprites.size(); i++)
-		animatedSprites[i].draw(master->mWindow);
+	if (sprites.size() > 0)
+		for (unsigned int i = 0; i < sprites.size(); i++)
+			master->mWindow.draw(sprites[i]);
+	if (animatedSprites.size() > 0)
+		for (unsigned int i = 0; i < animatedSprites.size(); i++)
+			animatedSprites[i].draw(master->mWindow);
 
 	//DEBUG
 	if (drawCollisionCircle == false)
