@@ -141,16 +141,7 @@ bool Enemy::update()
 
 void Enemy::notifyComponentDestruction(Component* component)
 {
-	//Delete component's children
-	std::vector<int> childIds;
-	for (unsigned int i = 0; i < component->childComponents.size(); i++)
-		childIds.push_back(component->childComponents[i]);
-	for (unsigned int cn = 0; cn < childIds.size(); cn++)
-		for (unsigned int i = 0; i < components.size(); i++)
-			if (components[i]->id == childIds[cn])
-				components[i]->hp = -999;
-
-	//Erase cid from it's parents' memory (tragic event)
+	//Erase child id from it's parents' memory
 	for (unsigned int i = 0; i < components.size(); i++)
 		for (unsigned int c = 0; c < components[i]->childComponents.size(); c++)
 			if (components[i]->childComponents[c] == component->id)
@@ -161,18 +152,6 @@ void Enemy::notifyComponentDestruction(Component* component)
 
 
 
-
-
-void Enemy::removeComponent(int cid)
-{
-	for (unsigned int i = 0; i < components.size(); i++)
-	{
-		if (components[i]->id == cid)
-		{
-			components[i]->hp = -999; //?
-		}
-	}
-}
 
 
 void Enemy::complexUpdate()

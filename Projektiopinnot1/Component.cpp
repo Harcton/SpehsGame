@@ -7,7 +7,23 @@
 
 
 Component::~Component()
-{}
+{
+	if (performDestructor == true)
+	{
+		//Destroy component's children
+		while (childComponents.size() > 0)
+		{
+			for (unsigned int i = 0; i < master->components.size(); i++)
+				if (master->components[i]->id == childComponents.back())
+				{
+				master->components[i]->hp = -999;
+				break;
+				}
+			childComponents.pop_back();
+		}
+		master->notifyComponentDestruction(this);
+	}
+}
 Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy) : Component::Component(mstr, cntr, xo, yo)
 {
 	gridLocationX = gx;

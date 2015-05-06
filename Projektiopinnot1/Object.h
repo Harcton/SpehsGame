@@ -30,7 +30,6 @@ public:
 	bool isBulletUpdate();
 	void checkCollisions(unsigned int);
 	void checkBulletCollision(Object*);
-	virtual void removeComponent(int){};
 	virtual void notifyComponentDestruction(Component*){}
 	virtual void draw();
 	void setRandomLocation();

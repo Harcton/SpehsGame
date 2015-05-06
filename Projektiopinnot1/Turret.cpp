@@ -127,7 +127,8 @@ void Turret::fire()
 	
 	magazine--;
 	canFireTimer = fireRateInterval;
-	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2*PI - angle, 15.0f, damage));
+	Object* bullet = new Object(master->mGame, master, x, y, 2 * PI - angle, 15.0f, damage);
+	master->mGame->bullets.push_back(bullet);
 	hasFired = true;
 }
 void Turret::reload()

@@ -251,15 +251,19 @@ bool Object::update()
 
 void Object::updateComponents()
 {
-	for (unsigned int i = 0; i < components.size(); i++)
-		if (components[i]->alive() == false)
+	int k = 0;
+	while (k < components.size())
+	{
+		if (components[k]->alive() == false)
 		{
-		Component* temp_componentPointer = components[i];
-		components.erase(components.begin() + i);
-		notifyComponentDestruction(temp_componentPointer);
-		delete temp_componentPointer;
-		i = 0;
+			Component* temp_componentPointer = components[k];
+			components.erase(components.begin() + k);
+			delete temp_componentPointer;
+			k = 0;
 		}
+		else
+			++k;
+	}
 
 	for (unsigned int i = 0; i < components.size(); i++)
 		components[i]->update();

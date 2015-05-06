@@ -24,7 +24,6 @@ public:
 	void applyPlayerData();
 
 	bool update();
-	void removeComponent(int);
 	void notifyComponentDestruction(Component*);
 	void addFromGrid(int, int);
 	void editShip();

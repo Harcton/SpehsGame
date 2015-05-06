@@ -360,13 +360,6 @@ void Player::zoomOut(double f)
 
 
 
-void Player::removeComponent(int cid)
-{
-	for (unsigned int i = 0; i < components.size(); i++)
-		if (components[i]->id == cid)
-		components[i]->hp = -999;
-}
-
 void Player::loadPlayerData()
 {
 	if (playerName.size() < 2)
@@ -388,6 +381,7 @@ void Player::applyPlayerData()
 	angle = 0;
 	while (!components.empty())
 	{
+		components.back()->performDestructor = false;
 		delete components.back();
 		components.pop_back();
 	}
@@ -553,10 +547,15 @@ void Player::editShip()
 	switch (editor.run())
 	{
 	case 0:
+	{
 		//Player exits with return to spehs
 		applyPlayerData();
 		loadKeybindings();
+		//Update enemy nearestComponent pointers
+		for (unsigned int i = 1; i < mGame->objects.size(); i++)
+			mGame->objects[i]->update();
 		break;
+	}
 	case 2:
 		//Player wishes to quit to menu
 		mGame->keepRunning = false;
@@ -576,30 +575,10 @@ void Player::editShip()
 
 void Player::notifyComponentDestruction(Component* component)
 {
-
-	//int gx = -1;
-	//int gy = -1;
-	//for (unsigned int i = 0; i < components.size(); i++)
-	//	if (components[i]->id == id)
-	//	{
-	//	gx = components[i]->gridLocationX;
-	//	gy = components[i]->gridLocationY;
-	//	}
 	int gx = component->gridLocationX;
 	int gy = component->gridLocationY;
 	if (gx < 0 || gy < 0)
 		return;
-
-
-
-	//Destroy component's children
-	std::vector<int> childIds;
-	for (unsigned int i = 0; i < component->childComponents.size(); i++)
-		childIds.push_back(component->childComponents[i]);
-	for (unsigned int cn = 0; cn < childIds.size(); cn++)
-		for (unsigned int i = 0; i < components.size(); i++)
-			if (components[i]->id == childIds[cn])
-				components[i]->hp = -999;
 
 	
 	//Notify parent component

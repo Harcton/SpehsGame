@@ -93,6 +93,7 @@ public:
 protected:
 	std::vector<sf::Sprite> sprites;
 	std::vector<sge::Sprite> animatedSprites;
+	bool performDestructor = true;
 
 	bool mouseAim;
 	bool mouseAimRelativeToCenter;

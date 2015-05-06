@@ -28,7 +28,6 @@ public:
 	~Enemy();
 
 	virtual bool update();
-	virtual void removeComponent(int);
 	virtual void notifyComponentDestruction(Component*);
 	virtual void complexUpdate();
 
