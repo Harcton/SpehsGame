@@ -23,7 +23,11 @@ public:
 	friend class Component;
 	friend class Engine;
 	friend class Enemy;
-	friend class Player;
+	friend class Seeker;
+	friend class Sentinel;
+	friend class Flier;
+	friend class Commander;
+	friend class Sentry;
 
 	virtual bool update();
 	void updateComponents();

@@ -108,6 +108,12 @@ Commander::~Commander()
 
 bool Commander::update()
 {
+	//When player is kill
+	if (mGame->playerObj->components.size() == 0)
+	{
+		state = state_victory;
+	}
+
 	//Counters
 	shootingCounter++;
 	flierAttackCounter++;
@@ -117,7 +123,8 @@ bool Commander::update()
 	if (components.size() > 0)
 	{
 		HPMemory = components[0]->hp;
-	}	
+	}
+	memoryState = state;
 
 	return Enemy::update();
 }
@@ -125,6 +132,12 @@ bool Commander::update()
 
 void Commander::AIupdate()//maybe not follow true all the time
 {
+	if (state == state_victory)
+	{
+		//nothing to see here just act normal
+		return;
+	}
+
 	if (flierAttackCounter >= 600)
 	{
 		initiateFlierAssault = true;
@@ -138,10 +151,14 @@ void Commander::AIupdate()//maybe not follow true all the time
 
 	if (fleeing)
 	{
+		state = state_fleeing;
+
 		//
 	}
 	else if (distance < closeRange) //Close state
 	{
+		state = state_closeRange;
+
 		follow = true;
 		xSpeed = -(cos(2 * PI - angle))*accelerationConstant;
 		ySpeed = -(sin(2 * PI - angle))*accelerationConstant;
@@ -159,6 +176,8 @@ void Commander::AIupdate()//maybe not follow true all the time
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
+		state = state_active;
+
 		follow = true;
 		xSpeed += (cos(angle))*accelerationConstant;
 		ySpeed += (sin(angle))*accelerationConstant;
@@ -174,12 +193,16 @@ void Commander::AIupdate()//maybe not follow true all the time
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		state = state_detected;
+
 		follow = true;
 		xSpeed += cos(2 * PI - angle)*accelerationConstant;
 		ySpeed += sin(2 * PI - angle)*accelerationConstant;
 	}
 	else //Passive state
 	{
+		state = state_passive;
+
 		follow = false;
 		xSpeed += cos(angle)*accelerationConstant;
 		ySpeed += sin(angle)*accelerationConstant;

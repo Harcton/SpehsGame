@@ -4,27 +4,6 @@
 #include "Enemy.h"
 
 
-
-
-enum AnimationID
-{
-	anim_active,
-	anim_passive,
-	anim_dodge
-};
-
-enum enemyState
-{
-	state_spawned,
-	state_contact,
-	state_closeRange,
-	state_active,
-	state_detected,
-	state_passive,
-	state_dodging,
-	state_activated
-};
-
 class Seeker : public Enemy
 {
 public:
@@ -41,8 +20,6 @@ private:
 	bool explosionLimiter;
 	int dodgeCounter;
 	int activationCounter;
-	enemyState state;
-	enemyState memoryState;
 };
 
 #endif

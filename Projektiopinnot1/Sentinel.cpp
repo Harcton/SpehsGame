@@ -7,6 +7,7 @@
 Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
+	state = state_spawned;
 
 	dodging = false;
 	repositioning = false;
@@ -34,6 +35,12 @@ Sentinel::~Sentinel()
 
 bool Sentinel::update()
 {
+	//When player is kill
+	if (mGame->playerObj->components.size() == 0)
+	{
+		state = state_victory;
+	}
+
 	//Counters
 	dodgeCounter--;
 	if (dodgeCounter < 0)
@@ -72,6 +79,7 @@ bool Sentinel::update()
 	{
 		HPMemory = components[0]->hp;
 	}
+	memoryState = state;
 
 	return Enemy::update();
 }
@@ -79,26 +87,42 @@ bool Sentinel::update()
 
 void Sentinel::AIupdate()
 {
+	if (state == state_victory)
+	{
+		//nothing to see here just act normal
+		return;
+	}
+
 	if (dodging)
 	{
+		state = state_dodging;
+
 		dodgeMove();
 	}
 	else if (repositioning)
 	{
+		state = state_repositioning;
+
 		//
 	}
 	else if (fleeing)
 	{
+		state = state_fleeing;
+
 		//
 	}
 	else if (distance < closeRange) //Close state
 	{
+		state = state_closeRange;
+
 		follow = true;
 		xSpeed += -(cos(2 * PI - angle))*accelerationConstant;
 		ySpeed += -(sin(2 * PI - angle))*accelerationConstant;
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
+		state = state_active;
+
 		if (rotationDirection == true)
 		{
 			if (components.size() > 0)
@@ -150,12 +174,16 @@ void Sentinel::AIupdate()
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		state = state_detected;
+
 		follow = true;
 		xSpeed += cos(2 * PI - angle)*accelerationConstant;
 		ySpeed += sin(2 * PI - angle)*accelerationConstant;
 	}
 	else //Passive state
 	{
+		state = state_passive;
+
 		follow = false;
 		xSpeed = xSpeed*0.96;
 		ySpeed = ySpeed*0.96;

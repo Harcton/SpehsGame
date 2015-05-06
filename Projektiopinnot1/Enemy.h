@@ -7,18 +7,34 @@ class Game;
 #include "Component.h"
 
 
-//ENEMY STATES
-//-Passive
-//-Detected
-//-Active
-//-Close range
-//-Dodging
-//-Repositioning
-//-Fleeing
-//
-//-Destroyed
-//-Fled
-//-Contact
+enum AnimationID
+{
+	anim_spawn,
+	anim_active,
+	anim_passive,
+	anim_dodge,
+	anim_contact,
+	anim_activation,
+	anim_victory
+};
+
+enum enemyState
+{
+	state_spawned,
+	state_activated,
+
+	state_passive,
+	state_detected,
+	state_active,
+	state_closeRange,
+	state_contact,
+
+	state_dodging,
+	state_fleeing,
+	state_repositioning,
+
+	state_victory
+};
 
 
 class Enemy : public Object
@@ -56,6 +72,8 @@ protected:
 	double distance;
 	double playerDirection;
 	Component* nearestComponent;
+	enemyState state;
+	enemyState memoryState;
 };
 
 #endif

@@ -36,6 +36,12 @@ Flier::~Flier()
 
 bool Flier::update()
 {
+	//When player is kill
+	if (mGame->playerObj->components.size() == 0)
+	{
+		state = state_victory;
+	}
+
 	//Counters
 	laserCounter++;
 
@@ -69,6 +75,7 @@ bool Flier::update()
 	{
 		HPMemory = components[0]->hp;
 	}
+	memoryState = state;
 
 	return Enemy::update();
 }
@@ -76,6 +83,12 @@ bool Flier::update()
 
 void Flier::AIupdate()//change behaviour when not fighting
 {
+	if (state == state_victory)
+	{
+		//nothing to see here just act normal
+		return;
+	}
+
 	//if (fleetMaster->initiateFlierAssault == true)
 	//{
 	//	this->initiateAssault = true;
@@ -83,16 +96,22 @@ void Flier::AIupdate()//change behaviour when not fighting
 
 	if (repositioning)
 	{
+		state = state_repositioning;
+
 		reposition();
 	}
 	else if (distance < closeRange) //Close state
 	{
+		state = state_closeRange;
+
 		follow = true;
 		xSpeed += -(cos(2 * PI - angle))*accelerationConstant;
 		ySpeed += -(sin(2 * PI - angle))*accelerationConstant;
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
+		state = state_active;
+
 		follow = true;
 		if (rotationDirection == true) //rotation direction to be fixed?
 		{
@@ -116,6 +135,8 @@ void Flier::AIupdate()//change behaviour when not fighting
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		state = state_detected;
+
 		if (initiateAssault == false)
 		{
 			follow = false;
@@ -210,6 +231,8 @@ void Flier::AIupdate()//change behaviour when not fighting
 	}
 	else //Passive state
 	{
+		state = state_passive;
+
 		follow = false;
 		initiateAssault = false;
 		xSpeed += cos(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);

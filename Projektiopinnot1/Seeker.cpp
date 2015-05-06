@@ -45,7 +45,7 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	components[0]->animatedSprites.back().setOrigin(50, 50);
 	components[0]->animatedSprites.back().setFrameSize(100, 100);
 	components[0]->animatedSprites.back().setTilesetSize(5, 3);
-	components[0]->animatedSprites.back().setFrameDuration(1);
+	components[0]->animatedSprites.back().setFrameDuration(3);
 }
 
 
@@ -56,6 +56,12 @@ Seeker::~Seeker()
 
 bool Seeker::update()
 {
+	//When player is kill
+	if (mGame->playerObj->components.size() == 0)
+	{
+		state = state_victory;
+	}
+
 	//Counters
 	dodgeCounter--;
 	if (dodgeCounter < 0)
@@ -68,7 +74,7 @@ bool Seeker::update()
 	if (components.size() > 0)
 	{
 		HPMemory = components[0]->hp;
-	}	
+	}
 	memoryState = state;
 
 	return Enemy::update();
@@ -77,6 +83,12 @@ bool Seeker::update()
 
 void Seeker::AIupdate()//maybe not follow true all the time
 {
+	if (state == state_victory)
+	{
+		//nothing to see here just act normal
+		return;
+	}
+
 	if (dodging)
 	{
 		state = state_dodging;
