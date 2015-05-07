@@ -9,10 +9,11 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
 
+	angle = playerDirection;
 	dodging = false;
 	repositioning = false;
 	fleeing = false;
-	aggroRange = SPAWN_RANGE;
+	aggroRange = 1850;
 	maxActionRange = 600;
 	closeRange = 350;
 	maxTurnSpeedLimit = 0.05;
@@ -89,11 +90,20 @@ bool Sentinel::update()
 
 void Sentinel::AIupdate()
 {
+	//Special cases
+	if (state == state_spawned)
+	{
+		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
+		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
+		state = state_passive;
+		return;
+	}
 	if (state == state_victory)
 	{
 		//nothing to see here just act normal
 		return;
 	}
+
 
 	if (dodging)
 	{
@@ -187,8 +197,6 @@ void Sentinel::AIupdate()
 		state = state_passive;
 
 		follow = false;
-		xSpeed = xSpeed*0.96;
-		ySpeed = ySpeed*0.96;
 		if (xSpeed > -0.01 && xSpeed < 0.01)
 		{
 			xSpeed = 0;

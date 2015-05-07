@@ -10,10 +10,11 @@ Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
 
+	angle = playerDirection;
 	dodging = false;
 	repositioning = false;
 	fleeing = false;
-	aggroRange = SPAWN_RANGE;
+	aggroRange = 2000;
 	maxActionRange = 1000;
 	closeRange = 500;
 	maxTurnSpeedLimit = 0.01;
@@ -93,11 +94,20 @@ bool Sentry::update()
 
 void Sentry::AIupdate()
 {
+	//Special cases
+	if (state == state_spawned)
+	{
+		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
+		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
+		state = state_passive;
+		return;
+	}
 	if (state == state_victory)
 	{
 		//nothing to see here just act normal
 		return;
 	}
+
 
 	if (dodging)
 	{
@@ -191,8 +201,7 @@ void Sentry::AIupdate()
 		state = state_passive;
 
 		follow = false;
-		xSpeed = xSpeed*0.96;
-		ySpeed = ySpeed*0.96;
+		//Wandering around
 		if (xSpeed > -0.01 && xSpeed < 0.01)
 		{
 			xSpeed = 0;

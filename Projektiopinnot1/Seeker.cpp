@@ -9,9 +9,10 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
 
+	angle = playerDirection;
 	explosionLimiter = false;
 	dodging = false;
-	aggroRange = SPAWN_RANGE;
+	aggroRange = 1500;
 	maxActionRange = 700;
 	closeRange = 150;
 	maxTurnSpeedLimit = 0.03;
@@ -86,11 +87,20 @@ bool Seeker::update()
 
 void Seeker::AIupdate()//maybe not follow true all the time
 {
+	//Special cases
+	if (state == state_spawned)
+	{
+		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
+		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
+		state = state_passive;
+		return;
+	}
 	if (state == state_victory)
 	{
 		//nothing to see here just act normal
 		return;
 	}
+
 
 	if (dodging)
 	{
@@ -189,8 +199,6 @@ void Seeker::AIupdate()//maybe not follow true all the time
 		}
 
 		follow = false;
-		xSpeed = xSpeed*0.96;
-		ySpeed = ySpeed*0.96;
 		if (xSpeed > -0.01 && xSpeed < 0.01)
 		{
 			xSpeed = 0;

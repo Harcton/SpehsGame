@@ -135,13 +135,13 @@ void Object::setRandomLocation()
 {
 	//Randomize x/y
 	if (flipCoin())
-		x = centerObj->x + irandom(SPAWN_RANGE-400, SPAWN_RANGE);
+		x = centerObj->x + irandom((SPAWN_RANGE - 400), SPAWN_RANGE);
 	else
-		x = centerObj->x + irandom(-SPAWN_RANGE + 400, -SPAWN_RANGE);
+		x = centerObj->x + irandom((-SPAWN_RANGE + 400), -SPAWN_RANGE);
 	if (flipCoin())
-		y = centerObj->y + irandom(SPAWN_RANGE - 400, SPAWN_RANGE);
+		y = centerObj->y + irandom((SPAWN_RANGE - 400), SPAWN_RANGE);
 	else
-		y = centerObj->y + irandom(-SPAWN_RANGE + 400, -SPAWN_RANGE);
+		y = centerObj->y + irandom((-SPAWN_RANGE + 400), -SPAWN_RANGE);
 }
 
 bool Object::update()
