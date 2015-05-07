@@ -125,10 +125,12 @@ void Turret::fire()
 		return;
 	}
 	
+	if (master->mGame->bullets.size() >= MAX_BULLETS)
+		return;
+
 	magazine--;
 	canFireTimer = fireRateInterval;
-	Object* bullet = new Object(master->mGame, master, x, y, 2 * PI - angle, 15.0f, damage);
-	master->mGame->bullets.push_back(bullet);
+	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2 * PI - angle, 15.0f, damage));
 	hasFired = true;
 }
 void Turret::reload()

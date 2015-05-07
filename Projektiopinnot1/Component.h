@@ -32,6 +32,8 @@ public:
 	Component(Object*, Object*, double, double, int, int);
 	Component(const Component& other);
 	Component& operator=(Component);
+	Component(Component&& other);
+	Component& operator=(Component&&);
 
 	friend class Object;
 	friend class Player;

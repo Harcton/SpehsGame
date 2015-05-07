@@ -115,6 +115,15 @@ Object& Object::operator=(Object other)
 	hp = other.hp;
 	return *this;
 }
+Object& Object::operator=(Object&&)
+{
+	std::cout << "\n  -Object move assigment";
+	return *this;
+}
+Object::Object(Object&& other) : mWindow(other.mWindow)
+{
+	std::cout << "\n  -Object move constructor";
+}
 
 
 void Object::setLocation(double mx, double my)

@@ -20,6 +20,9 @@ Game::~Game()
 }
 Game::Game(sf::RenderWindow& w) : mWindow(w)
 {
+	objects.reserve(MAX_OBJECTS);
+	bullets.reserve(MAX_BULLETS);
+
 	elements.push_back(sf::Sprite());
 	elements[0].setTexture(RM.getTexture("ball.png"));
 	elements[0].setOrigin(10, 10);
@@ -251,7 +254,8 @@ void Game::updateObjects()
 	{
 		if (objects.size() < 2)
 		{
-			objects.push_back(new Seeker(mWindow, this, 2)); //spawn different enemy types
+			if (objects.size() < MAX_OBJECTS)
+				objects.push_back(new Seeker(mWindow, this, 2)); //spawn different enemy types
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
@@ -291,25 +295,25 @@ void Game::demo()
 		else
 			spawnRandomization = irandom(1, 3);
 
-		if (spawnRandomization == 1)
+		if (spawnRandomization == 1 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Sentinel(mWindow, this, 1));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
-		if (spawnRandomization == 2)
+		if (spawnRandomization == 2 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Seeker(mWindow, this, 1));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
-		if (spawnRandomization == 3)
+		if (spawnRandomization == 3 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Sentry(mWindow, this, 1));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
-		if (spawnRandomization == 4)
+		if (spawnRandomization == 4 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Commander(mWindow, this, 1));
 			objects.back()->setRandomLocation();

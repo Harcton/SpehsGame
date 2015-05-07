@@ -21,6 +21,8 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	turnAccelerationConstant = 0.0002;
 	closeAngle = 0.001;
 
+	//Reserve memory for each component
+	components.reserve(11);
 	//-9
 	components.push_back(new Component(this, mGame->playerObj, -325, -100)); //Component 3 (REAR)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -212,6 +214,9 @@ void Commander::AIupdate()//maybe not follow true all the time
 
 void Commander::launchFliers()
 {
+	if (mGame->objects.size() >= MAX_OBJECTS)
+		return;
+
 	mGame->objects.push_back(new Flier(mWindow, mGame, 1/*, this*/));
 	mGame->objects.back()->setLocation(x, y); //randomize a lil bit
 	fliersFollowing++;

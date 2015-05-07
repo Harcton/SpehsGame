@@ -20,6 +20,8 @@ Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel/*, Comm
 	turnAccelerationConstant = 0.005;
 	closeAngle = 0.003;
 
+	//Reserve memory for all of the components
+	components.reserve(1);
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.getTexture("Flier.png"));

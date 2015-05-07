@@ -147,6 +147,15 @@ Component& Component::operator=(Component other)
 	autoThrusting = other.autoThrusting;
 	return *this;
 }
+Component& Component::operator=(Component&&)
+{
+	std::cout << "\n  -Component move assigment";
+	return *this;
+}
+Component::Component(Component&& other)
+{
+	std::cout << "\n  -Component move constructor";
+}
 
 
 bool Component::alive()

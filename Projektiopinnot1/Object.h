@@ -20,6 +20,9 @@ public:
 	Object(Game* game, Object* master, int x, int y, float angle, float speed, int damage);//Bullet constructor
 	Object(const Object& other);
 	Object& operator=(Object);
+	Object(Object&& other);
+	Object& operator=(Object&&);
+
 	friend class Component;
 	friend class Engine;
 	friend class Enemy;

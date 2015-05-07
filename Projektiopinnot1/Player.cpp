@@ -23,6 +23,8 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 	loadPlayerData();
 	applyPlayerData();
 	loadKeybindings();
+	//Reserve memory for all of the components
+	components.reserve(EDITOR_WIDTH*EDITOR_HEIGHT);
 }
 
 bool Player::update()
