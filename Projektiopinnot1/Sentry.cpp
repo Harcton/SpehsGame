@@ -111,7 +111,7 @@ void Sentry::AIupdate()
 
 	if (dodging)
 	{
-		state == state_dodging;
+		state = state_dodging;
 
 		dodgeMove();
 	}

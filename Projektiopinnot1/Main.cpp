@@ -196,10 +196,10 @@ bool testInput(MyKeys k, sf::Event& mEvent)
 float limitZoom()
 {
 	float cutValue = 0;
-	if (zoomFactor < 0.2)
+	if (zoomFactor < 0.4)
 	{
-		cutValue += 0.2 - zoomFactor;
-		zoomFactor = 0.2;
+		cutValue += 0.4 - zoomFactor;
+		zoomFactor = 0.4;
 	}
 	else if (zoomFactor > 4)
 	{

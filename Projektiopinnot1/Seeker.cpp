@@ -235,7 +235,7 @@ void Seeker::dodgeMove(const double tempXSpeed, const double tempYSpeed)
 
 void Seeker::animationHandler(AnimationID ID)
 {
-	if (!components.size() > 0)
+	if (!(components.size() > 0))
 		return;
 
 	for (unsigned int i = 0; i < components[0]->animatedSprites.size(); i++)
