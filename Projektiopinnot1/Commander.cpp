@@ -9,10 +9,12 @@
 Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
+	state = state_spawned;
 
+	angle = playerDirection;
 	fleeing = false;
 	initiateFlierAssault = false;
-	aggroRange = SPAWN_RANGE;
+	aggroRange = 2500;
 	maxActionRange = 2300;
 	closeRange = 1000;
 	maxTurnSpeedLimit = 0.001;
@@ -134,11 +136,20 @@ bool Commander::update()
 
 void Commander::AIupdate()//maybe not follow true all the time
 {
+	//Special cases
+	if (state == state_spawned)
+	{
+		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
+		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
+		state = state_passive;
+		return;
+	}
 	if (state == state_victory)
 	{
 		//nothing to see here just act normal
 		return;
 	}
+
 
 	if (flierAttackCounter >= 600)
 	{
