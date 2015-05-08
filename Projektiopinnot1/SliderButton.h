@@ -7,7 +7,7 @@
 class SliderButton : public Button
 {
 public:
-	SliderButton(ButtonId, float, float, int, int, std::string, int, sf::Font*, sf::Color, sf::Color, sf::Color, int*);
+	SliderButton(ButtonId, float, float, int, int, std::string, int, sf::Color, sf::Color, sf::Color, int*);
 	~SliderButton();
 	friend class MainMenu;
 	friend class Game;

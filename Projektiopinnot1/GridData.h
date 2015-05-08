@@ -16,20 +16,25 @@ public:
 	friend class ShipEditor;
 
 private:
-	//Upgrades
-	int armor = 0;
+	//Modifications
 	int angleModifier = 0; 
-	int turret = 0; //Turret damage
-	float engine = 0; //Acceleration increase
 	int rotationDirection = 0;
-	int repair = 0; //Repair amount
-	int maxAngle = 0;
-	float turnSpeed = 0;
-	int capacity = 0; //magazine/charge capacity
-	int rechargeSpeed = 0; //Reload & recharge rate
-	float maxSpeed = 0; //bullet/engine speed
-	int fireRateInterval = 0;
 	bool hullMount = false;
+
+	//////////////////
+	//Upgrades (in "The bigger the better" format)
+	short int armor = 0;
+	short int capacity = 0; //magazine/charge capacity
+	short int rechargeSpeed = 0; //Reload & recharge rate
+	
+	short int engine = 0; //Thrust strength
+
+	short int turret = 0; //Turret damage
+	short int maxAngle = 0;
+	short int turnSpeed = 0;
+	short int bulletSpeed = 0;
+	short int recoilTime = 0;
+	///////////////////
 
 	//Structural
 	bool core = false;

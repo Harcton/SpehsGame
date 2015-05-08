@@ -27,7 +27,7 @@ enum ButtonId
 	bi_false,
 	bi_true,
 	//Actions popup
-	bi_actionUpgradeArmor,
+	bi_actionUpgrade,
 	bi_actionTurret,
 	bi_actionEngine,
 	bi_actionRotate,
@@ -132,6 +132,24 @@ enum ButtonId
 	bi_confGreenSlider,
 	bi_confBlueSlider,
 
+//Upgrades
+	//Armor
+	bi_upgradeArmor,
+	//Turret upgrades
+	bi_upgradeTurretDamage,
+	bi_upgradeTurretAngle,
+	bi_upgradeTurretTurnSpeed,
+	bi_upgradeTurretMagazine,
+	bi_upgradeTurretReloadSpeed,
+	bi_upgradeTurretBulletSpeed,
+	bi_upgradeTurretRecoilTime,
+
+	//Engine upgrades
+	bi_upgradeEngineStrength,
+	bi_upgradeEngineCapacity,
+	bi_upgradeEngineRechargeRate,
+
+
 };
 
 enum TextAlign
@@ -157,13 +175,13 @@ button id (use bi_true if not using id system)
 x, y
 texture path, texture scale
 */
-	Button(ButtonId, float, float, int, int, std::string, int, sf::Font*, sf::Color, sf::Color);
+	Button(ButtonId, float, float, int, int, std::string, int, sf::Color, sf::Color);
 	Button(ButtonId, float, float, sf::Texture&, float);
 	friend class ShipEditor;
 	friend class MainMenu;
 	friend class Game;
 
-	bool mouseOverlap(sf::Vector2i& mousePos);
+	virtual bool mouseOverlap(sf::Vector2i& mousePos);
 	virtual ButtonId checkIfPressed(sf::Vector2i& mousePos);
 	virtual void draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos);
 	void setPosition(float, float);
@@ -175,7 +193,6 @@ protected:
 	sf::RectangleShape buttonRectangle;
 	sf::Text text;
 	TextAlign textAlign = ta_left;
-	sf::Font* font;
 	sf::Sprite spr;
 	bool visible = true;
 	bool selected = false;

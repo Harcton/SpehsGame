@@ -51,16 +51,16 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	int buttonY1 = int(WINDOW_HEIGHT / 2.0f) - 2 * buttonHeight;
 	sf::Color buttonColorBG(20, 45, 55, 160);
 	sf::Color buttonColorText(200, 210, 250, 220);
-	escMenuButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - buttonBorder, buttonWidth + buttonBorder * 2, buttonHeight * 4 + buttonBorder * 2, "", int(50 * resFactor), &font, sf::Color(15, 20, 25, 220), buttonColorText));
-	escMenuButtons.push_back(Button(bi_gsetReturn, buttonX1, buttonY1, buttonWidth, buttonHeight, "Resume", int(50 * resFactor), &font, buttonColorBG, buttonColorText));
+	escMenuButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - buttonBorder, buttonWidth + buttonBorder * 2, buttonHeight * 4 + buttonBorder * 2, "", int(50 * resFactor), sf::Color(15, 20, 25, 220), buttonColorText));
+	escMenuButtons.push_back(Button(bi_gsetReturn, buttonX1, buttonY1, buttonWidth, buttonHeight, "Resume", int(50 * resFactor), buttonColorBG, buttonColorText));
 	escMenuButtons.back().setTextAlign(ta_center);
-	escMenuSliders.push_back(SliderButton(bi_gsetMusicVolume, buttonX1, buttonY1 + buttonHeight, buttonWidth, buttonHeight, "Music", int(50 * resFactor), &font, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &MUSIC_VOLUME));
+	escMenuSliders.push_back(SliderButton(bi_gsetMusicVolume, buttonX1, buttonY1 + buttonHeight, buttonWidth, buttonHeight, "Music", int(50 * resFactor), buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &MUSIC_VOLUME));
 	escMenuSliders.back().sliderState = MUSIC_VOLUME;
 	escMenuSliders.back().setTextAlign(ta_center);
-	escMenuSliders.push_back(SliderButton(bi_gsetSoundVolume, buttonX1, buttonY1 + buttonHeight*2, buttonWidth, buttonHeight, "Sound effects", int(50 * resFactor), &font, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &SFX_VOLUME));
+	escMenuSliders.push_back(SliderButton(bi_gsetSoundVolume, buttonX1, buttonY1 + buttonHeight*2, buttonWidth, buttonHeight, "Sound effects", int(50 * resFactor), buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &SFX_VOLUME));
 	escMenuSliders.back().sliderState = SFX_VOLUME;
 	escMenuSliders.back().setTextAlign(ta_center);
-	escMenuButtons.push_back(Button(bi_gsetQuit, buttonX1, buttonY1 + 3 * buttonHeight, buttonWidth, buttonHeight, "Quit to menu", int(50 * resFactor), &font, buttonColorBG, buttonColorText));
+	escMenuButtons.push_back(Button(bi_gsetQuit, buttonX1, buttonY1 + 3 * buttonHeight, buttonWidth, buttonHeight, "Quit to menu", int(50 * resFactor), buttonColorBG, buttonColorText));
 	escMenuButtons.back().setTextAlign(ta_center);
 }
 

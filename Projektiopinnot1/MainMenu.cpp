@@ -23,46 +23,46 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	buttonColorBG = sf::Color(20, 45, 55, 160);
 	buttonColorText = sf::Color(200, 210, 250, 220);
 	
-	buttons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - buttonBorder, button1Width + buttonBorder * 2, button1Height*4 + buttonBorder*2, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
-	buttons.push_back(Button(bi_mmNewGame, buttonX1, buttonY1, button1Width, button1Height, "New Game", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - buttonBorder, button1Width + buttonBorder * 2, button1Height*4 + buttonBorder*2, "", int(50 * resFactor), sf::Color(15, 20, 25, 220), buttonColorText));
+	buttons.push_back(Button(bi_mmNewGame, buttonX1, buttonY1, button1Width, button1Height, "New Game", int(50 * resFactor), buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
-	buttons.push_back(Button(bi_mmLoadGame, buttonX1, buttonY1 + button1Height, button1Width, button1Height, "Load Game", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_mmLoadGame, buttonX1, buttonY1 + button1Height, button1Width, button1Height, "Load Game", int(50 * resFactor), buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
-	buttons.push_back(Button(bi_mmSettings, buttonX1, buttonY1 + button1Height * 2, button1Width, button1Height, "Settings", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_mmSettings, buttonX1, buttonY1 + button1Height * 2, button1Width, button1Height, "Settings", int(50 * resFactor), buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
-	buttons.push_back(Button(bi_mmQuit, buttonX1, buttonY1 + button1Height * 3, button1Width, button1Height, "Quit", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	buttons.push_back(Button(bi_mmQuit, buttonX1, buttonY1 + button1Height * 3, button1Width, button1Height, "Quit", int(50 * resFactor), buttonColorBG, buttonColorText));
 	buttons[buttons.size() - 1].setTextAlign(ta_center);
 
-	loadSaveButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - 2*button1Height - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
+	loadSaveButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, buttonY1 - 2*button1Height - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height, "", int(50 * resFactor), sf::Color(15, 20, 25, 220), buttonColorText));
 	loadSaveButtons.back().setTextAlign(ta_center);
-	loadSaveButtons.push_back(Button(bi_mmReturn, buttonX1, buttonY1 - 2*button1Height, button1Width, button1Height, "Back to main menu", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	loadSaveButtons.push_back(Button(bi_mmReturn, buttonX1, buttonY1 - 2*button1Height, button1Width, button1Height, "Back to main menu", int(50 * resFactor), buttonColorBG, buttonColorText));
 	loadSaveButtons.back().setTextAlign(ta_center);
-	loadSaveButtons.push_back(Button(bi_mmLoadSave, buttonX1, buttonY1 - button1Height, button1Width, button1Height, "Load save", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	loadSaveButtons.push_back(Button(bi_mmLoadSave, buttonX1, buttonY1 - button1Height, button1Width, button1Height, "Load save", int(50 * resFactor), buttonColorBG, buttonColorText));
 	loadSaveButtons.back().setTextAlign(ta_center);
-	loadSaveButtons.push_back(Button(bi_mmDeleteSave, buttonX1, buttonY1, button1Width, button1Height, "Delete save", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	loadSaveButtons.push_back(Button(bi_mmDeleteSave, buttonX1, buttonY1, button1Width, button1Height, "Delete save", int(50 * resFactor), buttonColorBG, buttonColorText));
 	loadSaveButtons.back().setTextAlign(ta_center);
-	loadSaveButtons.push_back(Button(bi_false, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height*visibleSaveButtonCount, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
-	loadSaveButtons.push_back(Button(bi_confScrollUp, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height, "/\\", int(50 * resFactor), &font1, sf::Color(10, 45, 55, 140), buttonColorText));
-	loadSaveButtons.push_back(Button(bi_confScrollDown, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + buttonBorder + button1Height*(visibleSaveButtonCount), int(0.5f*button1Height), button1Height, "\\/", int(50 * resFactor), &font1, sf::Color(10, 45, 55, 140), buttonColorText));
-	loadSaveButtons.push_back(Button(bi_confScrollBar, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height*2 + buttonBorder, int(button1Height*0.5f), button1Height, "", int(50 * resFactor), &font1, sf::Color(40, 100, 150, 140), buttonColorText));
+	loadSaveButtons.push_back(Button(bi_false, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height*visibleSaveButtonCount, "", int(50 * resFactor), buttonColorBG, buttonColorText));
+	loadSaveButtons.push_back(Button(bi_confScrollUp, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height + buttonBorder, int(button1Height*0.5f), button1Height, "/\\", int(50 * resFactor), sf::Color(10, 45, 55, 140), buttonColorText));
+	loadSaveButtons.push_back(Button(bi_confScrollDown, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + buttonBorder + button1Height*(visibleSaveButtonCount), int(0.5f*button1Height), button1Height, "\\/", int(50 * resFactor), sf::Color(10, 45, 55, 140), buttonColorText));
+	loadSaveButtons.push_back(Button(bi_confScrollBar, buttonX1 + button1Width - int(0.5f*button1Height), buttonY1 + button1Height*2 + buttonBorder, int(button1Height*0.5f), button1Height, "", int(50 * resFactor), sf::Color(40, 100, 150, 140), buttonColorText));
 	reloadPlayerSaves();
 
 	//SETTINGS buttons
-	settingsButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, settingsButtonY1 - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height * 6, "", int(50 * resFactor), &font1, sf::Color(15, 20, 25, 220), buttonColorText));
-	settingsButtons.push_back(Button(bi_mmReturn, buttonX1, settingsButtonY1, button1Width, button1Height, "Back to main menu", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.push_back(Button(bi_false, buttonX1 - buttonBorder, settingsButtonY1 - buttonBorder, button1Width + 2 * buttonBorder, 2 * buttonBorder + button1Height * 6, "", int(50 * resFactor), sf::Color(15, 20, 25, 220), buttonColorText));
+	settingsButtons.push_back(Button(bi_mmReturn, buttonX1, settingsButtonY1, button1Width, button1Height, "Back to main menu", int(50 * resFactor), buttonColorBG, buttonColorText));
 	settingsButtons.back().setTextAlign(ta_center);
-	settingsButtons.push_back(Button(bi_setFullscreenNode, buttonX1, settingsButtonY1 + button1Height, button1Width, button1Height, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.push_back(Button(bi_setFullscreenNode, buttonX1, settingsButtonY1 + button1Height, button1Width, button1Height, "", int(50 * resFactor), buttonColorBG, buttonColorText));
 	settingsButtons.back().setTextAlign(ta_center);
-	settingsButtons.push_back(Button(bi_setWindowWidth, buttonX1, settingsButtonY1 + button1Height*2, button1Width, button1Height, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.push_back(Button(bi_setWindowWidth, buttonX1, settingsButtonY1 + button1Height*2, button1Width, button1Height, "", int(50 * resFactor), buttonColorBG, buttonColorText));
 	settingsButtons.back().setTextAlign(ta_center);
-	settingsButtons.push_back(Button(bi_setWindowHeight, buttonX1, settingsButtonY1 + button1Height*3, button1Width, button1Height, "", int(50 * resFactor), &font1, buttonColorBG, buttonColorText));
+	settingsButtons.push_back(Button(bi_setWindowHeight, buttonX1, settingsButtonY1 + button1Height*3, button1Width, button1Height, "", int(50 * resFactor), buttonColorBG, buttonColorText));
 	settingsButtons.back().setTextAlign(ta_center);
 	reloadSettingsButtonStrings();
 	//Sliders
-	settingsSliderButtons.push_back(SliderButton(bi_setMusicSlider, buttonX1, settingsButtonY1 + button1Height*4, button1Width, button1Height, "Music", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &MUSIC_VOLUME));
+	settingsSliderButtons.push_back(SliderButton(bi_setMusicSlider, buttonX1, settingsButtonY1 + button1Height*4, button1Width, button1Height, "Music", int(50 * resFactor), buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &MUSIC_VOLUME));
 	settingsSliderButtons.back().sliderState = MUSIC_VOLUME;
 	settingsSliderButtons.back().setTextAlign(ta_center);
-	settingsSliderButtons.push_back(SliderButton(bi_setSoundEffectSlider, buttonX1, settingsButtonY1 + button1Height*5, button1Width, button1Height, "Sound effects", int(50 * resFactor), &font1, buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &SFX_VOLUME));
+	settingsSliderButtons.push_back(SliderButton(bi_setSoundEffectSlider, buttonX1, settingsButtonY1 + button1Height*5, button1Width, button1Height, "Sound effects", int(50 * resFactor), buttonColorBG, buttonColorText, sf::Color(50, 80, 130, 140), &SFX_VOLUME));
 	settingsSliderButtons.back().sliderState = SFX_VOLUME;
 	settingsSliderButtons.back().setTextAlign(ta_center);
 
@@ -677,9 +677,9 @@ void MainMenu::reloadPlayerSaves()
 		{
 			std::cout << "\n[" << playerSavesList[i] << "]";
 			if (playerSavesList.size() > visibleSaveButtonCount)
-				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width - int(button1Height*0.5f), button1Height, playerSavesList[i], int(50 * resFactor), &font1, sf::Color(50, 90, 100, 180), buttonColorText));
+				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width - int(button1Height*0.5f), button1Height, playerSavesList[i], int(50 * resFactor), sf::Color(50, 90, 100, 180), buttonColorText));
 			else
-				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width, button1Height, playerSavesList[i], int(50 * resFactor), &font1, sf::Color(50, 90, 100, 180), buttonColorText));
+				playerSaveButtons.push_back(Button(bi_mmSaveListElement, buttonX1, buttonY1 + buttonBorder + (1 + i)*button1Height, button1Width, button1Height, playerSavesList[i], int(50 * resFactor), sf::Color(50, 90, 100, 180), buttonColorText));
 			playerSaveButtons.back().setTextAlign(ta_center);
 		}
 

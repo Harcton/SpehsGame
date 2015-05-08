@@ -17,6 +17,7 @@ public:
 	int moveJoystickId;
 	int verticalMoveAxisPolarity;
 	int horizontalMoveAxisPolarity;
+	int money;
 	sf::Joystick::Axis horizontalMoveAxis;
 	sf::Joystick::Axis verticalMoveAxis;
 

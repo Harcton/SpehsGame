@@ -91,6 +91,7 @@
     <ClCompile Include="SliderButton.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Turret.cpp" />
+    <ClCompile Include="UpgradeButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="SliderButton.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Turret.h" />
+    <ClInclude Include="UpgradeButton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

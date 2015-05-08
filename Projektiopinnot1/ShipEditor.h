@@ -10,7 +10,8 @@ enum ButtonId;
 #include <vector>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
-#include "Button.h"
+#include "UpgradeButton.h"
+
 
 
 namespace editor
@@ -23,6 +24,7 @@ namespace editor
 		rotate,
 		configuration,
 		esc,
+		upgrade,
 	};
 
 	enum Action
@@ -70,6 +72,8 @@ public:
 	void drawInheritanceSprites();
 	void drawActions();
 	void drawEscButtons();
+	void drawUpgrades();
+	void reloadUpgradeButtons();
 	void reloadActions();
 	void closeActions(editor::Focus);
 	void drawCircleSlider();
@@ -205,6 +209,9 @@ private:
 	std::vector<Button> turretControlSchemeList;
 	std::vector<Button> coreControlSchemeList;
 	std::vector<Button> engineConfigurationButtons;
+	std::vector<UpgradeButton> turretUpgradeButtons;
+	std::vector<UpgradeButton> engineUpgradeButtons;
+	Button exitUpgrades;
 	bool actionTurretSchemeSelectionOpen = false;
 	bool actionCoreSchemeSelectionOpen = false;
 	bool actionJoystickIndexSelectionOpen = false;

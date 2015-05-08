@@ -5,12 +5,11 @@
 Button::~Button()
 {
 }
-Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::string str, int txtsize, sf::Font* fnt, sf::Color color, sf::Color textColor)
+Button::Button(ButtonId bid, float x_pos, float y_pos, int wth, int hht, std::string str, int txtsize, sf::Color color, sf::Color textColor)
 {//Text button constructor
 	type = bt_text;
 	id = bid;
-	font = fnt;
-	text.setFont(*font);
+	text.setFont(RM.menuFont);
 	text.setCharacterSize(txtsize);
 	text.setString(str);
 	text.setColor(textColor);

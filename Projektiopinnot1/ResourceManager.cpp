@@ -4,6 +4,8 @@
 ResourceManager::~ResourceManager() {}
 ResourceManager::ResourceManager()
 {
+	//Load global resources
+	menuFont.loadFromFile("Font/ORANGEKI.ttf");
 
 }
 

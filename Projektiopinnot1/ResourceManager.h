@@ -7,6 +7,7 @@
 #include <functional>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics/Font.hpp>
 
 
 
@@ -27,6 +28,8 @@ public:
 	sf::SoundBuffer& getSound(std::string);
 	void removeSound(std::string);
 
+	//Global resources
+	sf::Font menuFont;
 
 private:
 	std::hash<std::string> hasher;
