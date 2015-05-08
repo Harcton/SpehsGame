@@ -22,6 +22,7 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 {
 	objects.reserve(MAX_OBJECTS);
 	bullets.reserve(MAX_BULLETS);
+	backgrounds.reserve(MAX_BACKGROUNDS);
 
 	elements.push_back(sf::Sprite());
 	elements[0].setTexture(RM.getTexture("ball.png"));
@@ -77,7 +78,7 @@ void Game::run()
 		objects.push_back(new Enemy(mWindow, this, objects));*/
 
 	//Creating background objects
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < MAX_BACKGROUNDS; i++)
 	{
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 		backgrounds.back()->update();
@@ -222,7 +223,7 @@ void Game::updateBackgrounds()
 			delete temp_objPtr;
 			i--;
 		}
-	if (backgrounds.size() < 7)
+	if (backgrounds.size() < MAX_BACKGROUNDS)
 	{
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
 		backgrounds.back()->update();

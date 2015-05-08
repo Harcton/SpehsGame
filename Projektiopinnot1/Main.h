@@ -23,8 +23,11 @@
 #define PI 3.14159265
 #define SPAWN_RANGE 2800
 #define DESPAWN_RANGE 4000
+
+//Caontainer limits
 #define MAX_OBJECTS 200
 #define MAX_BULLETS 500
+#define MAX_BACKGROUNDS 10
 
 #define EDITOR_WIDTH 41
 #define EDITOR_HEIGHT 41
