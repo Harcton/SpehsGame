@@ -10,6 +10,7 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	state = state_spawned;
 
 	angle = playerDirection;
+	std::cout << angle << " " << playerDirection << std::endl;
 	dodging = false;
 	repositioning = false;
 	fleeing = false;
@@ -197,14 +198,10 @@ void Sentinel::AIupdate()
 		state = state_passive;
 
 		follow = false;
-		if (xSpeed > -0.01 && xSpeed < 0.01)
-		{
-			xSpeed = 0;
-		}
-		if (ySpeed > -0.01 && ySpeed < 0.01)
-		{
-			ySpeed = 0;
-		}
+
+		xSpeed += cos(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		ySpeed += sin(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		turnSpeed += irandom(-1, 1)*turnAccelerationConstant;
 	}
 }
 

@@ -199,14 +199,10 @@ void Seeker::AIupdate()//maybe not follow true all the time
 		}
 
 		follow = false;
-		if (xSpeed > -0.01 && xSpeed < 0.01)
-		{
-			xSpeed = 0;
-		}
-		if (ySpeed > -0.01 && ySpeed < 0.01)
-		{
-			ySpeed = 0;
-		}
+
+		xSpeed += cos(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		ySpeed += sin(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		turnSpeed += irandom(-1, 1)*turnAccelerationConstant;
 	}
 }
 

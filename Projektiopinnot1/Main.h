@@ -105,7 +105,7 @@ extern float movementSpeed;
 extern float rotationSpeed;
 bool testInput(MyKeys k, sf::Event&);
 
-//
+/*
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -116,6 +116,6 @@ bool testInput(MyKeys k, sf::Event&);
 #define new DEBUG_NEW
 #endif
 
-//
+*/
 
 #endif

@@ -60,7 +60,11 @@ protected:
 	//Temporal variables to be used in frequent loops
 	float temp_angleVar;
 	float temp_accelerationPower;
-
+	
+	double xAcceleration;
+	double yAcceleration;
+	double xSpeed1;
+	double ySpeed1;
 };
 
 #endif

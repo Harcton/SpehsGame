@@ -26,6 +26,8 @@ private:
 	int fliersFollowing;
 	int flierAttackCounter;
 	int releaseFlier;
+
+	int commanderID;
 };
 
 #endif

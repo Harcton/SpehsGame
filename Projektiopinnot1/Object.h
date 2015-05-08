@@ -61,7 +61,7 @@ public:
 	double xSpeed = 0;
 	double ySpeed = 0;
 	double turnSpeed; // +CCW, -CW
-
+	
 	int accTimer;
 	double xAcc;
 	double yAcc;

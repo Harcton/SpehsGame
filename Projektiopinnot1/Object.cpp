@@ -16,7 +16,6 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 
 	massCenterX = 0;
 	massCenterY = 0;
-
 }
 Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref)
 {
@@ -179,72 +178,11 @@ bool Object::update()
 		angle += 2*PI;
 
 
-	//acceleration timer
-	if (accTimer <= 1)
-	{
-		accTimer++;
-	}
-	else
-		accTimer = 0;
-	
-	//acceleration
-	if (accTimer == 1)
-	{
-		xSpeed0 = xSpeed;
-		ySpeed0 = ySpeed;
-	}
-	xAcc = (xSpeed / xSpeed0);
-	yAcc = (ySpeed / ySpeed0);
-	
-
-	xScreenDistance = (WINDOW_WIDTH / 2.5 - abs(scrSpeedX)) / (WINDOW_WIDTH / 2.5);
-	yScreenDistance = (WINDOW_HEIGHT / 2.5 - abs(scrSpeedY)) / (WINDOW_WIDTH / 2.5);
-	//scrSpeeds
-	//Check if ship is accelerating, limit and set scrSpeed
-	//X
-		//NOT ACCELERATING
-	if (centerObj->xAcc == 1 || centerObj->xAcc == -1)
-	{
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
-		{
-			scrSpeedX = 0.99 * scrSpeedX;
-			relativeSpeedX = 0.95 * relativeSpeedX;
-		}
-	}
-		//ACCELERATING
-	else
-	{
-		scrSpeedX += ((relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.2))*zoomFactor;
-	}
-
-
-	//Y
-		//NOT ACCELERATING
-	if (centerObj->yAcc == 1 || centerObj->yAcc == -1)
-	{
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
-		{
-			scrSpeedY = 0.99 * scrSpeedY;
-			relativeSpeedY = 0.95 * relativeSpeedY;
-		}
-	}
-		//ACCELERATING
-	else
-	{
-		scrSpeedY += ((relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.2))*zoomFactor;
-	}
-	
-
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
 	{
 		screenX = centerObj->screenX + resFactor*zoomFactor*(x - centerObj->x);
 		screenY = centerObj->screenY + resFactor*zoomFactor*(y - centerObj->y);
-	}
-	else
-	{//Player update, make the player object appear in the center of the screen
-		screenX = WINDOW_WIDTH / 2 - (scrSpeedX);// - (massCenterX*cos(angle) + massCenterY*sin(angle))*resFactor*zoomFactor;
-		screenY = WINDOW_HEIGHT / 2 - (scrSpeedY);// + (massCenterX*sin(angle) - massCenterY*cos(angle))*resFactor*zoomFactor;
 	}
 
 	//Apply variables

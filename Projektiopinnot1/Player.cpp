@@ -33,7 +33,7 @@ bool Player::update()
 	mousePosition = sf::Mouse::getPosition(mWindow);
 	mWindow.pollEvent(mEvent);
 
-
+	std::cout << screenX << " " << screenY << std::endl;
 
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
@@ -311,6 +311,83 @@ bool Player::update()
 			}
 		}
 	Object::update();
+
+
+	//SCREEN X/Y UPDATE
+	
+	//acceleration timer
+	if (accTimer <= 1)
+	{
+		accTimer++;
+	}
+	else
+		accTimer = 0;
+
+	//acceleration
+	if (accTimer == 1)
+	{
+		xSpeed0 = xSpeed;
+		ySpeed0 = ySpeed;
+	}
+	xAcc = (xSpeed / xSpeed0);
+	yAcc = (ySpeed / ySpeed0);
+	if (xSpeed1 != 0)
+		xAcceleration = (xSpeed / xSpeed1);
+	else
+		xAcceleration = 0;
+
+	if (ySpeed1 != 0)
+		yAcceleration = (ySpeed / ySpeed1);
+	else
+		yAcceleration = 0;
+
+
+	xScreenDistance = (WINDOW_WIDTH / 2.5 - abs(scrSpeedX)) / (WINDOW_WIDTH / 2.5);
+	yScreenDistance = (WINDOW_HEIGHT / 2.5 - abs(scrSpeedY)) / (WINDOW_WIDTH / 2.5);
+	//scrSpeeds
+	//Check if ship is accelerating, limit and set scrSpeed
+	//X
+	//NOT ACCELERATING
+	if (xAcc == 1 || xAcc == -1)
+	{
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
+		{
+			scrSpeedX = 0.99 * scrSpeedX;
+			relativeSpeedX = 0.95 * relativeSpeedX;
+		}
+	}
+	//ACCELERATING
+	else
+	{
+		scrSpeedX += (((relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.2))*zoomFactor);
+	}
+
+
+	//Y
+	//NOT ACCELERATING
+	if (yAcc == 1 || yAcc == -1)
+	{
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
+		{
+			scrSpeedY = 0.99 * scrSpeedY;
+			relativeSpeedY = 0.95 * relativeSpeedY;
+		}
+	}
+	//ACCELERATING
+	else
+	{
+		scrSpeedY += (((relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.2))*zoomFactor);
+	}
+	if (this == centerObj)
+		std::cout << xAcceleration << " " << yAcceleration << std::endl;
+	
+	screenX = WINDOW_WIDTH / 2 - (scrSpeedX);// - (massCenterX*cos(angle) + massCenterY*sin(angle))*resFactor*zoomFactor;
+	screenY = WINDOW_HEIGHT / 2 - (scrSpeedY);// + (massCenterX*sin(angle) - massCenterY*cos(angle))*resFactor*zoomFactor;
+
+	xSpeed1 = xSpeed;
+	ySpeed1 = ySpeed;
+	//
+
 	updateComponents();
 	//////////////
 

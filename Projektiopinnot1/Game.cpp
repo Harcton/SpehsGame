@@ -256,7 +256,7 @@ void Game::updateObjects()
 		if (objects.size() < 2)
 		{
 			if (objects.size() < MAX_OBJECTS)
-				objects.push_back(new Seeker(mWindow, this, 2)); //spawn different enemy types
+				objects.push_back(new Sentinel(mWindow, this, 2)); //spawn different enemy types
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}

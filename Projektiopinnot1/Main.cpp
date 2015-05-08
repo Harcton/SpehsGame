@@ -32,12 +32,11 @@ void initializeResourceManager(ResourceManager&);
 
 void main()
 {
-	//
+	/*
 	int cur = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 	cur |= _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_LEAK_CHECK_DF;
 	_CrtSetDbgFlag(cur);
-	int* i = new int(666);
-	//
+	*/
 	{
 
 		initializeResourceManager(RM);
@@ -63,7 +62,7 @@ void main()
 		mainMenu.run();
 	}
 
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 }
 
 
