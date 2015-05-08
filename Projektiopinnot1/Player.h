@@ -65,6 +65,8 @@ protected:
 	double yAcceleration;
 	double xSpeed1;
 	double ySpeed1;
+	double xAccVariable;
+	double yAccVariable;
 };
 
 #endif

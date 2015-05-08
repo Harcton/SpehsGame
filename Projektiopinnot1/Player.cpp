@@ -16,6 +16,9 @@ Player::Player(sf::RenderWindow& windowref, Game* game, int cx, int cy) : Object
 {
 	centerObj = this;
 
+	xAccVariable = 1;
+	yAccVariable = 1;
+
 	massCenterX = 0;
 	massCenterY = 0;
 	data = PlayerData();
@@ -32,10 +35,7 @@ bool Player::update()
 	//Update mousePosition
 	mousePosition = sf::Mouse::getPosition(mWindow);
 	mWindow.pollEvent(mEvent);
-
-	std::cout << screenX << " " << screenY << std::endl;
-
-
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 		editShip();
 
@@ -314,32 +314,31 @@ bool Player::update()
 
 
 	//SCREEN X/Y UPDATE
-	
-	//acceleration timer
-	if (accTimer <= 1)
-	{
-		accTimer++;
-	}
-	else
-		accTimer = 0;
-
-	//acceleration
-	if (accTimer == 1)
-	{
-		xSpeed0 = xSpeed;
-		ySpeed0 = ySpeed;
-	}
-	xAcc = (xSpeed / xSpeed0);
-	yAcc = (ySpeed / ySpeed0);
+		
 	if (xSpeed1 != 0)
 		xAcceleration = (xSpeed / xSpeed1);
 	else
-		xAcceleration = 0;
+		xAcceleration = 1;
 
 	if (ySpeed1 != 0)
 		yAcceleration = (ySpeed / ySpeed1);
 	else
-		yAcceleration = 0;
+		yAcceleration = 1;
+
+
+	if (abs(xAcceleration) > 1)
+		xAccVariable = xAccVariable * 0.999;
+	else
+		xAccVariable = xAccVariable * 1.01;
+	if (abs(xAccVariable) > 1)
+		xAccVariable = 1;
+
+	if (abs(yAcceleration) > 1)
+		yAccVariable = yAccVariable*0.999;
+	else
+		yAccVariable = yAccVariable * 1.01;
+	if (abs(yAccVariable) > 1)
+		yAccVariable = 1;
 
 
 	xScreenDistance = (WINDOW_WIDTH / 2.5 - abs(scrSpeedX)) / (WINDOW_WIDTH / 2.5);
@@ -348,7 +347,7 @@ bool Player::update()
 	//Check if ship is accelerating, limit and set scrSpeed
 	//X
 	//NOT ACCELERATING
-	if (xAcc == 1 || xAcc == -1)
+	if (abs(xAcceleration) == 1)
 	{
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
 		{
@@ -360,12 +359,14 @@ bool Player::update()
 	else
 	{
 		scrSpeedX += (((relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.2))*zoomFactor);
+		//scrSpeedX = scrSpeedX * xAccVariable;
 	}
-
+	/*std::cout << "scrSpeedX: " << scrSpeedX << std::endl;
+	std::cout << "xAccVariable: " << xAccVariable << std::endl;*/
 
 	//Y
 	//NOT ACCELERATING
-	if (yAcc == 1 || yAcc == -1)
+	if (abs(yAcceleration) == 1)
 	{
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !(sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
 		{
@@ -377,12 +378,22 @@ bool Player::update()
 	else
 	{
 		scrSpeedY += (((relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.2))*zoomFactor);
+		//scrSpeedY = scrSpeedY * yAccVariable;
 	}
-	if (this == centerObj)
-		std::cout << xAcceleration << " " << yAcceleration << std::endl;
-	
+	/*std::cout << "scrSpeedY: " << scrSpeedY << std::endl;
+	std::cout << "yAccVariable: " << yAccVariable << std::endl;*/
+
 	screenX = WINDOW_WIDTH / 2 - (scrSpeedX);// - (massCenterX*cos(angle) + massCenterY*sin(angle))*resFactor*zoomFactor;
 	screenY = WINDOW_HEIGHT / 2 - (scrSpeedY);// + (massCenterX*sin(angle) - massCenterY*cos(angle))*resFactor*zoomFactor;
+	double shipRadius = (getDistance(0, 0, shipWidth, shipHeight)*100.0f*zoomFactor*resFactor)/2.0f;
+	if (WINDOW_WIDTH - shipRadius > shipRadius)
+		screenX = limitWithin(double(shipRadius), screenX, double(WINDOW_WIDTH - shipRadius));
+	else
+		screenX = WINDOW_WIDTH / 2.0f;
+	if (WINDOW_HEIGHT - shipRadius > shipRadius)
+		screenY = limitWithin(double(shipRadius), screenY, double(WINDOW_HEIGHT - shipRadius));
+	else
+		screenY = WINDOW_HEIGHT / 2.0f;
 
 	xSpeed1 = xSpeed;
 	ySpeed1 = ySpeed;
