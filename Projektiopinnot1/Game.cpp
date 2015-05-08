@@ -12,7 +12,11 @@
 Game::~Game()
 {
 	for (unsigned int i = 0; i < objects.size(); i++)
+	{
+		for (unsigned int c = 0; c < objects[i]->components.size(); c++)
+			objects[i]->components[c]->destructorMode = component::quit;
 		delete objects[i];
+	}
 	for (unsigned int i = 0; i < bullets.size(); i++)
 		delete bullets[i];
 	for (unsigned int i = 0; i < backgrounds.size(); i++)
@@ -90,10 +94,6 @@ void Game::run()
 
 	while (keepRunning)
 	{
-		//DEBUG
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-			keepRunning = false;
-
 		pollEvents();
 
 		//DRAWING

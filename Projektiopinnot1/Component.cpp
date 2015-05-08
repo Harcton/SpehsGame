@@ -8,8 +8,9 @@
 
 Component::~Component()
 {
-	if (performDestructor == true)
+	switch (destructorMode)
 	{
+	case component::wreck:
 		//Destroy component's children
 		while (childComponents.size() > 0)
 		{
@@ -22,6 +23,9 @@ Component::~Component()
 			childComponents.pop_back();
 		}
 		master->notifyComponentDestruction(this);
+		break;
+	case component::quit:
+		break;
 	}
 }
 Component::Component(Object* mstr, Object* cntr, double xo, double yo, int gx, int gy) : Component::Component(mstr, cntr, xo, yo)

@@ -18,6 +18,12 @@ namespace component
 		engine,
 	};
 
+	enum DestructorMode
+	{
+		wreck,
+		quit,
+	};
+
 }
 
 
@@ -35,6 +41,7 @@ public:
 	Component(Component&& other);
 	Component& operator=(Component&&);
 
+	friend class Game;
 	friend class Object;
 	friend class Player;
 	friend class Enemy;
@@ -95,7 +102,7 @@ public:
 protected:
 	std::vector<sf::Sprite> sprites;
 	std::vector<sge::Sprite> animatedSprites;
-	bool performDestructor = true;
+	component::DestructorMode destructorMode = component::wreck;
 
 	bool mouseAim;
 	bool mouseAimRelativeToCenter;

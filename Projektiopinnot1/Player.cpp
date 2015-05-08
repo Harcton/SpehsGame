@@ -383,7 +383,7 @@ void Player::applyPlayerData()
 	angle = 0;
 	while (!components.empty())
 	{
-		components.back()->performDestructor = false;
+		components.back()->destructorMode = component::quit;
 		delete components.back();
 		components.pop_back();
 	}

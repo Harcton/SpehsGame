@@ -23,6 +23,7 @@ public:
 	Object(Object&& other);
 	Object& operator=(Object&&);
 
+	friend class Game;
 	friend class Component;
 	friend class Engine;
 	friend class Enemy;
