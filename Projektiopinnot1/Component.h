@@ -124,10 +124,6 @@ protected:
 	int rotationDirection; // negative = CCW (!)
 	bool holdToThrust = true;
 	bool autoThrusting = false;
-
-	//DEBUG
-	bool drawCollisionCircle;
-	sf::CircleShape collisionCircle;
 };
 
 #endif

@@ -30,32 +30,40 @@ float rotationSpeed = PI / 180000;
 ResourceManager RM;
 void initializeResourceManager(ResourceManager&);
 
-
 void main()
 {
-	initializeResourceManager(RM);
+	//
+	int cur = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+	cur |= _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_LEAK_CHECK_DF;
+	_CrtSetDbgFlag(cur);
+	int* i = new int(666);
+	//
+	{
 
-	//Load game settings. If no settings file exists, create one
-	if (loadSettings() == false)
-		saveSettings();
+		initializeResourceManager(RM);
 
-	//Randomize randomization...
-	time_t t;
-	srand((unsigned)time(&t));
+		//Load game settings. If no settings file exists, create one
+		if (loadSettings() == false)
+			saveSettings();
 
-	sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game" };
-	if (FULLSCREEN)
-		mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Fullscreen);
-	else
-		mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Close);
+		//Randomize randomization...
+		time_t t;
+		srand((unsigned) time(&t));
 
-	mWindow.setFramerateLimit(60);
-	mWindow.setMouseCursorVisible(true);
+		sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game" };
+		if (FULLSCREEN)
+			mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Fullscreen);
+		else
+			mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Close);
 
-	MainMenu mainMenu(mWindow);
-	mainMenu.run();	
+		mWindow.setFramerateLimit(60);
+		mWindow.setMouseCursorVisible(true);
 
+		MainMenu mainMenu(mWindow);
+		mainMenu.run();
+	}
 
+	_CrtDumpMemoryLeaks();
 }
 
 

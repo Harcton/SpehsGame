@@ -50,9 +50,6 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 	hp = 100;
 	maxHp = hp;
 	textureRadius = 50;
-
-	drawCollisionCircle = false;
-
 }
 Component::Component(const Component& other) : master(other.master), centerObj(other.master->mGame->playerObj)
 {//Copy constructor
@@ -213,17 +210,6 @@ void Component::update()
 				int temp_notRed = int(255.0f*(hp / float(maxHp)));
 				sprites[s].setColor(sf::Color(255, temp_notRed, temp_notRed));
 			}
-
-
-	//DEBUG
-	if (drawCollisionCircle == false)
-		return;
-	collisionCircle.setRadius(textureRadius);
-	collisionCircle.setFillColor(sf::Color(95, 125, 255, 70));
-	collisionCircle.setPosition(screenX - resFactor*zoomFactor*textureRadius, screenY - resFactor*zoomFactor*textureRadius);
-	collisionCircle.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
-
-
 }
 
 
@@ -235,11 +221,6 @@ void Component::draw()
 	if (animatedSprites.size() > 0)
 		for (unsigned int i = 0; i < animatedSprites.size(); i++)
 			animatedSprites[i].draw(master->mWindow);
-
-	//DEBUG
-	if (drawCollisionCircle == false)
-		return;
-	master->mWindow.draw(collisionCircle);
 }
 
 void Component::createChild(double ox, double oy, component::Type tp)
