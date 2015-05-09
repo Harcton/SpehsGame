@@ -30,6 +30,7 @@ public:
 	void loadKeybindings();
 	void calculateCenterOfMass();
 	void reloadSkeletonSprites();
+	void setTurretLooks(int, int);
 
 	//Handle input
 	void turnRight(double);

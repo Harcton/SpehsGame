@@ -9,9 +9,6 @@ Turret::~Turret()
 }
 Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mstr, cntr, xo, yo)
 {
-	sprites.push_back(sf::Sprite());
-	sprites.back().setTexture(RM.turretTex);
-	sprites.back().setOrigin(20, 50);
 	maxAngle = PI/3;
 	turningSpeed = PI/40;
 
@@ -24,7 +21,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	capacity = 20;			// magazine/thrust charge
 	magazine = capacity;
 	rechargeInterval = 120;	//Reload/thrust recharge speed
-	maxSpeed = 25;			//max bullet speed
+	maxSpeed = 55;			//max bullet speed
 	damage = 15;			//Turret damage
 	fireRateInterval = 5;
 }
@@ -103,7 +100,11 @@ void Turret::update()
 		}
 	}
 
-
+	//Update magazine
+	magazineSpr.setOrigin(30 + int(20.0f*(magazine/float(capacity))), 50);
+	magazineSpr.setPosition(screenX, screenY);
+	magazineSpr.setRotation(360 - ((angle) / PI) * 180);
+	magazineSpr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
 
 	Component::update();
 	return;
@@ -130,7 +131,7 @@ void Turret::fire()
 
 	magazine--;
 	canFireTimer = fireRateInterval;
-	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2 * PI - angle, 15.0f, damage));
+	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2 * PI - angle, maxSpeed, damage));
 	hasFired = true;
 }
 void Turret::reload()

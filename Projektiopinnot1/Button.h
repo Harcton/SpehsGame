@@ -185,7 +185,7 @@ texture path, texture scale
 	virtual bool mouseOverlap(sf::Vector2i& mousePos);
 	virtual ButtonId checkIfPressed(sf::Vector2i& mousePos);
 	virtual void draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos);
-	void setPosition(float, float);
+	virtual void setPosition(float, float);
 	void setTextAlign(TextAlign);
 
 protected:

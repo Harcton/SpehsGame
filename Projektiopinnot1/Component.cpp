@@ -215,12 +215,20 @@ void Component::update()
 
 void Component::draw()
 {
+	master->mWindow.draw(magazineSpr);
 	if (sprites.size() > 0)
 		for (unsigned int i = 0; i < sprites.size(); i++)
 			master->mWindow.draw(sprites[i]);
 	if (animatedSprites.size() > 0)
 		for (unsigned int i = 0; i < animatedSprites.size(); i++)
 			animatedSprites[i].draw(master->mWindow);
+	if (turretPlatformAngle != -1)
+	{
+		turretPlatform.setPosition(screenX, screenY);
+		turretPlatform.setRotation(360 - ((angle + turretPlatformAngle) / PI) * 180);
+		turretPlatform.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+		master->mWindow.draw(turretPlatform);
+	}
 }
 
 void Component::createChild(double ox, double oy, component::Type tp)

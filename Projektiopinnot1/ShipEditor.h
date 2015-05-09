@@ -160,6 +160,9 @@ private:
 	//Engine conf
 	int engineConfX1;
 	int engineConfY1;
+	//Upgrades
+	int turretUpgradesY1;
+	int engineUpgradesY1;
 
 	//Misc states
 	bool gettingUserInput = false;

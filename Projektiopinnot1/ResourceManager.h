@@ -58,6 +58,14 @@ public:
 	sf::Texture debris1Tex;
 	sf::Texture ball1Tex;
 	sf::Texture pointerArrowTex;
+	//Textures-player ship
+	sf::Texture turretPlatformTex;
+	sf::Texture turretRotationEngineTex;
+	sf::Texture turretFrameTex;
+	sf::Texture turretBarrelTex;
+	sf::Texture turretMagazineTex;
+
+
 	//Sounds
 
 	//Music

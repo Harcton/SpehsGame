@@ -16,6 +16,7 @@ public:
 	friend class ShipEditor;
 
 	void updateIndicators();
+	void setPosition(float, float);
 
 	bool mouseOverlap(sf::Vector2i& mousePos);
 	ButtonId checkIfPressed(sf::Vector2i& mousePos);

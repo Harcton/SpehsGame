@@ -582,6 +582,8 @@ void Player::addFromGrid(int gx, int gy)
 		components.back()->createChild((gx - coreX) * 100, (gy - coreY) * 100, component::turret);
 		components.back()->gridLocationX = gx;
 		components.back()->gridLocationY = gy;
+		//Set looks
+		setTurretLooks(gx, gy);
 		//Set stats
 		components.back()->angleModifier = data.grid[gx][gy].angleModifier*(PI/180);
 
@@ -630,6 +632,37 @@ void Player::addFromGrid(int gx, int gy)
 		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
 }
+
+void Player::setTurretLooks(int gx, int gy)
+{
+	//Platform
+	components[components.size() - 2]->turretPlatform = sf::Sprite();
+	components[components.size() - 2]->turretPlatform.setTexture(RM.turretPlatformTex);
+	components[components.size() - 2]->turretPlatform.setOrigin(50, 50);
+	components[components.size() - 2]->turretPlatform.setTextureRect(sf::IntRect((data.grid[gx][gy].maxAngle - 1) * 100, 0, 100, 100));
+	components[components.size() - 2]->turretPlatformAngle = data.grid[gx][gy].angleModifier*(PI / 180.f);
+	//Magazine
+	components.back()->magazineSpr = sf::Sprite();
+	components.back()->magazineSpr.setTexture(RM.turretMagazineTex);
+	components.back()->magazineSpr.setTextureRect(sf::IntRect((data.grid[gx][gy].capacity - 1) * 100, 0, 100, 100));
+	//Barrel
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.turretBarrelTex);
+	components.back()->sprites.back().setOrigin(0, 50);
+	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].bulletSpeed - 1) * 100, 0, 100, 100));
+	//Frame
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.turretFrameTex);
+	components.back()->sprites.back().setOrigin(50, 50);
+	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].turret - 1) * 100, 0, 100, 100));
+	//RotatingEngine
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.turretRotationEngineTex);
+	components.back()->sprites.back().setOrigin(50, 50);
+	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].turnSpeed - 1) * 100, 0, 100, 100));
+
+}
+
 
 void Player::editShip()
 {

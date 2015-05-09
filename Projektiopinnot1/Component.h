@@ -103,6 +103,10 @@ protected:
 	std::vector<sf::Sprite> sprites;
 	std::vector<sge::Sprite> animatedSprites;
 	component::DestructorMode destructorMode = component::wreck;
+	//Turret 
+	sf::Sprite turretPlatform;
+	float turretPlatformAngle = -1;
+	sf::Sprite magazineSpr;
 
 	bool mouseAim;
 	bool mouseAimRelativeToCenter;

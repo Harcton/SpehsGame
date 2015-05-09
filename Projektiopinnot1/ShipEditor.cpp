@@ -18,7 +18,7 @@ ShipEditor::~ShipEditor()
 }
 ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), mWindow(mw),
 exitUpgrades(bi_confExit, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), 0, upgradeButtonWidth, upgradeButtonHeight, "Return", int(44 * resFactor), sf::Color(120, 120, 125), sf::Color(35, 35, 40)),
-upgradeArmor(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int((WINDOW_HEIGHT / 2.0f - upgradeButtonHeight)), " Armor++", nullptr, 5)
+upgradeArmor(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(WINDOW_HEIGHT / 2.0f - upgradeButtonHeight), " Armor++", nullptr, 5)
 {
 	//Button lengths
 	actionButtonWidth = int(250 * resFactor);
@@ -307,8 +307,8 @@ upgradeArmor(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2
 	//Upgrade buttons
 	upgradesBackground1.setFillColor(sf::Color(120, 120, 125));
 	upgradesBackground2.setFillColor(sf::Color(80, 80, 85));
-	int turretUpgradesY1 = (WINDOW_HEIGHT - (upgradeButtonHeight) * 9) / 2.0f;// -> change reloadUpgradeButtons upgradebutton set y coordinate
-	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 0), " Armor++", nullptr, 5));
+	turretUpgradesY1 = (WINDOW_HEIGHT - (upgradeButtonHeight) * 9) / 2.0f;// -> change reloadUpgradeButtons upgradebutton set y coordinate
+	//turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 0), " Armor++", nullptr, 5));
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretDamage, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 1), " Damage++", nullptr, 5));
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretAngle, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 2), " Turn angle++", nullptr, 4));
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretTurnSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 3), " Turn speed++", nullptr, 3));
@@ -316,8 +316,8 @@ upgradeArmor(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretReloadSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 5), " Reload speed++", nullptr, 3));
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretBulletSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 6), " Bullet speed++", nullptr, 3));
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretRecoilTime, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 7), " Recoil time++", nullptr, 3));
-	int engineUpgradesY1 = (WINDOW_HEIGHT - (upgradeButtonHeight)* 5) / 2.0f;// change -> reloadUpgradeButtons upgradebutton set y coordinate
-	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 0), " Armor++", nullptr, 5));
+	engineUpgradesY1 = (WINDOW_HEIGHT - (upgradeButtonHeight)* 5) / 2.0f;// change -> reloadUpgradeButtons upgradebutton set y coordinate
+	//engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 0), " Armor++", nullptr, 5));
 	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeEngineStrength, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 1), " Thrust++", nullptr, 6));
 	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeEngineCapacity, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 2), " Capacity++", nullptr, 6));
 	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeEngineRechargeRate, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 3), " Recharge rate++", nullptr, 5));
@@ -795,18 +795,16 @@ void ShipEditor::mouseLeftPressed()
 			for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
 				engineUpgradeButtons[i].updateIndicators();
 		}
-		else
-		{//Skeleton armor upgrade button
-			if (upgradeArmor.checkIfPressed(mousePos) == bi_upgradeArmor &&
-				*upgradeArmor.targetInt < upgradeArmor.maxLevel &&
-				playerData.money >= cost && cost > -1)
-			{
-				*upgradeArmor.targetInt += 1;
-				playerData.money -= cost;
-				playerData.grid[selectedX][selectedY].refund += cost;
-				upgradeArmor.updateIndicators();
-			}
-		}
+		//Skeleton armor upgrade button
+		if (upgradeArmor.checkIfPressed(mousePos) == bi_upgradeArmor &&
+			*upgradeArmor.targetInt < upgradeArmor.maxLevel &&
+			playerData.money >= cost && cost > -1)
+		{
+			*upgradeArmor.targetInt += 1;
+			playerData.money -= cost;
+			playerData.grid[selectedX][selectedY].refund += cost;
+			upgradeArmor.updateIndicators();
+		}		
 
 		if (exitUpgrades.checkIfPressed(mousePos) == bi_confExit)
 			focus = editor::base;
@@ -1846,18 +1844,15 @@ void ShipEditor::drawUpgrades()
 			for (unsigned int j = 0; j < engineUpgradeButtons.size(); j++)
 				cost += int(pow(*engineUpgradeButtons[j].targetInt, 2));
 			}
-
-	}
-	else
-	{//Skeleton
-		if (upgradeArmor.mouseOverlap(mousePos))
-		{
-			cost = int(pow(*upgradeArmor.targetInt, 3));
-			drawCost();
-		}
-		upgradeArmor.draw(mWindow, mousePos);
 	}
 
+	if (upgradeArmor.mouseOverlap(mousePos))
+	{
+		cost = int(pow(*upgradeArmor.targetInt, 3));
+		drawCost();
+	}
+
+	upgradeArmor.draw(mWindow, mousePos);
 	exitUpgrades.draw(mWindow, mousePos);
 	if (cost > -1)
 		drawCost();
@@ -1869,9 +1864,6 @@ void ShipEditor::reloadUpgradeButtons()
 		for (unsigned int i = 0; i < turretUpgradeButtons.size(); i++)
 			switch (turretUpgradeButtons[i].upgrade.id)
 		{
-			case bi_upgradeArmor:
-				turretUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].armor;
-				break;
 			case bi_upgradeTurretDamage:
 				turretUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].turret;
 				break;
@@ -1896,9 +1888,12 @@ void ShipEditor::reloadUpgradeButtons()
 		}
 		for (unsigned int i = 0; i < turretUpgradeButtons.size(); i++)
 			turretUpgradeButtons[i].updateIndicators();
+
+		upgradeArmor.setPosition(upgradeArmor.buttonRectangle.getPosition().x, turretUpgradesY1);
+
 		sf::Vector2f bgPos1 = turretUpgradeButtons[0].buttonRectangle.getPosition();
 		bgPos1.x = int(bgPos1.x - 20 * resFactor);
-		bgPos1.y = int(bgPos1.y - 20 * resFactor);
+		bgPos1.y = int(bgPos1.y - 20 * resFactor - upgradeButtonHeight);
 		sf::Vector2f bgPos2;
 		bgPos2.x = int(bgPos1.x + 5 * resFactor);
 		bgPos2.y = int(bgPos1.y + 5 * resFactor);
@@ -1914,9 +1909,6 @@ void ShipEditor::reloadUpgradeButtons()
 		for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
 			switch (engineUpgradeButtons[i].upgrade.id)
 		{
-			case bi_upgradeArmor:
-				engineUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].armor;
-				break;
 			case bi_upgradeEngineStrength:
 				engineUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].engine;
 				break;
@@ -1930,9 +1922,11 @@ void ShipEditor::reloadUpgradeButtons()
 		for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
 			engineUpgradeButtons[i].updateIndicators();
 
+		upgradeArmor.setPosition(upgradeArmor.buttonRectangle.getPosition().x, engineUpgradesY1);
+
 		sf::Vector2f bgPos1 = engineUpgradeButtons[0].buttonRectangle.getPosition();
 		bgPos1.x = int(bgPos1.x - 20 * resFactor);
-		bgPos1.y = int(bgPos1.y - 20 * resFactor);
+		bgPos1.y = int(bgPos1.y - 20 * resFactor - upgradeButtonHeight);
 		sf::Vector2f bgPos2;
 		bgPos2.x = int(bgPos1.x + 5 * resFactor);
 		bgPos2.y = int(bgPos1.y + 5 * resFactor);
@@ -1945,8 +1939,7 @@ void ShipEditor::reloadUpgradeButtons()
 	}
 	else
 	{//Skeleton armor upgrading
-		upgradeArmor.targetInt = &playerData.grid[selectedX][selectedY].armor;
-		upgradeArmor.updateIndicators();
+		upgradeArmor.setPosition(upgradeArmor.buttonRectangle.getPosition().x, int(WINDOW_HEIGHT / 2.0f - upgradeButtonHeight));
 
 		sf::Vector2f bgPos1 = upgradeArmor.buttonRectangle.getPosition();
 		bgPos1.x = int(bgPos1.x - 20 * resFactor);
@@ -1962,14 +1955,14 @@ void ShipEditor::reloadUpgradeButtons()
 		exitUpgrades.setTextAlign(ta_center);
 	}
 
-
+	upgradeArmor.targetInt = &playerData.grid[selectedX][selectedY].armor;
+	upgradeArmor.updateIndicators();
 }
 
 void ShipEditor::drawCost()
 {
 	costText.setString("Cost: " + std::to_string(cost) + " metal\nMetal: "+std::to_string(playerData.money));
 	costBackground.setSize(sf::Vector2f(costText.getLocalBounds().width + 20 * resFactor, costText.getLocalBounds().height + 20 * resFactor));
-
 
 	costBackground.setPosition(mousePos.x, mousePos.y);
 	costText.setPosition(int(mousePos.x + 10*resFactor), int(mousePos.y));
@@ -1988,8 +1981,6 @@ void ShipEditor::zoom(int delta)
 	float zoomCut = limitZoom();
 	cameraX += (mousePos.x / float(WINDOW_WIDTH)) * ((WINDOW_WIDTH / (tempZoom*resFactor)) - (WINDOW_WIDTH / (zoomFactor*resFactor)));
 	cameraY += (mousePos.y / float(WINDOW_HEIGHT)) * ((WINDOW_HEIGHT / (tempZoom*resFactor)) - (WINDOW_HEIGHT / (zoomFactor*resFactor)));
-	
-
 }
 
 void ShipEditor::scrapComponent(int x, int y)
@@ -2000,10 +1991,10 @@ void ShipEditor::scrapComponent(int x, int y)
 
 	//Refund metal
 	playerData.money += SKELETON_COST;
-	playerData.money += playerData.grid[selectedX][selectedY].refund;
-	if (playerData.grid[selectedX][selectedY].turret != 0)
+	playerData.money += playerData.grid[x][y].refund;
+	if (playerData.grid[x][y].turret != 0)
 		playerData.money += TURRET_COST;
-	else if (playerData.grid[selectedX][selectedY].engine != 0)
+	else if (playerData.grid[x][y].engine != 0)
 		playerData.money += ENGINE_COST;
 
 
@@ -2016,8 +2007,6 @@ void ShipEditor::scrapComponent(int x, int y)
 		playerData.grid[x][y - 1].childDown = false;
 	if (y < EDITOR_HEIGHT - 1)
 		playerData.grid[x][y + 1].childUp = false;
-
-
 
 
 	if (playerData.grid[x][y].childUp == false

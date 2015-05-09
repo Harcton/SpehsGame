@@ -44,6 +44,26 @@ UpgradeButton::UpgradeButton(ButtonId bid, int mx, int my, std::string str, shor
 }
 
 
+void UpgradeButton::setPosition(float nx, float ny)
+{
+	buttonRectangle.setPosition(nx, ny);
+	upgrade.setPosition(nx + upgradeButtonWidth - upgrade_width, ny);
+	text.setPosition(sf::Vector2f(nx, ny));
+
+	//Level indicators
+	float indicatorWidth = 20 * resFactor;
+	float indicatorHeight = 10 * resFactor;
+	float indicatorBorder = 7.5 * resFactor;
+	float indicatorDistanceFromEachOther;
+	if (maxLevel != 1)
+		indicatorDistanceFromEachOther = (upgrade_width - 2 * indicatorBorder - maxLevel*indicatorWidth) / float(maxLevel - 1);
+	if (indicatorDistanceFromEachOther < 0)
+		indicatorDistanceFromEachOther = 0;
+	float indicator1X1 = nx + upgradeButtonWidth - upgrade_width + indicatorBorder;
+	for (unsigned int i = 0; i < levelIndicators.size(); i++)
+		levelIndicators[i].setPosition(sf::Vector2f(indicator1X1 + indicatorWidth*i + indicatorDistanceFromEachOther*i, ny + upgradeButtonHeight - indicatorBorder - indicatorHeight));
+
+}
 
 bool UpgradeButton::mouseOverlap(sf::Vector2i& mousePos)
 {
