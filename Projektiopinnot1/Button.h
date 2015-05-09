@@ -180,6 +180,7 @@ texture path, texture scale
 	friend class ShipEditor;
 	friend class MainMenu;
 	friend class Game;
+	friend class UpgradeButton;
 
 	virtual bool mouseOverlap(sf::Vector2i& mousePos);
 	virtual ButtonId checkIfPressed(sf::Vector2i& mousePos);

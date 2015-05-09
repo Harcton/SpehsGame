@@ -48,14 +48,14 @@ PlayerData::PlayerData()
 	//Default ship
 	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].armor = 1;
 	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].core = true;
-	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childUp = true;
-	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childDown = true;
-	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childLeft = true;
-	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childRight = true;
-	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0) - 1].armor = 1;
-	grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0) + 1].armor = 1;
-	grid[int(EDITOR_WIDTH / 2.0) - 1][int(EDITOR_HEIGHT / 2.0)].armor = 1;
-	grid[int(EDITOR_WIDTH / 2.0) + 1][int(EDITOR_HEIGHT / 2.0)].armor = 1;
+	//grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childUp = true;
+	//grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childDown = true;
+	//grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childLeft = true;
+	//grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0)].childRight = true;
+	//grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0) - 1].armor = 1;
+	//grid[int(EDITOR_WIDTH / 2.0)][int(EDITOR_HEIGHT / 2.0) + 1].armor = 1;
+	//grid[int(EDITOR_WIDTH / 2.0) - 1][int(EDITOR_HEIGHT / 2.0)].armor = 1;
+	//grid[int(EDITOR_WIDTH / 2.0) + 1][int(EDITOR_HEIGHT / 2.0)].armor = 1;
 
 }
 

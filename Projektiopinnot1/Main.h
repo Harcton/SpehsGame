@@ -24,13 +24,20 @@
 #define SPAWN_RANGE 2800
 #define DESPAWN_RANGE 4000
 
-//Caontainer limits
+//Container limits
 #define MAX_OBJECTS 200
 #define MAX_BULLETS 500
 #define MAX_BACKGROUNDS 10
 
+//Editor limits
 #define EDITOR_WIDTH 41
 #define EDITOR_HEIGHT 41
+
+//Costs
+#define TURRET_COST 20
+#define ENGINE_COST 15
+#define SKELETON_COST 10
+#define STARTING_MONEY SKELETON_COST*8 + TURRET_COST*2
 
 //Ship core keys
 #define key_turnRight 0.2

@@ -12,10 +12,10 @@ Engine::~Engine()
 Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, yo)
 {
 	sprites.push_back(sf::Sprite());
-	sprites.back().setTexture(RM.getTexture("engine.png"));
+	sprites.back().setTexture(RM.engineTex);
 	sprites.back().setOrigin(67, 50);
 
-	animatedSprites.push_back(sge::Sprite("engine_fire_animation_testversion.png"));
+	animatedSprites.push_back(sge::Sprite(RM.engineFireAnimation));
 	animatedSprites[0].setVisibility(false);
 	animatedSprites[0].setOrigin(167, 50);
 	animatedSprites[0].setFrameSize(200, 100);

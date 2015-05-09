@@ -27,7 +27,7 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	components.reserve(1);
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.getTexture("Sentinel.png"));
+	components.back()->sprites.back().setTexture(RM.sentinelTex);
 	components.back()->sprites.back().setOrigin(130, 75);
 }
 

@@ -51,7 +51,7 @@ protected:
 	GameFocus focus = gf_game;
 	sf::Vector2i mousePos;
 	std::vector<Background*> backgrounds;
-
+	sf::Text balanceText;
 
 
 	//GUI elements
@@ -68,7 +68,6 @@ protected:
 	//FOR TEST GAME
 	int distanceFromStart;
 	int spawnRandomization;
-	sf::Font font;
 	sf::Text distanceText;
 
 };

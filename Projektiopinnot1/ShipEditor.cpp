@@ -17,7 +17,8 @@ ShipEditor::~ShipEditor()
 {
 }
 ShipEditor::ShipEditor(sf::RenderWindow& mw, PlayerData& pd) : playerData(pd), mWindow(mw),
-exitUpgrades(bi_confExit, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), 0, upgradeButtonWidth, upgradeButtonHeight, "Return", int(34 * resFactor), sf::Color(120, 120, 125), sf::Color(35, 35, 40))
+exitUpgrades(bi_confExit, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), 0, upgradeButtonWidth, upgradeButtonHeight, "Return", int(44 * resFactor), sf::Color(120, 120, 125), sf::Color(35, 35, 40)),
+upgradeArmor(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int((WINDOW_HEIGHT / 2.0f - upgradeButtonHeight)), " Armor++", nullptr, 5)
 {
 	//Button lengths
 	actionButtonWidth = int(250 * resFactor);
@@ -45,6 +46,11 @@ exitUpgrades(bi_confExit, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f)
 	scaleFactor = resFactor*zoomFactor;
 	shadeRect.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
 	shadeRect.setFillColor(sf::Color(0, 0, 0, 100));
+	balanceText.setFont(RM.menuFont);
+	balanceText.setCharacterSize(50 * resFactor);
+	balanceText.setString("Metal: ");
+	balanceText.setPosition(int(10 * resFactor), int(WINDOW_HEIGHT - balanceText.getGlobalBounds().height*2));
+	balanceText.setColor(sf::Color(150, 200, 255, 200));
 	//Core conf rects
 	coreConfigurationRect1.setSize(sf::Vector2f(2*buttonBorder + 2*button1Width + button2Width + buttonHeight*3, 13*buttonHeight + 2*buttonBorder));
 	coreConfigurationRect1.setPosition(coreConfX1 - buttonBorder, coreConfY1 - buttonBorder);
@@ -89,7 +95,7 @@ exitUpgrades(bi_confExit, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f)
 	}
 	
 	//Load editor textures
-	circleSliderSpr.setTexture(RM.getTexture("circleSlider.png"));
+	circleSliderSpr.setTexture(RM.circleSliderTex);
 	circleSliderSpr.setOrigin(100, 100);
 
 	//Action buttons
@@ -255,12 +261,12 @@ exitUpgrades(bi_confExit, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f)
 	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 15.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), sf::Color(100, 200, 100), sf::Color(35, 35, 40)));
 	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + int(25 * resFactor), turretConfY1 + int(buttonHeight * 16.5) + int(buttonHeight * 0.375), button1Width - int(50 * resFactor), int(buttonHeight * 0.25), "", int(33 * resFactor), sf::Color(100, 100, 200), sf::Color(35, 35, 40)));
 	//Sliders
-	turretConfigurationButtons.push_back(Button(bi_confRedSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 14.5), RM.getTexture("slider1.png"), 1));
-	turretConfigurationButtons.push_back(Button(bi_confGreenSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 15.5), RM.getTexture("slider1.png"), 1));
-	turretConfigurationButtons.push_back(Button(bi_confBlueSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 16.5), RM.getTexture("slider1.png"), 1));
+	turretConfigurationButtons.push_back(Button(bi_confRedSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 14.5), RM.slider1Tex, 1));
+	turretConfigurationButtons.push_back(Button(bi_confGreenSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 15.5), RM.slider1Tex, 1));
+	turretConfigurationButtons.push_back(Button(bi_confBlueSlider, button1X1 + int(buttonHeight*0.5), turretConfY1 + int(buttonHeight * 16.5), RM.slider1Tex, 1));
 	//Preview
 	turretConfigurationButtons.push_back(Button(bi_false, button1X1 + button1Width, turretConfY1 + int(buttonHeight * 14.5), button2Width - int(0.5f*buttonHeight), buttonHeight * 3, " Color adjustment preview", int(33 * resFactor), sf::Color(80, 80, 95), sf::Color(180, 180, 200)));
-	colorPreviewTurret.setTexture(RM.getTexture("editorTurret.png"));
+	colorPreviewTurret.setTexture(RM.editorTurretTex);
 	colorPreviewTurret.setOrigin(50, 0);
 	colorPreviewTurret.setScale(resFactor, resFactor);
 	colorPreviewTurret.setPosition(button1X1 + button1Width + int(0.5f*button2Width), turretConfY1 + buttonHeight * 15);
@@ -298,25 +304,29 @@ exitUpgrades(bi_confExit, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f)
 		escButtons[i].setTextAlign(ta_center);
 
 
-
-
-	//	bi_upgradeTurretDamage,
-	//	bi_upgradeTurretAngle,
-	//	bi_upgradeTurretTurnSpeed,
-	//	bi_upgradeTurretMagazine,
-	//	bi_upgradeTurretReloadSpeed,
-	//	bi_upgradeTurretBulletSpeed,
-	//	bi_upgradeTurretRecoilTime,
 	//Upgrade buttons
-	int turretUpgradesY1 = (WINDOW_HEIGHT - (upgradeButtonHeight) * 9) / 2.0f;
+	upgradesBackground1.setFillColor(sf::Color(120, 120, 125));
+	upgradesBackground2.setFillColor(sf::Color(80, 80, 85));
+	int turretUpgradesY1 = (WINDOW_HEIGHT - (upgradeButtonHeight) * 9) / 2.0f;// -> change reloadUpgradeButtons upgradebutton set y coordinate
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 0), " Armor++", nullptr, 5));
 	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretDamage, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 1), " Damage++", nullptr, 5));
-	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretAngle, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 2), " Turn angle++", nullptr, 5));
-	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretTurnSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 3), " Turn speed++", nullptr, 5));
-	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretMagazine, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 4), " Magazine size++", nullptr, 5));
-	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretReloadSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 5), " Reload speed++", nullptr, 5));
-	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretBulletSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 6), " Bullet speed++", nullptr, 5));
-	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretRecoilTime, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 7), " Recoil time++", nullptr, 5));
+	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretAngle, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 2), " Turn angle++", nullptr, 4));
+	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretTurnSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 3), " Turn speed++", nullptr, 3));
+	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretMagazine, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 4), " Magazine size++", nullptr, 4));
+	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretReloadSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 5), " Reload speed++", nullptr, 3));
+	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretBulletSpeed, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 6), " Bullet speed++", nullptr, 3));
+	turretUpgradeButtons.push_back(UpgradeButton(bi_upgradeTurretRecoilTime, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(turretUpgradesY1 + upgradeButtonHeight * 7), " Recoil time++", nullptr, 3));
+	int engineUpgradesY1 = (WINDOW_HEIGHT - (upgradeButtonHeight)* 5) / 2.0f;// change -> reloadUpgradeButtons upgradebutton set y coordinate
+	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeArmor, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 0), " Armor++", nullptr, 5));
+	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeEngineStrength, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 1), " Thrust++", nullptr, 6));
+	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeEngineCapacity, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 2), " Capacity++", nullptr, 6));
+	engineUpgradeButtons.push_back(UpgradeButton(bi_upgradeEngineRechargeRate, int(WINDOW_WIDTH / 2.0f - (upgradeButtonWidth) / 2.0f), int(engineUpgradesY1 + upgradeButtonHeight * 3), " Recharge rate++", nullptr, 5));
+
+
+	//Cost popup
+	costBackground.setFillColor(sf::Color(135, 135, 150));
+	costText.setFont(RM.menuFont);
+	costText.setCharacterSize(40 * resFactor);
 
 }
 
@@ -347,6 +357,8 @@ int ShipEditor::run()
 		////Return/quit
 		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gettingUserInput == false)
 		//	keepRunning = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+			playerData.money++;
 
 		clickTimer++;
 
@@ -540,6 +552,7 @@ int ShipEditor::run()
 		if (adjustingColor != 0)
 			adjustColor();
 
+		balanceText.setString("Metal: " + std::to_string(playerData.money));
 
 			/////////////////////
 		   /**/drawWindow();/**/
@@ -591,6 +604,8 @@ void ShipEditor::drawWindow()
 	else if (focus == editor::upgrade)
 		drawUpgrades();
 
+	mWindow.draw(balanceText);
+
 	mWindow.display();
 }
 
@@ -623,7 +638,7 @@ void ShipEditor::updateGridSpriteTextures()
 			if (playerData.grid[x][y].armor > 0)
 			{
 				gridSprites[x][y].push_back(sf::Sprite());
-				gridSprites[x][y].back().setTexture(RM.getTexture("editorSkeleton.png"));
+				gridSprites[x][y].back().setTexture(RM.editorSkeletonTex);
 				gridSprites[x][y].back().setOrigin(50, 50);
 			}
 
@@ -631,7 +646,7 @@ void ShipEditor::updateGridSpriteTextures()
 			if (playerData.grid[x][y].turret > 0)
 			{//Add turret sprite
 				gridSprites[x][y].push_back(sf::Sprite());
-				gridSprites[x][y].back().setTexture(RM.getTexture("editorTurret.png"));
+				gridSprites[x][y].back().setTexture(RM.editorTurretTex);
 				gridSprites[x][y].back().setOrigin(50, 50);
 				gridSprites[x][y].back().setRotation(360 - playerData.grid[x][y].angleModifier);
 				gridSprites[x][y].back().setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
@@ -639,7 +654,7 @@ void ShipEditor::updateGridSpriteTextures()
 			else if (playerData.grid[x][y].engine > 0)
 			{//Add engine sprite
 				gridSprites[x][y].push_back(sf::Sprite());
-				gridSprites[x][y].back().setTexture(RM.getTexture("editorEngine.png"));
+				gridSprites[x][y].back().setTexture(RM.editorEngineTex);
 				gridSprites[x][y].back().setOrigin(50, 50);
 				gridSprites[x][y].back().setRotation(360 - playerData.grid[x][y].angleModifier);
 				gridSprites[x][y].back().setColor(sf::Color(playerData.grid[x][y].red, playerData.grid[x][y].green, playerData.grid[x][y].blue));
@@ -652,27 +667,27 @@ void ShipEditor::updateGridSpriteTextures()
 			if (playerData.grid[x][y].childUp == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setTexture(RM.inheritanceArrowTex);
 				inheritanceSprites[x][y].back().setOrigin(-46, 50);
 			}
 			if (playerData.grid[x][y].childDown == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setTexture(RM.inheritanceArrowTex);
 				inheritanceSprites[x][y].back().setOrigin(59, 150);
 				inheritanceSprites[x][y].back().setRotation(180);
 			}
 			if (playerData.grid[x][y].childLeft == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setTexture(RM.inheritanceArrowTex);
 				inheritanceSprites[x][y].back().setOrigin(57, 50);
 				inheritanceSprites[x][y].back().setRotation(270);
 			}
 			if (playerData.grid[x][y].childRight == true)
 			{
 				inheritanceSprites[x][y].push_back(sf::Sprite());
-				inheritanceSprites[x][y].back().setTexture(RM.getTexture("inheritanceArrow.png"));
+				inheritanceSprites[x][y].back().setTexture(RM.inheritanceArrowTex);
 				inheritanceSprites[x][y].back().setOrigin(-44, 150);
 				inheritanceSprites[x][y].back().setRotation(90);
 			}
@@ -750,8 +765,12 @@ void ShipEditor::mouseLeftPressed()
 				case bi_false:
 					break;
 				default:
-					if (*turretUpgradeButtons[i].targetInt < turretUpgradeButtons[i].maxLevel)
+					if (*turretUpgradeButtons[i].targetInt < turretUpgradeButtons[i].maxLevel && playerData.money >= cost && cost > -1)
+					{
 						*turretUpgradeButtons[i].targetInt += 1;
+						playerData.money -= cost;
+						playerData.grid[selectedX][selectedY].refund += cost;
+					}
 					break;
 			}
 			for (unsigned int i = 0; i < turretUpgradeButtons.size(); i++)
@@ -759,8 +778,38 @@ void ShipEditor::mouseLeftPressed()
 		}
 		else if (playerData.grid[selectedX][selectedY].engine != 0)
 		{//Engine upgrade buttons
-
+			for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
+				switch (engineUpgradeButtons[i].checkIfPressed(mousePos))
+			{
+				case bi_false:
+					break;
+				default:
+					if (*engineUpgradeButtons[i].targetInt < engineUpgradeButtons[i].maxLevel && playerData.money >= cost && cost > -1)
+					{
+						*engineUpgradeButtons[i].targetInt += 1;
+						playerData.money -= cost;
+						playerData.grid[selectedX][selectedY].refund += cost;
+					}
+					break;
+			}
+			for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
+				engineUpgradeButtons[i].updateIndicators();
 		}
+		else
+		{//Skeleton armor upgrade button
+			if (upgradeArmor.checkIfPressed(mousePos) == bi_upgradeArmor &&
+				*upgradeArmor.targetInt < upgradeArmor.maxLevel &&
+				playerData.money >= cost && cost > -1)
+			{
+				*upgradeArmor.targetInt += 1;
+				playerData.money -= cost;
+				playerData.grid[selectedX][selectedY].refund += cost;
+				upgradeArmor.updateIndicators();
+			}
+		}
+
+		if (exitUpgrades.checkIfPressed(mousePos) == bi_confExit)
+			focus = editor::base;
 		break;
 	case editor::esc:
 		for (unsigned int i = 0; i < escButtons.size(); i++)
@@ -826,38 +875,70 @@ void ShipEditor::mouseLeftPressed()
 		//Up
 		if (checkX == selectedX && checkY == selectedY - 1 && checkY >= 0 && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY].childUp = true;
-			playerData.grid[checkX][checkY].armor = 1;
-			selectedX = checkX;
-			selectedY = checkY;
-			updateGridSpriteTextures();
+			if (playerData.money >= SKELETON_COST)
+			{
+				playerData.grid[selectedX][selectedY].childUp = true;
+				playerData.grid[checkX][checkY].armor = 1;
+				selectedX = checkX;
+				selectedY = checkY;
+				updateGridSpriteTextures();
+				playerData.money -= SKELETON_COST;
+			}
+			else
+			{
+
+			}
 		}
 		//Down
 		else if (checkX == selectedX && checkY == selectedY + 1 && checkY < EDITOR_HEIGHT && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY].childDown = true;
-			playerData.grid[checkX][checkY].armor = 1;
-			selectedX = checkX;
-			selectedY = checkY;
-			updateGridSpriteTextures();
+			if (playerData.money >= SKELETON_COST)
+			{
+				playerData.grid[selectedX][selectedY].childDown = true;
+				playerData.grid[checkX][checkY].armor = 1;
+				selectedX = checkX;
+				selectedY = checkY;
+				updateGridSpriteTextures();
+				playerData.money -= SKELETON_COST;
+			}
+			else
+			{
+
+			}
 		}
 		//Left
 		else if (checkX == selectedX - 1 && checkY == selectedY && checkX >= 0 && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY].childLeft = true;
-			playerData.grid[checkX][checkY].armor = 1;
-			selectedX = checkX;
-			selectedY = checkY;
-			updateGridSpriteTextures();
+			if (playerData.money >= SKELETON_COST)
+			{
+				playerData.grid[selectedX][selectedY].childLeft = true;
+				playerData.grid[checkX][checkY].armor = 1;
+				selectedX = checkX;
+				selectedY = checkY;
+				updateGridSpriteTextures();
+				playerData.money -= SKELETON_COST;
+			}
+			else
+			{
+
+			}
 		}
 		//Right
 		else if (checkX == selectedX + 1 && checkY == selectedY && checkX < EDITOR_WIDTH && playerData.grid[checkX][checkY].armor == 0)
 		{
-			playerData.grid[selectedX][selectedY].childRight = true;
-			playerData.grid[checkX][checkY].armor = 1;
-			selectedX = checkX;
-			selectedY = checkY;
-			updateGridSpriteTextures();
+			if (playerData.money >= SKELETON_COST)
+			{
+				playerData.grid[selectedX][selectedY].childRight = true;
+				playerData.grid[checkX][checkY].armor = 1;
+				selectedX = checkX;
+				selectedY = checkY;
+				updateGridSpriteTextures();
+				playerData.money -= SKELETON_COST;
+			}
+			else
+			{
+
+			}
 		}
 		else if (checkX > -1 && checkX < EDITOR_WIDTH && checkY > -1 && checkY < EDITOR_HEIGHT)
 		{
@@ -897,18 +978,20 @@ void ShipEditor::mouseLeftPressed()
 				temp_dontClose = true;
 				break;
 			case bi_actionTurret:
-				if (playerData.grid[selectedX][selectedY].turret == 0 && playerData.grid[selectedX][selectedY].engine == 0)
+				if (playerData.grid[selectedX][selectedY].turret == 0 && playerData.grid[selectedX][selectedY].engine == 0 && playerData.money >= TURRET_COST)
 				{
 					playerData.grid[selectedX][selectedY].turret = 1;
 					updateGridSpriteTextures();
+					playerData.money -= TURRET_COST;
 				}
 				break;
 			case bi_actionEngine:
-				if (playerData.grid[selectedX][selectedY].turret == 0 && playerData.grid[selectedX][selectedY].engine == 0)
+				if (playerData.grid[selectedX][selectedY].turret == 0 && playerData.grid[selectedX][selectedY].engine == 0 && playerData.money >= ENGINE_COST)
 				{
 					playerData.grid[selectedX][selectedY].engine = 1;
 					playerData.grid[selectedX][selectedY].angleModifier = 180;
 					updateGridSpriteTextures();
+					playerData.money -= ENGINE_COST;
 				}
 				break;
 			case bi_actionRotate:
@@ -1704,6 +1787,25 @@ void ShipEditor::drawActions()
 	else if (actionCoreSchemeSelectionOpen == true)
 		for (unsigned int i = 0; i < actionCoreSchemeButtons.size(); i++)
 			actionCoreSchemeButtons[i].draw(mWindow, mousePos);
+
+
+	for (unsigned int i = 0; i < actionButtons.size(); i++)
+		if (actionButtons[i].id == bi_actionTurret && actionButtons[i].visible == true)
+	{
+		if (actionButtons[i].mouseOverlap(mousePos))
+		{//Set cost for a basic turret
+			cost = TURRET_COST;
+			drawCost();
+		}		
+	}
+		else if (actionButtons[i].id == bi_actionEngine && actionButtons[i].visible == true)
+	{
+		if (actionButtons[i].mouseOverlap(mousePos))
+		{//Set cost for a basic engine
+			cost = ENGINE_COST;
+			drawCost();
+		}
+	}
 }
 void ShipEditor::closeActions(editor::Focus newFocus)
 {
@@ -1714,16 +1816,51 @@ void ShipEditor::closeActions(editor::Focus newFocus)
 
 void ShipEditor::drawUpgrades()
 {
+	cost = -1;
+	mWindow.draw(upgradesBackground1);
+	mWindow.draw(upgradesBackground2);
 	if (playerData.grid[selectedX][selectedY].turret != 0)
 	{//Turret
 		for (unsigned int i = 0; i < turretUpgradeButtons.size(); i++)
 			turretUpgradeButtons[i].draw(mWindow, mousePos);
+
+		//Calculate cost
+		for (unsigned int i = 0; i < turretUpgradeButtons.size(); i++)
+			if (turretUpgradeButtons[i].mouseOverlap(mousePos))
+			{
+			cost = int(pow(*turretUpgradeButtons[i].targetInt, 3));
+			for (unsigned int j = 0; j < turretUpgradeButtons.size(); j++)
+				cost += int(pow(*turretUpgradeButtons[j].targetInt, 2));
+			}
 	}
-	else if (playerData.grid[selectedX][selectedY].turret != 0)
+	else if (playerData.grid[selectedX][selectedY].engine != 0)
 	{//Engine
 		for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
 			engineUpgradeButtons[i].draw(mWindow, mousePos);
+
+		//Calculate cost
+		for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
+			if (engineUpgradeButtons[i].mouseOverlap(mousePos))
+			{
+			cost = int(pow(*engineUpgradeButtons[i].targetInt, 3));
+			for (unsigned int j = 0; j < engineUpgradeButtons.size(); j++)
+				cost += int(pow(*engineUpgradeButtons[j].targetInt, 2));
+			}
+
 	}
+	else
+	{//Skeleton
+		if (upgradeArmor.mouseOverlap(mousePos))
+		{
+			cost = int(pow(*upgradeArmor.targetInt, 3));
+			drawCost();
+		}
+		upgradeArmor.draw(mWindow, mousePos);
+	}
+
+	exitUpgrades.draw(mWindow, mousePos);
+	if (cost > -1)
+		drawCost();
 }
 void ShipEditor::reloadUpgradeButtons()
 {
@@ -1759,8 +1896,88 @@ void ShipEditor::reloadUpgradeButtons()
 		}
 		for (unsigned int i = 0; i < turretUpgradeButtons.size(); i++)
 			turretUpgradeButtons[i].updateIndicators();
+		sf::Vector2f bgPos1 = turretUpgradeButtons[0].buttonRectangle.getPosition();
+		bgPos1.x = int(bgPos1.x - 20 * resFactor);
+		bgPos1.y = int(bgPos1.y - 20 * resFactor);
+		sf::Vector2f bgPos2;
+		bgPos2.x = int(bgPos1.x + 5 * resFactor);
+		bgPos2.y = int(bgPos1.y + 5 * resFactor);
+		upgradesBackground1.setPosition(bgPos1);
+		upgradesBackground2.setPosition(bgPos2);
+		upgradesBackground1.setSize(sf::Vector2f(int(upgradeButtonWidth + 40 * resFactor), int(upgradeButtonHeight * 9 + 40 * resFactor)));
+		upgradesBackground2.setSize(sf::Vector2f(int(upgradeButtonWidth + 30 * resFactor), int(upgradeButtonHeight * 9 + 30 * resFactor)));
+		exitUpgrades.setPosition(exitUpgrades.buttonRectangle.getPosition().x, int(((WINDOW_HEIGHT - (upgradeButtonHeight)* 9) / 2.0f) + upgradeButtonHeight * 8));
+		exitUpgrades.setTextAlign(ta_center);
 	}
+	else if (playerData.grid[selectedX][selectedY].engine != 0)
+	{
+		for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
+			switch (engineUpgradeButtons[i].upgrade.id)
+		{
+			case bi_upgradeArmor:
+				engineUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].armor;
+				break;
+			case bi_upgradeEngineStrength:
+				engineUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].engine;
+				break;
+			case bi_upgradeEngineCapacity:
+				engineUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].capacity;
+				break;
+			case bi_upgradeEngineRechargeRate:
+				engineUpgradeButtons[i].targetInt = &playerData.grid[selectedX][selectedY].rechargeSpeed;
+				break;
+		}
+		for (unsigned int i = 0; i < engineUpgradeButtons.size(); i++)
+			engineUpgradeButtons[i].updateIndicators();
+
+		sf::Vector2f bgPos1 = engineUpgradeButtons[0].buttonRectangle.getPosition();
+		bgPos1.x = int(bgPos1.x - 20 * resFactor);
+		bgPos1.y = int(bgPos1.y - 20 * resFactor);
+		sf::Vector2f bgPos2;
+		bgPos2.x = int(bgPos1.x + 5 * resFactor);
+		bgPos2.y = int(bgPos1.y + 5 * resFactor);
+		upgradesBackground1.setPosition(bgPos1);
+		upgradesBackground2.setPosition(bgPos2);
+		upgradesBackground1.setSize(sf::Vector2f(int(upgradeButtonWidth + 40 * resFactor), int(upgradeButtonHeight * 5 + 40 * resFactor)));
+		upgradesBackground2.setSize(sf::Vector2f(int(upgradeButtonWidth + 30 * resFactor), int(upgradeButtonHeight * 5 + 30 * resFactor)));
+		exitUpgrades.setPosition(exitUpgrades.buttonRectangle.getPosition().x, int((WINDOW_HEIGHT - (upgradeButtonHeight)* 5) / 2.0f + upgradeButtonHeight * 4));
+		exitUpgrades.setTextAlign(ta_center);	
+	}
+	else
+	{//Skeleton armor upgrading
+		upgradeArmor.targetInt = &playerData.grid[selectedX][selectedY].armor;
+		upgradeArmor.updateIndicators();
+
+		sf::Vector2f bgPos1 = upgradeArmor.buttonRectangle.getPosition();
+		bgPos1.x = int(bgPos1.x - 20 * resFactor);
+		bgPos1.y = int(bgPos1.y - 20 * resFactor);
+		sf::Vector2f bgPos2;
+		bgPos2.x = int(bgPos1.x + 5 * resFactor);
+		bgPos2.y = int(bgPos1.y + 5 * resFactor);
+		upgradesBackground1.setPosition(bgPos1);
+		upgradesBackground2.setPosition(bgPos2);
+		upgradesBackground1.setSize(sf::Vector2f(int(upgradeButtonWidth + 40 * resFactor), int(upgradeButtonHeight * 2 + 40 * resFactor)));
+		upgradesBackground2.setSize(sf::Vector2f(int(upgradeButtonWidth + 30 * resFactor), int(upgradeButtonHeight * 2 + 30 * resFactor)));
+		exitUpgrades.setPosition(exitUpgrades.buttonRectangle.getPosition().x, int(WINDOW_HEIGHT/2));
+		exitUpgrades.setTextAlign(ta_center);
+	}
+
+
 }
+
+void ShipEditor::drawCost()
+{
+	costText.setString("Cost: " + std::to_string(cost) + " metal\nMetal: "+std::to_string(playerData.money));
+	costBackground.setSize(sf::Vector2f(costText.getLocalBounds().width + 20 * resFactor, costText.getLocalBounds().height + 20 * resFactor));
+
+
+	costBackground.setPosition(mousePos.x, mousePos.y);
+	costText.setPosition(int(mousePos.x + 10*resFactor), int(mousePos.y));
+
+	mWindow.draw(costBackground);
+	mWindow.draw(costText);
+}
+
 
 
 
@@ -1778,8 +1995,17 @@ void ShipEditor::zoom(int delta)
 void ShipEditor::scrapComponent(int x, int y)
 {
 	//if selection is invalid-> return
-	if (selectedX < 0 || selectedX > EDITOR_WIDTH - 1 || selectedY < 0 || selectedY > EDITOR_HEIGHT - 1)
+	if (selectedX < 0 || selectedX > EDITOR_WIDTH - 1 || selectedY < 0 || selectedY > EDITOR_HEIGHT - 1 || playerData.grid[selectedX][selectedY].core == true)
 		return;
+
+	//Refund metal
+	playerData.money += SKELETON_COST;
+	playerData.money += playerData.grid[selectedX][selectedY].refund;
+	if (playerData.grid[selectedX][selectedY].turret != 0)
+		playerData.money += TURRET_COST;
+	else if (playerData.grid[selectedX][selectedY].engine != 0)
+		playerData.money += ENGINE_COST;
+
 
 	//Notify parent component
 	if (x > 0)

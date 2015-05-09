@@ -51,6 +51,7 @@ public:
 	virtual void shootLaser(int);
 
 protected:
+	int metal = 0;//irandom max amount dropped upon death
 	//Object
 	bool rotationDirection;
 	double closeAngle;

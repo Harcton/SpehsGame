@@ -14,6 +14,7 @@ enum ButtonId;
 
 
 
+
 namespace editor
 {
 	enum Focus
@@ -73,6 +74,7 @@ public:
 	void drawActions();
 	void drawEscButtons();
 	void drawUpgrades();
+	void drawCost();
 	void reloadUpgradeButtons();
 	void reloadActions();
 	void closeActions(editor::Focus);
@@ -176,9 +178,10 @@ private:
 	bool usingScrollBar = false;
 	int scrollDelta = 0;
 	int scrollState = 0;
+	int cost = -1;
 	sf::Vector2i mousePos;
 
-	//Editor sprites/shapes
+	//Editor sprites/shapes/misc elements
 	sf::RectangleShape selectedRect;
 	sf::RectangleShape shadeRect;
 	sf::RectangleShape coreConfigurationRect1;
@@ -190,12 +193,18 @@ private:
 	sf::RectangleShape engineConfigurationRect1;
 	sf::RectangleShape engineConfigurationRect2;
 	sf::RectangleShape engineConfigurationRect3;
+	sf::RectangleShape upgradesBackground1;
+	sf::RectangleShape upgradesBackground2;
 	sf::Sprite circleSliderSpr;
 	sf::Sprite colorPreviewTurret;
 	std::vector<sf::VertexArray> horizontalLines;
 	std::vector<sf::VertexArray> verticalLines;
 	std::vector<sf::Sprite> gridSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
 	std::vector<sf::Sprite> inheritanceSprites[EDITOR_WIDTH][EDITOR_HEIGHT];
+	sf::RectangleShape costBackground;
+	sf::Text costText;
+	sf::Text balanceText;
+
 
 	//Buttons
 	std::vector<Button> escButtons;
@@ -212,6 +221,7 @@ private:
 	std::vector<UpgradeButton> turretUpgradeButtons;
 	std::vector<UpgradeButton> engineUpgradeButtons;
 	Button exitUpgrades;
+	UpgradeButton upgradeArmor;
 	bool actionTurretSchemeSelectionOpen = false;
 	bool actionCoreSchemeSelectionOpen = false;
 	bool actionJoystickIndexSelectionOpen = false;

@@ -26,25 +26,25 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.getTexture("Seeker.png"));
+	components.back()->sprites.back().setTexture(RM.seekerTex);
 	components.back()->sprites.back().setOrigin(50, 50);
 
 	//Initialize Animations
-	components[0]->animatedSprites.push_back(sge::Sprite("seeker_active_animation.png"));
+	components[0]->animatedSprites.push_back(RM.seekerActiveTex);
 	components[0]->animatedSprites.back().setVisibility(false);
 	components[0]->animatedSprites.back().setOrigin(50, 50);
 	components[0]->animatedSprites.back().setFrameSize(100, 100);
 	components[0]->animatedSprites.back().setTilesetSize(4, 2);
 	components[0]->animatedSprites.back().setFrameDuration(1);
 
-	components[0]->animatedSprites.push_back(sge::Sprite("seeker_passive_animation.png"));
+	components[0]->animatedSprites.push_back(RM.seekerPassiveTex);
 	components[0]->animatedSprites.back().setVisibility(false);
 	components[0]->animatedSprites.back().setOrigin(50, 50);
 	components[0]->animatedSprites.back().setFrameSize(100, 100);
 	components[0]->animatedSprites.back().setTilesetSize(4, 2);
 	components[0]->animatedSprites.back().setFrameDuration(1);
 
-	components[0]->animatedSprites.push_back(sge::Sprite("seeker_dodge_animation.png"));
+	components[0]->animatedSprites.push_back(RM.seekerDodgeTex);
 	components[0]->animatedSprites.back().setVisibility(false);
 	components[0]->animatedSprites.back().setOrigin(50, 50);
 	components[0]->animatedSprites.back().setFrameSize(100, 100);

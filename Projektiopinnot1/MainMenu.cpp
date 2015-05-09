@@ -74,12 +74,12 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 
 
 	//Background
-	menuLogo.setTexture(RM.getTexture("menuLogo.png"));
+	menuLogo.setTexture(RM.menuLogoTex);
 	menuLogo.setOrigin(672, 0);
 	menuLogo.setScale(resFactor, resFactor);
 	menuLogo.setPosition(WINDOW_WIDTH/2, 0);
 	menuLogo.setColor(sf::Color(255, 255, 255, 220));
-	planetSpr.setTexture(RM.getTexture("menuPlanet.png"));
+	planetSpr.setTexture(RM.menuPlanetTex);
 	planetSpr.setOrigin(550, 500);
 	planetSpr.setScale(2 * resFactor, 2 * resFactor);
 	planetSpr.setPosition(WINDOW_WIDTH*0.8, WINDOW_HEIGHT + 512 * 2 * resFactor*0.4);
@@ -87,7 +87,7 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	for (int i = 0; i < 25; i++)
 	{
 		bgSprVector.push_back(sf::Sprite());
-		bgSprVector.back().setTexture(RM.getTexture("menuSpace1.png"));
+		bgSprVector.back().setTexture(RM.menuSpace1Tex);
 		bgSprVector.back().setOrigin(200, 175);
 		bgSprVector.back().setRotation(irandom(0, 360));
 		bgSprVector.back().setPosition(irandom(-200, WINDOW_WIDTH + 400), irandom(-200, WINDOW_HEIGHT + 400));
@@ -293,7 +293,7 @@ void MainMenu::draw()
 		{
 			bgSprVector.erase(bgSprVector.begin() + i);
 			bgSprVector.push_back(sf::Sprite());
-			bgSprVector.back().setTexture(RM.getTexture("menuSpace1.png"));
+			bgSprVector.back().setTexture(RM.menuSpace1Tex);
 			bgSprVector.back().setOrigin(200, 175);
 			bgSprVector.back().setRotation(irandom(0, 360));
 			bgSprVector.back().setPosition(irandom(-200, WINDOW_WIDTH + 400), irandom(-200, WINDOW_HEIGHT + 400));

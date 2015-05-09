@@ -34,7 +34,7 @@ Object::Object(Game* game, Object* mstr, int mx, int my, float angl, float spd, 
 	y = my;
 	xSpeed = cos(angl)*spd + master->xSpeed;
 	ySpeed = sin(angl)*spd + master->ySpeed;
-	spr.setTexture(RM.getTexture("bullet1.png"));
+	spr.setTexture(RM.bullet1Tex);
 }
 Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame), centerObj(other.centerObj), dataPtr(other.dataPtr)
 {//Copy constructor

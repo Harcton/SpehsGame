@@ -568,13 +568,13 @@ void Player::addFromGrid(int gx, int gy)
 	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100, gx, gy));
 	components.back()->types.push_back(component::hull);
 	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.getTexture("skeleton.png"));
+	components.back()->sprites.back().setTexture(RM.skeletonTex);
 	components.back()->sprites.back().setOrigin(50, 50);
 	
 	if (data.grid[gx][gy].core)
 	{//For the core piece, add the additional sprite
 		components.back()->sprites.push_back(sf::Sprite());
-		components.back()->sprites.back().setTexture(RM.getTexture("core.png"));
+		components.back()->sprites.back().setTexture(RM.coreTex);
 		components.back()->sprites.back().setOrigin(50, 50);
 	}	
 	else if (data.grid[gx][gy].turret > 0)

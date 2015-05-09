@@ -27,7 +27,7 @@ Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	components.reserve(2);
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.getTexture("enemy_base_green.png"));
+	components.back()->sprites.back().setTexture(RM.enemyBaseGreenTex);
 	components.back()->sprites.back().setOrigin(50, 50);
 	components.push_back(new Turret(this, centerObj, 0, 0));
 	components[components.size() - 2]->childComponents.push_back(components.back()->id);

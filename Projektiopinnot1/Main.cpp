@@ -26,9 +26,9 @@ float radarSpeed = 0;
 float movementSpeed = 0.0004;
 float rotationSpeed = PI / 180000;
 
-//Global textures
+//Global resources
 ResourceManager RM;
-void initializeResourceManager(ResourceManager&);
+
 
 void main()
 {
@@ -38,9 +38,6 @@ void main()
 	_CrtSetDbgFlag(cur);
 	*/
 	{
-
-		initializeResourceManager(RM);
-
 		//Load game settings. If no settings file exists, create one
 		if (loadSettings() == false)
 			saveSettings();
@@ -69,52 +66,7 @@ void main()
 
 void initializeResourceManager(ResourceManager& rm)
 {
-//TEXTURES
-	//PLAYER
-	rm.loadTexture("Texture/Player/skeleton.png");
-	rm.loadTexture("Texture/Player/core.png");
-	rm.loadTexture("Texture/Player/turret.png");
-	rm.loadTexture("Texture/Player/engine.png");
-	rm.loadTexture("Texture/Player/engine_fire.png");
-	rm.loadTexture("Texture/Player/engine_fire_animation.png");
-	rm.loadTexture("Texture/Player/engine_fire_animation_testversion.png");
 
-	//ENEMY
-	rm.loadTexture("Texture/Enemy/enemy_commander_ship_upgraded.png");
-	rm.loadTexture("Texture/Enemy/Flier.png");
-	rm.loadTexture("Texture/Enemy/enemy_base_purple.png");
-	rm.loadTexture("Texture/Enemy/enemy_base_green.png");
-	rm.loadTexture("Texture/Enemy/enemy_base.png");
-		//Seeker
-	rm.loadTexture("Texture/Enemy/Seeker.png");
-	rm.loadTexture("Texture/Enemy/seeker_active_animation.png");
-	rm.loadTexture("Texture/Enemy/seeker_passive_animation.png");
-	rm.loadTexture("Texture/Enemy/seeker_dodge_animation.png");
-		//Sentinel
-	rm.loadTexture("Texture/Enemy/Sentinel.png");
-
-	//MENU
-	rm.loadTexture("Texture/Menu/inheritanceArrow.png");
-	rm.loadTexture("Texture/Menu/xButton.png");
-	rm.loadTexture("Texture/Menu/circleSlider.png");
-	rm.loadTexture("Texture/Menu/slider1.png");
-	rm.loadTexture("Texture/Menu/editorTurret.png");
-	rm.loadTexture("Texture/Menu/editorSkeleton.png");
-	rm.loadTexture("Texture/Menu/editorEngine.png");
-	rm.loadTexture("Texture/Menu/menuPlanet.png");
-	rm.loadTexture("Texture/Menu/menuSpace1.png");
-	rm.loadTexture("Texture/Menu/menuLogo.png");
-	
-	//EFFECTS
-
-	//BACKGROUNDS
-	rm.loadTexture("Texture/Background/sky.png");
-
-	//MISC
-	rm.loadTexture("Texture/Misc/bullet1.png");
-	rm.loadTexture("Texture/Misc/debris1.png");
-	rm.loadTexture("Texture/Misc/ball.png");
-	rm.loadTexture("Texture/Misc/pointer_arrow.png");
 
 
 
@@ -123,7 +75,6 @@ void initializeResourceManager(ResourceManager& rm)
 
 
 
-	std::cout << "\nResourceManager intialized";
 }
 
 

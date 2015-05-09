@@ -231,7 +231,7 @@ void Component::createChild(double ox, double oy, component::Type tp)
 		master->components.push_back(new Component(master, centerObj, ox, oy));
 		childComponents.push_back(master->components.back()->id);
 		master->components.back()->sprites.push_back(sf::Sprite());
-		master->components.back()->sprites.back().setTexture(RM.getTexture("skeleton.png"));
+		master->components.back()->sprites.back().setTexture(RM.skeletonTex);
 		master->components.back()->sprites.back().setTextureRect(sf::IntRect(1400, 0, 100, 100));
 		break;
 	case component::turret: //Turret

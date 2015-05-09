@@ -16,7 +16,7 @@ namespace sge
 	{
 	public:
 		Sprite();
-		Sprite(std::string);
+		Sprite(sf::Texture&);
 		~Sprite();
 
 		void draw(sf::RenderWindow&);

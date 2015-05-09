@@ -1,11 +1,13 @@
 #include "Main.h"
 #include "Enemy.h"
 #include "Game.h"
+#include "Player.h"
 
 
 
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game) : Object(windowref, game)
 {
+	metal = 1;
 }
 
 
@@ -19,7 +21,12 @@ bool Enemy::update()
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
 	if (components.size() <= 0)
+	{//All components destroyed, chance to drop metal
+		int dropAmount = irandom(0, metal);
+		if (dropAmount > 0)
+			centerObj->dataPtr->money += dropAmount;
 		return false;
+	}
 	
 
 	complexUpdate();

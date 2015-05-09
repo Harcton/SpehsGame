@@ -12,7 +12,7 @@ Background::~Background()
 Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Background*>& hw) : homeVector(hw), Object(windowref, game)
 {
 	/*std::cout << "\nConstructing background...";*/
-	spr.setTexture(RM.getTexture("sky.png"));
+	spr.setTexture(RM.sky1Tex);
 	spr.setOrigin(50, 50);
 	angle = (irandom(0, 360)/double(360)) * (2*PI);
 	scale = double(irandom(400, 600) + 100) / 100;

@@ -3,9 +3,9 @@
 
 namespace sge
 {
-	Sprite::Sprite(std::string path) : Sprite()
+	Sprite::Sprite(sf::Texture& t) : Sprite()
 	{
-		setTexture(RM.getTexture(path));
+		setTexture(t);
 	}
 	Sprite::Sprite()
 	{

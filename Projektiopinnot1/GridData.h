@@ -20,20 +20,21 @@ private:
 	int angleModifier = 0; 
 	int rotationDirection = 0;
 	bool hullMount = false;
+	short int refund = 0;
 
 	//////////////////
 	//Upgrades (in "The bigger the better" format)
 	short int armor = 0;
-	short int capacity = 0; //magazine/charge capacity
-	short int rechargeSpeed = 0; //Reload & recharge rate
+	short int capacity = 1; //magazine/charge capacity
+	short int rechargeSpeed = 1; //Reload & recharge rate
 	
 	short int engine = 0; //Thrust strength
 
 	short int turret = 0; //Turret damage
-	short int maxAngle = 0;
-	short int turnSpeed = 0;
-	short int bulletSpeed = 0;
-	short int recoilTime = 0;
+	short int maxAngle = 1;
+	short int turnSpeed = 1;
+	short int bulletSpeed = 1;
+	short int recoilTime = 1;
 	///////////////////
 
 	//Structural

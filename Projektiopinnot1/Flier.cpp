@@ -24,7 +24,7 @@ Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel/*, Comm
 	components.reserve(1);
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
 	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.getTexture("Flier.png"));
+	components.back()->sprites.back().setTexture(RM.flierTex);
 	components.back()->sprites.back().setOrigin(50, 50);
 	components.back()->textureRadius = 30;
 	components.back()->maxHp = 30;

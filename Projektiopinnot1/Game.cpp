@@ -29,14 +29,19 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	backgrounds.reserve(MAX_BACKGROUNDS);
 
 	elements.push_back(sf::Sprite());
-	elements[0].setTexture(RM.getTexture("ball.png"));
+	elements[0].setTexture(RM.ball1Tex);
 	elements[0].setOrigin(10, 10);
 	elements.push_back(sf::Sprite());
-	elements[1].setTexture(RM.getTexture("pointer_arrow.png"));
+	elements[1].setTexture(RM.pointerArrowTex);
 	elements[1].setOrigin(10, 10);
 
-	font.loadFromFile("Font/ORANGEKI.ttf");
-	distanceText.setFont(font);
+	balanceText.setFont(RM.menuFont);
+	balanceText.setString("Metal: ");
+	balanceText.setColor(sf::Color(120, 170, 255, 180));
+	balanceText.setCharacterSize(50 * resFactor);
+	balanceText.setPosition(int(10 * resFactor), int(WINDOW_HEIGHT - balanceText.getGlobalBounds().height * 2));
+
+	distanceText.setFont(RM.menuFont);
 	distanceText.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25 + 30);
 	elements[0].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
 	elements[1].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25); //playerObj->screenX, playerObj->screenY
@@ -123,6 +128,8 @@ void Game::run()
 		for (unsigned int i = 0; i < elements.size(); i++)
 			mWindow.draw(elements[i]);
 		mWindow.draw(distanceText);
+		balanceText.setString("Metal: " + std::to_string(playerObj->dataPtr->money));
+		mWindow.draw(balanceText);
 		if (focus == gf_escMenu)
 			drawEscMenu();
 		

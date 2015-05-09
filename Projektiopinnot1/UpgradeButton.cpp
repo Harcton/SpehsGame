@@ -61,13 +61,13 @@ ButtonId UpgradeButton::checkIfPressed(sf::Vector2i& mousePos)
 }
 void UpgradeButton::draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos)
 {
-
 	window.draw(buttonRectangle);
 	window.draw(text);
 
 	upgrade.draw(window, mouse_pos);
 	for (unsigned int i = 0; i < levelIndicators.size(); i++)
 		window.draw(levelIndicators[i]);
+	window.draw(upgrade.text);
 }
 
 void UpgradeButton::updateIndicators()
