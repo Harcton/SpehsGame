@@ -32,6 +32,8 @@ ResourceManager::ResourceManager()
 	seekerDodgeTex.loadFromFile("Texture/Enemy/seeker_dodge_animation.png");
 	//Sentinel
 	sentinelTex.loadFromFile("Texture/Enemy/Sentinel.png");
+	//Flier
+	flierTex.loadFromFile("Texture/Enemy/flier_active_animation.png");
 	//MENU
 	inheritanceArrowTex.loadFromFile("Texture/Menu/inheritanceArrow.png");
 	circleSliderTex.loadFromFile("Texture/Menu/circleSlider.png");

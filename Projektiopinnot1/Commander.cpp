@@ -120,7 +120,6 @@ bool Commander::update()
 
 	//Counters
 	shootingCounter++;
-	flierAttackCounter++;
 	releaseFlier++;
 
 	AIupdate();
@@ -146,17 +145,13 @@ void Commander::AIupdate()//maybe not follow true all the time
 	}
 	if (state == state_victory)
 	{
-		//nothing to see here just act normal
+		follow = false;
+		xSpeed += cos(angle)*accelerationConstant;
+		ySpeed += sin(angle)*accelerationConstant;
 		return;
 	}
 
 
-	if (flierAttackCounter >= 600)
-	{
-		initiateFlierAssault = true;
-		flierAttackCounter = 0;
-		fliersFollowing = 0;
-	}
 	else
 	{
 		initiateFlierAssault = false;
@@ -195,13 +190,10 @@ void Commander::AIupdate()//maybe not follow true all the time
 		xSpeed += (cos(angle))*accelerationConstant;
 		ySpeed += (sin(angle))*accelerationConstant;
 
-		if (releaseFlier > 60)
+		if (releaseFlier > 90)
 		{
-			if (fliersFollowing < 6)
-			{
-				launchFliers();
-				releaseFlier = 0;
-			}
+			launchFliers();
+			releaseFlier = 0;
 		}
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
@@ -228,7 +220,6 @@ void Commander::launchFliers()
 	if (mGame->objects.size() >= MAX_OBJECTS)
 		return;
 
-	mGame->objects.push_back(new Flier(mWindow, mGame, 1/*, this*/));
+	mGame->objects.push_back(new Flier(mWindow, mGame, 1));
 	mGame->objects.back()->setLocation(x, y); //randomize a lil bit
-	fliersFollowing++;
 }

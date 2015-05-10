@@ -6,7 +6,6 @@ class Game;
 #include "Object.h"
 #include "Component.h"
 
-
 enum AnimationID
 {
 	anim_spawn,
@@ -18,7 +17,7 @@ enum AnimationID
 	anim_victory
 };
 
-enum enemyState
+enum EnemyState
 {
 	state_spawned,
 	state_activated,
@@ -49,7 +48,7 @@ public:
 
 	virtual void explosion(int, float);
 	virtual void shootLaser(int);
-
+	
 protected:
 	int metal = 0;//irandom max amount dropped upon death
 	//Object
@@ -73,8 +72,8 @@ protected:
 	double distance;
 	double playerDirection;
 	Component* nearestComponent;
-	enemyState state;
-	enemyState memoryState;
+	EnemyState state;
+	EnemyState memoryState;
 };
 
 #endif

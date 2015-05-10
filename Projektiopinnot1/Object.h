@@ -43,6 +43,7 @@ public:
 	void setRandomLocation();
 	void setLocation(double, double);
 
+
 	sf::Sprite spr;
 	double textureRadius;
 	double scale = 1;

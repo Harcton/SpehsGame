@@ -97,7 +97,9 @@ void Seeker::AIupdate()//maybe not follow true all the time
 	}
 	if (state == state_victory)
 	{
-		//nothing to see here just act normal
+		follow = false;
+		xSpeed += cos(angle)*accelerationConstant;
+		ySpeed += sin(angle)*accelerationConstant;
 		return;
 	}
 
@@ -248,7 +250,7 @@ void Seeker::animationHandler(AnimationID ID)
 	}
 	case anim_passive:
 	{
-		components[0]->animatedSprites[1].setVisibility(true);//no workerino??
+		components[0]->animatedSprites[1].setVisibility(true);
 		break;
 	}
 	case anim_dodge:

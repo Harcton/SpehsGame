@@ -4,30 +4,38 @@
 
 
 
-Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel/*, Commander* master*/) : Enemy(windowref, game)
+Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
-	//fleetMaster = master;
 
-	repositioning = false;
 	initiateAssault = false;
-	aggroRange = SPAWN_RANGE;
+	repositioning = false;
+	aggroRange = 2500;
 	maxActionRange = 90;
 	closeRange = 75;
-	maxTurnSpeedLimit = 0.05;
-	maxSpeedLimit = 4;
-	accelerationConstant = 0.4;
+	maxTurnSpeedLimit = 0.06;
+	maxSpeedLimit = 3;
+	accelerationConstant = 0.5;
 	turnAccelerationConstant = 0.005;
 	closeAngle = 0.003;
 
 	//Reserve memory for all of the components
 	components.reserve(1);
 	components.push_back(new Component(this, mGame->playerObj, 0, 0));
+	/*
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.flierTex);
-	components.back()->sprites.back().setOrigin(50, 50);
+	components.back()->sprites.back().setOrigin(15, 15);
+	*/
 	components.back()->textureRadius = 30;
 	components.back()->maxHp = 30;
+
+	//animations
+	components[0]->animatedSprites.push_back(RM.flierTex);
+	components[0]->animatedSprites.back().setOrigin(15, 15);
+	components[0]->animatedSprites.back().setFrameSize(30, 30);
+	components[0]->animatedSprites.back().setTilesetSize(2, 2);
+	components[0]->animatedSprites.back().setFrameDuration(2);
 }
 
 
@@ -46,11 +54,15 @@ bool Flier::update()
 
 	//Counters
 	laserCounter++;
+	behaviourCounter++;
 
-	rotationCounter += irandom(0, 2);
+	rotationCounter += irandom(1, 2);
 	if (rotationCounter <= 20)
 	{
-		rotationDirection = true;
+		if (flipCoin)
+			rotationDirection = true;
+		else
+			rotationDirection = false;
 	}
 	else if (rotationCounter > 20 && rotationCounter < 60)
 	{
@@ -83,18 +95,21 @@ bool Flier::update()
 }
 
 
-void Flier::AIupdate()//change behaviour when not fighting
+void Flier::AIupdate()
 {
 	if (state == state_victory)
 	{
-		//nothing to see here just act normal
+		follow = false;
+		xSpeed += cos(angle)*accelerationConstant;
+		ySpeed += sin(angle)*accelerationConstant;
+		turnSpeed -= turnAccelerationConstant / 2;
 		return;
 	}
 
-	//if (fleetMaster->initiateFlierAssault == true)
-	//{
-	//	this->initiateAssault = true;
-	//}
+	if (behaviourCounter > 200)
+	{
+		initiateAssault = true;
+	}
 
 	if (repositioning)
 	{
@@ -115,10 +130,10 @@ void Flier::AIupdate()//change behaviour when not fighting
 		state = state_active;
 
 		follow = true;
-		if (rotationDirection == true) //rotation direction to be fixed?
+		if (rotationDirection == true)
 		{
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
+			xSpeed += (cos(angle))*accelerationConstant;
+			ySpeed += (sin(angle))*accelerationConstant;
 		}
 		else if (rotationDirection == false)
 		{
@@ -134,6 +149,16 @@ void Flier::AIupdate()//change behaviour when not fighting
 				laserCounter = irandom(-12, -8);
 			}
 		}
+
+		if (behaviourCounter % 5000)
+		{
+			repositioning = true;
+			repositionCounter = -60;
+			if (flipCoin)
+				repositioningDirection = true;
+			else
+				repositioningDirection = false;
+		}
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
@@ -141,85 +166,7 @@ void Flier::AIupdate()//change behaviour when not fighting
 
 		if (initiateAssault == false)
 		{
-			follow = false;
-			//Follow the Commander ship!
-			//Not actually following !!!??!
-			if (angle >= 0 && angle < PI / 2) //1st quarter
-			{
-				/*if (flierMaster->angle < PI && flierMaster->angle > angle)
-				{
-				turnSpeed += maxTurnSpeed;
-				}
-				else if (flierMaster->angle < angle || flierMaster->angle > PI*1.5)
-				{
-				turnSpeed -= maxTurnSpeed;
-				}
-				else if (flierMaster->angle < angle + PI)
-				{
-				turnSpeed += maxTurnSpeed;
-				}
-				else
-				{
-				turnSpeed -= maxTurnSpeed;
-				}*/
-			}
-			else if (angle >= PI / 2 && angle < PI) //2nd quarter
-			{
-				/*if (flierMaster->angle < PI*1.5 && flierMaster->angle > angle)
-				{
-				turnSpeed += maxTurnSpeed;
-				}
-				else if (flierMaster->angle < angle)
-				{
-				turnSpeed -= maxTurnSpeed;
-				}
-				else if (flierMaster->angle > angle + PI)
-				{
-				turnSpeed -= maxTurnSpeed;
-				}
-				else
-				{
-				turnSpeed += maxTurnSpeed;
-				}*/
-			}
-			else if (angle >= PI && angle < PI*1.5)//3rd quarter
-			{
-				/*if (flierMaster->angle > angle)
-				{
-				turnSpeed += maxTurnSpeed;
-				}
-				else if (flierMaster->angle < angle && flierMaster->angle > PI / 2)
-				{
-				turnSpeed -= maxTurnSpeed;
-				}
-				else if (flierMaster->angle < angle - PI)
-				{
-				turnSpeed += maxTurnSpeed;
-				}
-				else
-				{
-				turnSpeed -= maxTurnSpeed;
-				}*/
-			}
-			else //4th quarter
-			{
-				/*if (flierMaster->angle > angle || flierMaster->angle < PI / 2)
-				{
-				turnSpeed += maxTurnSpeed;
-				}
-				else if (flierMaster->angle > PI && flierMaster->angle < angle)
-				{
-				turnSpeed -= maxTurnSpeed;
-				}
-				else if (flierMaster->angle < angle - PI)
-				{
-				turnSpeed += maxTurnSpeed;
-				}
-				else
-				{
-				turnSpeed -= maxTurnSpeed;
-				}*/
-			}
+			follow = false;			
 			xSpeed += cos(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
 			ySpeed += sin(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
 			turnSpeed += irandom(-1, 1)*turnAccelerationConstant;
@@ -246,5 +193,12 @@ void Flier::AIupdate()//change behaviour when not fighting
 
 void Flier::reposition()
 {
-	//TBD
+	follow = false;
+	if (repositioningDirection == true)
+		angle = playerDirection - PI / 2;
+	else
+		angle = playerDirection + PI / 2;
+
+	xSpeed += cos(2 * PI - angle)*accelerationConstant;
+	ySpeed += sin(2 * PI - angle)*accelerationConstant;
 }

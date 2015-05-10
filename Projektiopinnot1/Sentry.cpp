@@ -104,7 +104,9 @@ void Sentry::AIupdate()
 	}
 	if (state == state_victory)
 	{
-		//nothing to see here just act normal
+		follow = false;
+		xSpeed += cos(angle)*accelerationConstant;
+		ySpeed += sin(angle)*accelerationConstant;
 		return;
 	}
 

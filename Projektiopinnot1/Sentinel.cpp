@@ -29,6 +29,7 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.sentinelTex);
 	components.back()->sprites.back().setOrigin(130, 75);
+	components.back()->textureRadius = 50;
 }
 
 
@@ -101,7 +102,9 @@ void Sentinel::AIupdate()
 	}
 	if (state == state_victory)
 	{
-		//nothing to see here just act normal
+		follow = false;
+		xSpeed += cos(angle)*accelerationConstant;
+		ySpeed += sin(angle)*accelerationConstant;
 		return;
 	}
 

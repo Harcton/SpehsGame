@@ -11,8 +11,6 @@ public:
 	Commander(sf::RenderWindow&, Game*, int);
 	~Commander();
 
-	friend class Flier;
-
 	bool update();
 	void AIupdate();
 	void flee();
@@ -23,11 +21,7 @@ private:
 	bool initiateFlierAssault;
 	int shootingCounter;
 	int rotationCounter;
-	int fliersFollowing;
-	int flierAttackCounter;
 	int releaseFlier;
-
-	int commanderID;
 };
 
 #endif

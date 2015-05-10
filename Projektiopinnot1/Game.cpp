@@ -256,14 +256,14 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 0;//
+	bool tempDevelopmentSelection = 1;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
 		if (objects.size() < 2)
 		{
 			if (objects.size() < MAX_OBJECTS)
-				objects.push_back(new Sentinel(mWindow, this, 2)); //spawn different enemy types
+				objects.push_back(new Commander(mWindow, this, 2)); //spawn different enemy types
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}

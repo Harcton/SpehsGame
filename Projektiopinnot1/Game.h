@@ -47,6 +47,7 @@ public:
 
 	sf::RenderWindow& mWindow;
 	bool keepRunning = true;
+
 protected:
 	GameFocus focus = gf_game;
 	sf::Vector2i mousePos;
