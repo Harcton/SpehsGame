@@ -20,11 +20,13 @@ public:
 	bool alive();
 	//void fixAngle();
 
-
+	//Virtual getters
+	void setLaserPointerColor(sf::Color&& c);
 
 private:
 	int canFireTimer;
 	int magazine;
+	sf::VertexArray laserPointer;
 
 	double turretMinAngle;
 	double turretMaxAngle;

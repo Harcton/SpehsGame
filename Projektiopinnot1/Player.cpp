@@ -585,6 +585,7 @@ void Player::addFromGrid(int gx, int gy)
 		//Set looks
 		setTurretLooks(gx, gy);
 		//Set stats
+		setTurretStats(gx, gy);
 		components.back()->angleModifier = data.grid[gx][gy].angleModifier*(PI/180);
 
 		//Color all the sprites
@@ -592,6 +593,7 @@ void Player::addFromGrid(int gx, int gy)
 			components.back()->sprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
 		for (unsigned int i = 0; i < components.back()->animatedSprites.size(); i++)
 			components.back()->animatedSprites[i].setColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
+		components.back()->setLaserPointerColor(sf::Color(data.grid[gx][gy].red, data.grid[gx][gy].green, data.grid[gx][gy].blue));
 	}
 	else if (data.grid[gx][gy].engine > 0)
 	{//Add an engine
@@ -641,6 +643,16 @@ void Player::setTurretLooks(int gx, int gy)
 	components[components.size() - 2]->turretPlatform.setOrigin(50, 50);
 	components[components.size() - 2]->turretPlatform.setTextureRect(sf::IntRect((data.grid[gx][gy].maxAngle - 1) * 100, 0, 100, 100));
 	components[components.size() - 2]->turretPlatformAngle = data.grid[gx][gy].angleModifier*(PI / 180.f);
+	//Recoil absorber
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.turretRecoilAbsorberTex);
+	components.back()->sprites.back().setOrigin(50, 50);
+	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].recoilTime - 1) * 100, 0, 100, 100));
+	//Recoil absorber
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.turretReloaderTex);
+	components.back()->sprites.back().setOrigin(50, 50);
+	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].rechargeSpeed - 1) * 100, 0, 100, 100));
 	//Magazine
 	components.back()->magazineSpr = sf::Sprite();
 	components.back()->magazineSpr.setTexture(RM.turretMagazineTex);
@@ -662,7 +674,87 @@ void Player::setTurretLooks(int gx, int gy)
 	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].turnSpeed - 1) * 100, 0, 100, 100));
 
 }
-
+void Player::setTurretStats(int gx, int gy)
+{
+	//(!) This function assumes that the last component in the components vector is the target turret
+	switch (data.grid[gx][gy].maxAngle)
+	{//MAX ANGLE
+	case 2:
+		components.back()->maxAngle = 0.4*PI;
+		break;
+	case 3:
+		components.back()->maxAngle = 0.6*PI;
+		break;
+	case 4:
+		components.back()->maxAngle = PI;
+		break;
+	}
+	switch (data.grid[gx][gy].turnSpeed)
+	{//TURN SPEED
+	case 2:
+		components.back()->turningSpeed = PI/90;
+		break;
+	case 3:
+		components.back()->turningSpeed = PI / 20;
+		break;
+	}
+	switch (data.grid[gx][gy].bulletSpeed)
+	{//BULLET SPEED
+	case 2:
+		components.back()->maxSpeed = 25;
+		break;
+	case 3:
+		components.back()->maxSpeed = 50;//Update turret update -> laser drawing
+		break;
+	}
+	switch (data.grid[gx][gy].capacity)
+	{//CAPACITY
+	case 2:
+		components.back()->capacity = 8;
+		break;
+	case 3:
+		components.back()->capacity = 15;
+		break;
+	case 4:
+		components.back()->capacity = 20;
+		break;
+	}
+	components.back()->magazine = components.back()->capacity;
+	switch (data.grid[gx][gy].recoilTime)
+	{//RECOIL TIME
+	case 2:
+		components.back()->fireRateInterval = 30;
+		break;
+	case 3:
+		components.back()->fireRateInterval = 5;
+		break;
+	}
+	switch (data.grid[gx][gy].rechargeSpeed)
+	{//RELOAD SPEED
+	case 2:
+		components.back()->rechargeInterval = 22;
+		break;
+	case 3:
+		components.back()->rechargeInterval = 10;
+		break;
+	}
+	switch (data.grid[gx][gy].turret)
+	{
+	case 2:
+		components.back()->damage = 18;
+		break;
+	case 3:
+		components.back()->damage = 23;
+		break;
+	case 4:
+		components.back()->damage = 30;
+		break;
+	case 5:
+		components.back()->damage = 40;
+		components.back()->bulletTexPtr = &RM.bullet2Tex;
+		break;
+	}
+}
 
 void Player::editShip()
 {

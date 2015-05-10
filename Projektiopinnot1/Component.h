@@ -99,6 +99,9 @@ public:
 	float thrustStrength; //thrust strength
 	int rechargeAmount;
 
+	//Virtual getters
+	virtual void setLaserPointerColor(sf::Color&&){};
+
 protected:
 	std::vector<sf::Sprite> sprites;
 	std::vector<sge::Sprite> animatedSprites;
@@ -107,6 +110,7 @@ protected:
 	sf::Sprite turretPlatform;
 	float turretPlatformAngle = -1;
 	sf::Sprite magazineSpr;
+	sf::Texture* bulletTexPtr;
 
 	bool mouseAim;
 	bool mouseAimRelativeToCenter;
@@ -122,6 +126,7 @@ protected:
 	//Turret
 	bool hasFired = false;
 	bool reloading = false;
+	int magazine;
 
 	//Engine
 	int charge;
