@@ -2,14 +2,7 @@
 #include "PlayerData.h"
 
 
-PlayerData::~PlayerData()
-{
-	std::cout << "\nPlayerData destructor";
-	//free grid element memory
-	//for (unsigned int ex = 0; ex < EDITOR_WIDTH; ex++)
-	//	for (unsigned int ey = 0; ey < EDITOR_HEIGHT; ey++)
-	//		delete grid[ex][ey];
-}
+PlayerData::~PlayerData(){}
 PlayerData::PlayerData()
 {
 	//Initialize grid elements

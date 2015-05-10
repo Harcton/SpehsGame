@@ -19,6 +19,8 @@ ResourceManager::ResourceManager()
 	turretFrameTex.loadFromFile("Texture/Player/Turret/frame.png");
 	turretBarrelTex.loadFromFile("Texture/Player/Turret/barrel.png");
 	turretMagazineTex.loadFromFile("Texture/Player/Turret/magazine.png");
+	turretRecoilAbsorberTex.loadFromFile("Texture/Player/Turret/recoilAbsorber.png");
+	turretReloaderTex.loadFromFile("Texture/Player/Turret/reloader.png");
 	//ENEMY
 	commanderTex.loadFromFile("Texture/Enemy/enemy_commander_ship_upgraded.png");
 	flierTex.loadFromFile("Texture/Enemy/Flier.png");
@@ -49,6 +51,7 @@ ResourceManager::ResourceManager()
 	sky1Tex.loadFromFile("Texture/Background/sky.png");
 	//MISC
 	bullet1Tex.loadFromFile("Texture/Misc/bullet1.png");
+	bullet2Tex.loadFromFile("Texture/Misc/bullet2.png");
 	debris1Tex.loadFromFile("Texture/Misc/debris1.png");
 	ball1Tex.loadFromFile("Texture/Misc/ball.png");
 	pointerArrowTex.loadFromFile("Texture/Misc/pointer_arrow.png");

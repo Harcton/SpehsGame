@@ -55,6 +55,7 @@ public:
 	sf::Texture menuLogoTex;
 	sf::Texture sky1Tex;
 	sf::Texture bullet1Tex;
+	sf::Texture bullet2Tex;
 	sf::Texture debris1Tex;
 	sf::Texture ball1Tex;
 	sf::Texture pointerArrowTex;
@@ -64,6 +65,8 @@ public:
 	sf::Texture turretFrameTex;
 	sf::Texture turretBarrelTex;
 	sf::Texture turretMagazineTex;
+	sf::Texture turretRecoilAbsorberTex;
+	sf::Texture turretReloaderTex;
 
 
 	//Sounds

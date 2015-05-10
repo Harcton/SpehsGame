@@ -19,7 +19,6 @@
 //#include <map>
 
 
-
 #define PI 3.14159265
 #define SPAWN_RANGE 2800
 #define DESPAWN_RANGE 4000
@@ -112,8 +111,8 @@ extern float movementSpeed;
 extern float rotationSpeed;
 bool testInput(MyKeys k, sf::Event&);
 
-/*
 
+/*
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -122,7 +121,7 @@ bool testInput(MyKeys k, sf::Event&);
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
 #endif
-
 */
+
 
 #endif

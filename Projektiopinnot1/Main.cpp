@@ -5,7 +5,6 @@
 #include "MainMenu.h"
 
 
-
 //DEFAULT SETTINGS FOR NEW USERS
 bool FULLSCREEN = false;
 int WINDOW_WIDTH = 1600;
@@ -37,6 +36,7 @@ void main()
 	cur |= _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_LEAK_CHECK_DF;
 	_CrtSetDbgFlag(cur);
 	*/
+
 	{
 		//Load game settings. If no settings file exists, create one
 		if (loadSettings() == false)
@@ -58,23 +58,9 @@ void main()
 		MainMenu mainMenu(mWindow);
 		mainMenu.run();
 	}
-
-	//_CrtDumpMemoryLeaks();
-}
-
-
-
-void initializeResourceManager(ResourceManager& rm)
-{
-
-
-
-
-	//SOUND BUFFERS
 	
 
-
-
+	//_CrtDumpMemoryLeaks();
 }
 
 

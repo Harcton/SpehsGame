@@ -31,6 +31,7 @@ public:
 	void calculateCenterOfMass();
 	void reloadSkeletonSprites();
 	void setTurretLooks(int, int);
+	void setTurretStats(int, int);
 
 	//Handle input
 	void turnRight(double);
