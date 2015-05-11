@@ -237,9 +237,56 @@ bool Player::update()
 						}
 						//-------------------
 					}
+					else if (components[i]->mouseAim == true)
+					{//Mouse input
+						//Set positive mouse direction
+						if (components[i]->mouseAimRelativeToCenter == true)
+							mouseDirection = -1 * atan2(mousePosition.y - screenY, mousePosition.x - screenX);
+						else
+							mouseDirection = -1 * atan2(mousePosition.y - components[i]->screenY, mousePosition.x - components[i]->screenX);
+
+						if (mouseDirection < 0)
+							mouseDirection += 2 * PI;
+
+						temp_angleVar = components[i]->angle - mouseDirection;
+						if (temp_angleVar < 0)
+						{//
+							if (mouseDirection < components[i]->angle + PI)
+							{//1st L +
+								if (abs(temp_angleVar) < components[i]->turningSpeed)
+									components[i]->angle = mouseDirection;
+								else
+									components[i]->angle += components[i]->turningSpeed;
+							}
+							else
+							{//4th R -
+								if (mouseDirection - components[i]->angle < components[i]->turningSpeed)
+									components[i]->angle = mouseDirection;
+								else
+									components[i]->angle -= components[i]->turningSpeed;
+							}
+						}//
+						else
+						{//
+							if (mouseDirection < components[i]->angle - PI)
+							{//2nd L +
+								if (components[i]->angle - mouseDirection < components[i]->turningSpeed)
+									components[i]->angle = mouseDirection;
+								else
+									components[i]->angle += components[i]->turningSpeed;
+							}
+							else
+							{//3rd R -
+								if (abs(temp_angleVar) < components[i]->turningSpeed)
+									components[i]->angle = mouseDirection;
+								else
+									components[i]->angle -= components[i]->turningSpeed;
+							}
+						}//
+					}//End of mouse aiming
 					else
 					{//Use manual turret rotation (press button)
-						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_left], mGame->mEvent) && components[i]->mouseAim == false)
+						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_left], mGame->mEvent))
 						{//Rotate turret i CCW
 							//if (turretMaxAngle > turretMinAngle)
 							//{
@@ -254,7 +301,7 @@ bool Player::update()
 							//		components[i]->angle += components[i]->turningSpeed;
 							//}
 						}
-						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_right], mGame->mEvent) && components[i]->mouseAim == false)
+						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_right], mGame->mEvent))
 						{//Rotate turret i CW
 							//if (turretMaxAngle > turretMinAngle)
 							//{
@@ -272,41 +319,6 @@ bool Player::update()
 					}
 
 
-					if (components[i]->mouseAim == true)
-					{//Mouse input
-						//Set positive mouse direction
-						if (components[i]->mouseAimRelativeToCenter == true)
-							mouseDirection = -1 * atan2(mousePosition.y - screenY, mousePosition.x - screenX);
-						else
-							mouseDirection = -1 * atan2(mousePosition.y - components[i]->screenY, mousePosition.x - components[i]->screenX);
-
-						if (mouseDirection < 0)
-							mouseDirection += 2 * PI;
-
-						temp_angleVar = components[i]->angle - mouseDirection;
-						if (temp_angleVar < 0)
-						{//-
-							if (mouseDirection < components[i]->angle + PI)
-							{//1st L
-								components[i]->angle += components[i]->turningSpeed;
-							}
-							else
-							{//4th R
-								components[i]->angle -= components[i]->turningSpeed;
-							}
-						}//-
-						else
-						{//+
-							if (mouseDirection < components[i]->angle - PI)
-							{//2nd L
-								components[i]->angle += components[i]->turningSpeed;
-							}
-							else
-							{//3rd R
-								components[i]->angle -= components[i]->turningSpeed;
-							}
-						}//+
-					}//End of mouse aiming
 				}
 			}
 		}
