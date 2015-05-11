@@ -11,9 +11,18 @@ Engine::~Engine()
 }
 Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, yo)
 {
-	sprites.push_back(sf::Sprite());
-	sprites.back().setTexture(RM.engineTex);
-	sprites.back().setOrigin(67, 50);
+	//Stats
+	thrustStrength = 0.0008;
+	capacity = 200;			//thrust charge
+	rechargeAmount = 1;	//thrust recharge speed
+	chargeConsumption = 1;
+
+
+
+	thrusting = false;
+	autoThrusting = false;
+
+
 
 	animatedSprites.push_back(sge::Sprite(RM.engineFireAnimation));
 	animatedSprites[0].setVisibility(false);
@@ -22,32 +31,20 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 	animatedSprites[0].setTilesetSize(2, 3);
 	animatedSprites[0].setFrameDuration(1);
 
-
 	//Charge bar
-	chargeBar.setSize(sf::Vector2f(15.0f, 5.0f));
+	chargeBar.setSize(sf::Vector2f(15.0f, 4.0f));
 	chargeBar.setFillColor(sf::Color(255, 110, 70, 160));
 	chargeBar.setOrigin(0, 2);
-	chargeBarCenter.setSize(sf::Vector2f(15.0f, 3.0f));
-	chargeBarCenter.setFillColor(sf::Color(255, 240, 120, 200));
-	chargeBarCenter.setOrigin(0, 1);
-
 
 	types.push_back(component::engine);
 	textureRadius = 20;
-
-	thrustStrength = 0.0008;
-	capacity = 200;			//thrust charge
 	charge = capacity;
-	rechargeAmount = 1;	//thrust recharge speed
-
-	thrusting = false;
-	autoThrusting = false;
 }
 
 //Power parameter 0-100
 void Engine::thrust(float power)
 {
-	if (charge > 0)//()
+	if (charge >= chargeConsumption)//()
 	{
 		//Charge threshold
 		if (thrusting == false && charge < capacity*0.5f)
@@ -90,19 +87,19 @@ void Engine::thrust(float power)
 
 		
 		thrusting = true;
-		charge--;
+		charge -= chargeConsumption;
 		//animatedSprites[0].setVisibility(true);
 
 		if (rotationDirection == 0)
 		{
-			master->xSpeed += power*(cos(2 * PI - angle)*thrustStrength);
-			master->ySpeed += power*(sin(2 * PI - angle)*thrustStrength);
-			master->relativeSpeedX += power*(cos(2 * PI - angle)*thrustStrength);
-			master->relativeSpeedY += power*(sin(2 * PI - angle)*thrustStrength);
+			master->xSpeed += power*(cos(2 * PI - angle)*thrustStrength*(10.0 / (10 + master->getMass())));
+			master->ySpeed += power*(sin(2 * PI - angle)*thrustStrength*(10.0 / (10 + master->getMass())));
+			master->relativeSpeedX += power*(cos(2 * PI - angle)*thrustStrength*(10.0 / (10 + master->getMass())));
+			master->relativeSpeedY += power*(sin(2 * PI - angle)*thrustStrength*(10.0 / (10 + master->getMass())));
 		}
 		else
 		{
-			master->turnSpeed += rotationDirection*thrustStrength;
+			master->turnSpeed += rotationDirection*thrustStrength*(10.0 / (10 + master->getMass()));
 		}
 
 
@@ -144,11 +141,8 @@ void Engine::update()
 	Component::update();
 	//Charge bar
 	chargeBar.setScale(zoomFactor*resFactor*(float(charge) / capacity), zoomFactor*resFactor);
-	chargeBarCenter.setScale(chargeBar.getScale());
 	chargeBar.setRotation(360.0f - (angle)*(180.0f/PI));
-	chargeBarCenter.setRotation(chargeBar.getRotation());
 	chargeBar.setPosition(screenX, screenY);
-	chargeBarCenter.setPosition(chargeBar.getPosition());
 
 	return;
 }
@@ -164,5 +158,10 @@ void Engine::draw()
 	Component::draw();
 
 	master->mGame->mWindow.draw(chargeBar);
-	master->mGame->mWindow.draw(chargeBarCenter);
+}
+
+
+sf::RectangleShape& Engine::getChargeRectangle()
+{
+	return chargeBar;
 }

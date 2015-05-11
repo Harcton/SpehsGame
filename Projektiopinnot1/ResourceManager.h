@@ -67,7 +67,8 @@ public:
 	sf::Texture turretMagazineTex;
 	sf::Texture turretRecoilAbsorberTex;
 	sf::Texture turretReloaderTex;
-
+	sf::Texture engineFuelTankTex;
+	sf::Texture engineThrusterTex;
 
 	//Sounds
 

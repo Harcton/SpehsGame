@@ -19,11 +19,12 @@ public:
 	void thrust(float);
 	void draw();
 
+	sf::RectangleShape& getChargeRectangle();
+
 private:
 	bool thrustButtonReleased = true;
 	bool thrusting = false;
 	sf::RectangleShape chargeBar;
-	sf::RectangleShape chargeBarCenter;
 
 };
 

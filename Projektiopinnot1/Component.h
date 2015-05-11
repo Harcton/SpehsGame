@@ -60,7 +60,8 @@ public:
 	virtual void fire(){}
 	virtual void reload(){}
 	virtual void thrust(float){}
-	//virtual void fixAngle(){}
+	virtual void setLaserPointerColor(sf::Color&&){};
+	virtual sf::RectangleShape& getChargeRectangle(){ return sf::RectangleShape(); }
 
 
 	Object* master;
@@ -99,8 +100,6 @@ public:
 	float thrustStrength; //thrust strength
 	int rechargeAmount;
 
-	//Virtual getters
-	virtual void setLaserPointerColor(sf::Color&&){};
 
 protected:
 	std::vector<sf::Sprite> sprites;
@@ -123,13 +122,16 @@ protected:
 	int gridLocationX;
 	int gridLocationY;
 
+
+	//Engine and turret
+	int chargeConsumption;
+	int charge;
+
 	//Turret
 	bool hasFired = false;
 	bool reloading = false;
-	int magazine;
 
 	//Engine
-	int charge;
 	int rotationDirection; // negative = CCW (!)
 	bool holdToThrust = true;
 	bool autoThrusting = false;

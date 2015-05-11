@@ -25,7 +25,6 @@ public:
 
 private:
 	int canFireTimer;
-	int magazine;
 	sf::VertexArray laserPointer;
 
 	double turretMinAngle;

@@ -32,6 +32,8 @@ public:
 	void reloadSkeletonSprites();
 	void setTurretLooks(int, int);
 	void setTurretStats(int, int);
+	void setEngineLooks(int, int);
+	void setEngineStats(int, int);
 
 	//Handle input
 	void turnRight(double);
@@ -40,6 +42,10 @@ public:
 	void reverse(double);
 	void zoomIn(double);
 	void zoomOut(double);
+
+	//Virtual methods
+	int getMass();
+
 
 protected:
 	sf::Event mEvent;

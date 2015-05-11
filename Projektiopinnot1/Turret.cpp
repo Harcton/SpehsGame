@@ -17,6 +17,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	maxSpeed = 11;			//max bullet speed
 	damage = 15;			//Turret damage
 	fireRateInterval = 60;
+	chargeConsumption = 1;
 
 
 
@@ -25,7 +26,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	mouseAim = true;
 	textureRadius = 20;	
 	canFireTimer = 0;
-	magazine = capacity;
+	charge = capacity; //magazine
 	laserPointer[0].color = sf::Color(195, 40, 0, 220);
 	laserPointer[1].color = sf::Color(195, 40, 0, 220);
 }
@@ -42,7 +43,7 @@ void Turret::update()
 	if (reloading == true && canFireTimer < 1)
 	{//Reload complete
 		reloading = false;
-		magazine = capacity;
+		charge = capacity;
 		hasFired = false;
 	}
 
@@ -113,7 +114,7 @@ void Turret::update()
 	//Update magazine
 	if (reloading == false)
 	{
-		magazineSpr.setOrigin(30 + int(20.0f*(magazine / float(capacity))), 50);
+		magazineSpr.setOrigin(30 + int(20.0f*(charge / float(capacity))), 50);
 		magazineSpr.setColor(sf::Color(255, 255, 255, 255));
 	}
 	else
@@ -143,7 +144,7 @@ void Turret::fire()
 {
 	if (canFireTimer > 0)
 		return;
-	if (magazine < 1)
+	if (charge < chargeConsumption)
 	{
 		if (reloading == false)
 		{
@@ -156,7 +157,7 @@ void Turret::fire()
 	if (master->mGame->bullets.size() >= MAX_BULLETS)
 		return;
 
-	magazine--;
+	charge -= chargeConsumption;
 	canFireTimer = fireRateInterval;
 	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2 * PI - angle, maxSpeed, damage));
 	master->mGame->bullets.back()->spr.setTexture(*bulletTexPtr);

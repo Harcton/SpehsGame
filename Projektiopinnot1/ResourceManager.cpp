@@ -12,7 +12,6 @@ ResourceManager::ResourceManager()
 	engineTex.loadFromFile("Texture/Player/engine.png");
 	engineFireTex.loadFromFile("Texture/Player/engine_fire.png");
 	engineFireAnimation.loadFromFile("Texture/Player/engine_fire_animation_testversion.png");
-	//("Texture/Player/engine_fire_animation_testversion.png");
 	//Turret
 	turretPlatformTex.loadFromFile("Texture/Player/Turret/platform.png");
 	turretRotationEngineTex.loadFromFile("Texture/Player/Turret/rotatingEngine.png");
@@ -21,6 +20,9 @@ ResourceManager::ResourceManager()
 	turretMagazineTex.loadFromFile("Texture/Player/Turret/magazine.png");
 	turretRecoilAbsorberTex.loadFromFile("Texture/Player/Turret/recoilAbsorber.png");
 	turretReloaderTex.loadFromFile("Texture/Player/Turret/reloader.png");
+	//Engine
+	engineFuelTankTex.loadFromFile("Texture/Player/Engine/fuelTank.png");
+	engineThrusterTex.loadFromFile("Texture/Player/Engine/thruster.png");
 	//ENEMY
 	commanderTex.loadFromFile("Texture/Enemy/enemy_commander_ship_upgraded.png");
 	flierTex.loadFromFile("Texture/Enemy/Flier.png");

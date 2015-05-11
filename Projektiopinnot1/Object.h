@@ -85,6 +85,9 @@ public:
 	sf::RenderWindow& mWindow;
 	Game* mGame;
 
+	//Virtual methods
+	virtual int getMass(){ return 1; };
+
 protected:
 	Object* centerObj;
 	std::vector<Component*> components;
