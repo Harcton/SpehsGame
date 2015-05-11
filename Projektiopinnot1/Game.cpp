@@ -256,7 +256,7 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 1;//
+	bool tempDevelopmentSelection = 0;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{

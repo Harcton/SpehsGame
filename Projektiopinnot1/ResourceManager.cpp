@@ -12,6 +12,8 @@ ResourceManager::ResourceManager()
 	engineTex.loadFromFile("Texture/Player/engine.png");
 	engineFireTex.loadFromFile("Texture/Player/engine_fire.png");
 	engineFireAnimation.loadFromFile("Texture/Player/engine_fire_animation_testversion.png");
+	engineFireTier1Animation.loadFromFile("Texture/Player/engine_fire_animation_tier1.png");
+	engineFireTier4Animation.loadFromFile("Texture/Player/engine_fire_animation_tier4.png");
 	//Turret
 	turretPlatformTex.loadFromFile("Texture/Player/Turret/platform.png");
 	turretRotationEngineTex.loadFromFile("Texture/Player/Turret/rotatingEngine.png");
@@ -24,7 +26,6 @@ ResourceManager::ResourceManager()
 	engineFuelTankTex.loadFromFile("Texture/Player/Engine/fuelTank.png");
 	engineThrusterTex.loadFromFile("Texture/Player/Engine/thruster.png");
 	//ENEMY
-	commanderTex.loadFromFile("Texture/Enemy/enemy_commander_ship_upgraded.png");
 	flierTex.loadFromFile("Texture/Enemy/Flier.png");
 	enemyBasePurpleTex.loadFromFile("Texture/Enemy/enemy_base_purple.png");
 	enemyBaseGreenTex.loadFromFile("Texture/Enemy/enemy_base_green.png");
@@ -38,6 +39,8 @@ ResourceManager::ResourceManager()
 	sentinelTex.loadFromFile("Texture/Enemy/Sentinel.png");
 	//Flier
 	flierTex.loadFromFile("Texture/Enemy/flier_active_animation.png");
+	//Commander
+	commanderTex.loadFromFile("Texture/Enemy/commander_standard_texture.png");
 	//MENU
 	inheritanceArrowTex.loadFromFile("Texture/Menu/inheritanceArrow.png");
 	circleSliderTex.loadFromFile("Texture/Menu/circleSlider.png");

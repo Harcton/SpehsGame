@@ -34,6 +34,8 @@ public:
 	sf::Texture engineTex;
 	sf::Texture engineFireTex;
 	sf::Texture engineFireAnimation;
+	sf::Texture engineFireTier1Animation;
+	sf::Texture engineFireTier4Animation;
 	sf::Texture commanderTex;
 	sf::Texture flierTex;
 	sf::Texture enemyBasePurpleTex;

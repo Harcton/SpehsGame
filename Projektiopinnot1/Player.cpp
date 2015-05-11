@@ -796,22 +796,22 @@ void Player::setEngineLooks(int gx, int gy)
 	switch (data.grid[gx][gy].engine)
 	{
 	case 1:
-		//components.back()->animatedSprites[0].setTexture(RM.);
+		components.back()->animatedSprites[0].setTexture(RM.engineFireTier1Animation);
 		break;
 	case 2:
-		//components.back()->animatedSprites[0].setTexture(RM.);
+		components.back()->animatedSprites[0].setTexture(RM.engineFireTier1Animation);
 		break;
 	case 3:
-		//components.back()->animatedSprites[0].setTexture(RM.);
+		components.back()->animatedSprites[0].setTexture(RM.engineFireAnimation);
 		break;
 	case 4:
-		//components.back()->animatedSprites[0].setTexture(RM.);
+		components.back()->animatedSprites[0].setTexture(RM.engineFireAnimation);
 		break;
 	case 5:
-		//components.back()->animatedSprites[0].setTexture(RM.);
+		components.back()->animatedSprites[0].setTexture(RM.engineFireTier4Animation);
 		break;
 	case 6:
-		//components.back()->animatedSprites[0].setTexture(RM.);
+		components.back()->animatedSprites[0].setTexture(RM.engineFireTier4Animation);
 		break;
 	}
 
