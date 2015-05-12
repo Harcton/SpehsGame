@@ -190,6 +190,7 @@ bool loadSettings()
 		load.close();
 		std::cout << " Success";
 		resFactor = WINDOW_HEIGHT / 1080.0;
+		RM.updateVolumeLevels();
 		return true;
 	}
 	else
@@ -215,6 +216,7 @@ void saveSettings()
 
 		std::cout << " Success";
 		resFactor = WINDOW_HEIGHT / 1080.0;
+		RM.updateVolumeLevels();
 	}
 	else
 		std::cout << " Failed to save settings.txt";

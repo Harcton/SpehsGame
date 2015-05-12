@@ -77,7 +77,9 @@ bool UpgradeButton::mouseOverlap(sf::Vector2i& mousePos)
 }
 ButtonId UpgradeButton::checkIfPressed(sf::Vector2i& mousePos)
 {
-	return upgrade.checkIfPressed(mousePos);
+	ButtonId result = upgrade.checkIfPressed(mousePos);
+	RM.menuClickSound.stop();
+	return result;
 }
 void UpgradeButton::draw(sf::RenderWindow& window, sf::Vector2i& mouse_pos)
 {

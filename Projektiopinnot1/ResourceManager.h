@@ -18,6 +18,8 @@ public:
 	~ResourceManager();
 
 
+	void updateVolumeLevels();
+
 //RESOURCES
 	//Textures
 	sf::Texture skeletonTex;
@@ -68,6 +70,10 @@ public:
 	//Sounds
 	sf::SoundBuffer menuButtonHoverBuffer;
 	sf::Sound menuButtonHoverSound;
+	sf::SoundBuffer menuUpgradeBuffer;
+	sf::Sound menuUpgradeSound;
+	sf::SoundBuffer menuClickBuffer;
+	sf::Sound menuClickSound;
 
 	//Music
 

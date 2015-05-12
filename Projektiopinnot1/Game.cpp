@@ -158,8 +158,12 @@ void Game::pollEvents()
 			break;
 		case sf::Event::MouseButtonPressed:
 			if (focus == gf_escMenu)
+			{
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 					mouseLeftPressed();
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+					mouseRightPressed();
+			}
 			break;
 		case sf::Event::KeyPressed:
 			switch (mEvent.key.code)
@@ -219,6 +223,26 @@ void Game::mouseLeftPressed()
 		case bi_gsetSoundVolume:
 			break;
 	}
+}
+void Game::mouseRightPressed()
+{
+	for (unsigned int i = 0; i < escMenuSliders.size(); i++)
+		switch (escMenuSliders[i].checkIfPressed(mousePos))
+		{
+			case bi_gsetSoundVolume:
+			case bi_gsetMusicVolume:
+				if (escMenuSliders[i].sliderState == 0)
+					escMenuSliders[i].sliderState = 100;
+				else if (escMenuSliders[i].sliderState == 100)
+					escMenuSliders[i].sliderState = 0;
+				else if (escMenuSliders[i].sliderState < 50)
+					escMenuSliders[i].sliderState = 0;
+				else
+					escMenuSliders[i].sliderState = 100;
+				*escMenuSliders[i].targetVariable = escMenuSliders[i].sliderState;
+				break;
+		}
+	
 }
 
 

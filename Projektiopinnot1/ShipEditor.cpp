@@ -757,6 +757,7 @@ void ShipEditor::mouseLeftPressed()
 	switch (focus)
 	{
 	case editor::upgrade:
+	{
 		if (playerData.grid[selectedX][selectedY].turret != 0)
 		{//Turret upgrade buttons
 			for (unsigned int i = 0; i < turretUpgradeButtons.size(); i++)
@@ -770,6 +771,7 @@ void ShipEditor::mouseLeftPressed()
 						*turretUpgradeButtons[i].targetInt += 1;
 						playerData.money -= cost;
 						playerData.grid[selectedX][selectedY].refund += cost;
+						RM.menuUpgradeSound.play();
 					}
 					break;
 			}
@@ -789,6 +791,7 @@ void ShipEditor::mouseLeftPressed()
 						*engineUpgradeButtons[i].targetInt += 1;
 						playerData.money -= cost;
 						playerData.grid[selectedX][selectedY].refund += cost;
+						RM.menuUpgradeSound.play();
 					}
 					break;
 			}
@@ -804,10 +807,12 @@ void ShipEditor::mouseLeftPressed()
 			playerData.money -= cost;
 			playerData.grid[selectedX][selectedY].refund += cost;
 			upgradeArmor.updateIndicators();
-		}		
+			RM.menuUpgradeSound.play();
+		}
 
 		if (exitUpgrades.checkIfPressed(mousePos) == bi_confExit)
 			focus = editor::base;
+	}
 		break;
 	case editor::esc:
 		for (unsigned int i = 0; i < escButtons.size(); i++)

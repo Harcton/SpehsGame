@@ -73,7 +73,10 @@ ButtonId Button::checkIfPressed(sf::Vector2i& mousePos)
 		return bi_false;
 
 	if (mouseOverlap(mousePos))
+	{
+		RM.menuClickSound.play();
 		return id;
+	}
 	else
 		return bi_false;
 }

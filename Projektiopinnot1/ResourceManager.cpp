@@ -65,13 +65,27 @@ ResourceManager::ResourceManager()
 	//Sounds
 	menuButtonHoverBuffer.loadFromFile("Audio/Sound Effects/editor_menu_hover_sound_ver03.wav");
 	menuButtonHoverSound.setBuffer(menuButtonHoverBuffer);
+	menuUpgradeBuffer.loadFromFile("Audio/Sound Effects/upgrade_purchase_sound_ver00.wav");
+	menuUpgradeSound.setBuffer(menuUpgradeBuffer);
+	menuClickBuffer.loadFromFile("Audio/Sound Effects/menu_select_sound_ver02.wav");
+	menuClickSound.setBuffer(menuClickBuffer);
 
 
 	//Music
 
 	//Fonts
 	menuFont.loadFromFile("Font/ORANGEKI.ttf");
+}
 
+void ResourceManager::updateVolumeLevels()
+{//This function is called everytime the user saves/loads settings
+	//Sound effects
+	menuButtonHoverSound.setVolume(SFX_VOLUME);
+	menuUpgradeSound.setVolume(SFX_VOLUME);
+	menuClickSound.setVolume(SFX_VOLUME);
+
+	//Music
+	
 }
 
 

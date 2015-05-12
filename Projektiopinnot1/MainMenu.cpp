@@ -526,6 +526,7 @@ void MainMenu::mouseRightPressed()
 					settingsSliderButtons[i].sliderState = 0;
 				else
 					settingsSliderButtons[i].sliderState = 100;
+				*settingsSliderButtons[i].targetVariable = settingsSliderButtons[i].sliderState;
 				break;
 		}
 	}

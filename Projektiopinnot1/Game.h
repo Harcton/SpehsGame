@@ -31,6 +31,7 @@ public:
 	void run();
 	void pollEvents();
 	void mouseLeftPressed();
+	void mouseRightPressed();
 	void drawEscMenu();
 	void reloadEscMenuButtonStrings();
 	void updateBullets();
