@@ -63,12 +63,18 @@ ResourceManager::ResourceManager()
 	pointerArrowTex.loadFromFile("Texture/Misc/pointer_arrow.png");
 
 	//Sounds
-	menuButtonHoverBuffer.loadFromFile("Audio/Sound Effects/editor_menu_hover_sound_ver03.wav");
+	menuButtonHoverBuffer.loadFromFile("Audio/Sound Effects/editor_menu_hover_sound_ver03.wav");//Menu hover
 	menuButtonHoverSound.setBuffer(menuButtonHoverBuffer);
-	menuUpgradeBuffer.loadFromFile("Audio/Sound Effects/upgrade_purchase_sound_ver00.wav");
+	menuUpgradeBuffer.loadFromFile("Audio/Sound Effects/upgrade_purchase_sound_ver00.wav");//Upgrade
 	menuUpgradeSound.setBuffer(menuUpgradeBuffer);
-	menuClickBuffer.loadFromFile("Audio/Sound Effects/menu_select_sound_ver02.wav");
+	menuClickBuffer.loadFromFile("Audio/Sound Effects/menu_select_sound_ver02.wav");//Menu Select
 	menuClickSound.setBuffer(menuClickBuffer);
+	turretFireBuffer.loadFromFile("Audio/Sound Effects/turret_fire_sound_ver01.wav");//Turret
+	turretFireSound.setBuffer(turretFireBuffer);
+	explosionBuffer.loadFromFile("Audio/Sound Effects/explosion_sound_ver04.wav");//Explosion
+	explosionSound.setBuffer(explosionBuffer);
+	engineBuffer.loadFromFile("Audio/Sound Effects/engine_sound_ver03.wav");//Engine
+	engineSound.setBuffer(engineBuffer);
 
 
 	//Music

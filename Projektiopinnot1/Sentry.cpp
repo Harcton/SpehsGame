@@ -9,6 +9,7 @@ Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
+	metal = irandom(10, 15);
 
 	angle = playerDirection;
 	dodging = false;

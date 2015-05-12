@@ -74,6 +74,13 @@ public:
 	sf::Sound menuUpgradeSound;
 	sf::SoundBuffer menuClickBuffer;
 	sf::Sound menuClickSound;
+	sf::SoundBuffer turretFireBuffer;
+	sf::Sound turretFireSound;
+	sf::SoundBuffer explosionBuffer;
+	sf::Sound explosionSound;
+	sf::SoundBuffer engineBuffer;
+	sf::Sound engineSound;
+
 
 	//Music
 

@@ -72,6 +72,7 @@ protected:
 	int spawnRandomization;
 	sf::Text distanceText;
 
+	sf::Music spehsMusic;
 };
 
 #endif

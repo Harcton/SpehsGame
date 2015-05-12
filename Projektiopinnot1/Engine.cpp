@@ -134,7 +134,13 @@ void Engine::update()
 			charge = capacity;
 	}
 
-
+	//Very weird sound atm
+	//because it's restarting the sound every frame
+	if (thrusting)
+	{
+		RM.engineSound.play();
+	}
+	//else
 
 
 	Component::update();

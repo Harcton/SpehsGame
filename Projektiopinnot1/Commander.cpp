@@ -10,6 +10,7 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
+	metal = irandom(25, 35);
 
 	angle = playerDirection;
 	fleeing = false;
@@ -19,8 +20,8 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	closeRange = 1000;
 	maxTurnSpeedLimit = 0.001;
 	maxSpeedLimit = 0.1;
-	accelerationConstant = 0.01;
-	turnAccelerationConstant = 0.0002;
+	accelerationConstant = 0.05;
+	turnAccelerationConstant = 0.0003;
 	closeAngle = 0.001;
 
 	//Reserve memory for each component

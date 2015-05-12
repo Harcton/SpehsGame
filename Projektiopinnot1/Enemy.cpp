@@ -7,7 +7,6 @@
 
 Enemy::Enemy(sf::RenderWindow& windowref, Game* game) : Object(windowref, game)
 {
-	metal = 1;
 }
 
 
@@ -38,21 +37,6 @@ bool Enemy::update()
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
 
-	//limit turnSpeed
-	if (turnSpeed > maxTurnSpeedLimit)
-		turnSpeed = maxTurnSpeedLimit;
-	else if (turnSpeed < -maxTurnSpeedLimit)
-		turnSpeed = -maxTurnSpeedLimit;
-
-	//limit speed
-	if (this->xSpeed > maxSpeedLimit)
-		this->xSpeed = maxSpeedLimit;
-	else if (this->ySpeed > maxSpeedLimit)
-		this->ySpeed = maxSpeedLimit;
-	if (this->xSpeed < -maxSpeedLimit)
-		this->xSpeed = -maxSpeedLimit;
-	else if (this->ySpeed < -maxSpeedLimit)
-		this->ySpeed = -maxSpeedLimit;
 	
 	//follow
 	if (follow == true) //set angle to match playerdirection
@@ -141,6 +125,22 @@ bool Enemy::update()
 			turnSpeed = turnSpeed*0.9;
 		}
 	}
+
+	//limit turnSpeed
+	if (turnSpeed > maxTurnSpeedLimit)
+		turnSpeed = maxTurnSpeedLimit;
+	else if (turnSpeed < -maxTurnSpeedLimit)
+		turnSpeed = -maxTurnSpeedLimit;
+
+	//limit speed
+	if (this->xSpeed > maxSpeedLimit)
+		this->xSpeed = maxSpeedLimit;
+	else if (this->ySpeed > maxSpeedLimit)
+		this->ySpeed = maxSpeedLimit;
+	if (this->xSpeed < -maxSpeedLimit)
+		this->xSpeed = -maxSpeedLimit;
+	else if (this->ySpeed < -maxSpeedLimit)
+		this->ySpeed = -maxSpeedLimit;
 
 	return Object::update();
 }

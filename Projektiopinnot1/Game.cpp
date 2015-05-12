@@ -67,6 +67,9 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	escMenuSliders.back().setTextAlign(ta_center);
 	escMenuButtons.push_back(Button(bi_gsetQuit, buttonX1, buttonY1 + 3 * buttonHeight, buttonWidth, buttonHeight, "Quit to menu", int(50 * resFactor), buttonColorBG, buttonColorText));
 	escMenuButtons.back().setTextAlign(ta_center);
+	
+	spehsMusic.openFromFile("Audio/Music and Ambience/spehs_ambience_ver00.wav");
+	spehsMusic.play();
 }
 
 

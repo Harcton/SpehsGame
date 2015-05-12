@@ -69,8 +69,8 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	
 
 	//Intro music
-	//introMusic.openFromFile("Audio/Music/giantFollis.wav");
-	//introMusic.play();
+	introMusic.openFromFile("Audio/Music and Ambience/main_menu_ver01.wav");
+	introMusic.play();
 
 
 	//Background
@@ -640,8 +640,10 @@ void MainMenu::deleteSave(std::string name)
 
 void MainMenu::launchGame()
 {
+	introMusic.stop();
 	Game game(mWindow);
 	game.run();
+	introMusic.play();
 	focus = mmf_base;
 	textInput = "";
 	receivingTextInput = tit_none;

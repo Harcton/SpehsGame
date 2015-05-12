@@ -157,6 +157,12 @@ void Turret::fire()
 	if (master->mGame->bullets.size() >= MAX_BULLETS)
 		return;
 
+	if (master == centerObj)
+	{
+		//Very weird sound atm??
+		RM.turretFireSound.play();
+	}
+
 	charge -= chargeConsumption;
 	canFireTimer = fireRateInterval;
 	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2 * PI - angle, maxSpeed, damage));

@@ -8,6 +8,7 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
+	metal = irandom(8, 14);
 
 	angle = playerDirection;
 	std::cout << angle << " " << playerDirection << std::endl;

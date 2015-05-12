@@ -151,7 +151,9 @@ bool Player::update()
 					{
 						if (data.grid[components[i]->gridLocationX][components[i]->gridLocationY].holdToFire == true ||
 							(data.grid[components[i]->gridLocationX][components[i]->gridLocationY].holdToFire == false && components[i]->hasFired == false))
+						{
 							components[i]->fire();
+						}
 					}
 					else
 						components[i]->hasFired = false;

@@ -8,6 +8,7 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
+	metal = irandom(5, 10);
 
 	angle = playerDirection;
 	explosionLimiter = false;
@@ -49,7 +50,7 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	components[0]->animatedSprites.back().setOrigin(50, 50);
 	components[0]->animatedSprites.back().setFrameSize(100, 100);
 	components[0]->animatedSprites.back().setTilesetSize(5, 3);
-	components[0]->animatedSprites.back().setFrameDuration(3);
+	components[0]->animatedSprites.back().setFrameDuration(2);
 }
 
 
@@ -137,6 +138,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 						//wait for animation before destruction
 					}
 
+					RM.explosionSound.play();
 					explosion(50, 1.5);
 					this->hp = 0;
 					explosionLimiter = true;
@@ -160,7 +162,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 			if (HPMemory > this->components[0]->hp)
 			{
 				dodging = true;
-				dodgeCounter = 50;
+				dodgeCounter = 40;
 			}
 		}
 	}
@@ -216,16 +218,16 @@ void Seeker::dodgeMove(const double tempXSpeed, const double tempYSpeed)
 	if (xSpeed != -tempXSpeed)
 	{
 		if (tempXSpeed > 0)
-			xSpeed -= accelerationConstant * 4*enemyBehaviourLevel;
+			xSpeed -= accelerationConstant * 5*enemyBehaviourLevel;
 		else if (tempXSpeed < 0)
-			xSpeed += accelerationConstant * 4*enemyBehaviourLevel;
+			xSpeed += accelerationConstant * 5*enemyBehaviourLevel;
 	}
 	if (ySpeed != -tempYSpeed)
 	{
 		if (tempYSpeed > 0)
-			ySpeed -= accelerationConstant * 4*enemyBehaviourLevel;
+			ySpeed -= accelerationConstant * 5*enemyBehaviourLevel;
 		else if (tempYSpeed < 0)
-			ySpeed += accelerationConstant * 4*enemyBehaviourLevel;
+			ySpeed += accelerationConstant * 5*enemyBehaviourLevel;
 	}
 	turnSpeed += turnAccelerationConstant * enemyBehaviourLevel;
 }

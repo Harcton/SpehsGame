@@ -7,6 +7,8 @@
 Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
 {
 	enemyBehaviourLevel = behaviourLevel;
+	state = state_spawned;
+	metal = 1;
 
 	initiateAssault = false;
 	repositioning = false;
