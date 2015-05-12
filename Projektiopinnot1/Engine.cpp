@@ -12,24 +12,23 @@ Engine::~Engine()
 Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, yo)
 {
 	//Stats
-	thrustStrength = 0.0008;
+	thrustStrength = 0.0006;
 	capacity = 200;			//thrust charge
 	rechargeAmount = 1;	//thrust recharge speed
 	chargeConsumption = 1;
 
 
 
+
 	thrusting = false;
 	autoThrusting = false;
 
-
-
-	animatedSprites.push_back(sge::Sprite(RM.engineFireAnimation));
-	animatedSprites[0].setVisibility(false);
-	animatedSprites[0].setOrigin(167, 50);
-	animatedSprites[0].setFrameSize(200, 100);
-	animatedSprites[0].setTilesetSize(2, 3);
-	animatedSprites[0].setFrameDuration(1);
+	engineFlameSpr.setTexture(RM.engineFireAnimation);
+	engineFlameSpr.setVisibility(false);
+	engineFlameSpr.setOrigin(167, 50);
+	engineFlameSpr.setFrameSize(200, 100);
+	engineFlameSpr.setTilesetSize(2, 3);
+	engineFlameSpr.setFrameDuration(1);
 
 	//Charge bar
 	chargeBar.setSize(sf::Vector2f(15.0f, 4.0f));
@@ -71,14 +70,14 @@ void Engine::thrust(float power)
 					autoThrusting = false;
 					thrusting = false;
 					thrustButtonReleased = false;
-					animatedSprites[0].setVisibility(false);
+					engineFlameSpr.setVisibility(false);
 				}
 				else
 				{
 					std::cout << " Enabling... ";
 					autoThrusting = true;
 					thrustButtonReleased = false;
-					animatedSprites[0].setVisibility(true);
+					engineFlameSpr.setVisibility(true);
 				}
 				return;
 			}
@@ -88,7 +87,7 @@ void Engine::thrust(float power)
 		
 		thrusting = true;
 		charge -= chargeConsumption;
-		//animatedSprites[0].setVisibility(true);
+		//engineFlameSpr.setVisibility(true);
 
 		if (rotationDirection == 0)
 		{
@@ -149,17 +148,33 @@ void Engine::update()
 
 void Engine::draw()
 {
-	//Engine fire sprite visibility state
-	if (thrusting)
-		animatedSprites[0].setVisibility(true);
-	else
-		animatedSprites[0].setVisibility(false);
 
 	Component::draw();
 
 	master->mGame->mWindow.draw(chargeBar);
 }
+void Engine::drawEngineFlame()
+{
+	//Engine fire sprite visibility state
+	if (thrusting)
+	{
+		engineFlameSpr.setVisibility(true);
+		engineFlameSpr.setPosition(screenX, screenY);
+		engineFlameSpr.setRotation(360 - (angle / PI) * 180);
+		engineFlameSpr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+	}
+	else
+		engineFlameSpr.setVisibility(false);
 
+	
+
+	engineFlameSpr.draw(master->mGame->mWindow);
+}
+sge::Sprite& Engine::getEngineFlameSpr()
+{
+	std::cout << "yolo";
+	return engineFlameSpr;
+}
 
 sf::RectangleShape& Engine::getChargeRectangle()
 {

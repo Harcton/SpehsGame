@@ -124,6 +124,9 @@ void Game::run()
 			backgrounds[i]->draw();
 		for (unsigned int i = 0; i < objects.size(); i++)
 			objects[i]->draw();
+		//Engine flames
+		for (unsigned int i = 0; i < playerObj->components.size(); i++)
+			playerObj->components[i]->drawEngineFlame();
 		//GUI / buttons
 		for (unsigned int i = 0; i < elements.size(); i++)
 			mWindow.draw(elements[i]);

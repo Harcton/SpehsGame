@@ -773,6 +773,11 @@ void Player::setTurretStats(int gx, int gy)
 }
 void Player::setEngineLooks(int gx, int gy)
 {
+	//Recharger
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.engineRechargerTex);
+	components.back()->sprites.back().setOrigin(27, 25);
+	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].rechargeSpeed - 1) * 50, 0, 50, 50));
 	//Fuel tank
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.engineFuelTankTex);
@@ -783,41 +788,86 @@ void Player::setEngineLooks(int gx, int gy)
 	components.back()->sprites.back().setTexture(RM.engineThrusterTex);
 	components.back()->sprites.back().setOrigin(78, 25);
 	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].engine - 1) * 75, 0, 75, 50));
-
-
-
-
-	/*engine flame testaus
-		-Sijoita alla olevaan switch caseen haluttu (resourcemanageriin ladattu) textuuri
-		-Jokainen case edustaa siis enginen thrusterin tasoa (1-6)
-		-Save listassa on engineDebug alus jolla on 1 jokaista tasoa oleva engine
-	*/
 	//Thruster-engine flame
 	switch (data.grid[gx][gy].engine)
 	{
 	case 1:
-		components.back()->animatedSprites[0].setTexture(RM.engineFireTier1Animation);
+		components.back()->getEngineFlameSpr().setTexture(RM.engineFireTier1Animation);
 		break;
 	case 2:
-		components.back()->animatedSprites[0].setTexture(RM.engineFireTier1Animation);
+		components.back()->getEngineFlameSpr().setTexture(RM.engineFireTier1Animation);
 		break;
 	case 3:
-		components.back()->animatedSprites[0].setTexture(RM.engineFireAnimation);
+		components.back()->getEngineFlameSpr().setTexture(RM.engineFireAnimation);
 		break;
 	case 4:
-		components.back()->animatedSprites[0].setTexture(RM.engineFireAnimation);
+		components.back()->getEngineFlameSpr().setTexture(RM.engineFireAnimation);
 		break;
 	case 5:
-		components.back()->animatedSprites[0].setTexture(RM.engineFireTier4Animation);
+		components.back()->getEngineFlameSpr().setTexture(RM.engineFireTier4Animation);
 		break;
 	case 6:
-		components.back()->animatedSprites[0].setTexture(RM.engineFireTier4Animation);
+		components.back()->getEngineFlameSpr().setTexture(RM.engineFireTier4Animation);
 		break;
 	}
 
 }
 void Player::setEngineStats(int gx, int gy)
 {
+
+	switch (data.grid[gx][gy].engine)
+	{//Thrust strength
+	case 2:
+		components.back()->thrustStrength = 0.0008;
+		break;
+	case 3:
+		components.back()->thrustStrength = 0.0014;
+		components.back()->chargeConsumption = 2;
+		break;
+	case 4:
+		components.back()->thrustStrength = 0.0018;
+		components.back()->chargeConsumption = 2;
+		break;
+	case 5:
+		components.back()->thrustStrength = 0.0024;
+		components.back()->chargeConsumption = 3;
+		break;
+	case 6:
+		components.back()->thrustStrength = 0.0035;
+		components.back()->chargeConsumption = 4;
+		break;
+	}
+	switch (data.grid[gx][gy].capacity)
+	{//CAPACITY
+	case 2:
+		components.back()->capacity = 250;
+		components.back()->getChargeRectangle().setSize(sf::Vector2f(17.0f, 8.0f));
+		components.back()->getChargeRectangle().setOrigin(0, 4);
+		break;
+	case 3:
+		components.back()->capacity = 350;
+		components.back()->getChargeRectangle().setSize(sf::Vector2f(23.0f, 10.0f));
+		components.back()->getChargeRectangle().setOrigin(0, 5);
+		break;
+	case 4:
+		components.back()->capacity = 500;
+		components.back()->getChargeRectangle().setSize(sf::Vector2f(29.0f, 12.0f));
+		components.back()->getChargeRectangle().setOrigin(0, 6);
+		components.back()->getChargeRectangle().setFillColor(sf::Color(255, 0, 70, 190));
+		break;
+	case 5:
+		components.back()->capacity = 800;
+		components.back()->getChargeRectangle().setSize(sf::Vector2f(29.0f, 14.0f));
+		components.back()->getChargeRectangle().setOrigin(0, 7);
+		components.back()->getChargeRectangle().setFillColor(sf::Color(255, 0, 100, 190));
+		break;
+	case 6:
+		components.back()->capacity = 1500;
+		components.back()->getChargeRectangle().setSize(sf::Vector2f(34.0f, 14.0f));
+		components.back()->getChargeRectangle().setOrigin(0, 7);
+		components.back()->getChargeRectangle().setFillColor(sf::Color(255, 0, 140, 190));
+		break;
+	}
 	switch (data.grid[gx][gy].capacity)
 	{//CAPACITY
 	case 2:

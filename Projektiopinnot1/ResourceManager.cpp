@@ -25,6 +25,7 @@ ResourceManager::ResourceManager()
 	//Engine
 	engineFuelTankTex.loadFromFile("Texture/Player/Engine/fuelTank.png");
 	engineThrusterTex.loadFromFile("Texture/Player/Engine/thruster.png");
+	engineRechargerTex.loadFromFile("Texture/Player/Engine/recharger.png");
 	//ENEMY
 	flierTex.loadFromFile("Texture/Enemy/Flier.png");
 	enemyBasePurpleTex.loadFromFile("Texture/Enemy/enemy_base_purple.png");

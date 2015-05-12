@@ -18,13 +18,16 @@ public:
 	void update();
 	void thrust(float);
 	void draw();
+	void drawEngineFlame();
 
 	sf::RectangleShape& getChargeRectangle();
+	sge::Sprite& getEngineFlameSpr();
 
 private:
 	bool thrustButtonReleased = true;
 	bool thrusting = false;
 	sf::RectangleShape chargeBar;
+	sge::Sprite engineFlameSpr;
 
 };
 

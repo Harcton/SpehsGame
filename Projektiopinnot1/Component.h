@@ -62,7 +62,8 @@ public:
 	virtual void thrust(float){}
 	virtual void setLaserPointerColor(sf::Color&&){};
 	virtual sf::RectangleShape& getChargeRectangle(){ return sf::RectangleShape(); }
-
+	virtual sge::Sprite& getEngineFlameSpr(){ return sge::Sprite(); }
+	virtual void drawEngineFlame(){}
 
 	Object* master;
 	Object* centerObj;
