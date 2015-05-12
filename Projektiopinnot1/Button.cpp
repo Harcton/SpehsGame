@@ -36,6 +36,7 @@ bool Button::mouseOverlap(sf::Vector2i& mousePos)
 {
 	if (id == bi_false)
 		return false;
+	bool returnValue = false;
 
 	if (type == bt_text)
 	{
@@ -43,13 +44,7 @@ bool Button::mouseOverlap(sf::Vector2i& mousePos)
 			mousePos.x < buttonRectangle.getPosition().x + buttonRectangle.getGlobalBounds().width &&
 			mousePos.y >  buttonRectangle.getPosition().y &&
 			mousePos.y < buttonRectangle.getPosition().y + buttonRectangle.getGlobalBounds().height)
-		//if (mousePos.x > buttonRectangle.getPosition().x &&
-		//	mousePos.x < buttonRectangle.getPosition().x + buttonRectangle.getGlobalBounds().width - 5 &&
-		//	mousePos.y >  buttonRectangle.getPosition().y &&
-		//	mousePos.y < buttonRectangle.getPosition().y + buttonRectangle.getGlobalBounds().height - 5)
-			return true;
-		else
-			return false;
+		returnValue = true;
 	}
 	else if (type == bt_sprite)
 	{
@@ -57,11 +52,19 @@ bool Button::mouseOverlap(sf::Vector2i& mousePos)
 			mousePos.x < spr.getPosition().x + spr.getGlobalBounds().width &&
 			mousePos.y >  spr.getPosition().y &&
 			mousePos.y < spr.getPosition().y + spr.getGlobalBounds().height)
-			return true;
-		else
-			return false;
+			returnValue = true;
 	}
-	return false;
+
+
+	if (returnValue == true && hoverSoundPlayed == false)
+	{
+		RM.menuButtonHoverSound.play();
+		hoverSoundPlayed = true;
+	}
+	else if (returnValue == false)
+		hoverSoundPlayed = false;
+
+	return returnValue;
 }
 
 ButtonId Button::checkIfPressed(sf::Vector2i& mousePos)

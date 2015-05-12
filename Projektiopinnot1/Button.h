@@ -197,6 +197,7 @@ protected:
 	sf::Sprite spr;
 	bool visible = true;
 	bool selected = false;
+	bool hoverSoundPlayed = false;
 
 	int shadow = 0;
 	//Rectangle original colors

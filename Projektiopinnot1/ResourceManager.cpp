@@ -63,6 +63,9 @@ ResourceManager::ResourceManager()
 	pointerArrowTex.loadFromFile("Texture/Misc/pointer_arrow.png");
 
 	//Sounds
+	menuButtonHoverBuffer.loadFromFile("Audio/Sound Effects/editor_menu_hover_sound_ver03.wav");
+	menuButtonHoverSound.setBuffer(menuButtonHoverBuffer);
+
 
 	//Music
 

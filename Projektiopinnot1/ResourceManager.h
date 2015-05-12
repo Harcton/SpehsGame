@@ -8,7 +8,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/Font.hpp>
-
+#include <SFML/Audio.hpp>
 
 
 class ResourceManager
@@ -17,14 +17,6 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
-	//int hashPath(std::string);
-	//std::string getFileName(std::string);
-	//void loadTexture(std::string);
-	//sf::Texture& getTexture(std::string);
-	//void removeTexture(std::string);
-	//void loadSound(std::string);
-	//sf::SoundBuffer& getSound(std::string);
-	//void removeSound(std::string);
 
 //RESOURCES
 	//Textures
@@ -74,11 +66,27 @@ public:
 	sf::Texture engineRechargerTex;
 
 	//Sounds
+	sf::SoundBuffer menuButtonHoverBuffer;
+	sf::Sound menuButtonHoverSound;
 
 	//Music
 
 	//Font
 	sf::Font menuFont;
+
+
+
+
+
+
+	//int hashPath(std::string);
+	//std::string getFileName(std::string);
+	//void loadTexture(std::string);
+	//sf::Texture& getTexture(std::string);
+	//void removeTexture(std::string);
+	//void loadSound(std::string);
+	//sf::SoundBuffer& getSound(std::string);
+	//void removeSound(std::string);
 
 private:
 	//std::hash<std::string> hasher;

@@ -420,16 +420,22 @@ bool Player::update()
 
 void Player::turnRight(double factor)
 {
+	if (components.size() <= 0)
+		return;
 	turnSpeed -= factor*rotationSpeed*(10.0 / (10 + shipMass));
 }
 
 void Player::turnLeft(double factor)
 {
+	if (components.size() <= 0)
+		return;
 	turnSpeed += factor*rotationSpeed*(10.0 / (10 + shipMass));
 }
 
 void Player::accelerate(double factor)
 {
+	if (components.size() <= 0)
+		return;
 	xSpeed += factor*cos(2 * PI - angle)*movementSpeed*(10.0 / (10 + shipMass));
 	ySpeed += factor*sin(2 * PI - angle)*movementSpeed*(10.0 / (10 + shipMass));
 
@@ -439,6 +445,8 @@ void Player::accelerate(double factor)
 
 void Player::reverse(double factor)
 {
+	if (components.size() <= 0)
+		return;
 	xSpeed -= factor*(cos(2 * PI - angle)*movementSpeed*0.6);
 	ySpeed -= factor*(sin(2 * PI - angle)*movementSpeed)*0.6;
 
@@ -869,34 +877,18 @@ void Player::setEngineStats(int gx, int gy)
 		break;
 	}
 	switch (data.grid[gx][gy].capacity)
-	{//CAPACITY
+	{//Recharge rate
 	case 2:
-		components.back()->capacity = 250;
-		components.back()->getChargeRectangle().setSize(sf::Vector2f(17.0f, 8.0f));
-		components.back()->getChargeRectangle().setOrigin(0, 4);
+		components.back()->rechargeAmount = 2;
 		break;
 	case 3:
-		components.back()->capacity = 350;
-		components.back()->getChargeRectangle().setSize(sf::Vector2f(23.0f, 10.0f));
-		components.back()->getChargeRectangle().setOrigin(0, 5);
+		components.back()->rechargeAmount = 3;
 		break;
 	case 4:
-		components.back()->capacity = 500;
-		components.back()->getChargeRectangle().setSize(sf::Vector2f(29.0f, 12.0f));
-		components.back()->getChargeRectangle().setOrigin(0, 6);
-		components.back()->getChargeRectangle().setFillColor(sf::Color(255, 0, 70, 190));
+		components.back()->rechargeAmount = 4;
 		break;
 	case 5:
-		components.back()->capacity = 800;
-		components.back()->getChargeRectangle().setSize(sf::Vector2f(29.0f, 14.0f));
-		components.back()->getChargeRectangle().setOrigin(0, 7);
-		components.back()->getChargeRectangle().setFillColor(sf::Color(255, 0, 100, 190));
-		break;
-	case 6:
-		components.back()->capacity = 1500;
-		components.back()->getChargeRectangle().setSize(sf::Vector2f(34.0f, 14.0f));
-		components.back()->getChargeRectangle().setOrigin(0, 7);
-		components.back()->getChargeRectangle().setFillColor(sf::Color(255, 0, 140, 190));
+		components.back()->rechargeAmount = 5;
 		break;
 	}
 	components.back()->charge = components.back()->capacity;
