@@ -87,6 +87,7 @@ public:
 
 	//Virtual methods
 	virtual int getMass(){ return 1; };
+	virtual void editShip(){}
 
 protected:
 	Object* centerObj;

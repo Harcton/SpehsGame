@@ -64,6 +64,8 @@ protected:
 	//Space station
 	sf::Sprite stationSpr;
 	sf::Sprite stationArrow;
+	bool ableToDock = false;
+	sf::Sprite pressEnterToDockSpr;
 
 
 	//GUI elements

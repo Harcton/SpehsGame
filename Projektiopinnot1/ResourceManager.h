@@ -56,6 +56,7 @@ public:
 	sf::Texture ball1Tex;
 	sf::Texture pointerArrowTex;
 	sf::Texture stationTex;
+	sf::Texture pressEnterToDockTex;
 	//Textures-player ship
 	sf::Texture turretPlatformTex;
 	sf::Texture turretRotationEngineTex;

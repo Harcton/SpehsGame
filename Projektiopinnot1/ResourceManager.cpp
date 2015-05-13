@@ -63,6 +63,7 @@ ResourceManager::ResourceManager()
 	ball1Tex.loadFromFile("Texture/Misc/ball.png");
 	pointerArrowTex.loadFromFile("Texture/Misc/pointer_arrow.png");
 	stationTex.loadFromFile("Texture/Misc/station.png");
+	pressEnterToDockTex.loadFromFile("Texture/Misc/pressEnterToDock.png");
 
 	//Sounds
 	menuButtonHoverBuffer.loadFromFile("Audio/Sound Effects/editor_menu_hover_sound_ver03.wav");//Menu hover

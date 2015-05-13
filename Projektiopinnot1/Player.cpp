@@ -35,9 +35,6 @@ bool Player::update()
 	//Update mousePosition
 	mousePosition = sf::Mouse::getPosition(mWindow);
 	mWindow.pollEvent(mEvent);
-	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
-		editShip();
 
 	if (data.directionalMovement == false)
 	{
@@ -1043,6 +1040,13 @@ void Player::editShip()
 		//Update enemy nearestComponent pointers
 		for (unsigned int i = 1; i < mGame->objects.size(); i++)
 			mGame->objects[i]->update();
+
+
+		xSpeed = 0;
+		ySpeed = 0;
+		turnSpeed = 0;
+		screenX = WINDOW_WIDTH / 2;
+		screenY = WINDOW_HEIGHT / 2;
 		break;
 	}
 	case 2:
@@ -1050,14 +1054,6 @@ void Player::editShip()
 		mGame->keepRunning = false;
 		break;
 	}
-
-
-
-	xSpeed = 0;
-	ySpeed = 0;
-	turnSpeed = 0;
-	screenX = WINDOW_WIDTH / 2;
-	screenY = WINDOW_HEIGHT / 2;
 }
 
 

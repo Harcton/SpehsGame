@@ -53,6 +53,11 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	stationArrow.setColor(sf::Color(240, 190, 100));
 	stationArrow.setOrigin(0, 10);
 	stationArrow.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
+	pressEnterToDockSpr.setTexture(RM.pressEnterToDockTex);
+	pressEnterToDockSpr.setOrigin(100, 100);
+	pressEnterToDockSpr.setColor(sf::Color(255, 255, 255, 220));
+	pressEnterToDockSpr.setScale(resFactor, resFactor);
+	pressEnterToDockSpr.setPosition(WINDOW_WIDTH/2, WINDOW_HEIGHT - (WINDOW_HEIGHT/40));
 
 	//Esc menu
 	escMenuShade.setSize(sf::Vector2f(mWindow.getSize().x, mWindow.getSize().y));
@@ -148,10 +153,10 @@ void Game::run()
 		mWindow.draw(distanceText);
 		balanceText.setString("Metal: " + std::to_string(playerObj->dataPtr->money));
 		mWindow.draw(balanceText);
+		if (ableToDock)
+			mWindow.draw(pressEnterToDockSpr);
 		if (focus == gf_escMenu)
 			drawEscMenu();
-		
-
 
 
 		//Display the window
@@ -192,7 +197,10 @@ void Game::pollEvents()
 					focus = gf_game;
 				}
 				break;
-
+			case sf::Keyboard::Return:
+				if (ableToDock)
+					playerObj->editShip();
+				break;
 			}
 			break;
 	}
@@ -435,8 +443,15 @@ void Game::reloadEscMenuButtonStrings()
 
 void Game::updateStation()
 {
+	//Update station coordinates
 	nearestStationX = round(playerObj->x / STATION_INTERVAL)*STATION_INTERVAL;
 	nearestStationY = round(playerObj->y / STATION_INTERVAL)*STATION_INTERVAL;
+
+	//Check if player is in range and if enter key is pressed
+	if (getDistance(playerObj->x, playerObj->y, nearestStationX, nearestStationY) < 450)
+		ableToDock = true;
+	else
+		ableToDock = false;
 
 	stationSpr.setRotation(stationSpr.getRotation() + 0.1);
 	stationSpr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
