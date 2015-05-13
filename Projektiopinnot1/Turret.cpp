@@ -22,7 +22,7 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 
 
 	bulletTexPtr = &RM.bullet1Tex;
-	types.push_back(component::turret);
+	type = component::turret;
 	mouseAim = true;
 	textureRadius = 20;	
 	canFireTimer = 0;

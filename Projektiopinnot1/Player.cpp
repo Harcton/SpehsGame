@@ -143,9 +143,8 @@ bool Player::update()
 		//Fire/reload turrets
 		{// <-need a scope for turretCount...
 			for (unsigned int i = 0; i < components.size(); i++)
-			for (unsigned int k = 0; k < components[i]->types.size(); k++)
 			{
-				if (components[i]->types[k] == component::turret)
+				if (components[i]->type == component::turret)
 				{
 					if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_fire], mGame->mEvent))
 					{
@@ -161,7 +160,7 @@ bool Player::update()
 					if (components[i]->reloading == false)
 						components[i]->reload(); 
 				}
-				else if (components[i]->types[k] == component::engine)
+				else if (components[i]->type == component::engine)
 				{
 					if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust], mGame->mEvent))
 					{//Receiving input
@@ -186,9 +185,7 @@ bool Player::update()
 			int turretCount = 0;
 			for (unsigned int i = 0; i < components.size(); i++)
 			{
-				//Look through component i's types vector
-				for (unsigned int k = 0; k < components[i]->types.size(); k++)
-					if (components[i]->types[k] == component::turret)
+					if (components[i]->type == component::turret)
 				{//Turret i
 					turretCount++;
 
@@ -512,6 +509,9 @@ void Player::applyPlayerData()
 
 	calculateCenterOfMass();
 	reloadSkeletonSprites();
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->type == component::hull)
+		setArmorLooks(components[i]->gridLocationX, components[i]->gridLocationY);
 }
 
 void Player::calculateCenterOfMass()
@@ -588,9 +588,22 @@ void Player::calculateCenterOfMass()
 void Player::addFromGrid(int gx, int gy)
 {
 	components.push_back(new Component(this, this, (gx - coreX) * 100, (gy - coreY) * 100, gx, gy));
-	components.back()->types.push_back(component::hull);
+	components.back()->type = component::hull;
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.skeletonTex);
+	components.back()->sprites.back().setOrigin(50, 50);
+	//Push armor sprites in
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
+	components.back()->sprites.back().setOrigin(0, 50);
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
+	components.back()->sprites.back().setOrigin(0, 0);
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
+	components.back()->sprites.back().setOrigin(50, 0);
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
 	components.back()->sprites.back().setOrigin(50, 50);
 	
 	if (data.grid[gx][gy].core)
@@ -659,6 +672,123 @@ void Player::addFromGrid(int gx, int gy)
 		addFromGrid(gx - 1, gy);
 		components[selfIndex]->childComponents.push_back(components[tempIndex]->id);
 	}
+}
+
+void Player::setArmorLooks(int gx, int gy)
+{
+	Component* cPtr = nullptr;
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->gridLocationX == gx && components[i]->gridLocationY == gy && components[i]->type == component::hull)
+			cPtr = components[i];
+	if (cPtr == nullptr)
+		return;
+
+
+	bool temp_N = false;
+	bool temp_NE = false;
+	bool temp_E = false;
+	bool temp_SE = false;
+	bool temp_S = false;
+	bool temp_SW = false;
+	bool temp_W = false;
+	bool temp_NW = false;
+	if (gx > 0)
+	{
+		if (data.grid[gx - 1][gy].armor != 0)
+			temp_W = true;
+		if (gy > 0)
+			if (data.grid[gx - 1][gy - 1].armor != 0)
+				temp_NW = true;
+		if (gy < EDITOR_HEIGHT - 1)
+			if (data.grid[gx - 1][gy + 1].armor != 0)
+				temp_SW = true;
+	}
+	if (gx < EDITOR_WIDTH - 1)
+	{
+		if (data.grid[gx + 1][gy].armor != 0)
+			temp_E = true;
+		if (gy > 0)
+			if (data.grid[gx + 1][gy - 1].armor != 0)
+				temp_NE = true;
+		if (gy < EDITOR_HEIGHT - 1)
+			if (data.grid[gx + 1][gy + 1].armor != 0)
+				temp_SE = true;
+	}
+	if (gy > 0)
+		if (data.grid[gx][gy - 1].armor != 0)
+			temp_N = true;
+	if (gy < EDITOR_HEIGHT - 1)
+		if (data.grid[gx][gy + 1].armor != 0)
+			temp_S = true;
+
+	//1st piece
+	if (temp_N == false && temp_NE == false && temp_E == false)
+		cPtr->sprites[1].setTextureRect(sf::IntRect(0, 0, 50, 50));
+	else if (temp_N == false && temp_NE == false && temp_E == true)
+		cPtr->sprites[1].setTextureRect(sf::IntRect(50, 0, 50, 50));
+	else if (temp_N == false && temp_NE == true && temp_E == false)
+		cPtr->sprites[1].setTextureRect(sf::IntRect(100, 0, 50, 50));
+	else if (temp_N == false && temp_NE == true && temp_E == true)
+		cPtr->sprites[1].setTextureRect(sf::IntRect(150, 0, 50, 50));
+	else if (temp_N == true && temp_NE == false && temp_E == false)
+		cPtr->sprites[1].setTextureRect(sf::IntRect(200, 0, 50, 50));
+	else if (temp_N == true && temp_NE == false && temp_E == true)
+		cPtr->sprites[1].setTextureRect(sf::IntRect(250, 0, 50, 50));
+	else if (temp_N == true && temp_NE == true && temp_E == false)
+		cPtr->sprites[1].setTextureRect(sf::IntRect(300, 0, 50, 50));
+	else
+		cPtr->sprites[1].setTextureRect(sf::IntRect(350, 0, 50, 50));
+	//2nd piece
+	if (temp_S == false && temp_SE == false && temp_E == false)
+		cPtr->sprites[2].setTextureRect(sf::IntRect(0, 50, 50, 50));
+	else if (temp_S == false && temp_SE == false && temp_E == true)
+		cPtr->sprites[2].setTextureRect(sf::IntRect(50, 50, 50, 50));
+	else if (temp_S == false && temp_SE == true && temp_E == false)
+		cPtr->sprites[2].setTextureRect(sf::IntRect(100, 50, 50, 50));
+	else if (temp_S == false && temp_SE == true && temp_E == true)
+		cPtr->sprites[2].setTextureRect(sf::IntRect(150, 50, 50, 50));
+	else if (temp_S == true && temp_SE == false && temp_E == false)
+		cPtr->sprites[2].setTextureRect(sf::IntRect(200, 50, 50, 50));
+	else if (temp_S == true && temp_SE == false && temp_E == true)
+		cPtr->sprites[2].setTextureRect(sf::IntRect(250, 50, 50, 50));
+	else if (temp_S == true && temp_SE == true && temp_E == false)
+		cPtr->sprites[2].setTextureRect(sf::IntRect(300, 50, 50, 50));
+	else
+		cPtr->sprites[2].setTextureRect(sf::IntRect(350, 50, 50, 50));
+	//3rd piece
+	if (temp_S == false && temp_SW == false && temp_W == false)
+		cPtr->sprites[3].setTextureRect(sf::IntRect(350, 150, 50, 50));
+	else if (temp_S == false && temp_SW == false && temp_W == true)
+		cPtr->sprites[3].setTextureRect(sf::IntRect(300, 150, 50, 50));
+	else if (temp_S == false && temp_SW == true && temp_W == false)
+		cPtr->sprites[3].setTextureRect(sf::IntRect(250, 150, 50, 50));
+	else if (temp_S == false && temp_SW == true && temp_W == true)
+		cPtr->sprites[3].setTextureRect(sf::IntRect(200, 150, 50, 50));
+	else if (temp_S == true && temp_SW == false && temp_W == false)
+		cPtr->sprites[3].setTextureRect(sf::IntRect(150, 150, 50, 50));
+	else if (temp_S == true && temp_SW == false && temp_W == true)
+		cPtr->sprites[3].setTextureRect(sf::IntRect(100, 150, 50, 50));
+	else if (temp_S == true && temp_SW == true && temp_W == false)
+		cPtr->sprites[3].setTextureRect(sf::IntRect(50, 150, 50, 50));
+	else
+		cPtr->sprites[3].setTextureRect(sf::IntRect(0, 150, 50, 50));
+	//4th piece
+	if (temp_N == false && temp_NW == false && temp_W == false)
+		cPtr->sprites[4].setTextureRect(sf::IntRect(350, 100, 50, 50));
+	else if (temp_N == false && temp_NW == false && temp_W == true)
+		cPtr->sprites[4].setTextureRect(sf::IntRect(300, 100, 50, 50));
+	else if (temp_N == false && temp_NW == true && temp_W == false)
+		cPtr->sprites[4].setTextureRect(sf::IntRect(250, 100, 50, 50));
+	else if (temp_N == false && temp_NW == true && temp_W == true)
+		cPtr->sprites[4].setTextureRect(sf::IntRect(200, 100, 50, 50));
+	else if (temp_N == true && temp_NW == false && temp_W == false)
+		cPtr->sprites[4].setTextureRect(sf::IntRect(150, 100, 50, 50));
+	else if (temp_N == true && temp_NW == false && temp_W == true)
+		cPtr->sprites[4].setTextureRect(sf::IntRect(100, 100, 50, 50));
+	else if (temp_N == true && temp_NW == true && temp_W == false)
+		cPtr->sprites[4].setTextureRect(sf::IntRect(50, 100, 50, 50));
+	else
+		cPtr->sprites[4].setTextureRect(sf::IntRect(0, 100, 50, 50));
 }
 
 void Player::setTurretLooks(int gx, int gy)
@@ -955,6 +1085,9 @@ void Player::notifyComponentDestruction(Component* component)
 
 	calculateCenterOfMass();
 	reloadSkeletonSprites();
+	for (unsigned int i = 0; i < components.size(); i++)
+		if (components[i]->type == component::hull)
+			setArmorLooks(components[i]->gridLocationX, components[i]->gridLocationY);
 }
 
 void Player::loadKeybindings()
@@ -967,9 +1100,8 @@ void Player::loadKeybindings()
 
 	//Dynamic key binding per component
 	for (unsigned int i = 0; i < components.size(); i++)
-		for (unsigned int k = 0; k < components[i]->types.size(); k++)
-		{
-		if (components[i]->types[k] == component::turret)
+	{
+		if (components[i]->type == component::turret)
 		{
 			components[i]->mouseAim = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].mouseAim;
 			components[i]->mouseAimRelativeToCenter = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].mouseAimRelativeToCenter;
@@ -978,11 +1110,11 @@ void Player::loadKeybindings()
 			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_fire] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].turretFire;
 			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_reload] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].turretReload;
 		}
-		if (components[i]->types[k] == component::engine)
+		else if (components[i]->type == component::engine)
 		{
 			data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_thrust] = data.grid[components[i]->gridLocationX][components[i]->gridLocationY].engineThrust;
 		}
-		}
+	}
 }
 
 void Player::reloadSkeletonSprites()
@@ -990,8 +1122,7 @@ void Player::reloadSkeletonSprites()
 	int temp_state;
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->sprites.size() > 0 )
-			for (unsigned int t = 0; t < components[i]->types.size(); t++)
-				if (components[i]->types[t] == component::hull)
+			if (components[i]->type == component::hull)
 	{
 		temp_state = 0;
 		

@@ -54,8 +54,7 @@ Component::Component(Object* mstr, Object* cntr, double xo, double yo)
 Component::Component(const Component& other) : master(other.master), centerObj(other.master->mGame->playerObj)
 {//Copy constructor
 	std::cout << "\n  Component copy constructor";
-	for (unsigned int i = 0; i < other.types.size(); i++)
-		types.push_back(other.types[i]);
+		type = other.type;
 	for (unsigned int i = 0; i < other.sprites.size(); i++)
 		sprites.push_back(other.sprites[i]);
 	for (unsigned int i = 0; i < other.animatedSprites.size(); i++)
@@ -100,12 +99,10 @@ Component::Component(const Component& other) : master(other.master), centerObj(o
 Component& Component::operator=(Component other)
 {//Assignment operator
 	std::cout << "\n  Component assignemnt operator called";
-	types.clear();
 	sprites.clear();
 	animatedSprites.clear();
 	childComponents.clear();
-	for (unsigned int i = 0; i < other.types.size(); i++)
-		types.push_back(other.types[i]);
+	type = other.type;
 	for (unsigned int i = 0; i < other.sprites.size(); i++)
 		sprites.push_back(other.sprites[i]);
 	for (unsigned int i = 0; i < other.animatedSprites.size(); i++)
@@ -203,13 +200,12 @@ void Component::update()
 		animatedSprites[i].setScale(resFactor*zoomFactor, resFactor*zoomFactor);
 	}
 
-	for (unsigned int i = 0; i < types.size(); i++)
-		if (types[i] == component::hull)
-			for (unsigned int s = 0; s < sprites.size(); s++)
-			{
-				int temp_notRed = int(255.0f*(hp / float(maxHp)));
-				sprites[s].setColor(sf::Color(255, temp_notRed, temp_notRed));
-			}
+	if (type == component::hull)
+		for (unsigned int s = 0; s < sprites.size(); s++)
+		{
+			int temp_notRed = int(255.0f*(hp / float(maxHp)));
+			sprites[s].setColor(sf::Color(255, temp_notRed, temp_notRed));
+		}
 }
 
 

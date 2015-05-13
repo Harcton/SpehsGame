@@ -35,7 +35,7 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 	chargeBar.setFillColor(sf::Color(255, 110, 70, 160));
 	chargeBar.setOrigin(0, 2);
 
-	types.push_back(component::engine);
+	type = component::engine;
 	textureRadius = 20;
 	charge = capacity;
 }
@@ -178,7 +178,6 @@ void Engine::drawEngineFlame()
 }
 sge::Sprite& Engine::getEngineFlameSpr()
 {
-	std::cout << "yolo";
 	return engineFlameSpr;
 }
 

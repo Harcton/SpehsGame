@@ -182,11 +182,10 @@ void Sentry::AIupdate()
 			if (angle < playerDirection + closeAngle || angle > -playerDirection - closeRange)
 			{
 				for (unsigned int i = 0; i < components.size(); i++)
-					for (unsigned int k = 0; k < components[i]->types.size(); k++)
-						if (components[i]->types[k] == component::turret)
-						{
-							components[i]->fire();
-						}
+					if (components[i]->type == component::turret)
+					{
+						components[i]->fire();
+					}
 				shootingCounter = irandom(-25, -15);
 			}
 		}

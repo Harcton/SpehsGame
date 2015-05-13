@@ -175,8 +175,7 @@ void Commander::AIupdate()//maybe not follow true all the time
 		{
 			if (angle < playerDirection + closeAngle && angle > -playerDirection - closeAngle)
 				for (unsigned int i = 0; i < components.size(); i++)
-					for (unsigned int k = 0; k < components[i]->types.size(); k++)
-						if (components[i]->types[k] == component::turret)
+					if (components[i]->type == component::turret)
 						{
 							components[i]->fire();
 							shootingCounter = irandom(-30, -10);

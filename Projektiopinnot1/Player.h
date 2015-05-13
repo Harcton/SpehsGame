@@ -34,6 +34,7 @@ public:
 	void setTurretStats(int, int);
 	void setEngineLooks(int, int);
 	void setEngineStats(int, int);
+	void setArmorLooks(int, int);
 
 	//Handle input
 	void turnRight(double);

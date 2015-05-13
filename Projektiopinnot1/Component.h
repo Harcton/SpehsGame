@@ -82,7 +82,7 @@ public:
 	double screenX;
 	double screenY;
 
-	std::vector<component::Type> types;
+	component::Type type;
 	double angle;
 	double angleModifier = 0;
 	double turningSpeed;

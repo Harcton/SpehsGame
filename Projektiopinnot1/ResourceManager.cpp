@@ -14,6 +14,7 @@ ResourceManager::ResourceManager()
 	engineFireAnimation.loadFromFile("Texture/Player/engine_fire_animation_testversion.png");
 	engineFireTier1Animation.loadFromFile("Texture/Player/engine_fire_animation_tier1.png");
 	engineFireTier4Animation.loadFromFile("Texture/Player/engine_fire_animation_tier4.png");
+	shipArmor1Tex.loadFromFile("Texture/Player/armor1.png");
 	//Turret
 	turretPlatformTex.loadFromFile("Texture/Player/Turret/platform.png");
 	turretRotationEngineTex.loadFromFile("Texture/Player/Turret/rotatingEngine.png");

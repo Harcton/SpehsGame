@@ -66,6 +66,7 @@ public:
 	sf::Texture engineFuelTankTex;
 	sf::Texture engineThrusterTex;
 	sf::Texture engineRechargerTex;
+	sf::Texture shipArmor1Tex;
 
 	//Sounds
 	sf::SoundBuffer menuButtonHoverBuffer;
