@@ -254,16 +254,18 @@ void MainMenu::pollEvents()
 					break;
 				}
 				case '>'://Enter
-					if (textInput.size() > 1)
-					{
-						if (receivingTextInput == tit_windowWidth)
-							WINDOW_WIDTH = std::stoi(textInput);
-						else//window height
-							WINDOW_HEIGHT = std::stoi(textInput);
-						receivingTextInput = tit_none;
-						textInput = "";
-						reloadSettingsButtonStrings();
-					}
+					if (textInput == "")
+					{/*nothing happens to window width or height*/}
+					else if (receivingTextInput == tit_windowWidth)
+						WINDOW_WIDTH = std::stoi(textInput);
+					else//window height
+						WINDOW_HEIGHT = std::stoi(textInput);
+
+					WINDOW_WIDTH = limitWithin(100, WINDOW_WIDTH, 10000);
+					WINDOW_HEIGHT = limitWithin(100, WINDOW_HEIGHT, 10000);
+					receivingTextInput = tit_none;
+					textInput = "";
+					reloadSettingsButtonStrings();
 					break;
 				case '<'://Escape
 					receivingTextInput = tit_none;
@@ -479,20 +481,32 @@ void MainMenu::mouseLeftPressed()
 			case bi_setWindowWidth:
 				if (receivingTextInput != tit_windowWidth)
 					receivingTextInput = tit_windowWidth;
-				else
+				else if (textInput != "")
 				{
 					receivingTextInput = tit_none;
 					WINDOW_WIDTH = std::stoi(textInput);
+					WINDOW_WIDTH = limitWithin(100, WINDOW_WIDTH, 10000);
+					reloadSettingsButtonStrings();
+				}
+				else
+				{
+					receivingTextInput = tit_none;
 					reloadSettingsButtonStrings();
 				}
 				break;
 			case bi_setWindowHeight:
 				if (receivingTextInput != tit_windowHeight)
 					receivingTextInput = tit_windowHeight;
-				else
+				else if (textInput != "")
 				{
 					receivingTextInput = tit_none;
 					WINDOW_HEIGHT = std::stoi(textInput);
+					WINDOW_HEIGHT = limitWithin(100, WINDOW_HEIGHT, 10000);
+					reloadSettingsButtonStrings();
+				}
+				else
+				{
+					receivingTextInput = tit_none;
 					reloadSettingsButtonStrings();
 				}
 				break;

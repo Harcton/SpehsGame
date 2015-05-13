@@ -501,6 +501,9 @@ void Player::loadPlayerData()
 void Player::applyPlayerData()
 {
 	angle = 0;
+	x = data.spehsX;
+	y = data.spehsY;
+
 	while (!components.empty())
 	{
 		components.back()->destructorMode = component::quit;
@@ -605,6 +608,29 @@ void Player::addFromGrid(int gx, int gy)
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.skeletonTex);
 	components.back()->sprites.back().setOrigin(50, 50);
+	switch (data.grid[gx][gy].armor)
+	{//Set hp
+	case 1:
+		components.back()->maxHp = 200;
+		break;
+	case 2:
+		components.back()->maxHp = 400;
+		break;
+	case 3:
+		components.back()->maxHp = 800;
+		break;
+	case 4:
+		components.back()->maxHp = 1600;
+		break;
+	case 5:
+		components.back()->maxHp = 3200;
+		break;
+	case 6:
+		components.back()->maxHp = 6400;
+		break;
+	}
+	components.back()->hp = components.back()->maxHp;
+
 	if (data.grid[gx][gy].armor > 1)
 	{
 		//Push armor sprites in
@@ -872,62 +898,85 @@ void Player::setTurretStats(int gx, int gy)
 		components.back()->turningSpeed = PI / 20;
 		break;
 	}
-	switch (data.grid[gx][gy].bulletSpeed)
-	{//BULLET SPEED
+	switch (data.grid[gx][gy].rechargeSpeed)
+	{//RELOAD SPEED
+	case 1:
+		components.back()->rechargeInterval = 30;
+		break;
 	case 2:
-		components.back()->maxSpeed = 25;
+		components.back()->rechargeInterval = 18;
 		break;
 	case 3:
-		components.back()->maxSpeed = 50;//Update turret update -> laser drawing
+		components.back()->rechargeInterval = 7;
 		break;
 	}
 	switch (data.grid[gx][gy].capacity)
 	{//CAPACITY
+	case 1:
+		components.back()->capacity = 6;
+		break;
 	case 2:
-		components.back()->capacity = 8;
+		components.back()->capacity = 14;
 		break;
 	case 3:
-		components.back()->capacity = 15;
+		components.back()->capacity = 32;
+		components.back()->rechargeInterval = ceil(components.back()->rechargeInterval * 0.9);
 		break;
 	case 4:
-		components.back()->capacity = 20;
-		break;
-	}
-	components.back()->charge = components.back()->capacity;
-	switch (data.grid[gx][gy].recoilTime)
-	{//RECOIL TIME
-	case 2:
-		components.back()->fireRateInterval = 30;
-		break;
-	case 3:
-		components.back()->fireRateInterval = 5;
-		break;
-	}
-	switch (data.grid[gx][gy].rechargeSpeed)
-	{//RELOAD SPEED
-	case 2:
-		components.back()->rechargeInterval = 22;
-		break;
-	case 3:
-		components.back()->rechargeInterval = 10;
+		components.back()->capacity = 80;
+		components.back()->rechargeInterval = ceil(components.back()->rechargeInterval * 0.6);
 		break;
 	}
 	switch (data.grid[gx][gy].turret)
-	{
+	{//Damage
+	case 1:
+		components.back()->damage = 10;
+		break;
 	case 2:
-		components.back()->damage = 18;
+		components.back()->damage = 20;
+		components.back()->capacity = ceil(components.back()->capacity*0.7f);
+		components.back()->fireRateInterval = 40;
 		break;
 	case 3:
-		components.back()->damage = 23;
+		components.back()->damage = 30;
+		components.back()->capacity = ceil(components.back()->capacity*0.5f);
+		components.back()->fireRateInterval = 60;
 		break;
 	case 4:
-		components.back()->damage = 30;
+		components.back()->damage = 60;
+		components.back()->chargeConsumption = 2;
+		components.back()->capacity = ceil(components.back()->capacity*0.5f);
+		components.back()->fireRateInterval = 90;
 		break;
 	case 5:
-		components.back()->damage = 40;
+		components.back()->damage = 100;
+		components.back()->chargeConsumption = 3;
+		components.back()->capacity = ceil(components.back()->capacity*0.4f);
 		components.back()->bulletTexPtr = &RM.bullet2Tex;
+		components.back()->fireRateInterval = 120;
 		break;
 	}
+	switch (data.grid[gx][gy].bulletSpeed)
+	{//BULLET SPEED
+	case 2:
+		components.back()->maxSpeed = 25;
+		components.back()->fireRateInterval += 5;
+		break;
+	case 3:
+		components.back()->maxSpeed = 50;//Update turret update -> laser drawing
+		components.back()->fireRateInterval += 10;
+		break;
+	}
+	switch (data.grid[gx][gy].recoilTime)
+	{//RECOIL TIME
+	case 2:
+		components.back()->fireRateInterval = ceil(components.back()->fireRateInterval*0.6f);
+		break;
+	case 3:
+		components.back()->fireRateInterval = ceil(components.back()->fireRateInterval*0.2);
+		break;
+	}
+	components.back()->charge = components.back()->capacity;
 }
 void Player::setEngineLooks(int gx, int gy)
 {
@@ -1055,6 +1104,8 @@ void Player::editShip()
 	{
 	case 0:
 	{
+		data.spehsX = x;
+		data.spehsY = y;
 		//Player exits with return to spehs
 		applyPlayerData();
 		loadKeybindings();

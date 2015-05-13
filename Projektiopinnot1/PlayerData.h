@@ -18,6 +18,8 @@ public:
 	int verticalMoveAxisPolarity;
 	int horizontalMoveAxisPolarity;
 	int money = STARTING_MONEY;
+	int spehsX = 0;
+	int spehsY = 0;
 	sf::Joystick::Axis horizontalMoveAxis;
 	sf::Joystick::Axis verticalMoveAxis;
 
