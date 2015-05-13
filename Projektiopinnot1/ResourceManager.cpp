@@ -50,12 +50,13 @@ ResourceManager::ResourceManager()
 	editorTurretTex.loadFromFile("Texture/Menu/editorTurret.png");
 	editorSkeletonTex.loadFromFile("Texture/Menu/editorSkeleton.png");
 	editorEngineTex.loadFromFile("Texture/Menu/editorEngine.png");
-	menuPlanetTex.loadFromFile("Texture/Menu/menuPlanet.png");
-	menuSpace1Tex.loadFromFile("Texture/Menu/menuSpace1.png");
-	menuLogoTex.loadFromFile("Texture/Menu/menuLogo.png");
+	menuPlanetTex.loadFromFile("Texture/Menu/menuPlanet_update.png");
+	menuSpace1Tex.loadFromFile("Texture/Menu/menuSpace1_update.png");
+	menuLogoTex.loadFromFile("Texture/Menu/menuLogo_update.png");
 	//EFFECTS
 	//BACKGROUNDS
 	sky1Tex.loadFromFile("Texture/Background/sky.png");
+	sky2Tex.loadFromFile("Texture/Background/sky2.png");
 	//MISC
 	bullet1Tex.loadFromFile("Texture/Misc/bullet1.png");
 	bullet2Tex.loadFromFile("Texture/Misc/bullet2.png");

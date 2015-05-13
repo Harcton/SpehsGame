@@ -50,6 +50,7 @@ public:
 	sf::Texture menuSpace1Tex;
 	sf::Texture menuLogoTex;
 	sf::Texture sky1Tex;
+	sf::Texture sky2Tex;
 	sf::Texture bullet1Tex;
 	sf::Texture bullet2Tex;
 	sf::Texture debris1Tex;

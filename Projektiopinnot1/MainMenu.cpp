@@ -69,7 +69,7 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	
 
 	//Intro music
-	introMusic.openFromFile("Audio/Music and Ambience/main_menu_ver01.wav");
+	introMusic.openFromFile("Audio/Music and Ambience/main_menu_ver03.wav");
 	introMusic.play();
 
 
@@ -79,10 +79,10 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	menuLogo.setScale(resFactor, resFactor);
 	menuLogo.setPosition(WINDOW_WIDTH/2, 0);
 	menuLogo.setColor(sf::Color(255, 255, 255, 220));
-	planetSpr.setTexture(RM.menuPlanetTex);
-	planetSpr.setOrigin(550, 500);
-	planetSpr.setScale(2 * resFactor, 2 * resFactor);
-	planetSpr.setPosition(WINDOW_WIDTH*0.8, WINDOW_HEIGHT + 512 * 2 * resFactor*0.4);
+	//planetSpr.setTexture(RM.menuPlanetTex);
+	//planetSpr.setOrigin(550, 500);
+	//planetSpr.setScale(2 * resFactor, 2 * resFactor);
+	//planetSpr.setPosition(WINDOW_WIDTH*0.8, WINDOW_HEIGHT + 512 * 2 * resFactor*0.4);
 
 	for (int i = 0; i < 25; i++)
 	{
