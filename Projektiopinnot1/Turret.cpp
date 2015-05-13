@@ -12,11 +12,11 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	//Default stats
 	maxAngle = PI/7;
 	turningSpeed = PI/240;
-	capacity = 5;			// magazine/thrust charge
-	rechargeInterval = 30;	//Reload/thrust recharge speed
+	//capacity				// magazine/thrust charge
+	//rechargeInterval		//Reload/thrust recharge speed
 	maxSpeed = 11;			//max bullet speed
-	damage = 15;			//Turret damage
-	fireRateInterval = 60;
+	//damage				//Turret damage
+	fireRateInterval = 30;
 	chargeConsumption = 1;
 
 
