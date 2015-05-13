@@ -410,6 +410,19 @@ bool Player::update()
 	updateComponents();
 	//////////////
 
+
+
+	//Update engine sound
+	bool temp_thrusting = false;
+	for (unsigned int i = 0; i < components.size(); i++)
+	if (components[i]->type == component::engine)
+		if (components[i]->isThrusting() == true)
+		{
+		if (RM.thrustingSound.getStatus() != sf::Sound::Status::Playing)
+			RM.thrustingSound.play();
+			break;
+		}
+
 	return true;
 }
 

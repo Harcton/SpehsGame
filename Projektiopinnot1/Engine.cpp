@@ -23,6 +23,8 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 	thrusting = false;
 	autoThrusting = false;
 
+
+
 	engineFlameSpr.setTexture(RM.engineFireAnimation);
 	engineFlameSpr.setVisibility(false);
 	engineFlameSpr.setOrigin(167, 50);
@@ -87,7 +89,6 @@ void Engine::thrust(float power)
 		
 		thrusting = true;
 		charge -= chargeConsumption;
-		//engineFlameSpr.setVisibility(true);
 
 		if (rotationDirection == 0)
 		{
@@ -134,11 +135,6 @@ void Engine::update()
 			charge = capacity;
 	}
 
-	//me am lost with this one...
-	if (thrusting);
-	{
-		RM.engineSound.play();
-	}
 
 	Component::update();
 	//Charge bar
@@ -181,4 +177,9 @@ sge::Sprite& Engine::getEngineFlameSpr()
 sf::RectangleShape& Engine::getChargeRectangle()
 {
 	return chargeBar;
+}
+
+bool Engine::isThrusting()
+{
+	return thrusting;
 }

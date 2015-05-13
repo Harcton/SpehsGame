@@ -76,9 +76,8 @@ ResourceManager::ResourceManager()
 	turretFireSound.setBuffer(turretFireBuffer);
 	explosionBuffer.loadFromFile("Audio/Sound Effects/explosion_sound_ver04.wav");//Explosion
 	explosionSound.setBuffer(explosionBuffer);
-	engineBuffer.loadFromFile("Audio/Sound Effects/engine_sound_ver03.wav");//Engine
-	engineSound.setBuffer(engineBuffer);
-
+	thrustingBuffer.loadFromFile("Audio/Sound Effects/engine_sound_ver03.wav");
+	thrustingSound.setBuffer(thrustingBuffer);
 
 	//Music
 
@@ -92,6 +91,9 @@ void ResourceManager::updateVolumeLevels()
 	menuButtonHoverSound.setVolume(SFX_VOLUME);
 	menuUpgradeSound.setVolume(SFX_VOLUME);
 	menuClickSound.setVolume(SFX_VOLUME);
+	turretFireSound.setVolume(SFX_VOLUME);
+	explosionSound.setVolume(SFX_VOLUME);
+	thrustingSound.setVolume(SFX_VOLUME);
 
 	//Music
 	
