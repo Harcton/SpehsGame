@@ -19,6 +19,7 @@ public:
 	void thrust(float);
 	void draw();
 	void drawEngineFlame();
+	bool isThrusting();
 
 	sf::RectangleShape& getChargeRectangle();
 	sge::Sprite& getEngineFlameSpr();

@@ -33,6 +33,7 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	elements[0].setOrigin(10, 10);
 	elements.push_back(sf::Sprite());
 	elements[1].setTexture(RM.pointerArrowTex);
+	elements[1].setColor(sf::Color(255, 255, 255, 200));
 	elements[1].setOrigin(10, 10);
 
 	balanceText.setFont(RM.menuFont);
@@ -50,9 +51,14 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	stationSpr.setTexture(RM.stationTex);
 	stationSpr.setOrigin(450, 450);
 	stationArrow.setTexture(RM.pointerArrowTex);
-	stationArrow.setColor(sf::Color(240, 190, 100));
+	stationArrow.setColor(sf::Color(240, 190, 100, 200));
 	stationArrow.setOrigin(0, 10);
 	stationArrow.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
+	pressEnterToDockSpr.setTexture(RM.pressEnterToDockTex);
+	pressEnterToDockSpr.setOrigin(100, 100);
+	pressEnterToDockSpr.setColor(sf::Color(255, 255, 255, 0));
+	pressEnterToDockSpr.setScale(resFactor, resFactor);
+	pressEnterToDockSpr.setPosition(WINDOW_WIDTH/2, WINDOW_HEIGHT - (WINDOW_HEIGHT/40));
 
 	//Esc menu
 	escMenuShade.setSize(sf::Vector2f(mWindow.getSize().x, mWindow.getSize().y));
@@ -77,6 +83,7 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	escMenuButtons.back().setTextAlign(ta_center);
 	
 	spehsMusic.openFromFile("Audio/Music and Ambience/spehs_ambience_ver00.wav");
+	spehsMusic.setVolume(MUSIC_VOLUME);
 	spehsMusic.play();
 }
 
@@ -148,10 +155,9 @@ void Game::run()
 		mWindow.draw(distanceText);
 		balanceText.setString("Metal: " + std::to_string(playerObj->dataPtr->money));
 		mWindow.draw(balanceText);
+		mWindow.draw(pressEnterToDockSpr);
 		if (focus == gf_escMenu)
 			drawEscMenu();
-		
-
 
 
 		//Display the window
@@ -192,7 +198,10 @@ void Game::pollEvents()
 					focus = gf_game;
 				}
 				break;
-
+			case sf::Keyboard::Return:
+				if (ableToDock)
+					playerObj->editShip();
+				break;
 			}
 			break;
 	}
@@ -412,6 +421,17 @@ void Game::updateElements()
 	else
 		temp_angle = PI * 2 - temp_angle;
 	elements[1].setRotation(180 - (180 / PI)*temp_angle);
+
+	//Press enter to dock spr opacity
+	if (ableToDock)
+	{
+		if (pressEnterToDockSpr.getColor().a < 220)
+			pressEnterToDockSpr.setColor(sf::Color(255, 255, 255, pressEnterToDockSpr.getColor().a + 4));
+	}
+	else
+		if (pressEnterToDockSpr.getColor().a > 0)
+			pressEnterToDockSpr.setColor(sf::Color(255, 255, 255, pressEnterToDockSpr.getColor().a - 4));
+	
 }
 
 
@@ -435,8 +455,15 @@ void Game::reloadEscMenuButtonStrings()
 
 void Game::updateStation()
 {
+	//Update station coordinates
 	nearestStationX = round(playerObj->x / STATION_INTERVAL)*STATION_INTERVAL;
 	nearestStationY = round(playerObj->y / STATION_INTERVAL)*STATION_INTERVAL;
+
+	//Check if player is in range and if enter key is pressed
+	if (getDistance(playerObj->x, playerObj->y, nearestStationX, nearestStationY) < 450)
+		ableToDock = true;
+	else
+		ableToDock = false;
 
 	stationSpr.setRotation(stationSpr.getRotation() + 0.1);
 	stationSpr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);

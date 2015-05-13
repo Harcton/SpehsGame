@@ -57,6 +57,7 @@ public:
 	sf::Texture ball1Tex;
 	sf::Texture pointerArrowTex;
 	sf::Texture stationTex;
+	sf::Texture pressEnterToDockTex;
 	//Textures-player ship
 	sf::Texture turretPlatformTex;
 	sf::Texture turretRotationEngineTex;
@@ -81,8 +82,8 @@ public:
 	sf::Sound turretFireSound;
 	sf::SoundBuffer explosionBuffer;
 	sf::Sound explosionSound;
-	sf::SoundBuffer engineBuffer;
-	sf::Sound engineSound;
+	sf::SoundBuffer thrustingBuffer;
+	sf::Sound thrustingSound;
 
 
 	//Music
