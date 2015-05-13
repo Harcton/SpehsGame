@@ -418,10 +418,13 @@ bool Player::update()
 	if (components[i]->type == component::engine)
 		if (components[i]->isThrusting() == true)
 		{
+		temp_thrusting = true;
 		if (RM.thrustingSound.getStatus() != sf::Sound::Status::Playing)
 			RM.thrustingSound.play();
 			break;
 		}
+	if (temp_thrusting == false)
+		RM.thrustingSound.stop();
 
 	return true;
 }
@@ -602,20 +605,23 @@ void Player::addFromGrid(int gx, int gy)
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.skeletonTex);
 	components.back()->sprites.back().setOrigin(50, 50);
-	//Push armor sprites in
-	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
-	components.back()->sprites.back().setOrigin(0, 50);
-	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
-	components.back()->sprites.back().setOrigin(0, 0);
-	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
-	components.back()->sprites.back().setOrigin(50, 0);
-	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
-	components.back()->sprites.back().setOrigin(50, 50);
-	
+	if (data.grid[gx][gy].armor > 1)
+	{
+		//Push armor sprites in
+		components.back()->sprites.push_back(sf::Sprite());
+		components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
+		components.back()->sprites.back().setOrigin(0, 50);
+		components.back()->sprites.push_back(sf::Sprite());
+		components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
+		components.back()->sprites.back().setOrigin(0, 0);
+		components.back()->sprites.push_back(sf::Sprite());
+		components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
+		components.back()->sprites.back().setOrigin(50, 0);
+		components.back()->sprites.push_back(sf::Sprite());
+		components.back()->sprites.back().setTexture(RM.shipArmor1Tex);
+		components.back()->sprites.back().setOrigin(50, 50);
+	}
+
 	if (data.grid[gx][gy].core)
 	{//For the core piece, add the additional sprite
 		components.back()->sprites.push_back(sf::Sprite());
@@ -686,6 +692,8 @@ void Player::addFromGrid(int gx, int gy)
 
 void Player::setArmorLooks(int gx, int gy)
 {
+	if (data.grid[gx][gy].armor < 2)
+		return;
 	Component* cPtr = nullptr;
 	for (unsigned int i = 0; i < components.size(); i++)
 		if (components[i]->gridLocationX == gx && components[i]->gridLocationY == gy && components[i]->type == component::hull)
@@ -704,31 +712,31 @@ void Player::setArmorLooks(int gx, int gy)
 	bool temp_NW = false;
 	if (gx > 0)
 	{
-		if (data.grid[gx - 1][gy].armor != 0)
+		if (data.grid[gx - 1][gy].armor > 1)
 			temp_W = true;
 		if (gy > 0)
-			if (data.grid[gx - 1][gy - 1].armor != 0)
+			if (data.grid[gx - 1][gy - 1].armor > 1)
 				temp_NW = true;
 		if (gy < EDITOR_HEIGHT - 1)
-			if (data.grid[gx - 1][gy + 1].armor != 0)
+			if (data.grid[gx - 1][gy + 1].armor > 1)
 				temp_SW = true;
 	}
 	if (gx < EDITOR_WIDTH - 1)
 	{
-		if (data.grid[gx + 1][gy].armor != 0)
+		if (data.grid[gx + 1][gy].armor > 1)
 			temp_E = true;
 		if (gy > 0)
-			if (data.grid[gx + 1][gy - 1].armor != 0)
+			if (data.grid[gx + 1][gy - 1].armor > 1)
 				temp_NE = true;
 		if (gy < EDITOR_HEIGHT - 1)
-			if (data.grid[gx + 1][gy + 1].armor != 0)
+			if (data.grid[gx + 1][gy + 1].armor > 1)
 				temp_SE = true;
 	}
 	if (gy > 0)
-		if (data.grid[gx][gy - 1].armor != 0)
+		if (data.grid[gx][gy - 1].armor > 1)
 			temp_N = true;
 	if (gy < EDITOR_HEIGHT - 1)
-		if (data.grid[gx][gy + 1].armor != 0)
+		if (data.grid[gx][gy + 1].armor > 1)
 			temp_S = true;
 
 	//1st piece

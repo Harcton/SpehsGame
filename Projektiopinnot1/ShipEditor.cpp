@@ -640,6 +640,7 @@ void ShipEditor::updateGridSpriteTextures()
 				gridSprites[x][y].push_back(sf::Sprite());
 				gridSprites[x][y].back().setTexture(RM.editorSkeletonTex);
 				gridSprites[x][y].back().setOrigin(50, 50);
+				gridSprites[x][y].back().setColor(sf::Color(255 - 255 * (playerData.grid[x][y].armor / 6.0f), 255 - 255 * (playerData.grid[x][y].armor /6.0f), 255));
 			}
 
 			
@@ -811,7 +812,10 @@ void ShipEditor::mouseLeftPressed()
 		}
 
 		if (exitUpgrades.checkIfPressed(mousePos) == bi_confExit)
+		{
 			focus = editor::base;
+			updateGridSpriteTextures();
+		}
 	}
 		break;
 	case editor::esc:
