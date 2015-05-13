@@ -35,6 +35,8 @@ public:
 	void drawEscMenu();
 	void reloadEscMenuButtonStrings();
 	void updateBullets();
+	void updateStation();
+	void updateElements();
 
 	Object* playerObj;
 	std::vector<Object*> objects;
@@ -49,11 +51,19 @@ public:
 	sf::RenderWindow& mWindow;
 	bool keepRunning = true;
 
+	int nearestStationX = 0;
+	int nearestStationY = 0;
+
 protected:
 	GameFocus focus = gf_game;
 	sf::Vector2i mousePos;
 	std::vector<Background*> backgrounds;
 	sf::Text balanceText;
+
+
+	//Space station
+	sf::Sprite stationSpr;
+	sf::Sprite stationArrow;
 
 
 	//GUI elements

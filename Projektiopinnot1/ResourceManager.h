@@ -55,6 +55,7 @@ public:
 	sf::Texture debris1Tex;
 	sf::Texture ball1Tex;
 	sf::Texture pointerArrowTex;
+	sf::Texture stationTex;
 	//Textures-player ship
 	sf::Texture turretPlatformTex;
 	sf::Texture turretRotationEngineTex;

@@ -46,6 +46,14 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	elements[0].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
 	elements[1].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25); //playerObj->screenX, playerObj->screenY
 
+	//Station
+	stationSpr.setTexture(RM.stationTex);
+	stationSpr.setOrigin(450, 450);
+	stationArrow.setTexture(RM.pointerArrowTex);
+	stationArrow.setColor(sf::Color(240, 190, 100));
+	stationArrow.setOrigin(0, 10);
+	stationArrow.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
+
 	//Esc menu
 	escMenuShade.setSize(sf::Vector2f(mWindow.getSize().x, mWindow.getSize().y));
 	escMenuShade.setFillColor(sf::Color(0, 0, 0, 0));
@@ -113,6 +121,8 @@ void Game::run()
 			updateBackgrounds();
 			updateObjects();
 			updateBullets();
+			updateStation();
+			updateElements();
 		}
 
 
@@ -125,12 +135,14 @@ void Game::run()
 		//Game objects
 		for (unsigned int i = 0; i < backgrounds.size(); i++)
 			backgrounds[i]->draw();
+		mWindow.draw(stationSpr);
 		for (unsigned int i = 0; i < objects.size(); i++)
 			objects[i]->draw();
 		//Engine flames
 		for (unsigned int i = 0; i < playerObj->components.size(); i++)
 			playerObj->components[i]->drawEngineFlame();
 		//GUI / buttons
+		mWindow.draw(stationArrow);
 		for (unsigned int i = 0; i < elements.size(); i++)
 			mWindow.draw(elements[i]);
 		mWindow.draw(distanceText);
@@ -358,24 +370,33 @@ void Game::demo()
 			objects.back()->update();
 		}
 	}
+}
 
-
-
+void Game::updateElements()
+{
 	//Distance meter TO DO: rounded 2-4 decimal part
 	char distanceSuffix = ' ';
 	int convertedDistance = distanceFromStart;
 	if (distanceFromStart > 1000000000000)
-	{	convertedDistance = distanceFromStart / 1000000000000.0f;
-		distanceSuffix = 'T';	}
+	{
+		convertedDistance = distanceFromStart / 1000000000000.0f;
+		distanceSuffix = 'T';
+	}
 	else if (distanceFromStart > 1000000000)
-	{	convertedDistance = distanceFromStart / 1000000000.0f;
-		distanceSuffix = 'G';	}
+	{
+		convertedDistance = distanceFromStart / 1000000000.0f;
+		distanceSuffix = 'G';
+	}
 	else if (distanceFromStart > 1000000)
-	{	convertedDistance = distanceFromStart / 1000000.0f;
-		distanceSuffix = 'M';	}
+	{
+		convertedDistance = distanceFromStart / 1000000.0f;
+		distanceSuffix = 'M';
+	}
 	else if (distanceFromStart > 1000)
-	{	convertedDistance = distanceFromStart / 1000.0f;
-		distanceSuffix = 'k';	}
+	{
+		convertedDistance = distanceFromStart / 1000.0f;
+		distanceSuffix = 'k';
+	}
 	distanceText.setString(std::to_string(convertedDistance) + " " + distanceSuffix + "m");
 	//distanceText.setString(intToString(distanceFromStart));
 	double temp_angle = atan2(playerObj->y, playerObj->x);
@@ -384,8 +405,6 @@ void Game::demo()
 	else
 		temp_angle = PI * 2 - temp_angle;
 	elements[1].setRotation(180 - (180 / PI)*temp_angle);
-
-
 }
 
 
@@ -404,4 +423,20 @@ void Game::reloadEscMenuButtonStrings()
 		case bi_gsetMusicVolume:
 			break;
 	}
+}
+
+
+void Game::updateStation()
+{
+	nearestStationX = round(playerObj->x / STATION_INTERVAL)*STATION_INTERVAL;
+	nearestStationY = round(playerObj->y / STATION_INTERVAL)*STATION_INTERVAL;
+
+	stationSpr.setRotation(stationSpr.getRotation() + 0.1);
+	stationSpr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+	stationSpr.setPosition(playerObj->screenX + (nearestStationX - playerObj->x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationY - playerObj->y)*resFactor*zoomFactor);
+
+	float temp_stationDirection = -1 * atan2(playerObj->y - nearestStationY, playerObj->x - nearestStationX);
+	if (temp_stationDirection < 0)
+		temp_stationDirection = 2 * PI + temp_stationDirection;
+	stationArrow.setRotation(180 - temp_stationDirection*(180 / PI));
 }
