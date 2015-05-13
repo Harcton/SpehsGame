@@ -337,35 +337,42 @@ void Game::updateBullets()
 void Game::demo()
 {
 	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
+	distanceFromStation = getDistance(nearestStationX, nearestStationY, playerObj->x, playerObj->y);
+	if (distanceFromStart < 50000)
+		enemyBehaviourDifficulty = 1;
+	else if (distanceFromStart < 100000)
+		enemyBehaviourDifficulty = 2;
+	else
+		enemyBehaviourDifficulty = 3;
 
-	if (objects.size() < distanceFromStart / 1300)
+	if (objects.size() < distanceFromStation / 1300)
 	{
-		if (distanceFromStart / 1000 > 8)
+		if (distanceFromStart / 1000 > 50)
 			spawnRandomization = irandom(1, 4);
 		else
 			spawnRandomization = irandom(1, 3);
 
 		if (spawnRandomization == 1 && objects.size() < MAX_OBJECTS)
 		{
-			objects.push_back(new Sentinel(mWindow, this, 1));
+			objects.push_back(new Sentinel(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
 		if (spawnRandomization == 2 && objects.size() < MAX_OBJECTS)
 		{
-			objects.push_back(new Seeker(mWindow, this, 1));
+			objects.push_back(new Seeker(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
 		if (spawnRandomization == 3 && objects.size() < MAX_OBJECTS)
 		{
-			objects.push_back(new Sentry(mWindow, this, 1));
+			objects.push_back(new Sentry(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
 		if (spawnRandomization == 4 && objects.size() < MAX_OBJECTS)
 		{
-			objects.push_back(new Commander(mWindow, this, 1));
+			objects.push_back(new Commander(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}

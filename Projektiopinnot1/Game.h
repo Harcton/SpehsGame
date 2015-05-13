@@ -79,7 +79,10 @@ protected:
 
 	//FOR TEST GAME
 	int distanceFromStart;
+	int distanceFromStation;
 	int spawnRandomization;
+	int enemyBehaviourDifficulty;
+
 	sf::Text distanceText;
 
 	sf::Music spehsMusic;

@@ -8,7 +8,7 @@ Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enem
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = 1;
+	metal = 1 + enemyBehaviourLevel;
 
 	initiateAssault = false;
 	repositioning = false;
@@ -119,6 +119,12 @@ void Flier::AIupdate()
 
 		reposition();
 	}
+	if (fleeing)
+	{
+		state = state_fleeing;
+
+		flee();
+	}
 	else if (distance < closeRange) //Close state
 	{
 		state = state_closeRange;
@@ -130,6 +136,12 @@ void Flier::AIupdate()
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
 		state = state_active;
+
+		if (stationDistance < 2000)
+		{
+			fleeing = true;
+			return;
+		}
 
 		follow = true;
 		if (rotationDirection == true)
@@ -147,7 +159,7 @@ void Flier::AIupdate()
 		{
 			if (angle < playerDirection + closeAngle || angle > -playerDirection - closeRange)
 			{
-				shootLaser(1);
+				shootLaser(enemyBehaviourLevel);
 				laserCounter = irandom(-12, -8);
 			}
 		}
@@ -203,4 +215,11 @@ void Flier::reposition()
 
 	xSpeed += cos(2 * PI - angle)*accelerationConstant;
 	ySpeed += sin(2 * PI - angle)*accelerationConstant;
+}
+
+void Flier::flee()
+{
+	negFollow = true;
+	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
+	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
 }

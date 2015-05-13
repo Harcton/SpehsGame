@@ -33,6 +33,7 @@ bool Enemy::update()
 
 
 	distance = getDistance(this->x, this->y, nearestComponent->x, nearestComponent->y);
+	stationDistance = getDistance(this->x, this->y, mGame->nearestStationX, mGame->nearestStationY);
 	playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
@@ -125,6 +126,88 @@ bool Enemy::update()
 			turnSpeed = turnSpeed*0.9;
 		}
 	}
+
+	//follow
+	if (negFollow == true) //flee
+	{
+		if (angle >= 0 && angle < PI / 2) //1st quarter
+		{
+			if (playerDirection < PI && playerDirection > angle)
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+			else if (playerDirection < angle || playerDirection > PI*1.5)
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+			else if (playerDirection < angle + PI)
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+			else
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+		}
+		else if (angle >= PI / 2 && angle < PI) //2nd quarter
+		{
+			if (playerDirection < PI*1.5 && playerDirection > angle)
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+			else if (playerDirection < angle)
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+			else if (playerDirection > angle + PI)
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+			else
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+		}
+		else if (angle >= PI && angle < PI*1.5)//3rd quarter
+		{
+			if (playerDirection > angle)
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+			else if (playerDirection < angle && playerDirection > PI / 2)
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+			else if (playerDirection < angle - PI)
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+			else
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+		}
+		else //4th quarter
+		{
+			if (playerDirection > angle || playerDirection < PI / 2)
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+			else if (playerDirection > PI && playerDirection < angle)
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+			else if (playerDirection < angle - PI)
+			{
+				turnSpeed -= turnAccelerationConstant;
+			}
+			else
+			{
+				turnSpeed += turnAccelerationConstant;
+			}
+		}
+	}
+
 
 	//limit turnSpeed
 	if (turnSpeed > maxTurnSpeedLimit)

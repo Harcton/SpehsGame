@@ -10,7 +10,7 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(25, 35);
+	metal = irandom(25, 35) + enemyBehaviourLevel;
 
 	angle = playerDirection;
 	fleeing = false;
@@ -162,7 +162,7 @@ void Commander::AIupdate()//maybe not follow true all the time
 	{
 		state = state_fleeing;
 
-		//
+		flee();
 	}
 	else if (distance < closeRange) //Close state
 	{
@@ -185,6 +185,12 @@ void Commander::AIupdate()//maybe not follow true all the time
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
 		state = state_active;
+
+		if (stationDistance < 3200)
+		{
+			fleeing = true;
+			return;
+		}
 
 		follow = true;
 		xSpeed += (cos(angle))*accelerationConstant;
@@ -220,6 +226,14 @@ void Commander::launchFliers()
 	if (mGame->objects.size() >= MAX_OBJECTS)
 		return;
 
-	mGame->objects.push_back(new Flier(mWindow, mGame, 1));
+	mGame->objects.push_back(new Flier(mWindow, mGame, enemyBehaviourLevel));
 	mGame->objects.back()->setLocation(x, y); //randomize a lil bit
+}
+
+
+void Commander::flee()
+{
+	negFollow = true;
+	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
+	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
 }

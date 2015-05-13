@@ -8,7 +8,7 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(5, 10);
+	metal = irandom(5, 10) + enemyBehaviourLevel;
 
 	angle = playerDirection;
 	explosionLimiter = false;

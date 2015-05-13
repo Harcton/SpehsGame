@@ -9,7 +9,7 @@ Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(10, 15);
+	metal = irandom(10, 15) + enemyBehaviourLevel;
 
 	angle = playerDirection;
 	dodging = false;
@@ -141,6 +141,12 @@ void Sentry::AIupdate()
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
 		state = state_active;
+
+		if (stationDistance < 2000)
+		{
+			fleeing = true;
+			return;
+		}
 
 		if (rotationDirection)
 		{
@@ -284,5 +290,7 @@ void Sentry::reposition()
 
 void Sentry::flee()
 {
-	//TBD
+	negFollow = true;
+	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
+	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
 }

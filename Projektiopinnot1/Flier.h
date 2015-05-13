@@ -14,9 +14,11 @@ public:
 	bool update();
 	void AIupdate();
 	void reposition();
+	void flee();
 
 private:
 	bool repositioning;
+	bool fleeing;
 	int repositionCounter;
 	int laserCounter;
 	int rotationCounter;

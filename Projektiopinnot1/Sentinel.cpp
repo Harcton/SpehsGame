@@ -8,7 +8,7 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(8, 14);
+	metal = irandom(8, 14) + enemyBehaviourLevel;
 
 	angle = playerDirection;
 	std::cout << angle << " " << playerDirection << std::endl;
@@ -19,7 +19,7 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	maxActionRange = 600;
 	closeRange = 350;
 	maxTurnSpeedLimit = 0.05;
-	maxSpeedLimit = 6;
+	maxSpeedLimit = 8;
 	accelerationConstant = 0.8;
 	turnAccelerationConstant = 0.005;
 	closeAngle = 0.002;
@@ -126,7 +126,7 @@ void Sentinel::AIupdate()
 	{
 		state = state_fleeing;
 
-		//
+		flee();
 	}
 	else if (distance < closeRange) //Close state
 	{
@@ -139,6 +139,12 @@ void Sentinel::AIupdate()
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
 		state = state_active;
+
+		if (stationDistance < 2000)
+		{
+			fleeing = true;
+			return;
+		}
 
 		if (rotationDirection == true)
 		{
@@ -184,7 +190,7 @@ void Sentinel::AIupdate()
 		{
 			if (angle < playerDirection + closeAngle || angle > -playerDirection - closeRange)
 			{
-				shootLaser(3);
+				shootLaser(2+enemyBehaviourLevel);
 				laserCounter = irandom(-25, -15);
 			}
 		}
@@ -284,5 +290,8 @@ void Sentinel::reposition()
 
 void Sentinel::flee()
 {
-	//TBD
+	follow = false;
+	negFollow = true;
+	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
+	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
 }
