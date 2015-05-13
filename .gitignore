@@ -2,7 +2,7 @@
 Thumbs.db
 ehthumbs.db
 
-#Meidän ignoret
+#Meidï¿½n ignoret
 *.log
 *.dll
 *.sdf
@@ -51,3 +51,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.suo
+*.v12.suo
