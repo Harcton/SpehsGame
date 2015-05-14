@@ -134,76 +134,76 @@ bool Enemy::update()
 		{
 			if (playerDirection < PI && playerDirection > angle)
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 			else if (playerDirection < angle || playerDirection > PI*1.5)
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 			else if (playerDirection < angle + PI)
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 			else
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 		}
 		else if (angle >= PI / 2 && angle < PI) //2nd quarter
 		{
 			if (playerDirection < PI*1.5 && playerDirection > angle)
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 			else if (playerDirection < angle)
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 			else if (playerDirection > angle + PI)
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 			else
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 		}
 		else if (angle >= PI && angle < PI*1.5)//3rd quarter
 		{
 			if (playerDirection > angle)
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 			else if (playerDirection < angle && playerDirection > PI / 2)
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 			else if (playerDirection < angle - PI)
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 			else
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 		}
 		else //4th quarter
 		{
 			if (playerDirection > angle || playerDirection < PI / 2)
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 			else if (playerDirection > PI && playerDirection < angle)
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 			else if (playerDirection < angle - PI)
 			{
-				turnSpeed -= turnAccelerationConstant;
+				turnSpeed -= turnAccelerationConstant * 4;
 			}
 			else
 			{
-				turnSpeed += turnAccelerationConstant;
+				turnSpeed += turnAccelerationConstant * 4;
 			}
 		}
 	}

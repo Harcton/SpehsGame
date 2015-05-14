@@ -10,7 +10,7 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(25, 35) + enemyBehaviourLevel;
+	metal = irandom(25, 35)*((enemyBehaviourLevel * 5 + 4) / 3);
 
 	angle = playerDirection;
 	fleeing = false;
@@ -33,6 +33,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(0, 300, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 80 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-8
 	components.push_back(new Component(this, mGame->playerObj, -300, -50)); //Component 5 (R-REAR WING)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -40,6 +43,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(400, 300, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 50 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-7
 	components.push_back(new Component(this, mGame->playerObj, -300, -150)); //Component 4 (L-REAR WING)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -47,6 +53,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(200, 300, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 50 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-6
 	components.push_back(new Component(this, mGame->playerObj, -200, -50)); //Component 7 (R-CORE WING)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -54,6 +63,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(700, 0, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 75 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-5
 	components.push_back(new Component(this, mGame->playerObj, -200, -150)); //Component 6 (L-CORE WING)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -61,6 +73,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(500, 0, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 75 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-4
 	components.push_back(new Component(this, mGame->playerObj, -50, -50)); //Component 9 (R-FRONT WING)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -68,6 +83,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(800, 300, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 50 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-3
 	components.push_back(new Component(this, mGame->playerObj, -50, -150)); //Component 8 (L-FRONT WING)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -75,6 +93,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(600, 300, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 50 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-2
 	components.push_back(new Component(this, mGame->playerObj, -250, -100)); //Component 2 (CORE) //set correct coordinates for everyone...
 	components.back()->sprites.push_back(sf::Sprite());
@@ -82,6 +103,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(100, 100);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(300, 0, 200, 200));
 	components.back()->textureRadius = 100;
+
+	components.back()->hp = 100 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 	//-1
 	components.push_back(new Component(this, mGame->playerObj, -100, -100)); //Component 1 (TANK) //(0,0)
 	components.back()->sprites.push_back(sf::Sprite());
@@ -89,6 +113,9 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->sprites.back().setOrigin(150, 150);
 	components.back()->sprites.back().setTextureRect(sf::IntRect(0, 0, 300, 300));
 	components.back()->textureRadius = 150;
+
+	components.back()->hp = 200 + (enemyBehaviourLevel * 20);
+	components.back()->maxHp = components.back()->hp;
 
 	components[components.size() - 2]->childComponents.push_back(components.back()->id); //TANK TO CORE
 	components[components.size() - 2]->childComponents.push_back(components[components.size() - 6]->id); //R-CORE WING TO CORE
@@ -196,7 +223,7 @@ void Commander::AIupdate()//maybe not follow true all the time
 		xSpeed += (cos(angle))*accelerationConstant;
 		ySpeed += (sin(angle))*accelerationConstant;
 
-		if (releaseFlier > 90)
+		if (releaseFlier > (90 / ((enemyBehaviourLevel + 10) / 10)) )
 		{
 			launchFliers();
 			releaseFlier = 0;
@@ -233,6 +260,7 @@ void Commander::launchFliers()
 
 void Commander::flee()
 {
+	follow = false;
 	negFollow = true;
 	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
 	ySpeed += (sin(2 * PI - angle))*accelerationConstant;

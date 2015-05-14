@@ -69,7 +69,7 @@ protected:
 	bool follow;
 	bool negFollow = false;
 	int HPMemory;
-	int enemyBehaviourLevel; //1: defensive 2: passive 3: aggressive
+	int enemyBehaviourLevel;
 	double distance;
 	double stationDistance;
 	double playerDirection;

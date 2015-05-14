@@ -8,10 +8,8 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(8, 14) + enemyBehaviourLevel;
+	metal = irandom(8, 14)*((enemyBehaviourLevel*5 + 4) / 3);
 
-	angle = playerDirection;
-	std::cout << angle << " " << playerDirection << std::endl;
 	dodging = false;
 	repositioning = false;
 	fleeing = false;
@@ -21,7 +19,7 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	maxTurnSpeedLimit = 0.05;
 	maxSpeedLimit = 8;
 	accelerationConstant = 0.8;
-	turnAccelerationConstant = 0.005;
+	turnAccelerationConstant = 0.01;
 	closeAngle = 0.002;
 
 	//Reserve memory for all of the components
@@ -31,6 +29,9 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	components.back()->sprites.back().setTexture(RM.sentinelTex);
 	components.back()->sprites.back().setOrigin(130, 75);
 	components.back()->textureRadius = 50;
+
+	components.back()->hp = 80 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 }
 
 
@@ -51,6 +52,7 @@ bool Sentinel::update()
 	dodgeCounter--;
 	if (dodgeCounter < 0)
 	{
+		negFollow = false;
 		dodging = false;
 	}
 
@@ -96,6 +98,7 @@ void Sentinel::AIupdate()
 	//Special cases
 	if (state == state_spawned)
 	{
+		angle = playerDirection; //doesn't work because enemy update hasn't given playerDirection yet...
 		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
 		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
 		state = state_passive;
@@ -154,7 +157,7 @@ void Sentinel::AIupdate()
 				{
 					follow = false;
 					dodging = true;
-					dodgeCounter = 60;
+					dodgeCounter = 30;
 				}
 			}
 			
@@ -174,7 +177,7 @@ void Sentinel::AIupdate()
 				{
 					follow = false;
 					dodging = true;
-					dodgeCounter = 60;
+					dodgeCounter = 30;
 				}
 			}
 			else
@@ -190,7 +193,7 @@ void Sentinel::AIupdate()
 		{
 			if (angle < playerDirection + closeAngle || angle > -playerDirection - closeRange)
 			{
-				shootLaser(2+enemyBehaviourLevel);
+				shootLaser((2*enemyBehaviourLevel) * ((enemyBehaviourLevel + 6) / 2) );
 				laserCounter = irandom(-25, -15);
 			}
 		}
@@ -217,68 +220,74 @@ void Sentinel::AIupdate()
 
 
 void Sentinel::dodgeMove()
-{//work very much in progress over here
+{//work very much in progress over here!
 	//check player acceleration
-	if (angle >= 0 && angle < PI / 2) //1st quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-	}
-	else if (angle >= PI / 2 && angle < PI) //2nd quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-	}
-	else if (angle >= PI && angle < PI*1.5)//3rd quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-	}
-	else //4th quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-	}
+
+	follow = false;
+	negFollow = true;
+	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
+	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
+
+	//if (angle >= 0 && angle < PI / 2) //1st quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//}
+	//else if (angle >= PI / 2 && angle < PI) //2nd quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//}
+	//else if (angle >= PI && angle < PI*1.5)//3rd quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//}
+	//else //4th quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//}
 }
 
 

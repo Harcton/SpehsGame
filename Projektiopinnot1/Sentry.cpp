@@ -9,19 +9,19 @@ Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(10, 15) + enemyBehaviourLevel;
+	metal = irandom(10, 15) * ((enemyBehaviourLevel * 5 + 4) / 3);
 
 	angle = playerDirection;
 	dodging = false;
 	repositioning = false;
 	fleeing = false;
-	aggroRange = 2000;
+	aggroRange = 1900;
 	maxActionRange = 1000;
-	closeRange = 500;
+	closeRange = 550;
 	maxTurnSpeedLimit = 0.01;
 	maxSpeedLimit = 5;
-	accelerationConstant = 0.6;
-	turnAccelerationConstant = 0.0015;
+	accelerationConstant = 0.5;
+	turnAccelerationConstant = 0.009;
 	closeAngle = 0.003;
 
 	//Reserve memory for all of the components
@@ -32,6 +32,9 @@ Sentry::Sentry(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	components.back()->sprites.back().setOrigin(50, 50);
 	components.push_back(new Turret(this, centerObj, 0, 0));
 	components[components.size() - 2]->childComponents.push_back(components.back()->id);
+
+	components.back()->hp = 70 + (enemyBehaviourLevel * 10);
+	components.back()->maxHp = components.back()->hp;
 }
 
 
@@ -156,6 +159,7 @@ void Sentry::AIupdate()
 				{
 					follow = false;
 					dodging = true;
+					dodgeCounter = 25;
 				}
 			}
 			else
@@ -173,6 +177,7 @@ void Sentry::AIupdate()
 				{
 					follow = false;
 					dodging = true;
+					dodgeCounter = 25;
 				}
 			}
 			else
@@ -219,66 +224,72 @@ void Sentry::AIupdate()
 
 void Sentry::dodgeMove()
 {//work very much in progress over here
-	if (angle >= 0 && angle < PI / 2) //1st quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-	}
-	else if (angle >= PI / 2 && angle < PI) //2nd quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-	}
-	else if (angle >= PI && angle < PI*1.5)//3rd quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (-cos(angle))*accelerationConstant;
-		}
-	}
-	else //4th quarter
-	{
-		if (rotationDirection)
-		{
-			turnSpeed += turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-		else if (!rotationDirection)
-		{
-			turnSpeed -= turnAccelerationConstant;
-			xSpeed += (-sin(angle))*accelerationConstant;
-			ySpeed += (cos(angle))*accelerationConstant;
-		}
-	}
+
+	follow = false;
+	negFollow = true;
+	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
+	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
+
+	//if (angle >= 0 && angle < PI / 2) //1st quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//}
+	//else if (angle >= PI / 2 && angle < PI) //2nd quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//}
+	//else if (angle >= PI && angle < PI*1.5)//3rd quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (-cos(angle))*accelerationConstant;
+	//	}
+	//}
+	//else //4th quarter
+	//{
+	//	if (rotationDirection)
+	//	{
+	//		turnSpeed += turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//	else if (!rotationDirection)
+	//	{
+	//		turnSpeed -= turnAccelerationConstant;
+	//		xSpeed += (-sin(angle))*accelerationConstant;
+	//		ySpeed += (cos(angle))*accelerationConstant;
+	//	}
+	//}
 }
 
 
@@ -290,6 +301,7 @@ void Sentry::reposition()
 
 void Sentry::flee()
 {
+	follow = false;
 	negFollow = true;
 	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
 	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
