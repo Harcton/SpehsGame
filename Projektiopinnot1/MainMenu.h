@@ -16,6 +16,8 @@
 
 enum MainMenuFocus
 {
+	mmf_intro1,
+	mmf_intro2,
 	mmf_base,
 	mmf_load,
 	mmf_settings,
@@ -36,7 +38,7 @@ public:
 	~MainMenu();
 	MainMenu(sf::RenderWindow& );
 
-	void run();
+	int run();
 	void pollEvents();
 	void draw();
 
@@ -68,14 +70,16 @@ private:
 
 	//Misc
 	sf::Font font1;
-	bool keepRunning = true;
+	int keepRunning = 1;
 	sf::Music introMusic;
-	MainMenuFocus focus = mmf_base;
+	MainMenuFocus focus = mmf_intro1;
 	int doubleClickTimer = 0;
 
 	//Background
 	sf::Sprite planetSpr;
 	sf::Sprite menuLogo;
+	int logoLayer = 0;
+	int logoLayerTimer = 60;
 	std::vector<sf::Sprite> bgSprVector;
 
 	//Buttons
@@ -102,6 +106,11 @@ private:
 	int buttonBorder;
 	int settingsButtonY1;
 
+
+	//Intro
+	sf::Text intro1Text;
+	short int introTextAlphaPolarity = 1;
+	sf::RectangleShape introShade;
 };
 
 #endif

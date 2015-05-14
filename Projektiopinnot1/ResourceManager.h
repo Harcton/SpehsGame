@@ -46,7 +46,6 @@ public:
 	sf::Texture editorTurretTex;
 	sf::Texture editorSkeletonTex;
 	sf::Texture editorEngineTex;
-	sf::Texture menuPlanetTex;
 	sf::Texture menuSpace1Tex;
 	sf::Texture menuLogoTex;
 	sf::Texture sky1Tex;

@@ -50,7 +50,6 @@ ResourceManager::ResourceManager()
 	editorTurretTex.loadFromFile("Texture/Menu/editorTurret.png");
 	editorSkeletonTex.loadFromFile("Texture/Menu/editorSkeleton.png");
 	editorEngineTex.loadFromFile("Texture/Menu/editorEngine.png");
-	menuPlanetTex.loadFromFile("Texture/Menu/menuPlanet_update.png");
 	menuSpace1Tex.loadFromFile("Texture/Menu/menuSpace1_update.png");
 	menuLogoTex.loadFromFile("Texture/Menu/menuLogo_update.png");
 	//EFFECTS

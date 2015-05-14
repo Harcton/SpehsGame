@@ -3,6 +3,7 @@
 #include "PlayerData.h"
 #include "Game.h"
 
+#define BACKGROUNDSPRITES 25
 
 
 MainMenu::~MainMenu()
@@ -81,32 +82,37 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	menuLogo.setScale(resFactor, resFactor);
 	menuLogo.setPosition(WINDOW_WIDTH/2, 0);
 	menuLogo.setColor(sf::Color(255, 255, 255, 220));
-	//planetSpr.setTexture(RM.menuPlanetTex);
-	//planetSpr.setOrigin(550, 500);
-	//planetSpr.setScale(2 * resFactor, 2 * resFactor);
-	//planetSpr.setPosition(WINDOW_WIDTH*0.8, WINDOW_HEIGHT + 512 * 2 * resFactor*0.4);
 
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < BACKGROUNDSPRITES; i++)
 	{
 		bgSprVector.push_back(sf::Sprite());
 		bgSprVector.back().setTexture(RM.menuSpace1Tex);
 		bgSprVector.back().setOrigin(200, 175);
 		bgSprVector.back().setRotation(irandom(0, 360));
 		bgSprVector.back().setPosition(irandom(-200, WINDOW_WIDTH + 400), irandom(-200, WINDOW_HEIGHT + 400));
-		bgSprVector.back().setColor(sf::Color(irandom(0, 255), irandom(0, 255), irandom(0, 255), irandom(100, 155)));
+		bgSprVector.back().setColor(sf::Color(irandom(100, 155), irandom(100, 155), irandom(100, 155), irandom(120, 255)));
 		int temp_scale = resFactor*(1.0f / 100.0f)*irandom(50, 1500);
 		bgSprVector.back().setScale(temp_scale, temp_scale);
 	}
 
+
+	//Intro
+	intro1Text.setFont(RM.menuFont);
+	intro1Text.setCharacterSize(80 * resFactor);
+	intro1Text.setString("   A game by\n  Teo Hiltunen\n        and\nJuuso Turunen");
+	intro1Text.setPosition(int(WINDOW_WIDTH / 2 - intro1Text.getGlobalBounds().width / 2), int(WINDOW_HEIGHT / 2 - intro1Text.getGlobalBounds().height / 2));
+	intro1Text.setColor(sf::Color(255,255,255,0));
+	introShade.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
+	introShade.setFillColor(sf::Color(0, 0, 0, 254));
 }
 
 
 
-void MainMenu::run()
+int MainMenu::run()
 {
 
 
-	while (keepRunning)
+	while (keepRunning == 1)
 	{
 		mousePos = sf::Mouse::getPosition(mWindow);
 
@@ -123,7 +129,7 @@ void MainMenu::run()
 		mWindow.display();
 	}
 
-
+	return keepRunning;
 }
 
 void MainMenu::pollEvents()
@@ -159,7 +165,7 @@ void MainMenu::pollEvents()
 					break;
 				case sf::Keyboard::Escape:
 					if (focus == mmf_base)
-						keepRunning = false;
+						keepRunning = 0;
 					else if (focus == mmf_load)
 						focus = mmf_base;
 					else if (focus == mmf_settings)
@@ -167,15 +173,21 @@ void MainMenu::pollEvents()
 						saveSettings();
 						focus = mmf_base;
 					}
+					else if (focus == mmf_intro1 || focus == mmf_intro2)
+					{//Skip intro
+						focus = mmf_base;
+					}
 					break;
 				case sf::Keyboard::Return:
 					if (focus == mmf_load)
+					{
 						for (unsigned int i = 0; i < playerSaveButtons.size(); i++)
 							if (playerSaveButtons[i].selected == true)
-						{
-						playerName = playerSavesList[i];
-						launchGame();
-						}
+							{
+							playerName = playerSavesList[i];
+							launchGame();
+							}
+					}
 					break;
 				case sf::Keyboard::Delete:
 					if (focus == mmf_load)
@@ -281,6 +293,28 @@ void MainMenu::pollEvents()
 }
 void MainMenu::draw()
 {
+	//Intro 1 drawing
+	if (focus == mmf_intro1)
+	{
+		if (introTextAlphaPolarity == 1)
+		{
+			if (intro1Text.getColor().a < 254)
+				intro1Text.setColor(sf::Color(255, 255, 255, intro1Text.getColor().a + 1));
+			else
+				introTextAlphaPolarity = -1;
+		}
+		else
+		{
+			if (intro1Text.getColor().a > 0)
+				intro1Text.setColor(sf::Color(255, 255, 255, intro1Text.getColor().a - 2));
+			else
+				focus = mmf_intro2;
+		}
+		mWindow.draw(intro1Text);
+		return;
+	}
+
+
 	//Draw background first
 	for (unsigned int i = 0; i < bgSprVector.size(); i++)
 	{
@@ -305,12 +339,28 @@ void MainMenu::draw()
 			int temp_scale = resFactor*(1.0f / 100.0f)*irandom(50, 1500);
 			bgSprVector.back().setScale(temp_scale, temp_scale);
 		}
+
+
+		//Draw logo based on layer
+		if (logoLayer == i)
+			mWindow.draw(menuLogo);
 	}
 
-	planetSpr.setRotation(planetSpr.getRotation() + 0.01);
-	mWindow.draw(planetSpr);
-	mWindow.draw(menuLogo);
-	//End of background drawing
+	if (logoLayer < BACKGROUNDSPRITES - 1)
+	{//if the layer is not in the front
+		if (logoLayerTimer > 0)
+			logoLayerTimer--;
+		else
+		{
+			if (introShade.getFillColor().a <= 0)
+				logoLayer++;
+			logoLayerTimer = 4;
+		}
+	}
+	else if (focus == mmf_intro2)
+		focus = mmf_base;
+
+
 
 
 	if (focus == mmf_base)
@@ -369,6 +419,9 @@ void MainMenu::draw()
 			settingsSliderButtons[i].draw(mWindow, mousePos);
 	}
 
+	if (introShade.getFillColor().a > 0)
+		introShade.setFillColor(sf::Color(0, 0, 0, introShade.getFillColor().a - 2));
+	mWindow.draw(introShade);
 }
 
 
@@ -401,7 +454,7 @@ void MainMenu::mouseLeftPressed()
 				reloadSettingsButtonStrings();
 				break;
 			case bi_mmQuit:
-				keepRunning = false;
+				keepRunning = 0;
 				break;
 		}
 	}
@@ -474,6 +527,8 @@ void MainMenu::mouseLeftPressed()
 			case bi_mmReturn:
 				saveSettings();
 				focus = mmf_base;
+				if (WINDOW_WIDTH != mWindow.getSize().x || WINDOW_HEIGHT != mWindow.getSize().y)
+					keepRunning = -1;
 				break;
 			case bi_setFullscreenNode:
 				flipBool(FULLSCREEN);

@@ -36,8 +36,10 @@ void main()
 	cur |= _CRTDBG_CHECK_ALWAYS_DF | _CRTDBG_LEAK_CHECK_DF;
 	_CrtSetDbgFlag(cur);
 	*/
-
+	bool restart;
+	do
 	{
+		restart = false;
 		//Load game settings. If no settings file exists, create one
 		if (loadSettings() == false)
 			saveSettings();
@@ -46,19 +48,25 @@ void main()
 		time_t t;
 		srand((unsigned) time(&t));
 
+
 		sf::RenderWindow mWindow{ sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game" };
 		if (FULLSCREEN)
 			mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Fullscreen);
 		else
 			mWindow.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spehs Game", sf::Style::Close);
 
+
 		mWindow.setFramerateLimit(60);
 		mWindow.setMouseCursorVisible(true);
+		sf::Image icon;
+		icon.loadFromFile("Texture/Misc/icon.png");
+		mWindow.setIcon(32, 32, icon.getPixelsPtr());
 
 		MainMenu mainMenu(mWindow);
-		mainMenu.run();
-	}
-	
+		if (mainMenu.run() == -1)
+			restart = true;
+
+	} while (restart == true);
 
 	//_CrtDumpMemoryLeaks();
 }
