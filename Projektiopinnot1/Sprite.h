@@ -19,7 +19,7 @@ namespace sge
 		Sprite(sf::Texture&);
 		~Sprite();
 
-		void draw(sf::RenderWindow&);
+		virtual void draw(sf::RenderWindow&);
 		void animationUpdate();
 
 		//Misc
@@ -32,14 +32,14 @@ namespace sge
 		void setColor(sf::Color&);
 		void setRotation(double);
 		void setOrigin(int, int);
-		void setScale(double, double);
+		virtual void setScale(double, double);
 		void setFrame(int, int);
 		void setAutoUpdate(bool);
 		void setTilesetSize(int, int);
 		void setHorizontalFrames(int);
 		void setVerticalFrames(int);
 		void setFrameDuration(int);
-		void setFrameSize(int, int);
+		virtual void setFrameSize(int, int);
 		void setFrameWidth(int);
 		void setFrameHeight(int);
 		void setVisibility(bool);
@@ -47,7 +47,7 @@ namespace sge
 		//Getters (update when needed)
 		double getRotation();
 
-	private:
+	protected:
 		sf::Sprite sprite;
 		
 		bool autoUpdate;

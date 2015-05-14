@@ -1,7 +1,7 @@
 #include "Main.h"
 #include "Seeker.h"
 #include "Game.h"
-
+#include "VisualEffect.h"
 
 
 Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enemy(windowref, game)
@@ -135,7 +135,11 @@ void Seeker::AIupdate()//maybe not follow true all the time
 					if (state != memoryState)
 					{
 						//explosion animation
-						//wait for animation before destruction
+						mGame->frontVisualEffects.push_back(VisualEffect(RM.explosion1Tex, x, y, 5, 9));
+						mGame->frontVisualEffects.back().setFrameSize(200, 200);
+						mGame->frontVisualEffects.back().setTilesetSize(3, 3);
+						mGame->frontVisualEffects.back().setOrigin(100, 100);
+						mGame->frontVisualEffects.back().setColor(sf::Color(255, 255, 255, 180));
 					}
 
 					RM.explosionSound.play();

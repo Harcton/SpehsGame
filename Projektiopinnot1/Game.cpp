@@ -143,12 +143,17 @@ void Game::run()
 		//Game objects
 		for (unsigned int i = 0; i < backgrounds.size(); i++)
 			backgrounds[i]->draw();
+		if (focus == gf_game)
+			drawVisualEffects(backVisualEffects);
 		mWindow.draw(stationSpr);
 		for (unsigned int i = 0; i < objects.size(); i++)
 			objects[i]->draw();
 		//Engine flames
-		for (unsigned int i = 0; i < playerObj->components.size(); i++)
-			playerObj->components[i]->drawEngineFlame();
+		if (focus == gf_game)
+			for (unsigned int i = 0; i < playerObj->components.size(); i++)
+				playerObj->components[i]->drawEngineFlame();
+		if (focus == gf_game)
+			drawVisualEffects(frontVisualEffects);
 		//GUI / buttons
 		mWindow.draw(stationArrow);
 		for (unsigned int i = 0; i < elements.size(); i++)
@@ -308,14 +313,14 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 0;//
+	bool tempDevelopmentSelection = 1;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
-		if (objects.size() < 2)
+		if (objects.size() < 20)
 		{
 			if (objects.size() < MAX_OBJECTS)
-				objects.push_back(new Commander(mWindow, this, 2)); //spawn different enemy types
+				objects.push_back(new Seeker(mWindow, this, 2)); //spawn different enemy types
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
@@ -474,4 +479,17 @@ void Game::updateStation()
 	if (temp_stationDirection < 0)
 		temp_stationDirection = 2 * PI + temp_stationDirection;
 	stationArrow.setRotation(180 - temp_stationDirection*(180 / PI));
+}
+
+void Game::drawVisualEffects(std::vector<VisualEffect>& vector)
+{
+	for (unsigned int i = 0; i < vector.size(); i++)
+	{
+		vector[i].draw(mWindow, this);
+		if (vector[i].lifespan <= 0)
+			{
+			vector.erase(vector.begin() + i);
+			--i;
+			}
+	}
 }

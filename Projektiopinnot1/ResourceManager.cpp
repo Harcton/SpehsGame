@@ -54,6 +54,7 @@ ResourceManager::ResourceManager()
 	menuSpace1Tex.loadFromFile("Texture/Menu/menuSpace1_update.png");
 	menuLogoTex.loadFromFile("Texture/Menu/menuLogo_update.png");
 	//EFFECTS
+	explosion1Tex.loadFromFile("Texture/Effects/explosion1.png");
 	//BACKGROUNDS
 	sky1Tex.loadFromFile("Texture/Background/sky.png");
 	sky2Tex.loadFromFile("Texture/Background/sky2.png");

@@ -117,6 +117,9 @@
     <ClCompile Include="UpgradeButton.cpp">
       <Filter>Source Files\Ship editor</Filter>
     </ClCompile>
+    <ClCompile Include="VisualEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="UpgradeButton.h">
       <Filter>Header Files\Ship editor</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualEffect.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

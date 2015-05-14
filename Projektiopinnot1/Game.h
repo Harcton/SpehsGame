@@ -12,6 +12,7 @@ class Background;
 #include <SFML/Window/Window.hpp>
 #include <SFML/Window/Event.hpp>
 #include "SliderButton.h"
+#include "VisualEffect.h"
 
 
 
@@ -42,6 +43,9 @@ public:
 	std::vector<Object*> objects;
 	std::vector<Object*> bullets;
 	std::vector<Object*>::iterator bulletIt;
+	std::vector<VisualEffect> backVisualEffects;
+	std::vector<VisualEffect> frontVisualEffects;
+	void drawVisualEffects(std::vector<VisualEffect>&);
 	void updateBackgrounds();
 	void updateObjects();
 	void demo();

@@ -70,6 +70,8 @@ public:
 	sf::Texture engineThrusterTex;
 	sf::Texture engineRechargerTex;
 	sf::Texture shipArmor1Tex;
+	//Visual effects
+	sf::Texture explosion1Tex;
 
 	//Sounds
 	sf::SoundBuffer menuButtonHoverBuffer;

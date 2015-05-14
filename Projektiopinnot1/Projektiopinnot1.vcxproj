@@ -92,6 +92,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Turret.cpp" />
     <ClCompile Include="UpgradeButton.cpp" />
+    <ClCompile Include="VisualEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Turret.h" />
     <ClInclude Include="UpgradeButton.h" />
+    <ClInclude Include="VisualEffect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -198,7 +198,7 @@ void Object::updateComponents()
 	int k = 0;
 	while (k < components.size())
 	{
-		if (components[k]->alive() == false)
+		if (components[k]->type == component::hull && components[k]->alive() == false)
 		{
 			Component* temp_componentPointer = components[k];
 			components.erase(components.begin() + k);
