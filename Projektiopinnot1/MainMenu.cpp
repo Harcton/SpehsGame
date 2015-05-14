@@ -72,6 +72,7 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	introMusic.openFromFile("Audio/Music and Ambience/main_menu_ver03.wav");
 	introMusic.setVolume(MUSIC_VOLUME);
 	introMusic.play();
+	introMusic.setLoop(true);
 
 
 	//Background

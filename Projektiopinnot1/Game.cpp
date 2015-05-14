@@ -85,6 +85,7 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	spehsMusic.openFromFile("Audio/Music and Ambience/spehs_ambience_ver00.wav");
 	spehsMusic.setVolume(MUSIC_VOLUME);
 	spehsMusic.play();
+	spehsMusic.setLoop(true);
 }
 
 
