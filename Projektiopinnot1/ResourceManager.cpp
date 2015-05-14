@@ -63,7 +63,7 @@ ResourceManager::ResourceManager()
 	debris1Tex.loadFromFile("Texture/Misc/debris1.png");
 	ball1Tex.loadFromFile("Texture/Misc/ball.png");
 	pointerArrowTex.loadFromFile("Texture/Misc/pointer_arrow.png");
-	stationTex.loadFromFile("Texture/Misc/station.png");
+	stationTex.loadFromFile("Texture/Misc/DockingStation.png");
 	pressEnterToDockTex.loadFromFile("Texture/Misc/pressEnterToDock.png");
 
 	//Sounds
