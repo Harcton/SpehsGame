@@ -313,14 +313,14 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 1;//
+	bool tempDevelopmentSelection = 0;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
 		if (objects.size() < 20)
 		{
 			if (objects.size() < MAX_OBJECTS)
-				objects.push_back(new Seeker(mWindow, this, 2)); //spawn different enemy types
+				objects.push_back(new Sentinel(mWindow, this, 15)); //spawn different enemy types
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
@@ -353,12 +353,7 @@ void Game::demo()
 {
 	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
 	distanceFromStation = getDistance(nearestStationX, nearestStationY, playerObj->x, playerObj->y);
-	if (distanceFromStart < 50000)
-		enemyBehaviourDifficulty = 1;
-	else if (distanceFromStart < 100000)
-		enemyBehaviourDifficulty = 2;
-	else
-		enemyBehaviourDifficulty = 3;
+	enemyBehaviourDifficulty = distanceFromStart / 40000;
 
 	if (objects.size() < distanceFromStation / 1300)
 	{

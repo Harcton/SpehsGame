@@ -8,12 +8,12 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = irandom(5, 10) + enemyBehaviourLevel;
+	metal = irandom(5, 10) * ((enemyBehaviourLevel * 5 + 4) / 4);
 
 	angle = playerDirection;
 	explosionLimiter = false;
 	dodging = false;
-	aggroRange = 1500;
+	aggroRange = 1500 + enemyBehaviourLevel*2;
 	maxActionRange = 700;
 	closeRange = 150;
 	maxTurnSpeedLimit = 0.03;
@@ -29,6 +29,9 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.seekerTex);
 	components.back()->sprites.back().setOrigin(50, 50);
+
+	components.back()->hp = 80 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
 
 	//Initialize Animations
 	components[0]->animatedSprites.push_back(RM.seekerActiveTex);
@@ -135,7 +138,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 					if (state != memoryState)
 					{
 						//explosion animation
-						mGame->frontVisualEffects.push_back(VisualEffect(RM.explosion1Tex, x, y, 5, 9));
+						mGame->frontVisualEffects.push_back(VisualEffect(RM.explosion1Tex, x, y, 2, 9));
 						mGame->frontVisualEffects.back().setFrameSize(200, 200);
 						mGame->frontVisualEffects.back().setTilesetSize(3, 3);
 						mGame->frontVisualEffects.back().setOrigin(100, 100);
@@ -143,7 +146,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 					}
 
 					RM.explosionSound.play();
-					explosion(50, 1.5);
+					explosion(50 * ((enemyBehaviourLevel + 6) / 6), 1.5);
 					this->hp = 0;
 					explosionLimiter = true;
 				}
@@ -222,16 +225,16 @@ void Seeker::dodgeMove(const double tempXSpeed, const double tempYSpeed)
 	if (xSpeed != -tempXSpeed)
 	{
 		if (tempXSpeed > 0)
-			xSpeed -= accelerationConstant * 5*enemyBehaviourLevel;
+			xSpeed -= accelerationConstant * 6*enemyBehaviourLevel;
 		else if (tempXSpeed < 0)
-			xSpeed += accelerationConstant * 5*enemyBehaviourLevel;
+			xSpeed += accelerationConstant * 4*enemyBehaviourLevel;
 	}
 	if (ySpeed != -tempYSpeed)
 	{
 		if (tempYSpeed > 0)
-			ySpeed -= accelerationConstant * 5*enemyBehaviourLevel;
+			ySpeed -= accelerationConstant * 4*enemyBehaviourLevel;
 		else if (tempYSpeed < 0)
-			ySpeed += accelerationConstant * 5*enemyBehaviourLevel;
+			ySpeed += accelerationConstant * 6*enemyBehaviourLevel;
 	}
 	turnSpeed += turnAccelerationConstant * enemyBehaviourLevel;
 }

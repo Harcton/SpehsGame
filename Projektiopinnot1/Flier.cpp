@@ -8,7 +8,7 @@ Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enem
 {
 	enemyBehaviourLevel = behaviourLevel;
 	state = state_spawned;
-	metal = 1 + enemyBehaviourLevel;
+	metal = ((enemyBehaviourLevel + 4) / 4);
 
 	initiateAssault = false;
 	repositioning = false;
@@ -30,7 +30,9 @@ Flier::Flier(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : Enem
 	components.back()->sprites.back().setOrigin(15, 15);
 	*/
 	components.back()->textureRadius = 30;
-	components.back()->maxHp = 30;
+
+	components.back()->hp = 25 + (enemyBehaviourLevel * 5);
+	components.back()->maxHp = components.back()->hp;
 
 	//animations
 	components[0]->animatedSprites.push_back(RM.flierTex);
@@ -219,6 +221,7 @@ void Flier::reposition()
 
 void Flier::flee()
 {
+	follow = false;
 	negFollow = true;
 	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
 	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
