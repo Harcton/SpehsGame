@@ -53,10 +53,7 @@ public:
 	sf::Texture bullet1Tex;
 	sf::Texture bullet2Tex;
 	sf::Texture debris1Tex;
-	sf::Texture ball1Tex;
-	sf::Texture pointerArrowTex;
 	sf::Texture stationTex;
-	sf::Texture pressEnterToDockTex;
 	//Textures-player ship
 	sf::Texture turretPlatformTex;
 	sf::Texture turretRotationEngineTex;
@@ -71,6 +68,12 @@ public:
 	sf::Texture shipArmor1Tex;
 	//Visual effects
 	sf::Texture explosion1Tex;
+	//in-game Gui
+	sf::Texture compassTex;
+	sf::Texture ball1Tex;
+	sf::Texture pointerArrowTex;
+	sf::Texture pressEnterToDockTex;
+	sf::Texture displayMeterTex;
 
 	//Sounds
 	sf::SoundBuffer menuButtonHoverBuffer;

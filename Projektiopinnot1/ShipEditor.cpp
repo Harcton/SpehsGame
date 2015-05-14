@@ -1857,7 +1857,7 @@ void ShipEditor::drawUpgrades()
 
 	if (upgradeArmor.mouseOverlap(mousePos))
 	{
-		cost = int(pow(*upgradeArmor.targetInt, 3));
+		cost = int(pow(*upgradeArmor.targetInt + 3, 3));
 		drawCost();
 	}
 
