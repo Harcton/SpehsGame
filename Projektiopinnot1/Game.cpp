@@ -9,6 +9,7 @@
 
 
 
+
 Game::~Game()
 {
 	for (unsigned int i = 0; i < objects.size(); i++)
@@ -28,32 +29,70 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	bullets.reserve(MAX_BULLETS);
 	backgrounds.reserve(MAX_BACKGROUNDS);
 
-	elements.push_back(sf::Sprite());
-	elements[0].setTexture(RM.ball1Tex);
-	elements[0].setOrigin(10, 10);
-	elements.push_back(sf::Sprite());
-	elements[1].setTexture(RM.pointerArrowTex);
-	elements[1].setColor(sf::Color(255, 255, 255, 200));
-	elements[1].setOrigin(10, 10);
 
-	balanceText.setFont(RM.menuFont);
-	balanceText.setString("Metal: ");
-	balanceText.setColor(sf::Color(120, 170, 255, 180));
-	balanceText.setCharacterSize(50 * resFactor);
-	balanceText.setPosition(int(10 * resFactor), int(WINDOW_HEIGHT - balanceText.getGlobalBounds().height * 2));
+	//GUI
+	//Set GUI location
+	guiScale = 0.8;
+	compassRadius = int(150 * resFactor * guiScale);
+	compassX = compassRadius + 25 * resFactor;
+	compassY = 208 * resFactor * guiScale; //display meter origo.y
+	//Compass spr
+	compassSpr.setTexture(RM.compassTex);
+	compassSpr.setOrigin(150, 150);
+	compassSpr.setPosition(compassX, compassY);
+	compassSpr.setScale(resFactor * guiScale, resFactor * guiScale);
+	//Display meter
+	displayMeterSpr.setTexture(RM.displayMeterTex);
+	displayMeterSpr.setOrigin(30, 208);
+	displayMeterSpr.setScale(resFactor * guiScale, resFactor * guiScale);
+	displayMeterSpr.setPosition(compassX, compassY);
+	//Compass tab
+	compassTabSpr.setTexture(RM.ball1Tex);
+	compassTabSpr.setOrigin(10, 10);
+	compassTabSpr.setPosition(compassX, compassY);
+	compassTabSpr.setScale(resFactor * guiScale, resFactor * guiScale);
+	//Spawn arrow
+	spawnArrowSpr.setTexture(RM.pointerArrowTex);
+	spawnArrowSpr.setColor(sf::Color(255, 255, 255, 200));
+	spawnArrowSpr.setOrigin(10, 10);
+	spawnArrowSpr.setPosition(compassX, compassY);
+	spawnArrowSpr.setScale(resFactor * guiScale, resFactor * guiScale);
+	//Station arrow
+	stationArrow.setTexture(RM.pointerArrowTex);
+	stationArrow.setColor(sf::Color(240, 190, 100, 200));
+	stationArrow.setOrigin(10, 10);
+	stationArrow.setPosition(compassX, compassY);
+	stationArrow.setScale(resFactor * guiScale, resFactor * guiScale);
+	//Display text
+	sf::Color displayTextColor(60, 150, 0, 250);
+	int displayTextSize = int(33 * resFactor * guiScale);
+	displayLabelText.setFont(RM.menuFont);
+	displayLabelText.setColor(displayTextColor);
+	displayLabelText.setCharacterSize(displayTextSize);
+	displayLabelText.setPosition(int(compassX + 180 * resFactor*guiScale), int(35 * resFactor * guiScale));
+	displayLabelText.setString("Spawn:\nStation:\nMetal:");
+	//Display content texts
+	displayTextX = compassX + 470 * resFactor*guiScale;
+	displayTextY1 = 35 * resFactor * guiScale;
+	displayTextYDifference = displayTextSize + 0 * resFactor * guiScale;
+	displaySpawnText.setFont(RM.menuFont);
+	displaySpawnText.setColor(displayTextColor);
+	displaySpawnText.setCharacterSize(displayTextSize);
+	displayStationText.setFont(RM.menuFont);
+	displayStationText.setColor(displayTextColor);
+	displayStationText.setCharacterSize(displayTextSize);
+	displayMetalText.setFont(RM.menuFont);
+	displayMetalText.setColor(displayTextColor);
+	displayMetalText.setCharacterSize(displayTextSize);
+	
 
-	distanceText.setFont(RM.menuFont);
-	distanceText.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25 + 30);
-	elements[0].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
-	elements[1].setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25); //playerObj->screenX, playerObj->screenY
+
+
+
 
 	//Station
 	stationSpr.setTexture(RM.stationTex);
 	stationSpr.setOrigin(450, 450);
-	stationArrow.setTexture(RM.pointerArrowTex);
-	stationArrow.setColor(sf::Color(240, 190, 100, 200));
-	stationArrow.setOrigin(0, 10);
-	stationArrow.setPosition(WINDOW_WIDTH - WINDOW_WIDTH / 15, WINDOW_HEIGHT - WINDOW_HEIGHT / 1.25);
 	pressEnterToDockSpr.setTexture(RM.pressEnterToDockTex);
 	pressEnterToDockSpr.setOrigin(100, 100);
 	pressEnterToDockSpr.setColor(sf::Color(255, 255, 255, 0));
@@ -82,6 +121,8 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 	escMenuButtons.push_back(Button(bi_gsetQuit, buttonX1, buttonY1 + 3 * buttonHeight, buttonWidth, buttonHeight, "Quit to menu", int(50 * resFactor), buttonColorBG, buttonColorText));
 	escMenuButtons.back().setTextAlign(ta_center);
 	
+
+	//Background music
 	spehsMusic.openFromFile("Audio/Music and Ambience/spehs_ambience_ver00.wav");
 	spehsMusic.setVolume(MUSIC_VOLUME);
 	spehsMusic.play();
@@ -120,6 +161,9 @@ void Game::run()
 	{
 		pollEvents();
 
+		distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
+		distanceFromStation = getDistance(nearestStationX, nearestStationY, playerObj->x, playerObj->y);
+
 		//DRAWING
 		mWindow.clear(sf::Color(0, 0, 0, 100));
 
@@ -154,14 +198,7 @@ void Game::run()
 				playerObj->components[i]->drawEngineFlame();
 		if (focus == gf_game)
 			drawVisualEffects(frontVisualEffects);
-		//GUI / buttons
-		mWindow.draw(stationArrow);
-		for (unsigned int i = 0; i < elements.size(); i++)
-			mWindow.draw(elements[i]);
-		mWindow.draw(distanceText);
-		balanceText.setString("Metal: " + std::to_string(playerObj->dataPtr->money));
-		mWindow.draw(balanceText);
-		mWindow.draw(pressEnterToDockSpr);
+		drawGui();
 		if (focus == gf_escMenu)
 			drawEscMenu();
 
@@ -211,6 +248,20 @@ void Game::pollEvents()
 			}
 			break;
 	}
+}
+
+void Game::drawGui()
+{
+	mWindow.draw(displayMeterSpr);
+	mWindow.draw(compassSpr);
+	mWindow.draw(stationArrow);
+	mWindow.draw(spawnArrowSpr);
+	mWindow.draw(compassTabSpr);
+	mWindow.draw(displayLabelText);
+	mWindow.draw(displaySpawnText);
+	mWindow.draw(displayStationText);
+	mWindow.draw(displayMetalText);
+	mWindow.draw(pressEnterToDockSpr);
 }
 
 void Game::drawEscMenu()
@@ -351,8 +402,6 @@ void Game::updateBullets()
 
 void Game::demo()
 {
-	distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
-	distanceFromStation = getDistance(nearestStationX, nearestStationY, playerObj->x, playerObj->y);
 	if (distanceFromStart < 50000)
 		enemyBehaviourDifficulty = 1;
 	else if (distanceFromStart < 100000)
@@ -396,7 +445,8 @@ void Game::demo()
 
 void Game::updateElements()
 {
-	//Distance meter TO DO: rounded 2-4 decimal part
+	//Spawn distance meter 
+	//TO DO: rounded 2-4 decimal part
 	char distanceSuffix = ' ';
 	int convertedDistance = distanceFromStart;
 	if (distanceFromStart > 1000000000000)
@@ -419,14 +469,43 @@ void Game::updateElements()
 		convertedDistance = distanceFromStart / 1000.0f;
 		distanceSuffix = 'k';
 	}
-	distanceText.setString(std::to_string(convertedDistance) + " " + distanceSuffix + "m");
-	//distanceText.setString(intToString(distanceFromStart));
+	displaySpawnText.setString(std::to_string(convertedDistance) + " " + distanceSuffix + "m");
+	displaySpawnText.setPosition(displayTextX - displaySpawnText.getGlobalBounds().width, displayTextY1);
+
+
+	//Station distance
+	distanceSuffix = ' ';
+	convertedDistance = distanceFromStation;
+	if (distanceFromStart > 1000000000000)
+	{
+		convertedDistance = distanceFromStart / 1000000000000.0f;
+		distanceSuffix = 'T';
+	}
+	else if (distanceFromStart > 1000000000)
+	{
+		convertedDistance = distanceFromStart / 1000000000.0f;
+		distanceSuffix = 'G';
+	}
+	else if (distanceFromStart > 1000000)
+	{
+		convertedDistance = distanceFromStart / 1000000.0f;
+		distanceSuffix = 'M';
+	}
+	else if (distanceFromStart > 1000)
+	{
+		convertedDistance = distanceFromStart / 1000.0f;
+		distanceSuffix = 'k';
+	}
+	displayStationText.setString(std::to_string(convertedDistance) + " " + distanceSuffix + "m");
+	displayStationText.setPosition(displayTextX - displayStationText.getGlobalBounds().width, displayTextY1 + displayTextYDifference);
+
+	//Set spawn arrow angle
 	double temp_angle = atan2(playerObj->y, playerObj->x);
 	if (temp_angle < 0)
 		temp_angle = abs(temp_angle);
 	else
 		temp_angle = PI * 2 - temp_angle;
-	elements[1].setRotation(180 - (180 / PI)*temp_angle);
+	spawnArrowSpr.setRotation(180 - (180 / PI)*temp_angle);
 
 	//Press enter to dock spr opacity
 	if (ableToDock)
@@ -437,7 +516,10 @@ void Game::updateElements()
 	else
 		if (pressEnterToDockSpr.getColor().a > 0)
 			pressEnterToDockSpr.setColor(sf::Color(255, 255, 255, pressEnterToDockSpr.getColor().a - 4));
-	
+
+	//Update metal balance text
+	displayMetalText.setString(std::to_string(playerObj->dataPtr->money));
+	displayMetalText.setPosition(displayTextX - displayMetalText.getGlobalBounds().width, displayTextY1 + displayTextYDifference*2);
 }
 
 
@@ -466,10 +548,11 @@ void Game::updateStation()
 	nearestStationY = round(playerObj->y / STATION_INTERVAL)*STATION_INTERVAL;
 
 	//Check if player is in range and if enter key is pressed
-	if (getDistance(playerObj->x, playerObj->y, nearestStationX, nearestStationY) < 450)
+	if (distanceFromStation < 450)
 		ableToDock = true;
 	else
 		ableToDock = false;
+
 
 	stationSpr.setRotation(stationSpr.getRotation() + 0.1);
 	stationSpr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);

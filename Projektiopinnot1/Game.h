@@ -38,6 +38,7 @@ public:
 	void updateBullets();
 	void updateStation();
 	void updateElements();
+	void drawGui();
 
 	Object* playerObj;
 	std::vector<Object*> objects;
@@ -62,7 +63,9 @@ protected:
 	GameFocus focus = gf_game;
 	sf::Vector2i mousePos;
 	std::vector<Background*> backgrounds;
-	sf::Text balanceText;
+	int spawnRandomization;
+	int enemyBehaviourDifficulty;
+	sf::Music spehsMusic;
 
 
 	//Space station
@@ -72,8 +75,7 @@ protected:
 	sf::Sprite pressEnterToDockSpr;
 
 
-	//GUI elements
-	std::vector<sf::Sprite> elements;
+
 	//Esc menu
 	sf::RectangleShape escMenuShade;
 	std::vector<Button> escMenuButtons;
@@ -83,15 +85,27 @@ protected:
 	std::vector<Object*>::iterator obIt;
 	std::vector<Background*>::iterator bgIt;
 
-	//FOR TEST GAME
+	//GUI
+	//Compass coordinates used for building the gui
+	float guiScale;
+	int compassX;
+	int compassY;
+	int compassRadius;
+	sf::Sprite compassSpr;
+	sf::Sprite displayMeterSpr;
+	sf::Sprite compassTabSpr;
+	sf::Sprite spawnArrowSpr;
 	int distanceFromStart;
 	int distanceFromStation;
-	int spawnRandomization;
-	int enemyBehaviourDifficulty;
+	sf::Text displayLabelText;
+	sf::Text displaySpawnText;
+	sf::Text displayStationText;
+	sf::Text displayMetalText;
+	int displayTextX;
+	int displayTextY1;
+	int displayTextYDifference;
 
-	sf::Text distanceText;
 
-	sf::Music spehsMusic;
 };
 
 #endif

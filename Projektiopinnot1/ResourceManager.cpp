@@ -61,10 +61,13 @@ ResourceManager::ResourceManager()
 	bullet1Tex.loadFromFile("Texture/Misc/bullet1.png");
 	bullet2Tex.loadFromFile("Texture/Misc/bullet2.png");
 	debris1Tex.loadFromFile("Texture/Misc/debris1.png");
+	stationTex.loadFromFile("Texture/Misc/station.png");
+	//In-game GUI
+	compassTex.loadFromFile("Texture/Misc/compass.png");
 	ball1Tex.loadFromFile("Texture/Misc/ball.png");
 	pointerArrowTex.loadFromFile("Texture/Misc/pointer_arrow.png");
-	stationTex.loadFromFile("Texture/Misc/station.png");
 	pressEnterToDockTex.loadFromFile("Texture/Misc/pressEnterToDock.png");
+	displayMeterTex.loadFromFile("Texture/Misc/spehsGuiMeter.png");
 
 	//Sounds
 	menuButtonHoverBuffer.loadFromFile("Audio/Sound Effects/editor_menu_hover_sound_ver03.wav");//Menu hover
