@@ -61,7 +61,8 @@ ResourceManager::ResourceManager()
 	bullet1Tex.loadFromFile("Texture/Misc/bullet1.png");
 	bullet2Tex.loadFromFile("Texture/Misc/bullet2.png");
 	debris1Tex.loadFromFile("Texture/Misc/debris1.png");
-	stationTex.loadFromFile("Texture/Misc/DockingStation.png");
+	stationMainTex.loadFromFile("Texture/Misc/DockingStation_Main.png");
+	stationDocksTex.loadFromFile("Texture/Misc/DockingStation_Docks.png");
 	//In-game GUI
 	compassTex.loadFromFile("Texture/Misc/compass.png");
 	ball1Tex.loadFromFile("Texture/Misc/ball.png");
@@ -80,7 +81,7 @@ ResourceManager::ResourceManager()
 	turretFireSound.setBuffer(turretFireBuffer);
 	explosionBuffer.loadFromFile("Audio/Sound Effects/explosion_sound_ver04.wav");//Explosion
 	explosionSound.setBuffer(explosionBuffer);
-	thrustingBuffer.loadFromFile("Audio/Sound Effects/engine_sound_ver03.wav");
+	thrustingBuffer.loadFromFile("Audio/Sound Effects/engine_sound_ver03.wav");//Engine
 	thrustingSound.setBuffer(thrustingBuffer);
 
 	//Music

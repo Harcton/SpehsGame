@@ -53,7 +53,8 @@ public:
 	sf::Texture bullet1Tex;
 	sf::Texture bullet2Tex;
 	sf::Texture debris1Tex;
-	sf::Texture stationTex;
+	sf::Texture stationMainTex;
+	sf::Texture stationDocksTex;
 	//Textures-player ship
 	sf::Texture turretPlatformTex;
 	sf::Texture turretRotationEngineTex;

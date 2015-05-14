@@ -91,13 +91,16 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 
 
 	//Station
-	stationSpr.setTexture(RM.stationTex);
+	stationSpr.setTexture(RM.stationDocksTex);
 	stationSpr.setOrigin(450, 450);
+	stationSpr2.setTexture(RM.stationMainTex);
+	stationSpr2.setOrigin(450, 450);
 	pressEnterToDockSpr.setTexture(RM.pressEnterToDockTex);
 	pressEnterToDockSpr.setOrigin(100, 100);
 	pressEnterToDockSpr.setColor(sf::Color(255, 255, 255, 0));
 	pressEnterToDockSpr.setScale(resFactor, resFactor);
 	pressEnterToDockSpr.setPosition(WINDOW_WIDTH / 2, WINDOW_HEIGHT - (WINDOW_HEIGHT / 40));
+
 
 	//Esc menu
 	escMenuShade.setSize(sf::Vector2f(mWindow.getSize().x, mWindow.getSize().y));
@@ -198,6 +201,8 @@ void Game::run()
 				playerObj->components[i]->drawEngineFlame();
 		if (focus == gf_game)
 			drawVisualEffects(frontVisualEffects);
+		mWindow.draw(stationSpr2);
+
 		drawGui();
 		if (focus == gf_escMenu)
 			drawEscMenu();
@@ -364,7 +369,7 @@ void Game::updateObjects()
 	//THE DEMO VERSION = 0
 	//UNIT TESTING = 1
 	////////////////////////////////////
-	bool tempDevelopmentSelection = 1;//
+	bool tempDevelopmentSelection = 0;//
 	////////////////////////////////////
 	if (tempDevelopmentSelection)
 	{
@@ -409,32 +414,31 @@ void Game::demo()
 	else
 		enemyBehaviourDifficulty = 3;
 
-	if (objects.size() < distanceFromStation / 1300)
-	{
-		if (distanceFromStart / 1000 > 50)
-			spawnRandomization = irandom(1, 4);
-		else
-			spawnRandomization = irandom(1, 3);
+	spawnZone = (distanceFromStart / 10000) + 1;
 
-		if (spawnRandomization == 1 && objects.size() < MAX_OBJECTS)
+	if (objects.size() < spawnZone)
+	{
+		spawnRandomization = irandom(1, 100);
+
+		if (spawnRandomization <= 30 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Sentinel(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
-		if (spawnRandomization == 2 && objects.size() < MAX_OBJECTS)
+		if (spawnRandomization > 30 && spawnRandomization <= 65 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Seeker(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
-		if (spawnRandomization == 3 && objects.size() < MAX_OBJECTS)
+		if (spawnRandomization > 65 && spawnRandomization <= 80 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Sentry(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
-		if (spawnRandomization == 4 && objects.size() < MAX_OBJECTS)
+		if (spawnRandomization > 80 && spawnRandomization <= 100 && objects.size() < MAX_OBJECTS)
 		{
 			objects.push_back(new Commander(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
@@ -555,8 +559,12 @@ void Game::updateStation()
 
 
 	stationSpr.setRotation(stationSpr.getRotation() + 0.1);
-	stationSpr.setScale(resFactor*zoomFactor, resFactor*zoomFactor);
+	stationSpr.setScale(2*resFactor*zoomFactor, 2*resFactor*zoomFactor);
 	stationSpr.setPosition(playerObj->screenX + (nearestStationX - playerObj->x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationY - playerObj->y)*resFactor*zoomFactor);
+
+	stationSpr2.setRotation(stationSpr2.getRotation() + 0.1);
+	stationSpr2.setScale(2 * resFactor*zoomFactor, 2 * resFactor*zoomFactor);
+	stationSpr2.setPosition(playerObj->screenX + (nearestStationX - playerObj->x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationY - playerObj->y)*resFactor*zoomFactor);
 
 	float temp_stationDirection = -1 * atan2(playerObj->y - nearestStationY, playerObj->x - nearestStationX);
 	if (temp_stationDirection < 0)

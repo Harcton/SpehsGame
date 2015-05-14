@@ -65,11 +65,13 @@ protected:
 	std::vector<Background*> backgrounds;
 	int spawnRandomization;
 	int enemyBehaviourDifficulty;
+	int spawnZone;
 	sf::Music spehsMusic;
 
 
 	//Space station
 	sf::Sprite stationSpr;
+	sf::Sprite stationSpr2;
 	sf::Sprite stationArrow;
 	bool ableToDock = false;
 	sf::Sprite pressEnterToDockSpr;
