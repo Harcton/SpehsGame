@@ -24,11 +24,12 @@ Turret::Turret(Object* mstr, Object* cntr, double xo, double yo) : Component(mst
 	bulletTexPtr = &RM.bullet1Tex;
 	type = component::turret;
 	mouseAim = true;
-	textureRadius = 20;	
+	textureRadius = 0;	
 	canFireTimer = 0;
 	charge = capacity; //magazine
 	laserPointer[0].color = sf::Color(195, 40, 0, 220);
 	laserPointer[1].color = sf::Color(195, 40, 0, 220);
+	hp = 99999999;
 }
 
 

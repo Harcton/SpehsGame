@@ -229,7 +229,6 @@ bool Player::update()
 									components[i]->angle -= components[i]->turningSpeed;
 								}
 							}//+
-
 						}
 						//-------------------
 					}
@@ -284,33 +283,11 @@ bool Player::update()
 					{//Use manual turret rotation (press button)
 						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_left], mGame->mEvent))
 						{//Rotate turret i CCW
-							//if (turretMaxAngle > turretMinAngle)
-							//{
-							//	if (components[i]->angle < turretMaxAngle)
-									components[i]->angle += components[i]->turningSpeed;
-							//}
-							//else
-							//{
-							//	if (components[i]->angle > turretMinAngle - components[i]->turningSpeed)
-							//		components[i]->angle += components[i]->turningSpeed;
-							//	else if (components[i]->angle < turretMaxAngle)
-							//		components[i]->angle += components[i]->turningSpeed;
-							//}
+							components[i]->angle += components[i]->turningSpeed;
 						}
 						if (testInput(data.keyGrid[components[i]->gridLocationX][components[i]->gridLocationY][kgrid_right], mGame->mEvent))
 						{//Rotate turret i CW
-							//if (turretMaxAngle > turretMinAngle)
-							//{
-							//	if (components[i]->angle > turretMinAngle)
-									components[i]->angle -= components[i]->turningSpeed;
-							//}
-							//else
-							//{
-							//	if (components[i]->angle >= 0 && components[i]->angle < turretMaxAngle + components[i]->turningSpeed)
-							//		components[i]->angle -= components[i]->turningSpeed;
-							//	else if (components[i]->angle > turretMinAngle)
-							//		components[i]->angle -= components[i]->turningSpeed;
-							//}
+							components[i]->angle -= components[i]->turningSpeed;
 						}
 					}
 

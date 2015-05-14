@@ -22,7 +22,7 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 
 	thrusting = false;
 	autoThrusting = false;
-
+	hp = 99999999;
 
 
 	engineFlameSpr.setTexture(RM.engineFireAnimation);
@@ -38,7 +38,7 @@ Engine::Engine(Object* mstr, double xo, double yo) : Component(mstr, mstr, xo, y
 	chargeBar.setOrigin(0, 2);
 
 	type = component::engine;
-	textureRadius = 20;
+	textureRadius = 0;
 	charge = capacity;
 }
 

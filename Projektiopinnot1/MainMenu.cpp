@@ -16,7 +16,7 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	button1Width = int(500 * resFactor);
 	button1Height = int(75 * resFactor);
 	buttonX1 = int((WINDOW_WIDTH - button1Width) * 0.5f);
-	buttonY1 = int((WINDOW_HEIGHT - button1Height * 4)*0.5f);
+	buttonY1 = int(WINDOW_HEIGHT*0.5f);	//buttonY1 = int((WINDOW_HEIGHT - button1Height * 4)*0.5f);
 	buttonBorder = button1Height*0.25f;
 	visibleSaveButtonCount = floor((WINDOW_HEIGHT - buttonY1 - button1Height - 2 * buttonBorder) / float(button1Height));
 	settingsButtonY1 = int((WINDOW_HEIGHT - button1Height * 3)*0.5f);
