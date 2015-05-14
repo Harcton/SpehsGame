@@ -64,6 +64,7 @@ public:
 	virtual sf::RectangleShape& getChargeRectangle(){ return sf::RectangleShape(); }
 	virtual sge::Sprite& getEngineFlameSpr(){ return sge::Sprite(); }
 	virtual void drawEngineFlame(){}
+	virtual void drawLaserPointer(){}
 	virtual bool isThrusting(){ return false; }
 
 	Object* master;

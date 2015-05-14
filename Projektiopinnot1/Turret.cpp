@@ -131,7 +131,6 @@ void Turret::update()
 	{
 		laserPointer[0].position = sf::Vector2f(screenX, screenY);
 		laserPointer[1].position = sf::Vector2f(screenX + cos(angle)*(WINDOW_WIDTH+WINDOW_HEIGHT), screenY - sin(angle)*(WINDOW_WIDTH+WINDOW_HEIGHT));
-		master->mGame->mWindow.draw(laserPointer);
 	}
 
 
@@ -139,7 +138,10 @@ void Turret::update()
 	return;
 }
 
-
+void Turret::drawLaserPointer()
+{
+	master->mGame->mWindow.draw(laserPointer);
+}
 
 void Turret::fire()
 {

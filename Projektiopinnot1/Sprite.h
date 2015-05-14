@@ -25,6 +25,7 @@ namespace sge
 		//Misc
 		void nextFrame();
 		void previousFrame();
+		void restart();
 
 		//Setters
 		void setTexture(sf::Texture&);
@@ -43,6 +44,7 @@ namespace sge
 		void setFrameWidth(int);
 		void setFrameHeight(int);
 		void setVisibility(bool);
+		void setLooping(bool);
 
 		//Getters (update when needed)
 		double getRotation();
@@ -52,6 +54,7 @@ namespace sge
 		
 		bool autoUpdate;
 		bool visible;
+		bool looping;
 
 		int currentHorizontalFrame;
 		int currentVerticalFrame;

@@ -194,10 +194,14 @@ void Game::run()
 			objects[i]->draw();
 		//Engine flames
 		if (focus == gf_game)
+		{
 			for (unsigned int i = 0; i < playerObj->components.size(); i++)
 				playerObj->components[i]->drawEngineFlame();
-		if (focus == gf_game)
+			for (unsigned int i = 0; i < playerObj->components.size(); i++)
+				playerObj->components[i]->drawLaserPointer();
+
 			drawVisualEffects(frontVisualEffects);
+		}
 		drawGui();
 		if (focus == gf_escMenu)
 			drawEscMenu();
@@ -476,24 +480,24 @@ void Game::updateElements()
 	//Station distance
 	distanceSuffix = ' ';
 	convertedDistance = distanceFromStation;
-	if (distanceFromStart > 1000000000000)
+	if (distanceFromStation > 1000000000000)
 	{
-		convertedDistance = distanceFromStart / 1000000000000.0f;
+		convertedDistance = distanceFromStation / 1000000000000.0f;
 		distanceSuffix = 'T';
 	}
-	else if (distanceFromStart > 1000000000)
+	else if (distanceFromStation > 1000000000)
 	{
-		convertedDistance = distanceFromStart / 1000000000.0f;
+		convertedDistance = distanceFromStation / 1000000000.0f;
 		distanceSuffix = 'G';
 	}
-	else if (distanceFromStart > 1000000)
+	else if (distanceFromStation > 1000000)
 	{
-		convertedDistance = distanceFromStart / 1000000.0f;
+		convertedDistance = distanceFromStation / 1000000.0f;
 		distanceSuffix = 'M';
 	}
-	else if (distanceFromStart > 1000)
+	else if (distanceFromStation > 1000)
 	{
-		convertedDistance = distanceFromStart / 1000.0f;
+		convertedDistance = distanceFromStation / 1000.0f;
 		distanceSuffix = 'k';
 	}
 	displayStationText.setString(std::to_string(convertedDistance) + " " + distanceSuffix + "m");

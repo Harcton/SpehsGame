@@ -77,11 +77,17 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 
 
 	//Background
-	menuLogo.setTexture(RM.menuLogoTex);
-	menuLogo.setOrigin(672, 0);
-	menuLogo.setScale(resFactor, resFactor);
-	menuLogo.setPosition(WINDOW_WIDTH/2, 0);
-	menuLogo.setColor(sf::Color(255, 255, 255, 220));
+	menuLogoAnimatedTex.loadFromFile("Texture/Menu/menuLogoAnimated.png");
+	menuLogoAnimated.setTexture(menuLogoAnimatedTex);
+	menuLogoAnimated.setOrigin(350, 0);
+	menuLogoAnimated.setFrameSize(700, 250);
+	menuLogoAnimated.setTilesetSize(5, 4);
+	menuLogoAnimated.setFrameDuration(2);
+	menuLogoAnimated.setPosition(int(WINDOW_WIDTH / 2), 0);
+	menuLogoAnimated.setColor(sf::Color(255, 255, 255, 255));
+	menuLogoAnimated.setScale(2*resFactor, 2*resFactor);
+	menuLogoAnimated.setLooping(false);
+
 
 	for (int i = 0; i < BACKGROUNDSPRITES; i++)
 	{
@@ -343,7 +349,8 @@ void MainMenu::draw()
 
 		//Draw logo based on layer
 		if (logoLayer == i)
-			mWindow.draw(menuLogo);
+			menuLogoAnimated.draw(mWindow);
+
 	}
 
 	if (logoLayer < BACKGROUNDSPRITES - 1)
@@ -714,6 +721,7 @@ void MainMenu::launchGame()
 	introMusic.stop();
 	Game game(mWindow);
 	game.run();
+	menuLogoAnimated.restart();
 	introMusic.setVolume(MUSIC_VOLUME);
 	introMusic.play();
 	focus = mmf_base;

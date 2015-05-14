@@ -11,7 +11,7 @@
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include "SliderButton.h"//includes "Button.h"
-
+#include "Sprite.h"
 
 
 enum MainMenuFocus
@@ -77,7 +77,8 @@ private:
 
 	//Background
 	sf::Sprite planetSpr;
-	sf::Sprite menuLogo;
+	sf::Texture menuLogoAnimatedTex;
+	sge::Sprite menuLogoAnimated;
 	int logoLayer = 0;
 	int logoLayerTimer = 60;
 	std::vector<sf::Sprite> bgSprVector;

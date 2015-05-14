@@ -11,6 +11,7 @@ namespace sge
 	{
 		autoUpdate = true;
 		visible = true;
+		looping = true;
 		currentHorizontalFrame = 0;
 		currentVerticalFrame = 0;
 		horizontalFrames = 1;
@@ -35,6 +36,8 @@ namespace sge
 		}
 
 		animationTimer = frameDuration;
+				
+
 		if (++currentHorizontalFrame >= horizontalFrames)
 		{
 			currentHorizontalFrame = 0;
@@ -42,6 +45,8 @@ namespace sge
 				currentVerticalFrame = 0;
 		}
 		setFrame(currentHorizontalFrame, currentVerticalFrame);
+		if (currentHorizontalFrame == horizontalFrames - 1 && currentVerticalFrame == verticalFrames - 1 && looping == false)
+			autoUpdate = false;//Dont update if not looping
 	}
 	void Sprite::draw(sf::RenderWindow& window)
 	{
@@ -73,6 +78,12 @@ namespace sge
 				currentVerticalFrame = verticalFrames - 1;
 		}
 		setFrame(currentHorizontalFrame, currentVerticalFrame);
+	}
+	void Sprite::restart()
+	{
+		setFrame(0, 0);
+		if (looping == false)
+			autoUpdate = true;
 	}
 
 
@@ -142,6 +153,10 @@ namespace sge
 	void Sprite::setVisibility(bool setting)
 	{
 		visible = setting;
+	}
+	void Sprite::setLooping(bool setting)
+	{
+		looping = setting;
 	}
 
 
