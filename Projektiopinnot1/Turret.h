@@ -20,6 +20,7 @@ public:
 	bool alive();
 	//void fixAngle();
 
+	void drawLaserPointer();
 	//Virtual getters
 	void setLaserPointerColor(sf::Color&& c);
 
