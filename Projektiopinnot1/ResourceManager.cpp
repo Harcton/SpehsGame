@@ -77,6 +77,8 @@ ResourceManager::ResourceManager()
 	menuUpgradeSound.setBuffer(menuUpgradeBuffer);
 	menuClickBuffer.loadFromFile("Audio/Sound Effects/menu_select_sound_ver02.wav");//Menu Select
 	menuClickSound.setBuffer(menuClickBuffer);
+	enterMenuBuffer.loadFromFile("Audio/Sound Effects/enter_menu_sound_ver00.wav");//Enter Menu
+	enterMenuSound.setBuffer(enterMenuBuffer);
 	turretFireBuffer.loadFromFile("Audio/Sound Effects/turret_fire_sound_ver01.wav");//Turret
 	turretFireSound.setBuffer(turretFireBuffer);
 	explosionBuffer.loadFromFile("Audio/Sound Effects/explosion_sound_ver04.wav");//Explosion
@@ -96,6 +98,7 @@ void ResourceManager::updateVolumeLevels()
 	menuButtonHoverSound.setVolume(SFX_VOLUME);
 	menuUpgradeSound.setVolume(SFX_VOLUME);
 	menuClickSound.setVolume(SFX_VOLUME);
+	enterMenuSound.setVolume(SFX_VOLUME);
 	turretFireSound.setVolume(SFX_VOLUME);
 	explosionSound.setVolume(SFX_VOLUME);
 	thrustingSound.setVolume(SFX_VOLUME);

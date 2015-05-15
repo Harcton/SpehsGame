@@ -101,6 +101,7 @@ bool Flier::update()
 
 void Flier::AIupdate()
 {
+	//Special cases
 	if (state == state_victory)
 	{
 		follow = false;
@@ -137,13 +138,12 @@ void Flier::AIupdate()
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
-		state = state_active;
-
-		if (stationDistance < 2000)
+		if (stationDistance < 3000)
 		{
 			fleeing = true;
 			return;
 		}
+		state = state_active;
 
 		follow = true;
 		if (rotationDirection == true)
@@ -178,6 +178,11 @@ void Flier::AIupdate()
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		if (stationDistance < 3000)
+		{
+			fleeing = true;
+			return;
+		}
 		state = state_detected;
 
 		if (initiateAssault == false)

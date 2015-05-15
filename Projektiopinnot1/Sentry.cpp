@@ -143,13 +143,12 @@ void Sentry::AIupdate()
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
-		state = state_active;
-
-		if (stationDistance < 2000)
+		if (stationDistance < 3000)
 		{
 			fleeing = true;
 			return;
 		}
+		state = state_active;
 
 		if (rotationDirection)
 		{
@@ -203,6 +202,11 @@ void Sentry::AIupdate()
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		if (stationDistance < 3000)
+		{
+			fleeing = true;
+			return;
+		}
 		state = state_detected;
 
 		follow = true;

@@ -126,7 +126,7 @@ Game::Game(sf::RenderWindow& w) : mWindow(w)
 
 
 	//Background music
-	spehsMusic.openFromFile("Audio/Music and Ambience/spehs_ambience_ver00.wav");
+	spehsMusic.openFromFile("Audio/Music and Ambience/spehs_music_ver01.wav");
 	spehsMusic.setVolume(MUSIC_VOLUME);
 	spehsMusic.play();
 	spehsMusic.setLoop(true);
@@ -349,7 +349,11 @@ void Game::updateBackgrounds()
 	if (backgrounds.size() < MAX_BACKGROUNDS)
 	{
 		backgrounds.push_back(new Background(mWindow, this, backgrounds));
-		backgrounds.back()->update();
+		backgrounds.back()->updateBackground();
+	}
+	for (unsigned int i = 0; i < backgrounds.size(); i++)
+	{
+		backgrounds[i]->updateBackground();
 	}
 }
 
@@ -419,7 +423,7 @@ void Game::demo()
 
 	spawnZone = (distanceFromStart / 10000) + 1;
 
-	if (objects.size() < spawnZone)
+	if (objects.size() < spawnZone && distanceFromStation > SPAWN_RANGE)
 	{
 		spawnRandomization = irandom(1, 100);
 

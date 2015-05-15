@@ -13,10 +13,12 @@ public:
 	bool update();
 	void AIupdate();
 	void dodgeMove(const double, const double);
+	void flee();
 	void animationHandler(AnimationID);
 
 private:
 	bool dodging;
+	bool fleeing;
 	bool explosionLimiter;
 	int dodgeCounter;
 	int activationCounter;

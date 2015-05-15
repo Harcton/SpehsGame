@@ -14,7 +14,8 @@ public:
 	bool updateBackground();
 
 private:
-	std::vector<Background*>& homeVector;
+	std::vector<Background*>& homeVector; //this doesn't do anything I think
+	double distanceFromPlayer;
 };
 
 #endif

@@ -13,6 +13,7 @@ Seeker::Seeker(sf::RenderWindow& windowref, Game* game, int behaviourLevel) : En
 	angle = playerDirection;
 	explosionLimiter = false;
 	dodging = false;
+	fleeing = false;
 	aggroRange = 1500 + enemyBehaviourLevel*2;
 	maxActionRange = 700;
 	closeRange = 150;
@@ -118,6 +119,12 @@ void Seeker::AIupdate()//maybe not follow true all the time
 
 		dodgeMove(xSpeed, ySpeed);
 	}
+	else if (fleeing)
+	{
+		state = state_fleeing;
+
+		flee();
+	}
 	else if (distance < closeRange) //Close state
 	{
 		state = state_closeRange;
@@ -138,7 +145,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 					if (state != memoryState)
 					{
 						//explosion animation
-						mGame->frontVisualEffects.push_back(VisualEffect(RM.explosion1Tex, x, y, 2, 9));
+						mGame->frontVisualEffects.push_back(VisualEffect(RM.explosion1Tex, x, y, 1, 9));
 						mGame->frontVisualEffects.back().setFrameSize(200, 200);
 						mGame->frontVisualEffects.back().setTilesetSize(3, 3);
 						mGame->frontVisualEffects.back().setOrigin(100, 100);
@@ -154,6 +161,11 @@ void Seeker::AIupdate()//maybe not follow true all the time
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
+		if (stationDistance < 3000)
+		{
+			fleeing = true;
+			return;
+		}
 		state = state_active;
 		if (state != memoryState)
 		{
@@ -175,6 +187,11 @@ void Seeker::AIupdate()//maybe not follow true all the time
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		if (stationDistance < 3000)
+		{
+			fleeing = true;
+			return;
+		}
 		if (activationCounter < 0)
 			state = state_detected;
 		if (state != memoryState)
@@ -237,6 +254,15 @@ void Seeker::dodgeMove(const double tempXSpeed, const double tempYSpeed)
 			ySpeed += accelerationConstant * 6*enemyBehaviourLevel;
 	}
 	turnSpeed += turnAccelerationConstant * enemyBehaviourLevel;
+}
+
+
+void Seeker::flee()
+{
+	follow = false;
+	negFollow = true;
+	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
+	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
 }
 
 

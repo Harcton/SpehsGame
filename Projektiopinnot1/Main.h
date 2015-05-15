@@ -21,7 +21,7 @@
 
 #define PI 3.14159265
 #define SPAWN_RANGE 2800
-#define DESPAWN_RANGE 4000
+#define DESPAWN_RANGE 5000
 #define STATION_INTERVAL 40000
 
 //Container limits

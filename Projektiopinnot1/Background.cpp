@@ -1,4 +1,5 @@
 #include "Main.h"
+#include "Game.h"
 #include "Background.h"
 
 
@@ -15,7 +16,7 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 	spr.setTexture(RM.sky1Tex);
 	spr.setOrigin(50, 50);
 	angle = (irandom(0, 360)/double(360)) * (2*PI);
-	scale = double(irandom(400, 650) + 100) / 100;
+	scale = double(irandom(250, 650) + 100) / 100;
 	turnSpeed = irandom(-1, 1)*0.1 / double(360);
 
 	hasCollisionChecks = false;
@@ -24,8 +25,8 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 	//Randomize x/y
 	float tempLocator = irandom(0, 359) * (PI / 180.0f);
 
-	x = centerObj->x + (DESPAWN_RANGE-200) * cos(tempLocator);
-	y = centerObj->y + (DESPAWN_RANGE-200) * sin(tempLocator);
+	x = centerObj->x + (DESPAWN_RANGE) * cos(tempLocator);
+	y = centerObj->y + (DESPAWN_RANGE) * sin(tempLocator);
 	/*if (flipCoin())
 		x = centerObj->x + irandom(-SPAWN_RANGE, SPAWN_RANGE);
 	else
@@ -43,5 +44,13 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 
 bool Background::updateBackground()
 {
+	distanceFromPlayer = abs(getDistance(this->x, this->y, mGame->playerObj->x, mGame->playerObj->y)/4 - DESPAWN_RANGE/4);
+	if (distanceFromPlayer > 255)
+		distanceFromPlayer = 255;
+
+	//std::cout << distanceFromPlayer << std::endl;
+
+	spr.setColor(sf::Color(100, 100, 100, distanceFromPlayer));
+
 	return Object::update();
 }

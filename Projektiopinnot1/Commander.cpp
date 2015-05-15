@@ -27,16 +27,6 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	//Reserve memory for each component
 	components.reserve(11);
 	//-9
-	components.push_back(new Component(this, mGame->playerObj, -325, -100)); //Component 3 (REAR)
-	components.back()->sprites.push_back(sf::Sprite());
-	components.back()->sprites.back().setTexture(RM.commanderTex);
-	components.back()->sprites.back().setOrigin(100, 100);
-	components.back()->sprites.back().setTextureRect(sf::IntRect(0, 300, 200, 200));
-	components.back()->textureRadius = 100;
-
-	components.back()->hp = 80 + (enemyBehaviourLevel * 15);
-	components.back()->maxHp = components.back()->hp;
-	//-8
 	components.push_back(new Component(this, mGame->playerObj, -300, -50)); //Component 5 (R-REAR WING)
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.commanderTex);
@@ -46,7 +36,7 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 
 	components.back()->hp = 50 + (enemyBehaviourLevel * 15);
 	components.back()->maxHp = components.back()->hp;
-	//-7
+	//-8
 	components.push_back(new Component(this, mGame->playerObj, -300, -150)); //Component 4 (L-REAR WING)
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.commanderTex);
@@ -55,6 +45,16 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components.back()->textureRadius = 100;
 
 	components.back()->hp = 50 + (enemyBehaviourLevel * 15);
+	components.back()->maxHp = components.back()->hp;
+	//-7
+	components.push_back(new Component(this, mGame->playerObj, -325, -100)); //Component 3 (REAR)
+	components.back()->sprites.push_back(sf::Sprite());
+	components.back()->sprites.back().setTexture(RM.commanderTex);
+	components.back()->sprites.back().setOrigin(100, 100);
+	components.back()->sprites.back().setTextureRect(sf::IntRect(0, 300, 200, 200));
+	components.back()->textureRadius = 100;
+
+	components.back()->hp = 80 + (enemyBehaviourLevel * 15);
 	components.back()->maxHp = components.back()->hp;
 	//-6
 	components.push_back(new Component(this, mGame->playerObj, -200, -50)); //Component 7 (R-CORE WING)
@@ -120,11 +120,11 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components[components.size() - 2]->childComponents.push_back(components.back()->id); //TANK TO CORE
 	components[components.size() - 2]->childComponents.push_back(components[components.size() - 6]->id); //R-CORE WING TO CORE
 	components[components.size() - 2]->childComponents.push_back(components[components.size() - 5]->id); //L-CORE WING TO CORE
-	components[components.size() - 2]->childComponents.push_back(components[components.size() - 9]->id); //REAR TO CORE
+	components[components.size() - 2]->childComponents.push_back(components[components.size() - 7]->id); //REAR TO CORE
 	components.back()->childComponents.push_back(components[components.size() - 4]->id); //R-FRONT WING TO TANK
 	components.back()->childComponents.push_back(components[components.size() - 3]->id); //L-FRONT WING TO TANK
-	components[components.size() - 5]->childComponents.push_back(components[components.size() - 7]->id); //L-REAR WING TO L-CORE WING
-	components[components.size() - 6]->childComponents.push_back(components[components.size() - 8]->id); //R-REAR WING TO R-CORE WING
+	components[components.size() - 5]->childComponents.push_back(components[components.size() - 8]->id); //L-REAR WING TO L-CORE WING
+	components[components.size() - 6]->childComponents.push_back(components[components.size() - 9]->id); //R-REAR WING TO R-CORE WING
 
 	components.push_back(new Turret(this, centerObj, -200, -150));
 	components[components.size() - 5]->childComponents.push_back(components.back()->id);
@@ -211,14 +211,13 @@ void Commander::AIupdate()//maybe not follow true all the time
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
-		state = state_active;
-
-		if (stationDistance < 3200)
+		if (stationDistance < 3000)
 		{
 			fleeing = true;
 			return;
 		}
-
+		state = state_active;
+		
 		follow = true;
 		xSpeed += (cos(angle))*accelerationConstant;
 		ySpeed += (sin(angle))*accelerationConstant;
@@ -231,6 +230,11 @@ void Commander::AIupdate()//maybe not follow true all the time
 	}
 	else if (distance > maxActionRange && distance < aggroRange) //Detection state
 	{
+		if (stationDistance < 3000)
+		{
+			fleeing = true;
+			return;
+		}
 		state = state_detected;
 
 		follow = true;

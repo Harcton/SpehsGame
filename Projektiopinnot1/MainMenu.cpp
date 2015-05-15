@@ -70,7 +70,7 @@ MainMenu::MainMenu(sf::RenderWindow& window) : mWindow(window)
 	
 
 	//Intro music
-	introMusic.openFromFile("Audio/Music and Ambience/main_menu_ver03.wav");
+	introMusic.openFromFile("Audio/Music and Ambience/main_menu_ver06.wav");
 	introMusic.setVolume(MUSIC_VOLUME);
 	introMusic.play();
 	introMusic.setLoop(true);
@@ -722,6 +722,7 @@ void MainMenu::launchGame()
 	Game game(mWindow);
 	game.run();
 	menuLogoAnimated.restart();
+	RM.enterMenuSound.play();
 	introMusic.setVolume(MUSIC_VOLUME);
 	introMusic.play();
 	focus = mmf_base;

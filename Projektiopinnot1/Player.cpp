@@ -312,16 +312,16 @@ bool Player::update()
 
 
 	if (abs(xAcceleration) > 1)
-		xAccVariable = xAccVariable * 0.999;
+		xAccVariable = xAccVariable * 0.9999;
 	else
-		xAccVariable = xAccVariable * 1.01;
+		xAccVariable = xAccVariable * 1.001;
 	if (abs(xAccVariable) > 1)
 		xAccVariable = 1;
 
 	if (abs(yAcceleration) > 1)
-		yAccVariable = yAccVariable*0.999;
+		yAccVariable = yAccVariable*0.9999;
 	else
-		yAccVariable = yAccVariable * 1.01;
+		yAccVariable = yAccVariable * 1.001;
 	if (abs(yAccVariable) > 1)
 		yAccVariable = 1;
 
@@ -343,11 +343,11 @@ bool Player::update()
 	//ACCELERATING
 	else
 	{
-		scrSpeedX += (((relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.2))*zoomFactor);
+		scrSpeedX += (((relativeSpeedX * abs(relativeSpeedX)) * (xScreenDistance*0.05))*zoomFactor);
 		//scrSpeedX = scrSpeedX * xAccVariable;
 	}
-	/*std::cout << "scrSpeedX: " << scrSpeedX << std::endl;
-	std::cout << "xAccVariable: " << xAccVariable << std::endl;*/
+	//std::cout << "scrSpeedX: " << scrSpeedX << std::endl;
+	//std::cout << "xAccVariable: " << xAccVariable << std::endl;
 
 	//Y
 	//NOT ACCELERATING
@@ -362,7 +362,7 @@ bool Player::update()
 	//ACCELERATING
 	else
 	{
-		scrSpeedY += (((relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.2))*zoomFactor);
+		scrSpeedY += (((relativeSpeedY * abs(relativeSpeedY)) * (yScreenDistance*0.05))*zoomFactor);
 		//scrSpeedY = scrSpeedY * yAccVariable;
 	}
 	/*std::cout << "scrSpeedY: " << scrSpeedY << std::endl;
