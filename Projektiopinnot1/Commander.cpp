@@ -18,10 +18,10 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	aggroRange = 2500;
 	maxActionRange = 2300;
 	closeRange = 1000;
-	maxTurnSpeedLimit = 0.001;
-	maxSpeedLimit = 0.1;
-	accelerationConstant = 0.05;
-	turnAccelerationConstant = 0.0003;
+	maxTurnSpeedLimit = 0.005;
+	maxSpeedLimit = 0.5;
+	accelerationConstant = 0.1;
+	turnAccelerationConstant = 0.0005;
 	closeAngle = 0.001;
 
 	//Reserve memory for each component
@@ -207,6 +207,12 @@ void Commander::AIupdate()//maybe not follow true all the time
 							components[i]->fire();
 							shootingCounter = irandom(-30, -10);
 						}
+		}
+
+		if (releaseFlier >(90 / ((enemyBehaviourLevel + 10) / 10)))
+		{
+			launchFliers();
+			releaseFlier = 0;
 		}
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state

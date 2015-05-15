@@ -445,7 +445,7 @@ void Game::demo()
 			objects.back()->setRandomLocation();
 			objects.back()->update();
 		}
-		if (spawnRandomization > 80 && spawnRandomization <= 100 && objects.size() < MAX_OBJECTS)
+		if (spawnRandomization > 80 && spawnRandomization <= 100 && objects.size() < MAX_OBJECTS && spawnZone > 5)
 		{
 			objects.push_back(new Commander(mWindow, this, enemyBehaviourDifficulty));
 			objects.back()->setRandomLocation();
