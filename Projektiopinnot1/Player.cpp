@@ -831,9 +831,9 @@ void Player::setTurretLooks(int gx, int gy)
 	components.back()->sprites.back().setOrigin(50, 50);
 	components.back()->sprites.back().setTextureRect(sf::IntRect((data.grid[gx][gy].rechargeSpeed - 1) * 100, 0, 100, 100));
 	//Magazine
-	components.back()->magazineSpr = sf::Sprite();
-	components.back()->magazineSpr.setTexture(RM.turretMagazineTex);
-	components.back()->magazineSpr.setTextureRect(sf::IntRect((data.grid[gx][gy].capacity - 1) * 100, 0, 100, 100));
+	components.back()->getMagazineSpr() = sf::Sprite();
+	components.back()->getMagazineSpr().setTexture(RM.turretMagazineTex);
+	components.back()->getMagazineSpr().setTextureRect(sf::IntRect((data.grid[gx][gy].capacity - 1) * 100, 0, 100, 100));
 	//Barrel
 	components.back()->sprites.push_back(sf::Sprite());
 	components.back()->sprites.back().setTexture(RM.turretBarrelTex);
@@ -908,29 +908,33 @@ void Player::setTurretStats(int gx, int gy)
 	{//Damage
 	case 1:
 		components.back()->damage = 10;
+		components.back()->setBulletTexPtr(&RM.bullet1Tex);
 		break;
 	case 2:
 		components.back()->damage = 20;
 		components.back()->capacity = ceil(components.back()->capacity*0.7f);
 		components.back()->fireRateInterval = 40;
+		components.back()->setBulletTexPtr(&RM.bullet2Tex);
 		break;
 	case 3:
 		components.back()->damage = 30;
 		components.back()->capacity = ceil(components.back()->capacity*0.5f);
 		components.back()->fireRateInterval = 60;
+		components.back()->setBulletTexPtr(&RM.bullet3Tex);
 		break;
 	case 4:
 		components.back()->damage = 60;
 		components.back()->chargeConsumption = 2;
 		components.back()->capacity = ceil(components.back()->capacity*0.5f);
 		components.back()->fireRateInterval = 90;
+		components.back()->setBulletTexPtr(&RM.bullet4Tex);
 		break;
 	case 5:
 		components.back()->damage = 100;
 		components.back()->chargeConsumption = 3;
 		components.back()->capacity = ceil(components.back()->capacity*0.4f);
-		components.back()->bulletTexPtr = &RM.bullet2Tex;
 		components.back()->fireRateInterval = 120;
+		components.back()->setBulletTexPtr(&RM.bullet5Tex);
 		break;
 	}
 	switch (data.grid[gx][gy].bulletSpeed)

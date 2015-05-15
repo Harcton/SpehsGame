@@ -50,8 +50,12 @@ public:
 	sf::Texture menuLogoTex;
 	sf::Texture sky1Tex;
 	sf::Texture sky2Tex;
+	sf::Texture sky3Tex;
 	sf::Texture bullet1Tex;
 	sf::Texture bullet2Tex;
+	sf::Texture bullet3Tex;
+	sf::Texture bullet4Tex;
+	sf::Texture bullet5Tex;
 	sf::Texture debris1Tex;
 	sf::Texture stationMainTex;
 	sf::Texture stationDocksTex;

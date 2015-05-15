@@ -149,7 +149,8 @@ bool Object::update()
 
 	//Bullet update
 	if (isBullet != 0)
-		isBulletUpdate();
+		if (isBulletUpdate() == false)
+			return false;
 
 
 
@@ -221,7 +222,7 @@ bool Object::isBulletUpdate()
 		mGame->objects[i]->checkBulletCollision(this);
 		}
 
-	if (getDistance(0, 0, xSpeed, ySpeed) < 0.1)
+	if (isBullet == 0)
 		return false;
 	return true;
 }
@@ -288,8 +289,6 @@ void Object::checkBulletCollision(Object* b)
 			{
 				components[i]->hp -= b->isBullet;
 				b->isBullet = 0;
-				x += 6 * cos(angle);
-				y += -6 * sin(angle);
 			}
 
 			//Bounce

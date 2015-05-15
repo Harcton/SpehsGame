@@ -12,12 +12,29 @@ Background::~Background()
 }
 Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Background*>& hw) : homeVector(hw), Object(windowref, game)
 {
-	/*std::cout << "\nConstructing background...";*/
-	spr.setTexture(RM.sky1Tex);
 	spr.setOrigin(50, 50);
 	angle = (irandom(0, 360)/double(360)) * (2*PI);
-	scale = double(irandom(250, 650) + 100) / 100;
-	turnSpeed = irandom(-1, 1)*0.1 / double(360);
+	switch (irandom(0, 5))
+	{
+	case 0:
+	case 1:
+	case 2:
+		spr.setTexture(RM.sky1Tex);
+		turnSpeed = (1 - irandom(0, 1)*2)*0.1 / double(360);
+		scale = double(irandom(250, 650) + 100) / 100;
+		break;
+	case 3:
+	case 4:
+		spr.setTexture(RM.sky2Tex);
+		turnSpeed = (1 - irandom(0, 1) * 2)*0.01 / double(360);
+		scale = double(irandom(200, 450) + 100) / 100;
+		break;
+	case 5:
+		spr.setTexture(RM.sky3Tex);
+		turnSpeed = (1 - irandom(0, 1) * 2)*0.01 / double(360);
+		scale = double(irandom(200, 450) + 100) / 100;
+		break;
+	}
 
 	hasCollisionChecks = false;
 

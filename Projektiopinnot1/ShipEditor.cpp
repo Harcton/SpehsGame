@@ -354,11 +354,6 @@ int ShipEditor::run()
 
 	while (keepRunning == 1)
 	{
-		////Return/quit
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gettingUserInput == false)
-		//	keepRunning = false;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-			playerData.money++;
 
 		clickTimer++;
 

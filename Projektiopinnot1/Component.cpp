@@ -211,7 +211,6 @@ void Component::update()
 
 void Component::draw()
 {
-	master->mWindow.draw(magazineSpr);
 	if (sprites.size() > 0)
 		for (unsigned int i = 0; i < sprites.size(); i++)
 			master->mWindow.draw(sprites[i]);

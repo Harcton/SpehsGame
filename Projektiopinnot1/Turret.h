@@ -18,15 +18,21 @@ public:
 	void reload();
 	void update();
 	bool alive();
+	void draw();
 	//void fixAngle();
 
 	void drawLaserPointer();
-	//Virtual getters
+	//Virtual functions
 	void setLaserPointerColor(sf::Color&& c);
+	void setBulletTexPtr(sf::Texture*);
+	sf::Sprite& getMagazineSpr();
+
 
 private:
 	int canFireTimer;
 	sf::VertexArray laserPointer;
+	sf::Sprite magazineSpr;
+	sf::Texture* bulletTexPtr;
 
 	double turretMinAngle;
 	double turretMaxAngle;

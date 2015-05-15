@@ -138,6 +138,12 @@ void Turret::update()
 	return;
 }
 
+void Turret::draw()
+{
+	master->mGame->mWindow.draw(magazineSpr);
+	Component::draw();
+}
+
 void Turret::drawLaserPointer()
 {
 	master->mGame->mWindow.draw(laserPointer);
@@ -183,4 +189,14 @@ void Turret::setLaserPointerColor(sf::Color&& c)
 {
 	laserPointer[0].color = c;
 	laserPointer[1].color = c;
+}
+
+void Turret::setBulletTexPtr(sf::Texture* texPtr)
+{
+	bulletTexPtr = texPtr;
+}
+
+sf::Sprite& Turret::getMagazineSpr()
+{
+	return magazineSpr;
 }

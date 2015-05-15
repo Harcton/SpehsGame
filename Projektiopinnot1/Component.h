@@ -66,6 +66,8 @@ public:
 	virtual void drawEngineFlame(){}
 	virtual void drawLaserPointer(){}
 	virtual bool isThrusting(){ return false; }
+	virtual void setBulletTexPtr(sf::Texture*){}
+	virtual sf::Sprite& getMagazineSpr(){ return sf::Sprite(); }
 
 	Object* master;
 	Object* centerObj;
@@ -111,8 +113,6 @@ protected:
 	//Turret 
 	sf::Sprite turretPlatform;
 	float turretPlatformAngle = -1;
-	sf::Sprite magazineSpr;
-	sf::Texture* bulletTexPtr;
 
 	bool mouseAim;
 	bool mouseAimRelativeToCenter;

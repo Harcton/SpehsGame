@@ -57,9 +57,14 @@ ResourceManager::ResourceManager()
 	//BACKGROUNDS
 	sky1Tex.loadFromFile("Texture/Background/sky.png");
 	sky2Tex.loadFromFile("Texture/Background/sky2.png");
-	//MISC
+	sky3Tex.loadFromFile("Texture/Background/sky3.png");
+	//Bullets
 	bullet1Tex.loadFromFile("Texture/Misc/bullet1.png");
 	bullet2Tex.loadFromFile("Texture/Misc/bullet2.png");
+	bullet3Tex.loadFromFile("Texture/Misc/bullet3.png");
+	bullet4Tex.loadFromFile("Texture/Misc/bullet4.png");
+	bullet5Tex.loadFromFile("Texture/Misc/bullet5.png");
+	//MISC
 	debris1Tex.loadFromFile("Texture/Misc/debris1.png");
 	stationMainTex.loadFromFile("Texture/Misc/DockingStation_Main.png");
 	stationDocksTex.loadFromFile("Texture/Misc/DockingStation_Docks.png");
