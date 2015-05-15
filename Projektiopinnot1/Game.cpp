@@ -559,18 +559,18 @@ void Game::updateStation()
 	nearestStationY = round(playerObj->y / STATION_INTERVAL)*STATION_INTERVAL;
 
 	//Check if player is in range and if enter key is pressed
-	if (distanceFromStation < 450)
+	if (distanceFromStation <= 600)
 		ableToDock = true;
 	else
 		ableToDock = false;
 
 
-	stationSpr.setRotation(stationSpr.getRotation() + 0.1);
-	stationSpr.setScale(2*resFactor*zoomFactor, 2*resFactor*zoomFactor);
+	stationSpr.setRotation(stationSpr.getRotation() + 0.05);
+	stationSpr.setScale(1.7*resFactor*zoomFactor, 1.7*resFactor*zoomFactor);
 	stationSpr.setPosition(playerObj->screenX + (nearestStationX - playerObj->x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationY - playerObj->y)*resFactor*zoomFactor);
 
-	stationSpr2.setRotation(stationSpr2.getRotation() + 0.1);
-	stationSpr2.setScale(2 * resFactor*zoomFactor, 2 * resFactor*zoomFactor);
+	stationSpr2.setRotation(stationSpr2.getRotation() + 0.05);
+	stationSpr2.setScale(1.7 * resFactor*zoomFactor, 1.7 * resFactor*zoomFactor);
 	stationSpr2.setPosition(playerObj->screenX + (nearestStationX - playerObj->x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationY - playerObj->y)*resFactor*zoomFactor);
 
 	float temp_stationDirection = -1 * atan2(playerObj->y - nearestStationY, playerObj->x - nearestStationX);

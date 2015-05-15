@@ -478,8 +478,8 @@ void Player::loadPlayerData()
 void Player::applyPlayerData()
 {
 	angle = 0;
-	x = data.spehsX;
-	y = data.spehsY;
+	x = round(data.spehsX / STATION_INTERVAL)*STATION_INTERVAL + PLAYERSPAWN_DISTANCE;
+	y = round(data.spehsY / STATION_INTERVAL)*STATION_INTERVAL;
 
 	while (!components.empty())
 	{
@@ -1081,8 +1081,6 @@ void Player::editShip()
 	{
 	case 0:
 	{
-		data.spehsX = x;
-		data.spehsY = y;
 		//Player exits with return to spehs
 		applyPlayerData();
 		loadKeybindings();

@@ -23,6 +23,7 @@
 #define SPAWN_RANGE 2800
 #define DESPAWN_RANGE 5000
 #define STATION_INTERVAL 40000
+#define PLAYERSPAWN_DISTANCE 600
 
 //Container limits
 #define MAX_OBJECTS 200
@@ -37,7 +38,7 @@
 #define TURRET_COST 20
 #define ENGINE_COST 15
 #define SKELETON_COST 10
-#define STARTING_MONEY SKELETON_COST*8 + TURRET_COST*2
+#define STARTING_MONEY 360
 
 //Ship core keys
 #define key_turnRight 0.2
