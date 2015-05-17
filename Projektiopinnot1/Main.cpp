@@ -58,6 +58,7 @@ void main()
 
 		mWindow.setFramerateLimit(60);
 		mWindow.setMouseCursorVisible(true);
+		mWindow.setJoystickThreshold(5);
 		sf::Image icon;
 		icon.loadFromFile("Texture/Misc/icon.png");
 		mWindow.setIcon(32, 32, icon.getPixelsPtr());

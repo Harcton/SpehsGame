@@ -251,7 +251,11 @@ void Game::pollEvents()
 				break;
 			case sf::Keyboard::Return:
 				if (ableToDock)
+				{
+					playerObj->dataPtr->spehsX = nearestStationX;
+					playerObj->dataPtr->spehsY = nearestStationY;
 					playerObj->editShip();
+				}
 				break;
 			}
 			break;
