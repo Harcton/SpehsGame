@@ -387,7 +387,22 @@ bool Player::update()
 	updateComponents();
 	//////////////
 
+	if (components.size() == 0)
+	{
+		if (xSpeed > 0)
+			xSpeed--;
+		else if (xSpeed < 0)
+			xSpeed++;
+		if (xSpeed >-1 && xSpeed < 1)
+			xSpeed = 0;
 
+		if (ySpeed > 0)
+			ySpeed--;
+		else if (ySpeed < 0)
+			ySpeed++;
+		if (ySpeed >-1 && ySpeed < 1)
+			ySpeed = 0;
+	}
 
 	//Update engine sound
 	bool temp_thrusting = false;

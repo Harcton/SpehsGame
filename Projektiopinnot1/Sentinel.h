@@ -21,7 +21,6 @@ private:
 	bool dodging;
 	bool repositioning;
 	bool fleeing;
-	int dodgeCounter;
 	int repositionCounter;
 	int laserCounter;
 	int rotationCounter;

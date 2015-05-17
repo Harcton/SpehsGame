@@ -17,10 +17,10 @@ Sentinel::Sentinel(sf::RenderWindow& windowref, Game* game, int behaviourLevel) 
 	maxActionRange = 600;
 	closeRange = 350;
 	maxTurnSpeedLimit = 0.05;
-	maxSpeedLimit = 8;
-	accelerationConstant = 0.8;
+	maxSpeedLimit = 4;
+	accelerationConstant = 1.2;
 	turnAccelerationConstant = 0.01;
-	closeAngle = 0.002;
+	closeAngle = 0.001;
 
 	//Reserve memory for all of the components
 	components.reserve(1);
@@ -49,12 +49,6 @@ bool Sentinel::update()
 	}
 
 	//Counters
-	dodgeCounter--;
-	if (dodgeCounter < 0)
-	{
-		negFollow = false;
-		dodging = false;
-	}
 
 	laserCounter++;
 
@@ -107,8 +101,9 @@ void Sentinel::AIupdate()
 	if (state == state_victory)
 	{
 		follow = false;
-		xSpeed += cos(angle)*accelerationConstant;
-		ySpeed += sin(angle)*accelerationConstant;
+		xSpeed += cos(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		ySpeed += sin(2  * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
+		turnSpeed -= irandom(-1, 1)*turnAccelerationConstant;
 		return;
 	}
 
@@ -117,7 +112,10 @@ void Sentinel::AIupdate()
 	{
 		state = state_dodging;
 
-		dodgeMove();
+		rotationCounter = 0;
+		xSpeed = (2 * PI -sin(angle))*maxSpeedLimit / 2;
+		ySpeed = (2 * PI - cos(angle))*maxSpeedLimit / 2;
+		dodging = false;
 	}
 	else if (repositioning)
 	{
@@ -138,6 +136,13 @@ void Sentinel::AIupdate()
 		follow = true;
 		xSpeed += -(cos(2 * PI - angle))*accelerationConstant;
 		ySpeed += -(sin(2 * PI - angle))*accelerationConstant;
+		if (components.size() > 0)
+		{
+			if (HPMemory > components[0]->hp && follow == true)
+			{
+				dodging = true;
+			}
+		}
 	}
 	else if (distance > closeRange && distance < maxActionRange) //Active state
 	{
@@ -154,9 +159,7 @@ void Sentinel::AIupdate()
 			{
 				if (HPMemory > components[0]->hp && follow == true)
 				{
-					follow = false;
 					dodging = true;
-					dodgeCounter = 30;
 				}
 			}
 			
@@ -174,9 +177,7 @@ void Sentinel::AIupdate()
 			{
 				if (HPMemory > components[0]->hp && follow == true)
 				{
-					follow = false;
 					dodging = true;
-					dodgeCounter = 30;
 				}
 			}
 			else
@@ -220,78 +221,6 @@ void Sentinel::AIupdate()
 		ySpeed += sin(2 * PI - angle)*accelerationConstant*irandom(0.9, 1.1);
 		turnSpeed += irandom(-1, 1)*turnAccelerationConstant;
 	}
-}
-
-
-void Sentinel::dodgeMove()
-{//work very much in progress over here!
-	//check player acceleration
-
-	follow = false;
-	negFollow = true;
-	xSpeed += (cos(2 * PI - angle))*accelerationConstant;
-	ySpeed += (sin(2 * PI - angle))*accelerationConstant;
-
-	//if (angle >= 0 && angle < PI / 2) //1st quarter
-	//{
-	//	if (rotationDirection)
-	//	{
-	//		turnSpeed += turnAccelerationConstant;
-	//		xSpeed += (sin(angle))*accelerationConstant;
-	//		ySpeed += (cos(angle))*accelerationConstant;
-	//	}
-	//	else if (!rotationDirection)
-	//	{
-	//		turnSpeed -= turnAccelerationConstant;
-	//		xSpeed += (sin(angle))*accelerationConstant;
-	//		ySpeed += (cos(angle))*accelerationConstant;
-	//	}
-	//}
-	//else if (angle >= PI / 2 && angle < PI) //2nd quarter
-	//{
-	//	if (rotationDirection)
-	//	{
-	//		turnSpeed += turnAccelerationConstant;
-	//		xSpeed += (sin(angle))*accelerationConstant;
-	//		ySpeed += (-cos(angle))*accelerationConstant;
-	//	}
-	//	else if (!rotationDirection)
-	//	{
-	//		turnSpeed -= turnAccelerationConstant;
-	//		xSpeed += (sin(angle))*accelerationConstant;
-	//		ySpeed += (-cos(angle))*accelerationConstant;
-	//	}
-	//}
-	//else if (angle >= PI && angle < PI*1.5)//3rd quarter
-	//{
-	//	if (rotationDirection)
-	//	{
-	//		turnSpeed += turnAccelerationConstant;
-	//		xSpeed += (-sin(angle))*accelerationConstant;
-	//		ySpeed += (-cos(angle))*accelerationConstant;
-	//	}
-	//	else if (!rotationDirection)
-	//	{
-	//		turnSpeed -= turnAccelerationConstant;
-	//		xSpeed += (-sin(angle))*accelerationConstant;
-	//		ySpeed += (-cos(angle))*accelerationConstant;
-	//	}
-	//}
-	//else //4th quarter
-	//{
-	//	if (rotationDirection)
-	//	{
-	//		turnSpeed += turnAccelerationConstant;
-	//		xSpeed += (-sin(angle))*accelerationConstant;
-	//		ySpeed += (cos(angle))*accelerationConstant;
-	//	}
-	//	else if (!rotationDirection)
-	//	{
-	//		turnSpeed -= turnAccelerationConstant;
-	//		xSpeed += (-sin(angle))*accelerationConstant;
-	//		ySpeed += (cos(angle))*accelerationConstant;
-	//	}
-	//}
 }
 
 

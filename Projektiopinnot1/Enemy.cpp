@@ -20,10 +20,8 @@ bool Enemy::update()
 	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
 		return false;
 	if (components.size() <= 0)
-	{//All components destroyed, chance to drop metal
-		int dropAmount = irandom(0, metal);
-		if (dropAmount > 0)
-			centerObj->dataPtr->money += dropAmount;
+	{//All components destroyed, drop metal
+		centerObj->dataPtr->money += metal;
 		return false;
 	}
 	
@@ -32,9 +30,13 @@ bool Enemy::update()
 	updateComponents();
 
 
-	distance = getDistance(this->x, this->y, nearestComponent->x, nearestComponent->y);
+	if (nearestComponent != nullptr)
+		distance = getDistance(this->x, this->y, nearestComponent->x, nearestComponent->y);
+
 	stationDistance = getDistance(this->x, this->y, mGame->nearestStationX, mGame->nearestStationY);
-	playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
+
+	if (nearestComponent != nullptr)
+		playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
 
@@ -127,7 +129,7 @@ bool Enemy::update()
 		}
 	}
 
-	//follow
+	//negFollow
 	if (negFollow == true) //flee
 	{
 		if (angle >= 0 && angle < PI / 2) //1st quarter

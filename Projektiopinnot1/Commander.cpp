@@ -126,10 +126,11 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	components[components.size() - 5]->childComponents.push_back(components[components.size() - 8]->id); //L-REAR WING TO L-CORE WING
 	components[components.size() - 6]->childComponents.push_back(components[components.size() - 9]->id); //R-REAR WING TO R-CORE WING
 
-	components.push_back(new Turret(this, centerObj, -200, -150));
-	components[components.size() - 5]->childComponents.push_back(components.back()->id);
-	components.push_back(new Turret(this, centerObj, -200, -50));
-	components[components.size() - 6]->childComponents.push_back(components.back()->id);
+	//These don't work anyway at the moment
+	//components.push_back(new Turret(this, centerObj, -200, -150));
+	//components[components.size() - 5]->childComponents.push_back(components.back()->id);
+	//components.push_back(new Turret(this, centerObj, -200, -50));
+	//components[components.size() - 6]->childComponents.push_back(components.back()->id);
 }
 
 
@@ -147,7 +148,7 @@ bool Commander::update()
 	}
 
 	//Counters
-	shootingCounter++;
+	//shootingCounter++;
 	releaseFlier++;
 
 	AIupdate();
@@ -198,16 +199,16 @@ void Commander::AIupdate()//maybe not follow true all the time
 		follow = true;
 		xSpeed = -(cos(2 * PI - angle))*accelerationConstant;
 		ySpeed = -(sin(2 * PI - angle))*accelerationConstant;
-		if (shootingCounter >= 8)
-		{
-			if (angle < playerDirection + closeAngle && angle > -playerDirection - closeAngle)
-				for (unsigned int i = 0; i < components.size(); i++)
-					if (components[i]->type == component::turret)
-						{
-							components[i]->fire();
-							shootingCounter = irandom(-30, -10);
-						}
-		}
+		//if (shootingCounter >= 8)
+		//{
+		//	if (angle < playerDirection + closeAngle && angle > -playerDirection - closeAngle)
+		//		for (unsigned int i = 0; i < components.size(); i++)
+		//			if (components[i]->type == component::turret)
+		//				{
+		//					components[i]->fire();
+		//					shootingCounter = irandom(-30, -10);
+		//				}
+		//}
 
 		if (releaseFlier >(90 / ((enemyBehaviourLevel + 10) / 10)))
 		{
