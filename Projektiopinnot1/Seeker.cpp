@@ -145,7 +145,7 @@ void Seeker::AIupdate()//maybe not follow true all the time
 					if (state != memoryState)
 					{
 						//explosion animation
-						mGame->frontVisualEffects.push_back(VisualEffect(RM.explosion1Tex, x, y, 1, 9));
+						mGame->frontVisualEffects.push_back(VisualEffect(RM.explosion1Tex, location.x, location.y, 1, 9));
 						mGame->frontVisualEffects.back().setFrameSize(200, 200);
 						mGame->frontVisualEffects.back().setTilesetSize(3, 3);
 						mGame->frontVisualEffects.back().setOrigin(100, 100);

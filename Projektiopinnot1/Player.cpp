@@ -420,6 +420,20 @@ bool Player::update()
 
 	return true;
 }
+void Player::draw()
+{
+	mWindow.draw(spr);
+	for (unsigned int i = 0; i < components.size(); i++)
+	if (components[i]->type != component::turret)
+		components[i]->draw();
+}
+void Player::drawTurrets()
+{
+	for (unsigned int i = 0; i < components.size(); i++)
+	if (components[i]->type == component::turret)
+		components[i]->draw();
+}
+
 
 
 void Player::turnRight(double factor)
@@ -493,8 +507,8 @@ void Player::loadPlayerData()
 void Player::applyPlayerData()
 {
 	angle = 0;
-	x = round(data.spehsX / STATION_INTERVAL)*STATION_INTERVAL + PLAYERSPAWN_DISTANCE;
-	y = round(data.spehsY / STATION_INTERVAL)*STATION_INTERVAL;
+	location.x = round(data.spehsX / STATION_INTERVAL)*STATION_INTERVAL + PLAYERSPAWN_DISTANCE;
+	location.y = round(data.spehsY / STATION_INTERVAL)*STATION_INTERVAL;
 
 	while (!components.empty())
 	{

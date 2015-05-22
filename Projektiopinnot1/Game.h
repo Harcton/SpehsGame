@@ -49,16 +49,19 @@ public:
 	void drawVisualEffects(std::vector<VisualEffect>&);
 	void updateBackgrounds();
 	void updateObjects();
-	void demo();
+	void demo1();
+	void demo2();
 	std::string intToString(int);
 	sf::Event mEvent;
 
 	sf::RenderWindow& mWindow;
 	bool keepRunning = true;
 
-	int nearestStationX = 0;
-	int nearestStationY = 0;
 
+	//Locations
+	Location spawnLocation;
+	Location nearestStationLocation;
+	
 protected:
 	GameFocus focus = gf_game;
 	sf::Vector2i mousePos;
@@ -75,6 +78,7 @@ protected:
 	sf::Sprite stationArrow;
 	bool ableToDock = false;
 	sf::Sprite pressEnterToDockSpr;
+
 
 
 

@@ -4,6 +4,7 @@
 class Object;
 //Included dependencies
 #include "Sprite.h"
+#include "Location.h"
 #include <SFML/Graphics/CircleShape.hpp>
 
 
@@ -78,10 +79,6 @@ public:
 	double yOffset;
 	double xOffsetOriginal;
 	double yOffsetOriginal;
-	
-	// actual coordinates in space 
-	double x;
-	double y;
 
 	double screenX;
 	double screenY;
@@ -110,6 +107,7 @@ protected:
 	std::vector<sf::Sprite> sprites;
 	std::vector<sge::Sprite> animatedSprites;
 	component::DestructorMode destructorMode = component::wreck;
+	Location location;
 	//Turret 
 	sf::Sprite turretPlatform;
 	float turretPlatformAngle = -1;

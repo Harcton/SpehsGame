@@ -5,10 +5,8 @@
 
 VisualEffect::~VisualEffect()
 {}
-VisualEffect::VisualEffect(sf::Texture& t, float mx, float my, int frameduration, int frames) : sge::Sprite(t)
+VisualEffect::VisualEffect(sf::Texture& t, float mx, float my, int frameduration, int frames) : sge::Sprite(t), location(mx, my)
 {
-	x = mx;
-	y = my;
 	frameDuration = frameduration;
 	animationTimer = frameduration;
 	lifespan = frameduration*frames;
@@ -18,8 +16,8 @@ VisualEffect::VisualEffect(sf::Texture& t, float mx, float my, int frameduration
 void VisualEffect::draw(sf::RenderWindow& window, Game* game)
 {
 	lifespan--;
-	screenX = game->playerObj->screenX + resFactor*zoomFactor*(x - game->playerObj->x);
-	screenY = game->playerObj->screenY + resFactor*zoomFactor*(y - game->playerObj->y);
+	screenX = game->playerObj->screenX + resFactor*zoomFactor*(location.x - game->playerObj->getLocation().x);
+	screenY = game->playerObj->screenY + resFactor*zoomFactor*(location.y - game->playerObj->getLocation().y);
 
 	setPosition(screenX, screenY);
 	sprite.setScale(xScale*resFactor*zoomFactor, xScale*resFactor*zoomFactor);

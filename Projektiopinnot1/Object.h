@@ -5,6 +5,7 @@ class Game;
 class Component;
 class PlayerData;
 //Included dependencies
+#include "Location.h"
 #include <math.h>
 #include <vector>
 #include <SFML/Graphics/Sprite.hpp>
@@ -36,20 +37,15 @@ public:
 	virtual bool update();
 	void updateComponents();
 	bool isBulletUpdate();
-	void checkCollisions(unsigned int);
 	void checkBulletCollision(Object*);
 	virtual void notifyComponentDestruction(Component*){}
 	virtual void draw();
 	void setRandomLocation();
-	void setLocation(double, double);
 
 
 	sf::Sprite spr;
 	double textureRadius;
 	double scale = 1;
-
-	double x;
-	double y;
 
 	double massCenterX;
 	double massCenterY;
@@ -77,7 +73,8 @@ public:
 	double yScreenDistance;
 
 	//Get methods
-	int& getHpRef(){ return hp; }
+	int& getHpRef();
+	Location& getLocation();
 
 
 	bool hasCollisionChecks = true;
@@ -88,6 +85,7 @@ public:
 	//Virtual methods
 	virtual int getMass(){ return 1; };
 	virtual void editShip(){}
+	virtual void drawTurrets(){}
 
 protected:
 	Object* centerObj;
@@ -100,6 +98,7 @@ protected:
 	int hp = 100;
 	int isBullet = 0; //0 = is not a bullet, 0 != is bullet, value equals damage upon impact
 	Object* master;
+	Location location;
 };
 
 #endif

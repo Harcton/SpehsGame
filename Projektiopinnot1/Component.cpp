@@ -68,8 +68,8 @@ Component::Component(const Component& other) : master(other.master), centerObj(o
 	yOffset = other.yOffset;
 	xOffsetOriginal = other.xOffsetOriginal;
 	yOffsetOriginal = other.yOffsetOriginal;
-	x = other.x;
-	y = other.y;
+	location.x = other.location.x;
+	location.y = other.location.y;
 	screenX = other.screenX;
 	screenY = other.screenY;
 	angle = other.angle;
@@ -116,8 +116,8 @@ Component& Component::operator=(Component other)
 	yOffset = other.yOffset;
 	xOffsetOriginal = other.xOffsetOriginal;
 	yOffsetOriginal = other.yOffsetOriginal;
-	x = other.x;
-	y = other.y;
+	location.x = other.location.x;
+	location.y = other.location.y;
 	screenX = other.screenX;
 	screenY = other.screenY;
 	angle = other.angle;
@@ -181,11 +181,11 @@ void Component::update()
 
 
 	// X/Y
-	x = master->x + xOffset*cos(master->angle) + yOffset*sin(master->angle);
-	y = master->y - xOffset*sin(master->angle) + yOffset*cos(master->angle);
+	location.x = master->location.x + xOffset*cos(master->angle) + yOffset*sin(master->angle);
+	location.y = master->location.y - xOffset*sin(master->angle) + yOffset*cos(master->angle);
 
-	screenX = centerObj->screenX + resFactor*zoomFactor*(x - centerObj->x);
-	screenY = centerObj->screenY + resFactor*zoomFactor*(y - centerObj->y);
+	screenX = centerObj->screenX + resFactor*zoomFactor*(location.x - centerObj->location.x);
+	screenY = centerObj->screenY + resFactor*zoomFactor*(location.y - centerObj->location.y);
 
 	for (unsigned int i = 0; i < sprites.size(); i++)
 	{

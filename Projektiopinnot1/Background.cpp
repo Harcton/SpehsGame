@@ -42,8 +42,8 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 	//Randomize x/y
 	float tempLocator = irandom(0, 359) * (PI / 180.0f);
 
-	x = centerObj->x + (DESPAWN_RANGE) * cos(tempLocator);
-	y = centerObj->y + (DESPAWN_RANGE) * sin(tempLocator);
+	location.x = centerObj->getLocation().x + (DESPAWN_RANGE) * cos(tempLocator);
+	location.y = centerObj->getLocation().y + (DESPAWN_RANGE) * sin(tempLocator);
 	/*if (flipCoin())
 		x = centerObj->x + irandom(-SPAWN_RANGE, SPAWN_RANGE);
 	else
@@ -61,7 +61,7 @@ Background::Background(sf::RenderWindow& windowref, Game* game, std::vector<Back
 
 bool Background::updateBackground()
 {
-	distanceFromPlayer = abs(getDistance(this->x, this->y, mGame->playerObj->x, mGame->playerObj->y)/4 - DESPAWN_RANGE/4);
+	distanceFromPlayer = abs(location.distanceFrom(centerObj->getLocation())/4 - DESPAWN_RANGE/4);
 	if (distanceFromPlayer > 255)
 		distanceFromPlayer = 255;
 

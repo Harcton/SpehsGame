@@ -164,8 +164,8 @@ void Game::run()
 	{
 		pollEvents();
 
-		distanceFromStart = getDistance(0, 0, playerObj->x, playerObj->y);
-		distanceFromStation = getDistance(nearestStationX, nearestStationY, playerObj->x, playerObj->y);
+		distanceFromStart = playerObj->location.distanceFrom(spawnLocation);
+		distanceFromStation = playerObj->location.distanceFrom(nearestStationLocation);
 
 		//DRAWING
 		mWindow.clear(sf::Color(0, 0, 0, 100));
@@ -173,18 +173,32 @@ void Game::run()
 		//If the game "has focus", update and run the game normally
 		if (focus == gf_game)
 		{
+			
+			switch (2)
+			{
+			case 0:
+				if (objects.size() < 20)
+				{//UNIT TESTING
+					if (objects.size() < MAX_OBJECTS)
+						objects.push_back(new Sentinel(mWindow, this, 2)); //spawn different enemy types
+					objects.back()->setRandomLocation();
+					objects.back()->update();
+				}
+				break;
+			case 1:
+				demo1();
+				break;
+			case 2:
+				demo2();
+				break;
+			}
 			updateBackgrounds();
 			updateObjects();
 			updateBullets();
 			updateStation();
 			updateElements();
 		}
-
-
-		for (unsigned int i = 0; i < objects.size(); i++)
-			if (objects[i]->hasCollisionChecks == true)
-				objects[i]->checkCollisions(i);
-
+		
 
 		//Draw all graphical entities regardless of game focus
 		//Game objects
@@ -195,21 +209,20 @@ void Game::run()
 		mWindow.draw(stationSpr);
 		for (unsigned int i = 0; i < objects.size(); i++)
 			objects[i]->draw();
-		//Engine flames
 		if (focus == gf_game)
-		{
+		{//Engine flames and laser pointers
 			for (unsigned int i = 0; i < playerObj->components.size(); i++)
 				playerObj->components[i]->drawEngineFlame();
 			for (unsigned int i = 0; i < playerObj->components.size(); i++)
 				playerObj->components[i]->drawLaserPointer();
-
-			drawVisualEffects(frontVisualEffects);
 		}
+		playerObj->drawTurrets();
+		if (focus == gf_game)
+			drawVisualEffects(frontVisualEffects);
 		mWindow.draw(stationSpr2);
 		drawGui();
 		if (focus == gf_escMenu)
 			drawEscMenu();
-
 
 		//Display the window
 		mWindow.display();
@@ -252,8 +265,8 @@ void Game::pollEvents()
 			case sf::Keyboard::Return:
 				if (ableToDock)
 				{
-					playerObj->dataPtr->spehsX = nearestStationX;
-					playerObj->dataPtr->spehsY = nearestStationY;
+					playerObj->dataPtr->spehsX = nearestStationLocation.x;
+					playerObj->dataPtr->spehsY = nearestStationLocation.y;
 					playerObj->editShip();
 				}
 				break;
@@ -373,28 +386,6 @@ void Game::updateObjects()
 		delete temp_objPtr;
 		i--;
 		}
-
-
-
-
-	//THE DEMO VERSION = 0
-	//UNIT TESTING = 1
-	////////////////////////////////////
-	bool tempDevelopmentSelection = 0;//
-	////////////////////////////////////
-	if (tempDevelopmentSelection)
-	{
-		if (objects.size() < 20)
-		{
-			if (objects.size() < MAX_OBJECTS)
-				objects.push_back(new Sentinel(mWindow, this, 2)); //spawn different enemy types
-			objects.back()->setRandomLocation();
-			objects.back()->update();
-		}
-	}
-	else
-		demo();
-
 }
 
 void Game::updateBullets()
@@ -416,7 +407,7 @@ void Game::updateBullets()
 		bullets[i]->draw();
 }
 
-void Game::demo()
+void Game::demo1()
 {
 	if (distanceFromStart < 50000)
 		enemyBehaviourDifficulty = 1;
@@ -424,6 +415,44 @@ void Game::demo()
 		enemyBehaviourDifficulty = 2;
 	else
 		enemyBehaviourDifficulty = 3;
+
+	spawnZone = (distanceFromStart / 10000) + 1;
+
+	if (objects.size() < spawnZone && distanceFromStation > SPAWN_RANGE)
+	{
+		spawnRandomization = irandom(1, 100);
+
+		if (spawnRandomization <= 30 && objects.size() < MAX_OBJECTS)
+		{
+			objects.push_back(new Sentinel(mWindow, this, enemyBehaviourDifficulty));
+			objects.back()->setRandomLocation();
+			objects.back()->update();
+		}
+		if (spawnRandomization > 30 && spawnRandomization <= 65 && objects.size() < MAX_OBJECTS)
+		{
+			objects.push_back(new Seeker(mWindow, this, enemyBehaviourDifficulty));
+			objects.back()->setRandomLocation();
+			objects.back()->update();
+		}
+		if (spawnRandomization > 65 && spawnRandomization <= 80 && objects.size() < MAX_OBJECTS)
+		{
+			objects.push_back(new Sentry(mWindow, this, enemyBehaviourDifficulty));
+			objects.back()->setRandomLocation();
+			objects.back()->update();
+		}
+		if (spawnRandomization > 80 && spawnRandomization <= 100 && objects.size() < MAX_OBJECTS && spawnZone > 5)
+		{
+			objects.push_back(new Commander(mWindow, this, enemyBehaviourDifficulty));
+			objects.back()->setRandomLocation();
+			objects.back()->update();
+		}
+	}
+}
+
+void Game::demo2()
+{
+	enemyBehaviourDifficulty = std::ceil(distanceFromStart / 50000.0f);
+	std::cout << "\nLevel: " << enemyBehaviourDifficulty;
 
 	spawnZone = (distanceFromStart / 10000) + 1;
 
@@ -515,12 +544,7 @@ void Game::updateElements()
 	displayStationText.setPosition(displayTextX - displayStationText.getGlobalBounds().width, displayTextY1 + displayTextYDifference);
 
 	//Set spawn arrow angle
-	double temp_angle = atan2(playerObj->y, playerObj->x);
-	if (temp_angle < 0)
-		temp_angle = abs(temp_angle);
-	else
-		temp_angle = PI * 2 - temp_angle;
-	spawnArrowSpr.setRotation(180 - (180 / PI)*temp_angle);
+	spawnArrowSpr.setRotation(180 - playerObj->location.angleTowardsDeg(spawnLocation));
 
 	//Press enter to dock spr opacity
 	if (ableToDock)
@@ -559,8 +583,8 @@ void Game::reloadEscMenuButtonStrings()
 void Game::updateStation()
 {
 	//Update station coordinates
-	nearestStationX = round(playerObj->x / STATION_INTERVAL)*STATION_INTERVAL;
-	nearestStationY = round(playerObj->y / STATION_INTERVAL)*STATION_INTERVAL;
+	nearestStationLocation.x = round(playerObj->location.x / STATION_INTERVAL)*STATION_INTERVAL;
+	nearestStationLocation.y = round(playerObj->location.y / STATION_INTERVAL)*STATION_INTERVAL;
 
 	//Check if player is in range and if enter key is pressed
 	if (distanceFromStation <= 600)
@@ -571,16 +595,14 @@ void Game::updateStation()
 
 	stationSpr.setRotation(stationSpr.getRotation() + 0.05);
 	stationSpr.setScale(1.7*resFactor*zoomFactor, 1.7*resFactor*zoomFactor);
-	stationSpr.setPosition(playerObj->screenX + (nearestStationX - playerObj->x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationY - playerObj->y)*resFactor*zoomFactor);
+	stationSpr.setPosition(playerObj->screenX + (nearestStationLocation.x - playerObj->location.x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationLocation.y - playerObj->location.y)*resFactor*zoomFactor);
 
 	stationSpr2.setRotation(stationSpr2.getRotation() + 0.05);
 	stationSpr2.setScale(1.7 * resFactor*zoomFactor, 1.7 * resFactor*zoomFactor);
-	stationSpr2.setPosition(playerObj->screenX + (nearestStationX - playerObj->x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationY - playerObj->y)*resFactor*zoomFactor);
+	stationSpr2.setPosition(playerObj->screenX + (nearestStationLocation.x - playerObj->location.x)*resFactor*zoomFactor, playerObj->screenY + (nearestStationLocation.y - playerObj->location.y)*resFactor*zoomFactor);
 
-	float temp_stationDirection = -1 * atan2(playerObj->y - nearestStationY, playerObj->x - nearestStationX);
-	if (temp_stationDirection < 0)
-		temp_stationDirection = 2 * PI + temp_stationDirection;
-	stationArrow.setRotation(180 - temp_stationDirection*(180 / PI));
+
+	stationArrow.setRotation(180 - playerObj->location.angleTowardsDeg(nearestStationLocation));
 }
 
 void Game::drawVisualEffects(std::vector<VisualEffect>& vector)

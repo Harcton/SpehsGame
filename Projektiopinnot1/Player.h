@@ -24,12 +24,15 @@ public:
 	void applyPlayerData();
 
 	bool update();
+	void draw();
+	void drawTurrets();
 	void notifyComponentDestruction(Component*);
 	void addFromGrid(int, int);
 	void editShip();
 	void loadKeybindings();
 	void calculateCenterOfMass();
 	void reloadSkeletonSprites();
+
 	void setTurretLooks(int, int);
 	void setTurretStats(int, int);
 	void setEngineLooks(int, int);

@@ -265,7 +265,7 @@ void Commander::launchFliers()
 		return;
 
 	mGame->objects.push_back(new Flier(mWindow, mGame, enemyBehaviourLevel));
-	mGame->objects.back()->setLocation(x, y); //randomize a lil bit
+	mGame->objects.back()->location.setLocation(location); //randomize a lil bit
 }
 
 

@@ -17,7 +17,7 @@ Enemy::~Enemy()
 
 bool Enemy::update()
 {
-	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE)
+	if (location.distanceFrom(centerObj->location) > DESPAWN_RANGE)
 		return false;
 	if (components.size() <= 0)
 	{//All components destroyed, drop metal
@@ -31,12 +31,14 @@ bool Enemy::update()
 
 
 	if (nearestComponent != nullptr)
-		distance = getDistance(this->x, this->y, nearestComponent->x, nearestComponent->y);
+		distance = location.distanceFrom(nearestComponent->location);
 
-	stationDistance = getDistance(this->x, this->y, mGame->nearestStationX, mGame->nearestStationY);
+	stationDistance = location.distanceFrom(mGame->nearestStationLocation);
 
+	//if (nearestComponent != nullptr)
+	//	playerDirection = location.angleTowardsRad(nearestComponent->location);
 	if (nearestComponent != nullptr)
-		playerDirection = -1 * atan2(nearestComponent->y - y, nearestComponent->x - x);
+		playerDirection = -1 * atan2(nearestComponent->location.y - location.y, nearestComponent->location.x - location.x);
 	if (playerDirection < 0)
 		playerDirection = ((2 * PI) + playerDirection);
 
@@ -255,12 +257,12 @@ void Enemy::complexUpdate()
 	{
 		if (i == 0)
 		{
-			tempDistance = getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
+			tempDistance = location.distanceFrom(centerObj->components[i]->location);
 			tempIndex = i;
 		}
-		else if (tempDistance > getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y))
+		else if (tempDistance > location.distanceFrom(centerObj->components[i]->location))
 		{
-			tempDistance = getDistance(this->x, this->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y);
+			tempDistance = location.distanceFrom(centerObj->components[i]->location);
 			tempIndex = i;
 		}
 	}
@@ -284,8 +286,7 @@ void Enemy::explosion(int dmg, float explosionRadius)
 		return;//Prevents fatal vector out of range error happening (components[0])
 	for (unsigned int i = 0; i < mGame->playerObj->components.size(); i++)
 	{
-		if (getDistance(this->components[0]->x, this->components[0]->y, mGame->playerObj->components[i]->x, mGame->playerObj->components[i]->y) 
-			< this->components[0]->textureRadius * explosionRadius)
+		if ( location.distanceFrom(mGame->playerObj->components[i]->location) < this->components[0]->textureRadius * explosionRadius)
 		{
 			mGame->playerObj->components[i]->hp -= dmg;
 		}

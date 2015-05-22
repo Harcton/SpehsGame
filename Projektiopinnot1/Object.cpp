@@ -8,7 +8,7 @@ Object::~Object()
 	for (unsigned int i = 0; i < components.size(); i++)
 		delete components[i];
 }
-Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
+Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref), location(0, 0)
 {
 	mGame = game;
 	centerObj = game->playerObj;
@@ -17,27 +17,23 @@ Object::Object(sf::RenderWindow& windowref, Game* game) : mWindow(windowref)
 	massCenterX = 0;
 	massCenterY = 0;
 }
-Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref)
+Object::Object(sf::RenderWindow& windowref, Game* game, int cx, int cy) : mWindow(windowref), location(cx, cy)
 {
 	mGame = game;
 	centerObj = mGame->playerObj;
-	x = cx;
-	y = cy;
 }
-Object::Object(Game* game, Object* mstr, int mx, int my, float angl, float spd, int dmg) : mWindow(game->mWindow), mGame(game)
+Object::Object(Game* game, Object* mstr, int mx, int my, float angl, float spd, int dmg) : mWindow(game->mWindow), mGame(game), location(mx, my)
 {//Bullet constructor
 	scale = 1;
 	centerObj = game->playerObj;
 	isBullet = dmg;
 	master = mstr;
-	x = mx;
-	y = my;
 	xSpeed = cos(angl)*spd + master->xSpeed;
 	ySpeed = sin(angl)*spd + master->ySpeed;
 	spr.setTexture(RM.bullet1Tex);
 	spr.setOrigin(5, 5);
 }
-Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame), centerObj(other.centerObj), dataPtr(other.dataPtr)
+Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame), centerObj(other.centerObj), dataPtr(other.dataPtr), location(other.location.x, other.location.y)
 {//Copy constructor
 	std::cout << "\n  Component copy constructor";
 	for (unsigned int i = 0; i < other.components.size(); i++)
@@ -45,8 +41,6 @@ Object::Object(const Object& other) : mWindow(other.mWindow), mGame(other.mGame)
 	spr = other.spr;
 	textureRadius = other.textureRadius;
 	scale = other.scale;
-	x = other.x;
-	y = other.y;
 	massCenterX = other.massCenterX;
 	massCenterY = other.massCenterY;
 	screenX = other.screenY;
@@ -86,8 +80,8 @@ Object& Object::operator=(Object other)
 	spr = other.spr;
 	textureRadius = other.textureRadius;
 	scale = other.scale;
-	x = other.x;
-	y = other.y;
+	location.x = other.location.x;
+	location.y = other.location.y;
 	massCenterX = other.massCenterX;
 	massCenterY = other.massCenterY;
 	screenX = other.screenY;
@@ -120,29 +114,24 @@ Object& Object::operator=(Object&&)
 	std::cout << "\n  -Object move assigment";
 	return *this;
 }
-Object::Object(Object&& other) : mWindow(other.mWindow)
+Object::Object(Object&& other) : mWindow(other.mWindow), location(other.location.x, other.location.y)
 {
 	std::cout << "\n  -Object move constructor";
 }
 
 
-void Object::setLocation(double mx, double my)
-{
-	x = mx;
-	y = my;
-}
 void Object::setRandomLocation()
 {
 	float tempLocator = irandom(0, 359) * (PI / 180.0f);
 	int tempDistance = irandom(SPAWN_RANGE + 300, SPAWN_RANGE);
 
-	x = centerObj->x + tempDistance * cos(tempLocator);
-	y = centerObj->y + tempDistance * sin(tempLocator);
+	location.x = centerObj->location.x + tempDistance * cos(tempLocator);
+	location.y = centerObj->location.y + tempDistance * sin(tempLocator);
 }
 
 bool Object::update()
 {
-	if (getDistance(x, y, centerObj->x, centerObj->y) > DESPAWN_RANGE || hp <= 0)
+	if (location.distanceFrom(centerObj->location) > DESPAWN_RANGE || hp <= 0)
 	{
 		return false;
 	}
@@ -164,8 +153,8 @@ bool Object::update()
 
 	//Update variable values
 	angle += turnSpeed;	
-	x += xSpeed;
-	y += ySpeed;
+	location.x += xSpeed;
+	location.y += ySpeed;
 
 	///////////////////////////////////////////////////////////////////
 	//Usefull code dont remove: (Rotate point x1,y1 around point x2,y2)
@@ -183,8 +172,8 @@ bool Object::update()
 	//Update screen positions
 	if (centerObj != this) //If the object is not the player
 	{
-		screenX = centerObj->screenX + resFactor*zoomFactor*(x - centerObj->x);
-		screenY = centerObj->screenY + resFactor*zoomFactor*(y - centerObj->y);
+		screenX = centerObj->screenX + resFactor*zoomFactor*(location.x - centerObj->location.x);
+		screenY = centerObj->screenY + resFactor*zoomFactor*(location.y - centerObj->location.y);
 	}
 
 	//Apply variables
@@ -222,9 +211,13 @@ bool Object::isBulletUpdate()
 		mGame->objects[i]->checkBulletCollision(this);
 		}
 
+	// If bullet collides in check bullet collision,
+	// is bullet variable will be set to 0,
+	// thus returning false resulting in the destruction of the bullet.
 	if (isBullet == 0)
 		return false;
-	return true;
+	else // No collision detected, continue flight
+		return true;
 }
 
 
@@ -235,68 +228,24 @@ void Object::draw()
 		components[i]->draw();
 }
 
-void Object::checkCollisions(unsigned int selfIndex)//Does this actually do anything?
-{
-	for (unsigned int i = 0; i < mGame->objects.size(); i++)
-		if (i != selfIndex)
-		{
-			collisionCheckAngle = -1 * atan2(mGame->objects[i]->y - y, mGame->objects[i]->x - x);
-			if (collisionCheckAngle < 0)
-				collisionCheckAngle = ((2 * PI) + collisionCheckAngle);
-
-
-			checkCollisionDistance = getDistance(x, y, mGame->objects[i]->x, mGame->objects[i]->y);
-			checkCollisionRange = textureRadius + mGame->objects[i]->textureRadius;
-
-			if (checkCollisionDistance < checkCollisionRange)
-			{
-				double ys;
-				if (ySpeed > 0)
-					ys = 1 + ySpeed;
-				else
-					ys = 1 - ySpeed;
-				ySpeed += 0.001*sin(collisionCheckAngle)*ys;
-				y += 3 * sin(collisionCheckAngle);
-
-				double xs;
-				if (xSpeed > 0)
-					xs = 1 - xSpeed;
-				else
-					xs = 1 + xSpeed;
-				xSpeed += 0.001*cos(collisionCheckAngle)*xs;
-				x += -3 * cos(collisionCheckAngle);
-			}
-		}
-}
-
 
 void Object::checkBulletCollision(Object* b)
 {
-	float temp_coordinateModifier = resFactor*zoomFactor*textureRadius;
 	for (unsigned int i = 0; i < components.size(); i++)
 	{
-		b->collisionCheckAngle = -1 * atan2(components[i]->y - b->y - temp_coordinateModifier, components[i]->x - b->x - temp_coordinateModifier);
-		if (b->collisionCheckAngle < 0)
-			b->collisionCheckAngle = ((2 * PI) + b->collisionCheckAngle);
-
-
-		b->checkCollisionDistance = getDistance(b->x, b->y, components[i]->x - temp_coordinateModifier, components[i]->y - temp_coordinateModifier);
-		b->checkCollisionRange = b->textureRadius + components[i]->textureRadius;
-
-		if (b->checkCollisionDistance < b->checkCollisionRange)
+		if (b->location.distanceFrom(components[i]->location) < b->textureRadius + components[i]->textureRadius)
 		{
 			if (b->isBullet != 0)
 			{
 				components[i]->hp -= b->isBullet;
 				b->isBullet = 0;
 			}
-
-			//Bounce
-			b->xSpeed = b->xSpeed*0.75;
-			b->ySpeed = b->ySpeed*0.75;
-			b->angle = PI / 2 + (irandom(0, 180) / double(180))*PI;
-			b->xSpeed = cos(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
-			b->ySpeed = sin(2 * PI - b->angle) * getDistance(0, 0, b->xSpeed, b->ySpeed);
 		}
 	}
 }
+
+//Getters
+int& Object::getHpRef()
+{ return hp; }
+Location& Object::getLocation()
+{ return location; }

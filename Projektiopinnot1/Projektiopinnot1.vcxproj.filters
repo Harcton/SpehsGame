@@ -120,6 +120,9 @@
     <ClCompile Include="VisualEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Location.cpp">
+      <Filter>Source Files\Spehs Game engine type</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="VisualEffect.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Location.h">
+      <Filter>Header Files\Spehs Game engine type</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

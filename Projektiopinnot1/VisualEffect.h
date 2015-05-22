@@ -3,6 +3,7 @@
 
 class Game;
 #include "Sprite.h"
+#include "Location.h"
 
 class VisualEffect : public sge::Sprite
 {
@@ -19,8 +20,7 @@ private:
 	int lifespan = 0;
 	int frameCount = 0;
 	int frameIndex = 0;
-	float x;
-	float y;
+	Location location;
 	float screenX;
 	float screenY;
 	float xScale = 1;

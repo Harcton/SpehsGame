@@ -79,6 +79,7 @@
     <ClCompile Include="Flier.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GridData.cpp" />
+    <ClCompile Include="Location.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Flier.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GridData.h" />
+    <ClInclude Include="Location.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MyKeys.h" />

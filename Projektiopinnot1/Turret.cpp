@@ -174,7 +174,7 @@ void Turret::fire()
 
 	charge -= chargeConsumption;
 	canFireTimer = fireRateInterval;
-	master->mGame->bullets.push_back(new Object(master->mGame, master, x, y, 2 * PI - angle, maxSpeed, damage));
+	master->mGame->bullets.push_back(new Object(master->mGame, master, location.x, location.y, 2 * PI - angle, maxSpeed, damage));
 	master->mGame->bullets.back()->spr.setTexture(*bulletTexPtr);
 	hasFired = true;
 }
