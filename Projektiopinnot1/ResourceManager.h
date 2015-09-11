@@ -56,7 +56,7 @@ public:
 	sf::Texture bullet3Tex;
 	sf::Texture bullet4Tex;
 	sf::Texture bullet5Tex;
-	sf::Texture debris1Tex;
+	sf::Texture debrisTex;
 	sf::Texture stationMainTex;
 	sf::Texture stationDocksTex;
 	//Textures-player ship

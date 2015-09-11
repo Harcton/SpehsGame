@@ -33,6 +33,7 @@ public:
 	friend class Flier;
 	friend class Commander;
 	friend class Sentry;
+	friend class Debris;
 
 	virtual bool update();
 	void updateComponents();

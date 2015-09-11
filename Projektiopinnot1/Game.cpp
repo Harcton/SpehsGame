@@ -6,6 +6,7 @@
 #include "Seeker.h"
 #include "Commander.h"
 #include "Sentry.h"
+#include "Debris.h"
 
 
 
@@ -22,6 +23,8 @@ Game::~Game()
 		delete bullets[i];
 	for (unsigned int i = 0; i < backgrounds.size(); i++)
 		delete backgrounds[i];
+	for (unsigned int i = 0; i < debriss.size(); i++)
+		delete debriss[i];
 }
 Game::Game(sf::RenderWindow& w) : mWindow(w)
 {
@@ -194,6 +197,7 @@ void Game::run()
 			}
 			updateBackgrounds();
 			updateObjects();
+			updateDebris();
 			updateBullets();
 			updateStation();
 			updateElements();
@@ -209,6 +213,8 @@ void Game::run()
 		mWindow.draw(stationSpr);
 		for (unsigned int i = 0; i < objects.size(); i++)
 			objects[i]->draw();
+		for (unsigned int i = 0; i < debriss.size(); i++)
+			debriss[i]->draw();
 		if (focus == gf_game)
 		{//Engine flames and laser pointers
 			for (unsigned int i = 0; i < playerObj->components.size(); i++)
@@ -388,6 +394,20 @@ void Game::updateObjects()
 		}
 }
 
+
+void Game::updateDebris()
+{
+	for (int i = 0; i < debriss.size(); i++)
+		if (debriss[i]->update() == false)
+		{
+		Object* temp_objPtr = debriss[i];
+		debriss.erase(debriss.begin() + i);
+		delete temp_objPtr;
+		i--;
+		}
+}
+
+
 void Game::updateBullets()
 {
 	//Bullet update
@@ -452,9 +472,10 @@ void Game::demo1()
 void Game::demo2()
 {
 	enemyBehaviourDifficulty = std::ceil(distanceFromStart / 50000.0f);
-	std::cout << "\nLevel: " << enemyBehaviourDifficulty;
+	//std::cout << "\nLevel: " << enemyBehaviourDifficulty;
 
 	spawnZone = (distanceFromStart / 10000) + 1;
+	debrisAmount = 10;
 
 	if (objects.size() < spawnZone && distanceFromStation > SPAWN_RANGE)
 	{
@@ -485,6 +506,15 @@ void Game::demo2()
 			objects.back()->update();
 		}
 	}
+
+	//TO DISABLE DEBRIS: COMMENT THIS IF STATEMENT
+	if (debriss.size() < debrisAmount)
+	{
+		debriss.push_back(new Debris(mWindow, this));
+		debriss.back()->setRandomLocation();
+		debriss.back()->update();
+	}
+	//
 }
 
 void Game::updateElements()

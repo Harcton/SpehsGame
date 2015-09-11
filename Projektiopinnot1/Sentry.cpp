@@ -101,6 +101,9 @@ void Sentry::AIupdate()
 	//Special cases
 	if (state == state_spawned)
 	{
+		//Enemy::update();
+		//angle = (180 / PI)*playerDirection;
+
 		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
 		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
 		state = state_passive;

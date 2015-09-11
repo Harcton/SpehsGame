@@ -92,7 +92,9 @@ void Sentinel::AIupdate()
 	//Special cases
 	if (state == state_spawned)
 	{
-		angle = playerDirection; //doesn't work because enemy update hasn't given playerDirection yet...
+		//Enemy::update();
+		//angle = (180 / PI)*playerDirection; //??
+
 		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
 		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
 		state = state_passive;

@@ -65,7 +65,7 @@ ResourceManager::ResourceManager()
 	bullet4Tex.loadFromFile("Texture/Misc/bullet4.png");
 	bullet5Tex.loadFromFile("Texture/Misc/bullet5.png");
 	//MISC
-	debris1Tex.loadFromFile("Texture/Misc/debris1.png");
+	debrisTex.loadFromFile("Texture/Misc/debris2.png");
 	stationMainTex.loadFromFile("Texture/Misc/DockingStation_Main.png");
 	stationDocksTex.loadFromFile("Texture/Misc/DockingStation_Docks.png");
 	//In-game GUI

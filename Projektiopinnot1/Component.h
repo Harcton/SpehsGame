@@ -51,6 +51,7 @@ public:
 	friend class Sentry;
 	friend class Flier;
 	friend class Commander;
+	friend class Debris;
 
 	virtual void update();
 	virtual bool alive();

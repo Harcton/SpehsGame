@@ -12,14 +12,14 @@ Commander::Commander(sf::RenderWindow& windowref, Game* game, int behaviourLevel
 	state = state_spawned;
 	metal = irandom(25, 35)*((enemyBehaviourLevel * 5 + 4) / 3);
 
-	angle = playerDirection;
+	//angle = playerDirection;//Note radians!! .__. + components... ._______.
 	fleeing = false;
 	initiateFlierAssault = false;
 	aggroRange = 2500;
 	maxActionRange = 2300;
-	closeRange = 1000;
+	closeRange = 800;
 	maxTurnSpeedLimit = 0.005;
-	maxSpeedLimit = 0.5;
+	maxSpeedLimit = 0.3;
 	accelerationConstant = 0.1;
 	turnAccelerationConstant = 0.0005;
 	closeAngle = 0.001;
@@ -162,13 +162,13 @@ bool Commander::update()
 }
 
 
-void Commander::AIupdate()//maybe not follow true all the time
+void Commander::AIupdate()//maybe not follow true all the time (edit: ????)
 {
 	//Special cases
 	if (state == state_spawned)
 	{
-		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 3);
-		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 3);
+		xSpeed = (cos(2 * PI - angle))*(maxSpeedLimit / 4);
+		ySpeed = (sin(2 * PI - angle))*(maxSpeedLimit / 4);
 		state = state_passive;
 		return;
 	}
@@ -265,7 +265,7 @@ void Commander::launchFliers()
 		return;
 
 	mGame->objects.push_back(new Flier(mWindow, mGame, enemyBehaviourLevel));
-	mGame->objects.back()->location.setLocation(location); //randomize a lil bit
+	mGame->objects.back()->location.setLocation(location); //TODO: set 2 spawn points
 }
 
 

@@ -38,10 +38,12 @@ public:
 	void updateBullets();
 	void updateStation();
 	void updateElements();
+	void updateDebris();
 	void drawGui();
 
 	Object* playerObj;
 	std::vector<Object*> objects;
+	std::vector<Object*> debriss;
 	std::vector<Object*> bullets;
 	std::vector<Object*>::iterator bulletIt;
 	std::vector<VisualEffect> backVisualEffects;
@@ -69,6 +71,7 @@ protected:
 	int spawnRandomization;
 	int enemyBehaviourDifficulty;
 	int spawnZone;
+	unsigned int debrisAmount;
 	sf::Music spehsMusic;
 
 

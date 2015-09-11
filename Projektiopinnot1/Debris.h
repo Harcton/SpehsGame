@@ -7,14 +7,20 @@ class Debris : public Object
 {
 public:
 	~Debris();
-	Debris(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& hw);
-	Debris(sf::RenderWindow& windowref, Game* game, std::vector<Object*>& hw, int cx, int cy);
-	bool updateDebris();
+	Debris(sf::RenderWindow& windowref, Game* game);
+	Debris(sf::RenderWindow& windowref, Game* game, int cx, int cy);
+	virtual bool update();
 
 	void randomizeLook();
 
 protected:
-	std::vector<Object*>& homeVector;
+	void complexUpdate();
+	void updateCollision();
+
+	int hitTimer = 0;
+	double maxSpeedLimit;
+	double distance;
+	Component* nearestComponent;
 };
 
 #endif
